@@ -5,5 +5,9 @@ import org.hibernate.Hibernate;
 
 @Actions
 public class Test {
-Hibernate hibernate  = null;
+	Hibernate hibernate  = null;   
+
+	public void jjj(){
+
+	}
 }
