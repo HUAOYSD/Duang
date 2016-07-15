@@ -1,0 +1,183 @@
+////使用须知：
+////使用须知：
+////使用须知：
+	*这儿玩意儿是为了开发过程中快捷使用，而提取的简要说明，就降降等级当成个文档用吧
+	*该说明只是对每个方法进行了简要说明，但是个别方法比较复杂，不便整理，
+	*所以，大家使用的时候如果又不太明白的地方就找util.js中的原方法看看，那上边有详细说明
+	*如果方法有错误，提出来达成‘共知’
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * function函数  * * * * * * * * * * * * * * * * * * * * * * * * * */
+c$(function(){alert('执行DOM加载完成事件');}); // 为 c$.ready(fun) 的缩写
+c$.getEvent								   //获取事件的 event
+c$.isFunction = function(fn) 			   //判断对象是否函数
+c$.addOnloadFun = function(fun, win)	   //添加 onload 事件(多次调用此函数时会保证各函数的执行顺序)
+c$.ready = function (fun)				   //当DOM载入就绪时执行某函数(比window.onload更早)
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * 字符串、日期、数组等操作  * * * * * * * * * * * * * * * * * * * * * * * * * */
+String.prototype.trim								//顾名思义
+String.prototype.toUpperCase 						//将字符串转换成大写
+String.prototype.toLowerCase						//将字符串转换成小写
+String.prototype.replaceAll = function(regexp, newSubStr, flags)	//全部替换字符串中的指定内容(正则表达式替换)eg:"add dda".replaceAll('a', '55')  // 返回: "55dd dd55"
+String.prototype.replaceAllStr = function(oldStr, newStr)   		//全部替换字符串中的指定内容(非正则表达式替换)eg:"add dda".replaceAllStr('a', '55')  // 返回: "55dd dd55"
+String.prototype.startWith = function(sub) 	   		//判断是否以子串开头,是以子串开头则返回 true，否则返回false
+String.prototype.endWith = function(sub)  			//同上行
+String.prototype.format = function(value)			//字符串格式化输出eg:"#1 Name:#Name, Age:#Age".format({Name:"zhangsan", Age:23 }); // 返回："#1 Name:zhangsan, Age:23"
+String.prototype.chsLeng = function(chsLength)		// 获取字符长度,zhuyi:一个非拉丁文(如中文)占多少个字符，默认为2个 (改数据库时需改这里)eg: "aa哈哈".chsLeng() // 返回: 6
+String.prototype.hasChinese =	function(isAllChinese)				//检查字符串是否包含中文，是则返回true，否则返回false (注:空字符串返回 false),isAllChinese 是否要求全部都为中文
+String.prototype.isChineseOrNumberOrLetter//检查字符串是否只由汉字、字母、数字组成.如果通过验证返回true,否则返回false (注:空字符串返回 false)
+String.prototype.isNumber_Letter 					//检查字符串是否只由数字、26个英文字母或者下划线组成
+String.prototype.isNumberLetter 					//检查字符串是否只由数字、26个英文字母组成
+String.prototype.isNotNull 							//检查字符串是否为空，null返回false,不为空返回true
+String.prototype.isEmail 							//检查字符串是否为email地址
+String.prototype.isDate 							//检查字符串是否为日期格式(正确格式如: 2011-03-28 或者 11/3/28, 2011年03月28日, 20111028)
+String.prototype.isTime 							//检查字符串是否为时间格式(正确格式如: 13:04:06 或者 21时5分10秒, 210521)
+String.prototype.isDateTime 						//检查字符串是否为日期和时间格式 (正确格式如: 2003/12/05 13:04:06 或者 2001年10月20日10时5分30秒, 20110208230406)
+String.prototype.isUrl		   						//检查字符串是否为URL地址
+String.prototype.isIDCard(num)						//判断身份证儿  合法返回真，假的或空的返回假
+String.prototype.isPhone(str)					//判断手机号码  合法返回真，假的或空的返回假
+String.prototype.isTel(str)	    				//判断座机号码  合法返回真，假的或空的返回假
+String.prototype.isqq(str)						//判断QQ号  合法返回真，假的或空的返回假
+c$.isInt = function(element, max, min, name, isMust, isAlert) 			 //整数检查，判断对象是否为数字(包括负数、科学记数法、逗号分隔的数)
+c$.isNumber = function(element, max, min, decimal, name, isMust, isAlert)//数字检查，判断对象是否为数字(包括负数、科学记数法、逗号分隔的数)
+String.prototype.toUnicode 						//转换字符串成 Unicode 编码,return 转换后的字符串
+String.prototype.toHtmlCode						//转换字符串成 Html 页面上显示的编码
+String.prototype.toTextCode						//转换字符串由 Html 页面上显示的编码变回正常编码(以 toHtmlCode 函数对应)
+String.prototype.removeHtmlTag					//清除HTML标签
+Date.prototype.format = function(format)		//格式化时间字符串,format 格式化的字符串(默认为：yyyy-MM-dd HH:mm:ss )eg:new Date().format("yyyy-MM-dd HH:mm:ss.S")
+Array.prototype.each = function(func)			//数组的逐个执行,就是循环，类似jquery的each
+Array.prototype.clear							//清空数组
+Array.prototype.indexOf = function(value)		//查找数组里的某个值的下标
+Array.prototype.lastIndexOf = function(value)	//查找数组里的某个值的下标(从后面找起)
+Array.prototype.clone							//复制数组(浅拷贝)
+Array.prototype.contains = function(value)		//判断数组里是否包含此值
+Array.prototype.remove							//删除数组里的某些值(只删除第一个找到的值)
+Array.prototype.removeAll						//删除数组里的某些值(删除所有找到的值)
+Array.prototype.unique							//返回没有重复值的新数组,原数组不改变
+Array.prototype.filter = function(func)			//对数组中的每个元素都执行一次指定的函数,并且创建一个新数组，该数组元素是所有回调函数执行时返回值为 true 的原数组元素。原数组不改变
+Array.prototype.notNull							//以数组形式返回原数组中不为 null 与 undefined 的元素。原数组不改变
+Array.prototype.max								//返回数组里的最大值
+Array.prototype.min								//返回数组里的最小值
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * 元素操作  * * * * * * * * * * * * * * * * * * * * * * * * * */
+c$("mytext")  // 返回 id 或者 name 为"mytext"的元素
+c$("#mytext") // 返回 id 为"mytext"的元素
+c$("@mytext") // 返回 name 为"mytext"的所有元素
+c$(".class1") // 返回 class 为"class1"的所有元素
+c$("$div")    // 返回 标签 为"div"的所有元素
+c$("$div #text1")  					// 返回 div 标签里面 id 为"text1"的元素(支持多级查询，以空格分隔)
+c$.getElement = function(str, dom) 	//获取元素
+c$.getElement("mytext")  // 返回 id 或者 name 为"mytext"的元素
+c$.getElement("#mytext") // 返回 id 为"mytext"的元素
+c$.getElement("@mytext") // 返回 name 为"mytext"的元素
+c$.getElement(".class1") // 返回 class 为"class1"的元素
+c$.getElement("$div")    // 返回 标签 为"div"的所有元素
+c$.getElement("$div #text1")  					// 返回 div 标签里面 id 为"text1"的元素(支持多级查询，以空格分隔)
+c$.getValue = function(name, init)				//获取元素的值
+c$.getRadioValue = function(boxName, init)		//获取单选按钮对应的编号和名称
+c$.getElements = function(formField)			//获取 form 表单的所有元素(仅 input, checkbox 等可以表单提交的元素)
+c$.checkForm = function(formField, type)		//检查from是否可送出
+c$.checkElement = function(element, type)		//检查一个元素
+c$.isElement = function(obj)					//判断对象是否页面元素
+c$.clearForm = function(form)					//清除form里各元素的值
+c$.clearFileInput = function(file)				//清空file的值
+c$.inputNumber = function(isFloat, event)		//过滤数字(不符合的不让输入)
+c$.inputLetter = function(event)				//过滤字母(不符合的不让输入)
+c$.inputNumLetter = function(event)				//过滤字母数字(不符合的不让输入)
+c$.setButtonUsed = function(isDisabled, dom)	//设定按钮是否可用
+c$.setElementDisable = function(objEle, canUse)	//设置元素可用或者不可用
+c$.setDomDisable = function(canUse, dom, notChangeArr)	//设置整个页面的元素都可用或者都不可用 (对frame,iframe里面的元素暂未处理)
+c$.cover = function(flag, zIndex)				//设置页面覆盖层
+c$.removeElement = function(element)			//删除节点
+c$.getElementPos = function(element) 			//获取元素位置
+c$.setFocus = function(element) 				// 设定为焦点
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * 浏览器操作  * * * * * * * * * * * * * * * * * * * * * * * * * */
+c$.browser        			//获取浏览器类型,eg: if (c$.browser()[0] == 'IE') alert('这是 IE 浏览器, 版本号为:' + c$.browser()[1]);
+c$.browser.isNav  			//如果是火狐等浏览器则为“true”，IE浏览器则返回“false”
+c$.browser.isFF				//是否火狐
+c$.browser.isIE				//是否IE
+c$.browser.isIE6			//是否IE6
+c$.browser.type				//另一种获取浏览器类型的写法(值为字符串),值会有: IE, Firefox, Opera, Chrome, Safari, Other
+c$.browser.version			//浏览器的版本(值为字符串) 
+c$.openWin = function(url, name, width, height)		//打开窗口(没有高和宽参数时默认全屏)
+c$.closeWin = function(win)							//关闭窗口(IE上的关闭窗口时不提示)
+c$.setIframeHeight = function(iframe)				//设定iframe适应高度(必须在 iframe元素加载后执行,如在 onload 里面执行,否则无效)
+c$.addFavorite = function(sURL, sTitle)				//添加收藏
+c$.setHome = function(obj, url)						//设为首页
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * 系统操作  * * * * * * * * * * * * * * * * * * * * * * * * * */
+c$.isTest      //是否测试环境,如果是本机或者局域网，则认为是测试环境(为 true)； 其它则认为是正在发布的环境(为 false)
+c$.isWin       //顾名思义
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * 对象操作  * * * * * * * * * * * * * * * * * * * * * * * * * */
+c$.create = function(arg)						//创建一个类
+c$.extend = function(destination, source)		//类的扩展
+c$.keys = function(object) 						//获取对象的所有键的数组
+c$.values = function(object)					//获取对象的所有值的数组
+c$.clone = function(object)						//返回某对象的复制(浅拷贝)
+c$.toStr = function(strValue)					//将对象转换成字符串
+c$.toInt = function(str)						//转成 int 类型
+c$.toFloat = function(str)						//转成 float 类型
+c$.toNumberStr = function(value, decimal, signNumber)	//把数值转化成指定的数值字符串,指定小数位,可加逗号
+c$.HashTable								//创建一个哈希表对象
+c$.serialize = function(form, encode)		//表单序列化
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * ajax，其实jquery就行了,egg pain write write ba  * * * * * * * * * * * * * * * * * * * * * * * * * */
+c$.createXMLHttpRequest											//创建 XMLHttpRequest
+c$.getAjaxValue = function(xmlHttp, tagName, init, index)		//获取xmlHttp里符合的资料
+/**
+ * 发送ajax
+ * 需改变的参数则需写上，使用默认的不用写，所有的参数都可以不写
+ * @return paramObj 参数对象,具体参考下面的用例
+ * @return c$ 对象本身，以支持连缀
+ * c$.ajax({
+ *    url : "submit.html",                         // 需要发送的地址(默认: 当前页地址)
+ *    param : "a=1&b=2",                           // 需要发送的传参字符串
+ *    async : true,                                // 异步或者同步请求(默认: true, 异步请求)。如果需要发送同步请求，请将此选项设置为 false
+ *    cache : true,                                // 是否允许缓存请求(默认: true, 允许缓存)
+ *    method : "GET",                              // 请求方式(默认: "GET"),也可用"POST"
+ *    success : function(xmlHttp){....},           // 请求成功返回的动作
+ *    error : function(xmlHttp, status){....},     // 请求失败时的动作
+ *    complete : function(xmlHttp, status){....}   // 请求返回后的动作(不管成败,且在 success 和 error 之后运行)
+ * });
+ */
+c$.ajax = function(paramObj)
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * 其他综合  * * * * * * * * * * * * * * * * * * * * * * * * * */
+function setCheckAll(objid,subName)				//设置全选组件
+c$.selectAll = function(checkboxList, checked)	//checkbox全选: 全部勾上 或者全部不选
+c$.addTimeStamp = function(url, flag)			//给网址加上时间戳,避免浏览器缓存(已经有时间戳的，会修改时间戳)
+c$.getHost = function(url)						//获取URL里面的网站域名	
+c$.json2str = function (obj, key2lowerCase)		//将 JSON 对象内容转成字符串(注：中文会被url转码)
+c$.getRequestParams = function(href, key2lowerCase)		//分解URL请求参数
+c$.encodeUrl = function(href, key2lowerCase)			//对链接进行 UTF-8 编码
+c$.toQueryStr = function(obj, href, key2lowerCase)		//把对象格式化成 URL 的参数形式
+c$.getRequestValue = function(name)				//获取URL的参数
+c$.getMousePos = function(ev)					//获取鼠标的坐标
+function pageTo(num)							//进入分页
+function getChecked(objName)					//获取选中的复选框,返回选中的数组
+function fillForm(formId,jsonData)				//根据json填充form,注：复选框的json数据格式应该为："aihao":["tiyu","nba"]
+
+
+
+
+
+
+
+

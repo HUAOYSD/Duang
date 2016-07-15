@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd     
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd     
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<context:component-scan base-package="org" />
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 数据源配置 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<!-- 指定连接数据库的驱动 -->
+		<property name="driverClass">
+			<value>${connection.driver_class}</value>
+		</property>
+		<!-- 指定连接数据库的URL -->
+		<property name="jdbcUrl">
+			<value>${connection.url}</value>
+		</property>
+		<!-- 指定连接数据库的用户名 -->
+		<property name="user">
+			<value>${connection.username}</value>
+		</property>
+		<!-- 指定连接数据库的密码 -->
+		<property name="" value="root" />
+		<property name="password">
+			<value>${connection.password}</value>
+		</property>
+		<!-- 指定连接池中保留的最大连接数. Default:15 -->
+		<property name="maxPoolSize" value="15" />
+		<!-- 指定连接池中保留的最小连接数 -->
+		<property name="minPoolSize" value="10" />
+		<!-- 指定连接池的初始化连接数 取值应在minPoolSize 与 maxPoolSize 之间.Default:3 -->
+		<property name="initialPoolSize" value="5" />
+		<!-- 最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。 Default:0 -->
+		<property name="maxIdleTime" value="60" />
+		<!-- 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数. Default:3 -->
+		<property name="acquireIncrement" value="5" />
+		<!-- JDBC的标准,用以控制数据源内加载的PreparedStatements数量。但由于预缓存的statements属于单个connection而不是整个连接池所以设置这个参数需要考虑到多方面的因数.如果maxStatements与maxStatementsPerConnection均为0,则缓存被关闭。Default:0 -->
+		<property name="maxStatements" value="0" />
+		<!-- 每60秒检查所有连接池中的空闲连接.Default:0 -->
+		<property name="idleConnectionTestPeriod" value="60" />
+		<!-- 定义在从数据库获取新连接失败后重复尝试的次数。 Default:30 -->
+		<property name="acquireRetryAttempts" value="30" />
+		<!-- 获取连接失败将会引起所有等待连接池来获取连接的线程抛出异常。但是数据源仍有效保留,并在下次调用getConnection()的时候继续尝试获取连接。如果设为true,那么在尝试获取连接失败后该数据源将申明已断开并永久关闭。Default:false -->
+		<property name="breakAfterAcquireFailure" value="true" />
+		<!-- 性能消耗大请只在需要的时候是打开它。如果设为true,那么在每个connection提交的时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable等提升连接测试的性能。 
+			Default:false -->
+		<property name="testConnectionOnCheckout" value="false" />
+		<!-- 检查获取的连接是否有效 -->
+		<property name="testConnectionOnCheckin" value="true" />
+		<!-- 测试语句 -->
+		<property name="preferredTestQuery" value="select 1" />
+		<property name="properties">
+			<props>
+				<prop key="c3p0.idle_test_period">18000</prop>
+				<prop key="c3p0.timeout">20000</prop>
+				<prop key="c3p0.max_size">40</prop>
+				<prop key="c3p0.max_statements">100</prop>
+				<prop key="c3p0.min_size">10</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>org.duang.entity</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 日志控制器 -->
+  	<bean id="logController" class="org.duang.common.logger.LogController"></bean>
+
+	<!-- 事务配置开始 -->
+    <bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <!-- 开启注解事务 -->
+	<tx:annotation-driven transaction-manager="txManager"/>
+
+	<!-- 开启cglib动态代理 -->
+	<!-- <aop:config proxy-target-class="true" /> -->
+	
+	<!-- 配置事务 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+    	<tx:attributes>
+  			<tx:method name="save*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="del*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="cancel*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="edit*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="modify*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="send*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="import*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="login*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="export*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="logout*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<!-- hibernate4新特性，全面支持事务，so查询也得要事务了 -->
+            <tx:method name="get*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="is*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="exist*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="check*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="count*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="find*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="query*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="go*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="to*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="*" rollback-for="java.lang.Exception"/>
+        </tx:attributes>
+    </tx:advice>
+    
+     <!-- 因为这个当当开启了动态代理，so:注解@Resource等就必须写在set方法上，不能写在变量上(虽然可以用,但是不是借口注入,代理就没意义了) -->
+    <aop:config expose-proxy="true">
+		<aop:pointcut id="txPointcut" expression="(execution (* org.duang.service.impl..*.*(..))) or (execution (* org.duang.service.base..*.*(..)))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+		<!-- 日志切面 -->
+		<aop:aspect id="LogAspect" ref="logController">
+			<!-- <aop:pointcut expression="execution(* com.oneBuy.service.*.*(..))" id="serviceImpl"/> -->
+			<aop:pointcut id="serviceImpl" expression="(execution (* org.duang.service.impl..*.*(..))) or (execution (* org.duang.service.base..*.*(..)))" />
+			<aop:around method="methodCacheHold" pointcut-ref="serviceImpl"/>
+		</aop:aspect>
+	</aop:config>
+  	<!-- 事务配置结束 -->
+    
+</beans>

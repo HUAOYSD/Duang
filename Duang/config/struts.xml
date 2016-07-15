@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<package name="sys" namespace="/sys" extends="struts-default,json-default">
+		<interceptors>
+			<!-- session拦截器 -->
+			<interceptor name="sessionInterceptor" class="org.duang.common.interceptor.SessionInterceptor" />
+			<interceptor-stack name="sysLoginStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="sessionInterceptor">
+					<param name="excludeMethods">login,showLogin,loginView</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<!--全局拦截器栈 -->
+		<default-interceptor-ref name="sysLoginStack"></default-interceptor-ref>
+
+		<global-results>
+			<result name="noSession">/WEB-INF/page/error/noSession.jsp</result>
+			<result name="strutsException">/WEB-INF/page/error/error.jsp</result>
+		</global-results>
+
+		<global-exception-mappings>
+			<exception-mapping result="strutsException"
+				exception="java.lang.Exception"></exception-mapping>
+		</global-exception-mappings>
+	</package>
+</struts>     
