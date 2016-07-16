@@ -39,11 +39,10 @@ public class BaseAction {
 	 */ 
 	protected void printJsonResult(PrintWriter out){
 		try {
-			System.out.println("develop");
-//			if (out != null) {
-//				out.print(jsonObject);
-//				out.close();
-//			}
+			if (out != null) {
+				out.print(jsonObject);
+				out.close();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("ERROR-Msg："+e.getMessage());
