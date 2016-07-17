@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @ClassName: LogController 
  * @Description: TODO(这里用一句话描述这个类的作用) 
  * @author 白攀
- * @date 2014-8-21 上午11:08:43 
+ * @date 2016-7-15 上午11:08:43 
  */ 
 public class LogController {
 
@@ -30,7 +30,7 @@ public class LogController {
 	 * @throws Throwable
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2014-8-22 下午1:37:08
+	 * @date 2016-7-15 下午1:37:08
 	 */ 
 	public Object methodCacheHold(ProceedingJoinPoint joinPoint) throws Throwable {
 		String methoName = joinPoint.getSignature().getName(); 	// 方法名
@@ -53,7 +53,7 @@ public class LogController {
 	 * @param @throws Exception    
 	 * @return String[]    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-1 下午2:21:28
+	 * @date 2016-7-15 下午2:21:28
 	 * @throws
 	 */
 	@SuppressWarnings("rawtypes")
@@ -95,19 +95,5 @@ public class LogController {
 		methode[2] = ("").equals(methode[2]) ? "未知类型" : methode[2];
 		return methode;  
 	}
-
-	/** 
-	 * 下载
-	 * @Title: downloadFile 
-	 * @Description: TODO(这里用一句话描述这个方法的作用) 
-	 * @return void    返回类型 
-	 * @author 白攀
-	 * @date 2014-8-22 下午1:54:26
-	 */ 
-	@RequestMapping("downloadFile.do")
-	public void downloadFile(){
-		System.out.println("下载");
-	}
-
 
 }

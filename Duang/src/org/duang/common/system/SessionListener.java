@@ -19,7 +19,6 @@ public class SessionListener implements HttpSessionListener {
     private MySessionContext myc = MySessionContext.getInstance();  
   
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {  
-    	//com.mchange.v2.c3p0.ComboPooledDataSource""
         myc.addSession(httpSessionEvent.getSession());  
     }  
   

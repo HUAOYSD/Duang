@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
  * @ClassName: MD5Utils 
  * @Description: TODO 
  * @author 白攀 
- * @date 2016-3-5 下午12:35:36 
+ * @date 2016-7-17 下午12:35:36 
  */
 public class MD5Utils {
 

@@ -5,23 +5,30 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
-import org.duang.dao.EnglishDao;
-import org.duang.entity.English;
-import org.duang.service.EnglishService;
+import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.SysUserDao;
+import org.duang.entity.SysUser;
+import org.duang.service.SysUserService;
 import org.duang.util.PageUtil;
 import org.springframework.stereotype.Service;
 
-@ServiceLog(ModelName="单词服务管理")
-@Service(value="englishServiceImpl")
-public class EnglishServiceImpl implements EnglishService{
+/**   
+ * 系统用户业务接口实现类
+ * @ClassName:  SysUserServiceImpl   
+ * @Description:TODO(这里用一句话描述这个类的作用)   
+ * @author 白攀
+ * @date 2016年7月17日 下午12:21:22      
+ */  
+@ServiceLog(ModelName="系统用户服务管理")
+@Service(value="sysuserserviceimpl")
+public class SysUserServiceImpl implements SysUserService{
 
-	@Resource
-	private EnglishDao dao;
+	@Resource(name="sysuserdao")
+	private SysUserDao dao;
 
-	public EnglishServiceImpl(){
-		System.out.println("注入EnglishServiceImpl服务层");
+	public SysUserServiceImpl(){
+		LoggerUtils.info("注入SysUserServiceImpl服务层");
 	}
-	
 	
 	/**
 	 * 计数总数全部
@@ -30,7 +37,6 @@ public class EnglishServiceImpl implements EnglishService{
 	public int count() throws Exception{
 		return dao.count();
 	}
-	
 	
 	/**
 	 * 计数总数全部
@@ -59,7 +65,7 @@ public class EnglishServiceImpl implements EnglishService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<English> queryAllEntity() throws Exception {
+	public List<SysUser> queryAllEntity() throws Exception {
 		return dao.queryAllEntity();
 	}
 
@@ -69,7 +75,7 @@ public class EnglishServiceImpl implements EnglishService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<English> queryAllEntity(PageUtil<English> page) throws Exception{
+	public List<SysUser> queryAllEntity(PageUtil<SysUser> page) throws Exception{
 		return dao.queryAllEntity(page);
 	}
 
@@ -81,7 +87,7 @@ public class EnglishServiceImpl implements EnglishService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<English> queryEntity(String field, Object value, PageUtil<English> page) throws Exception{
+	public List<SysUser> queryEntity(String field, Object value, PageUtil<SysUser> page) throws Exception{
 		return dao.queryEntity(field, value, page);
 	}
 
@@ -93,7 +99,7 @@ public class EnglishServiceImpl implements EnglishService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<English> queryEntity(List<String> properties, List<Object> values, PageUtil<English> page) throws Exception{
+	public List<SysUser> queryEntity(List<String> properties, List<Object> values, PageUtil<SysUser> page) throws Exception{
 		return dao.queryEntity(properties, values, page);
 	}
 
@@ -103,7 +109,7 @@ public class EnglishServiceImpl implements EnglishService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public English findById(Serializable id) throws Exception{
+	public SysUser findById(Serializable id) throws Exception{
 		return dao.findById(id);
 	}
 
@@ -113,7 +119,7 @@ public class EnglishServiceImpl implements EnglishService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(English t) throws Exception{
+	public boolean saveEntity(SysUser t) throws Exception{
 		return dao.saveEntity(t);
 	}
 
@@ -123,7 +129,7 @@ public class EnglishServiceImpl implements EnglishService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(English t) throws Exception{
+	public boolean updateEntity(SysUser t) throws Exception{
 		return dao.updateEntity(t);
 	}
 
@@ -133,7 +139,7 @@ public class EnglishServiceImpl implements EnglishService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(English t) throws Exception{
+	public boolean deleteEntity(SysUser t) throws Exception{
 		return dao.deleteEntity(t);
 	}
 
@@ -177,13 +183,5 @@ public class EnglishServiceImpl implements EnglishService{
 		return dao.executeSql(sqls);
 	}
 
-
-	//这个要设置手动异常
-	public boolean addEnglish2(English english) throws Exception{
-		dao.saveEntity(english);
-		int a = 5 / 0;
-		System.out.println(a);
-		return true;
-	}
 
 }

@@ -5,7 +5,7 @@ package org.duang.common.logger;
  * @ClassName: Opration 
  * @Description: TODO(这里用一句话描述这个类的作用) 
  * @author 白攀
- * @date 2014-8-22 下午1:36:23 
+ * @date 2016-7-16 下午1:36:23 
  *  
  */ 
 public enum LogOprationUtil {

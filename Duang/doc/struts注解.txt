@@ -1,0 +1,48 @@
+如果类上注解了一个action，并在该类的方法上也注解了一个action，那么这俩action都是可以用的
+在Action类上注解了action的话，就用不着再在Action类上面去注解@Controller了，因为使用@Controller注解就是为了给Struts.xml的Action提供一个Class，而Class是通过name
+来调用的, so:@Action直接有了name属性值，而他的"Class"值分为两种情况：
+   1.如果是在类上注解：那么class就是默认指定了该类
+   2.如果在方法上注解：那么class就是默认指定该类并指定了该方法，直接使用name就可以访问该方法
+
+总结常用的注解如下：
+
+Namespace：指定命名空间。
+
+ParentPackage：指定父包。
+
+Result：提供了Action结果的映射。（一个结果的映射）
+
+Results：“Result”注解列表
+
+ResultPath：指定结果页面的基路径。
+
+Action：指定Action的访问URL。
+
+Actions：“Action”注解列表。
+
+ExceptionMapping：指定异常映射。（映射一个声明异常）
+
+ExceptionMappings：一级声明异常的数组。
+
+InterceptorRef：拦截器引用。
+
+InterceptorRefs：拦截器引用组。
+
+
+?@Action，这个注解对应<action>节点。这个注解可以应用于action类上，也可以应用于方法上。这个注解中有几个属性：
+	?value()，表示action的URL，也就是<action>节点中的name属性；
+	?results()，表示action的多个result；这个属性是一个数组属性，因此可以定义多个Result；
+	?interceptorRefs()，表示action的多个拦截器。这个属性也是一个数组属性，因此可以定义多个拦截器；
+	?params()，这是一个String类型的数组，它按照name/value的形式组织，是传给action的参数；
+	?exceptionMappings()，这是异常属性，它是一个ExceptionMapping的数组属性，表示action的异常，在使用时必须引用相应的拦截器；
+ 
+?@Result，这个注解对应了<result>节点。这个注解只能应用于action类上。这个注解中也有几个属性：
+	?name()，表示action方法的返回值，也就是<result>节点的name属性，默认情况下是【success】；
+	?location()，表示view层文件的位置，可以是相对路径，也可以是绝对路径；
+	?type()，是action的类型，比如redirect；
+	?params()，是一个String数组。也是以name/value形式传送给result的参数； 
+
+
+
+
+

@@ -19,7 +19,7 @@ public class LoggerUtils {
 	 * @param @param message    
 	 * @return void    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-3 下午4:52:13
+	 * @date 2016-7-16下午4:52:13
 	 * @throws
 	 */
 	public static void debug(String message){
@@ -35,7 +35,7 @@ public class LoggerUtils {
 	 * @param @param message    
 	 * @return void    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-3 下午4:52:13
+	 * @date 2016-7-16 下午4:52:13
 	 * @throws
 	 */
 	public static void info(String message){
@@ -51,7 +51,7 @@ public class LoggerUtils {
 	 * @param @param message    
 	 * @return void    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-3 下午4:52:13
+	 * @date 2016-7-16 下午4:52:13
 	 * @throws
 	 */
 	public static void warn(String message){
@@ -67,7 +67,7 @@ public class LoggerUtils {
 	 * @param @param message    
 	 * @return void    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-3 下午4:52:13
+	 * @date 2016-7-16 下午4:52:13
 	 * @throws
 	 */
 	public static void error(String message){

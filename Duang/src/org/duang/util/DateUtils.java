@@ -12,7 +12,7 @@ import java.util.Date;
  * @ClassName: DateUtil 
  * @Description: TODO 
  * @author 白攀 
- * @date 2016-3-1 上午11:52:40 
+ * @date 2016-7-17 上午11:52:40 
  */
 public class DateUtils {
 	/**
@@ -469,7 +469,7 @@ public class DateUtils {
 	 * @param @return    
 	 * @return Date    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-1 上午11:59:15
+	 * @date 2016-7-17 上午11:59:15
 	 * @throws
 	 */
 	public Date getYesterday() {
@@ -489,7 +489,7 @@ public class DateUtils {
 	 * @param @return    
 	 * @return Date    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-1 上午11:59:32
+	 * @date 2016-7-17 上午11:59:32
 	 * @throws
 	 */
 	public Date getTomorrow(){

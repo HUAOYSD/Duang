@@ -133,7 +133,6 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
 		<!-- 日志切面 -->
 		<aop:aspect id="LogAspect" ref="logController">
-			<!-- <aop:pointcut expression="execution(* com.oneBuy.service.*.*(..))" id="serviceImpl"/> -->
 			<aop:pointcut id="serviceImpl" expression="(execution (* org.duang.service.impl..*.*(..))) or (execution (* org.duang.service.base..*.*(..)))" />
 			<aop:around method="methodCacheHold" pointcut-ref="serviceImpl"/>
 		</aop:aspect>

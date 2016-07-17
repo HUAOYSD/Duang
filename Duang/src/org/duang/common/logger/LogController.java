@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @ClassName: PermissionsInterceptor 
  * @Description: TODO(这里用一句话描述这个类的作用) 
  * @author 白攀
- * @date 2014-8-21 上午11:08:43 
+ * @date 2016-7-15 上午11:08:43 
  */ 
 public class LogController {
 
@@ -27,14 +27,13 @@ public class LogController {
 	 * @throws Throwable
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2014-8-22 下午1:37:08
+	 * @date 2016-7-16 下午1:37:08
 	 */ 
 	public Object methodCacheHold(ProceedingJoinPoint joinPoint) throws Throwable {
 		String methoName = joinPoint.getSignature().getName(); 	// 方法名
 		String[] contents = this.getMthodRemark(joinPoint);
 		//msg = DateUtils.getCurrentDate("yyyy年MM月dd日 HH时mm分ss秒")+"执行方法'"+methoName+"',警告：此方法为不明方法";
 		String msg = DateUtils.getCurrentDate("yyyy年MM月dd日 HH时mm分ss秒")+"执行方法——"+joinPoint.getTarget().getClass()+"."+methoName+"[方法序号："+contents[1]+"；类型："+contents[2]+"；所属模块："+contents[0]+"]";
-		System.out.println(msg);
 		LoggerUtils.info(msg);
 		return joinPoint.proceed();//当做继续的意思
 	}
@@ -50,7 +49,7 @@ public class LogController {
 	 * @param @throws Exception    
 	 * @return String[]    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-1 下午2:21:28
+	 * @date 2016-7-16 下午2:21:28
 	 * @throws
 	 */
 	@SuppressWarnings("rawtypes")
@@ -94,18 +93,6 @@ public class LogController {
 	}
 
 
-	/** 
-	 * 下载
-	 * @Title: downloadFile 
-	 * @Description: TODO(这里用一句话描述这个方法的作用) 
-	 * @return void    返回类型 
-	 * @author 白攀
-	 * @date 2014-8-22 下午1:54:26
-	 */ 
-	@RequestMapping("downloadFile.do")
-	public void downloadFile(){
-		System.out.println("下载");
-	}
 
 
 }

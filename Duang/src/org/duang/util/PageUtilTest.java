@@ -17,7 +17,7 @@ import java.util.List;
  * @ClassName: PageUtilTest 
  * @Description: TODO(分页工具包) 
  * @author 白攀
- * @date 2013-12-30 下午2:18:20 
+ * @date 2016-7-17 下午2:18:20 
  */
 public class PageUtilTest {
 
@@ -48,7 +48,7 @@ public class PageUtilTest {
 	 * @param countRecords 总记录数
 	 * @param pageRecords 每页记录数 默认为20
 	 * @author 白攀
-	 * @date 2013-12-30 下午2:37:38
+	 * @date 2016-7-17 下午2:37:38
 	 */
 	public PageUtilTest(int currentPageNum,Integer countRecords,Integer pageRecords){
 		this.setCountRecords(countRecords);
@@ -87,7 +87,7 @@ public class PageUtilTest {
 	 * @param countPages
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2013-12-30 下午2:43:13
+	 * @date 2016-7-17 下午2:43:13
 	 */
 	private void setCountPages() {
 		this.countPages=(int) Math.ceil(((double)this.countRecords)/((double)this.pageRecords));
@@ -111,7 +111,7 @@ public class PageUtilTest {
 	 * @param currentPageNum
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2013-12-30 下午3:12:34
+	 * @date 2016-7-17 下午3:12:34
 	 */
 	public void setCurrentPageNum(int currentPageNum) {
 		if(currentPageNum>0 && currentPageNum<=countPages){
@@ -133,7 +133,7 @@ public class PageUtilTest {
 	 * @param easyui
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2014-4-25 下午03:49:28
+	 * @date 2016-7-17 下午03:49:28
 	 */ 
 	public void setCurrentPageNum(int currentPageNum,Boolean isEasyui){
 		if (isEasyui) {
@@ -153,7 +153,7 @@ public class PageUtilTest {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2013-12-30 下午4:06:44
+	 * @date 2016-7-17 下午4:06:44
 	 */
 	public void setPrevPageNum() {
 		if(this.countPages>1 && this.currentPageNum>1){
@@ -169,7 +169,7 @@ public class PageUtilTest {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2013-12-30 下午3:16:30
+	 * @date 2016-7-17 下午3:16:30
 	 */
 	public void setNextPageNum() {
 		if(this.currentPageNum==this.countPages){
@@ -192,7 +192,7 @@ public class PageUtilTest {
 	 * @return
 	 * @return List<Integer>    返回类型 
 	 * @author 白攀
-	 * @date 2013-12-30 下午3:27:21
+	 * @date 2016-7-17 下午3:27:21
 	 */
 	public void setListPages() {
 		int start=1;
@@ -223,7 +223,7 @@ public class PageUtilTest {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2013-12-30 下午3:59:37
+	 * @date 2016-7-17 下午3:59:37
 	 */
 	private void setRecordStartIndex() {
 		this.recordStartIndex=(this.currentPageNum-1)*this.pageRecords;

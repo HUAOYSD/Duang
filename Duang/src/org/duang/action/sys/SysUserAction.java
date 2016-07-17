@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
 @Controller
 @RequestMapping("/english")
-public class EnglishAction{
-
-
+public class SysUserAction{
+	
 }

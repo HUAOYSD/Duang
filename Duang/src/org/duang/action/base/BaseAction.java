@@ -12,7 +12,7 @@ import org.duang.common.logger.LoggerUtils;
  * @ClassName: BaseAction 
  * @Description: TODO 
  * @author Comsys-白攀 
- * @date 2016-2-29 下午2:33:18 
+ * @date 2016-7-15 下午2:33:18 
  */
 public class BaseAction {
 
@@ -25,6 +25,18 @@ public class BaseAction {
 	//json对象
 	protected JSONObject jsonObject = null;
 
+	/**   
+	 * easy列表页自带参数 每页个数
+	 * @Fields rows : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	protected int rows;
+	/**   
+	 * easy列表页自带参数 当前页数
+	 * @Fields page : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	protected int page;
+	
+	
 	//	public BaseController(){
 	//		this.clazz=CastToClass.getSuperGenericClass(this.getClass());
 	//	}
@@ -35,7 +47,7 @@ public class BaseAction {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2016-3-6 下午4:31:26
+	 * @date 2016-7-15 下午4:31:26
 	 */ 
 	protected void printJsonResult(PrintWriter out){
 		try {
@@ -57,7 +69,7 @@ public class BaseAction {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2016-3-6 下午4:31:26
+	 * @date 2016-7-15 下午4:31:26
 	 */ 
 	protected void printJsonResult(PrintWriter out, String jsonStr){
 		try {
@@ -72,5 +84,18 @@ public class BaseAction {
 		}
 	}
 
+
+	public int getRows() {
+		return rows;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
 }
 

@@ -8,7 +8,7 @@ import java.util.List;
  * @ClassName: PageUtil 
  * @Description: TODO 
  * @author 白攀 
- * @date 2016-3-5 下午1:52:53 
+ * @date 2016-7-17 下午1:52:53 
  */
 public class PageUtil<T>{
 
@@ -211,7 +211,7 @@ public class PageUtil<T>{
 	 * @param     
 	 * @return void    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-5 下午3:55:03
+	 * @date 2016-7-17 下午3:55:03
 	 * @throws
 	 */
 	public void setListPages(){

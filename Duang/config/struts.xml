@@ -4,7 +4,8 @@
 	<package name="sys" namespace="/sys" extends="struts-default,json-default">
 		<interceptors>
 			<!-- session拦截器 -->
-			<interceptor name="sessionInterceptor" class="org.duang.common.interceptor.SessionInterceptor" />
+			<interceptor name="sessionInterceptor"
+				class="org.duang.common.interceptor.SessionInterceptor" />
 			<interceptor-stack name="sysLoginStack">
 				<interceptor-ref name="defaultStack"></interceptor-ref>
 				<interceptor-ref name="sessionInterceptor">

@@ -38,7 +38,7 @@ public class FileUtil {
 	 * @return
 	 * @return String 返回类型
 	 * @author 白攀
-	 * @date 2015-12-18 上午10:46:54
+	 * @date 2016-7-17 上午10:46:54
 	 */
 	public static String getUrlCallBackInfo(String fileurl, String charset) {
 		StringBuffer sb = new StringBuffer();
@@ -85,7 +85,7 @@ public class FileUtil {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
 	 * @author 白攀
-	 * @date 2016-1-26 上午11:07:18
+	 * @date 2016-7-17 上午11:07:18
 	 */
 	public static String  wireStringToFile(String content,String filePath,String fileName){
 		if(filePath==null || filePath.equals("")){
@@ -170,7 +170,7 @@ public class FileUtil {
 	 * @Title: getPrefix 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return String    返回类型 
-	 * @date 2014年8月14日 上午9:58:03
+	 * @date 2016-7-17 上午9:58:03
 	 * @author 白攀
 	 */
 	public static String getPrefix(String fileName){
@@ -348,7 +348,7 @@ public class FileUtil {
 	 * @throws Exception
 	 * @return long    返回类型 
 	 * @author 白攀
-	 * @date 2014-5-4 下午2:52:09
+	 * @date 2016-7-17 下午2:52:09
 	 */
 	@SuppressWarnings("resource")
 	public static long getFileSizes(File f) {

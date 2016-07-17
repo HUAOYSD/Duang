@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
  * @ClassName: CastToClass 
  * @Description: TODO 
  * @author 白攀 
- * @date 2016-2-29 下午2:41:57 
+ * @date 2016-7-17 下午2:41:57 
  */
 public class CastToClass {
 

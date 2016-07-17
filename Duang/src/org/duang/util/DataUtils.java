@@ -10,7 +10,7 @@ import java.util.UUID;
  * @ClassName: DataUtils 
  * @Description: TODO 
  * @author 白攀 
- * @date 2016-3-2 下午3:28:12 
+ * @date 2016-7-17 下午3:28:12 
  */
 public class DataUtils {
 	/**
@@ -85,7 +85,7 @@ public class DataUtils {
 	 * @return
 	 * @return int    返回类型 
 	 * @author 白攀
-	 * @date 2014-9-2 下午3:52:49
+	 * @date 2016-7-17 下午3:52:49
 	 */ 
 	public static int str2int(String string){
 		try {
@@ -105,7 +105,7 @@ public class DataUtils {
 	 * @param @return    
 	 * @return String    返回类型
 	 * @author 白攀 
-	 * @date 2016-3-2 下午3:46:49
+	 * @date 2016-7-17 下午3:46:49
 	 * @throws
 	 */
 	public static String randomUUID(){
