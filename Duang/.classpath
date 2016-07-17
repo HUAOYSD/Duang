@@ -82,35 +82,40 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-tx-3.2.9.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-web-3.2.9.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/standard.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-convention-plugin-2.3.16.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-core-2.3.16.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-dojo-plugin-2.3.16.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-embeddedjsp-plugin-2.3.16.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-json-plugin-2.3.16.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-spring-plugin-2.3.16.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/validation-api-1.0.0.GA.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xom-1.0d10.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/annotations-api.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/catalina.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/catalina-ant.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/catalina-ha.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/catalina-tribes.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/ecj-4.4.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/el-api.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/jasper.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/jasper-el.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/jsp-api.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/tomcat7-websocket.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/tomcat-api.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/tomcat-coyote.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/tomcat-dbcp.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/tomcat-i18n-es.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/tomcat-i18n-fr.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/tomcat-i18n-ja.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/tomcat-jdbc.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/tomcat-util.jar"/>
-	<classpathentry kind="lib" path="C:/tomcat/tomcat/lib/websocket-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/com.springsource.com.mchange.v2.c3p0-0.9.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/annotations-api.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/catalina.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/catalina-ant.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/catalina-ha.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/catalina-tribes.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/ecj-4.4.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/el-api.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/jasper.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/jasper-el.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/tomcat7-websocket.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/tomcat-api.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/tomcat-coyote.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/tomcat-dbcp.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/tomcat-i18n-es.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/tomcat-i18n-fr.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/tomcat-i18n-ja.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/tomcat-jdbc.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/tomcat-util.jar"/>
+	<classpathentry kind="lib" path="C:/mysoft/apache-tomcat-7.0.55/lib/websocket-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-convention-plugin-2.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-core-2.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-dojo-plugin-2.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-dwr-plugin-2.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-embeddedjsp-plugin-2.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-jasperreports-plugin-2.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-json-plugin-2.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-spring-plugin-2.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xapool.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xwork-core-2.2.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
