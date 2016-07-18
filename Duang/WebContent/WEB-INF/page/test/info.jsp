@@ -17,7 +17,7 @@
 	<div>
 		<form action="<%=path %>/sysseraction.do" method="post">
 			<div>
-				<input name="返回" value="" type="button" onclick="javascript:window.history.back();"/>
+				<input name="返回" value="返回" type="button" onclick="javascript:window.history.back();"/>
 			</div>
 			<div>
 				<table cellpadding="0" cellspacing="0">

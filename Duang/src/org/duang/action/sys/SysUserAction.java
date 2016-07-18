@@ -1,9 +1,7 @@
 package org.duang.action.sys;
 
 import java.util.List;
-
 import javax.annotation.Resource;
-
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -25,13 +23,11 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * @ClassName: EnglishAction 
  * @Description: TODO(这里用一句话描述这个类的作用) 
  * @author 白攀
- * @date 2014-8-21 下午2:07:35 
- *  
+ * @date 2016-7-17 下午2:07:35 
  */ 
 @Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
-@InterceptorRef(value="defaultStack")
-@Action(value="sysseraction")
 @Namespaces(@Namespace("/"))
+@Action(value="sysseraction", interceptorRefs = {@InterceptorRef(value = "defaultStack")} )
 @Results(value={
 		@Result(name="success",type="dispatcher",location="WEB-INF/page/test/list.jsp"),
 		@Result(name="info",type="dispatcher",location="WEB-INF/page/test/info.jsp"),
@@ -39,7 +35,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 })
 public class SysUserAction extends BaseAction<SysUser>{
 
-	/**   
+	/**  
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 8766958805913002975L;
@@ -50,17 +46,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	public void setSysUserService(SysUserService sysUserService) {
 		this.sysUserService = sysUserService;
 	}
-	
-	@Override
-	public String execute(){
-		try {
-			super.execute();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return SUCCESS;
-	}
+
 
 	/**   
 	 * 查询全部或根据条件查询
@@ -78,12 +64,12 @@ public class SysUserAction extends BaseAction<SysUser>{
 		String searchName = super.getRequest().getParameter("search_name");
 		String searchEmail = super.getRequest().getParameter("search_email");
 		if (DataUtils.notEmpty(searchName)) {//示例like
-			super.condsUtils.addProperties("name");
-			super.condsUtils.addValues(new Object[]{searchName,"like"});
+			super.condsUtils.addProperties(false, "name");
+			super.condsUtils.addValues(false, searchName);
 		}
 		if (DataUtils.notEmpty(searchEmail)) {//标准eq
-			super.condsUtils.addProperties("email");
-			super.condsUtils.addValues(searchEmail);
+			super.condsUtils.addProperties(false, "email");
+			super.condsUtils.concatValue(new Object[]{searchEmail,"like"});
 		}
 		List<SysUser> list = null;
 		try {

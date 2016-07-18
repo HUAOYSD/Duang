@@ -40,8 +40,11 @@ public class BaseDao<M> {
 	 * @date 2014-8-21 下午2:00:36
 	 */ 
 	public Session getSession(){
-		return sessionFactory.getCurrentSession();
+		//		System.out.println(sessionFactory);
+		//		System.out.println(sessionFactory.getCurrentSession());
+		//		System.out.println(sessionFactory.openSession());
 		//		return sessionFactory.openSession();
+		return sessionFactory.getCurrentSession();
 	}
 
 	private Class<M> entityClass;
@@ -1426,8 +1429,8 @@ public class BaseDao<M> {
 	 */ 
 	public DetachedCriteria fillDtCriteria(List<String> properties,List<Object> values) throws Exception{
 		DetachedCriteria dt = null;
+		dt = DetachedCriteria.forClass(entityClass);
 		if (values!=null&&values.size()>0) {
-			dt = DetachedCriteria.forClass(entityClass);
 			for (int i = 0; i < properties.size(); i++) {
 				//这是between，like,in,gt,lt等
 				if (values.get(i) instanceof Object[]) {

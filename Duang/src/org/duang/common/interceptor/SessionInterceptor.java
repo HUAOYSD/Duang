@@ -4,7 +4,6 @@ import org.apache.struts2.ServletActionContext;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.SessionTools;
-
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
 

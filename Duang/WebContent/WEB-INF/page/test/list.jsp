@@ -19,7 +19,7 @@
 	}
 	
 	function toadd(){
-		window.location.href="add.jsp";
+		window.location.href="<%=path %>/jumpaction!toTestAdd.do";
 	}
 </script>
 </head>
@@ -27,10 +27,10 @@
 	<div>
 		<form action="<%=path %>/sysseraction!queryList.do" method="post">
 			<div>
-				<input name="search_name" value=""/>
-				<input name="search_email" value=""/>
-				<input name="查询" value="" type="button" onclick="javascript:document.forms[0].submit();"/>
-				<input name="新增" value="" type="button" onclick="toadd()"/>
+				名字：<input name="search_name" value=""/>
+				邮箱：<input name="search_email" value=""/>
+				<input name="查询" value="查询" type="button" onclick="javascript:document.forms[0].submit();"/>
+				<input name="新增" value="新增" type="button" onclick="toadd()"/>
 			</div>
 			<div>
 				<table cellpadding="0" cellspacing="0">
@@ -47,8 +47,8 @@
 							<td>${temp.name }</td>
 							<td>${temp.password }</td>
 							<td>${temp.email }</td>
-							<td><input name="查看" value="" type="button" onclick="chakan('${temp.id }')"/></td>
-							<td><input name="删除" value="" type="button" onclick="shanchu('${temp.id }')"/></td>
+							<td><input name="查看" value="查看" type="button" onclick="chakan('${temp.id }')"/></td>
+							<td><input name="删除" value="删除" type="button" onclick="shanchu('${temp.id }')"/></td>
 						</tr>
 					</c:forEach>
 				</table>

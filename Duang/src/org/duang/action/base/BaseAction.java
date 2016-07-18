@@ -3,16 +3,13 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import net.sf.json.JSONObject;
-
 import org.apache.avro.reflect.Nullable;
 import org.apache.struts2.ServletActionContext;
 import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.util.CastToClass;
 import org.duang.util.PageUtil;
-
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 

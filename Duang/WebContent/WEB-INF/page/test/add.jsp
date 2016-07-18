@@ -17,7 +17,7 @@
 	<div>
 		<form action="<%=path %>/sysseraction!saveSysUser.do" method="post">
 			<div>
-				<input name="返回" value="" type="button" onclick="javascript:window.history.back();"/>
+				<input name="返回" value="返回" type="button" onclick="javascript:window.history.back();"/>
 			</div>
 			<div>
 				ID:<input name="id"/><br/>
@@ -25,7 +25,7 @@
 				密码:<input name="password"/><br/>
 				邮箱:<input name="email"/><br/>
 				
-				<input name="增加" value="" type="button" onclick="javascript:document.forms[0].submit();"/>
+				<input name="增加" value="增加" type="button" onclick="javascript:document.forms[0].submit();"/>
 			</div>
 		</form>
 	</div>

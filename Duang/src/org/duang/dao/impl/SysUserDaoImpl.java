@@ -100,6 +100,10 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 */
 	public List<SysUser> queryEntity(List<String> properties, List<Object> values, PageUtil<SysUser> page) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
+		List<SysUser> list1 = super.queryByDetachedCriteria(detachedCriteria, page);
+		List<SysUser> list2 = super.query("name", "张三");
+		List<SysUser> list3 = super.queryBySQL("select * from sys_user where name='张三'");
+		List<SysUser> list4 = super.queryByHQL("from SysUser where name='张三'");
 		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
 

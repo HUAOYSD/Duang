@@ -26,9 +26,11 @@ public class CondsUtils {
 	 * @param arg 所有的条件如：term1,term2...
 	 * @return 条件名字集合
 	 */
-	public List<String> addProperties(String... arg){
-		//每次给它清一遍
-		propertys.clear();
+	public List<String> addProperties(boolean isclear,String... arg){
+		if (isclear) {
+			//每次给它清一遍
+			propertys.clear();
+		}
 		if (arg!=null && arg.length > 0) {
 			for (String temp : arg) {
 				propertys.add(temp);
@@ -40,17 +42,36 @@ public class CondsUtils {
 
 	/**
 	 * 添加条件值
+	 * 注意：该方法不能填充like，gt等条件值，如有需要请使用 {@link org.duang.common.CondsUtils} concatValue方法
 	 * @param arg 所有的条件值如：obj1,obj2...
 	 * @return 条件名字集合
 	 */
-	public List<Object> addValues(Object... arg){
-		//每次给它清一遍
-		values.clear();
+	public List<Object> addValues(boolean isclear, Object... arg){
+		if (isclear) {
+			//每次给它清一遍
+			values.clear();
+		}
 		if (arg!=null && arg.length > 0) {
 			for (Object temp : arg) {
 				values.add(temp);
 			}
 		}
+		return values;
+	}
+
+	/**   
+	 * 直接追加值给value
+	 * @Title: concatValue   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param arg
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年7月18日 下午9:54:43
+	 * @return: List<Object>      
+	 * @throws   
+	 */  
+	public List<Object> concatValue(Object arg){
+		values.add(arg);
 		return values;
 	}
 
@@ -61,7 +82,7 @@ public class CondsUtils {
 	public List<String> getPropertys() {
 		return propertys;
 	}
-	
+
 
 	/**
 	 * 获取条件值
