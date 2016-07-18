@@ -23,13 +23,17 @@ import org.springframework.stereotype.Service;
 @Service(value="sysuserserviceimpl")
 public class SysUserServiceImpl implements SysUserService{
 
-	@Resource(name="sysuserdao")
 	private SysUserDao dao;
+
+	@Resource(name="sysuserdao")
+	public void setDao(SysUserDao dao) {
+		this.dao = dao;
+	}
 
 	public SysUserServiceImpl(){
 		LoggerUtils.info("注入SysUserServiceImpl服务层");
 	}
-	
+
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
@@ -37,7 +41,7 @@ public class SysUserServiceImpl implements SysUserService{
 	public int count() throws Exception{
 		return dao.count();
 	}
-	
+
 	/**
 	 * 计数总数全部
 	 * @param properties  字段属性
@@ -47,8 +51,8 @@ public class SysUserServiceImpl implements SysUserService{
 	public int count(String properties, Object value) throws Exception{
 		return dao.count(properties, value);
 	}
-	
-	
+
+
 	/**
 	 * 计数总数全部
 	 * @param properties  条件名字集合  
@@ -58,7 +62,7 @@ public class SysUserServiceImpl implements SysUserService{
 	public int count(List<String> properties,List<Object> values) throws Exception{
 		return dao.count(properties, values);
 	}
-	
+
 
 	/**
 	 * 查询全部

@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.duang.annotation.ServiceLog;
 import org.duang.util.DateUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 
 /** 

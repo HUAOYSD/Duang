@@ -9,3 +9,10 @@
 	到最后工作结束后再将develop合并到master分支，通过master上线运行．
 	另外对于线上环境有紧急bug要修改的时候．再从master里创建一个分支．独立维护．结束后，再分别同步master和develop两个分支．
 ```
+
+##了解
+###1.注解模板：file->codetemplates.xml
+###2.命名看注解切入那儿
+###3.先设置编码-8的
+###4.services和dao层的异常全部抛出（严禁捕获），在action try catch
+###5.jsp放web-info下面

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.duang.common.logger.LoggerUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -22,16 +23,11 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 public class BaseDao<M> {
-
-
 	private SessionFactory sessionFactory;
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
 	@Resource(name="sessionFactory")
 	public void setSessionFactory(SessionFactory sessionFactory) {
-		System.out.println("BaseDao注入SessionFactory");
 		this.sessionFactory = sessionFactory;
+		LoggerUtils.info("BaseDao注入SessionFactory");
 	}
 
 	/** 

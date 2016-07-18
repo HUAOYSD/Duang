@@ -1,6 +1,7 @@
 package org.duang.common.interceptor;
 
 import org.apache.struts2.ServletActionContext;
+import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.SessionTools;
 
@@ -38,7 +39,7 @@ public class SessionInterceptor extends MethodFilterInterceptor {
 		LoggerUtils.info("进入了拦截器");
 		if (SessionTools.getSessionSysUser() == null) {
 			ServletActionContext.getRequest().setAttribute("msg", "您还没有登录或登录已超时，请重新登录，3秒后将跳转到登录页面！<br><a href='javascript:alert('自个儿跳');'>如不能自动跳转请点击此处</a>");
-			return "noSession";
+			return ResultPath.NOSESSION;
 		}
 		return arg0.invoke();
 	}

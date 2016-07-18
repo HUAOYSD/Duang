@@ -2,13 +2,11 @@ package org.duang.action.base;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LogOprationUtil;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.util.DateUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 
 /** 

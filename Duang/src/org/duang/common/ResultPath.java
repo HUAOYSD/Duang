@@ -11,6 +11,8 @@ public class ResultPath {
 
 	public static final String PREFIXX = "/WEB-INF/page";
 	public static final String NOSESSION = "nosession";
+	public static final String INFO = "info";
 
+	
 }
 

@@ -1,30 +1,43 @@
-package org.duang.action.base; 
+package org.duang.action.base;
 import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
+import org.apache.avro.reflect.Nullable;
+import org.apache.struts2.ServletActionContext;
 import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.util.CastToClass;
+import org.duang.util.PageUtil;
 
+import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ModelDriven;
 
-/** 
- * Action基类
- * @ClassName: BaseAction 
- * @Description: TODO 
- * @author Comsys-白攀 
- * @date 2016-7-15 下午2:33:18 
- */
-public class BaseAction {
+/**   
+ *
+ * @ClassName:  BaseAction   
+ * @Description:TODO(这里用一句话描述这个类的作用)   
+ * @author 白攀
+ * @date 2016年7月18日 上午9:48:13   
+ * @param <T>   
+ */  
+public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 
-	//下一个地址
-	protected String path;
-	//提示消息
-	protected String msg;
-	//条件类
-	protected CondsUtils condsUtils = new CondsUtils();
-	//json对象
-	protected JSONObject jsonObject = null;
+	private static final long serialVersionUID = 1L;
 
+	/**   
+	 * 需要操作的实体类
+	 * @Fields entity : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	protected T entity;
+	/**   
+	 * 该实体类的class属性
+	 * @Fields clazz : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	private Class<T> clazz;
 	/**   
 	 * easy列表页自带参数 每页个数
 	 * @Fields rows : TODO(用一句话描述这个变量表示什么)   
@@ -35,11 +48,50 @@ public class BaseAction {
 	 * @Fields page : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	protected int page;
-	
-	
-	//	public BaseController(){
-	//		this.clazz=CastToClass.getSuperGenericClass(this.getClass());
-	//	}
+	/**   
+	 * 提示消息
+	 * @Fields msg : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	protected String msg;
+	/**
+	 * json对象   
+	 * @Fields jsonObject : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	protected JSONObject jsonObject = new JSONObject(true);
+	/**   
+	 * 查询使用的条件类
+	 * @Fields condsUtils : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	protected CondsUtils condsUtils = new CondsUtils();
+	/**   
+	 * 分页对象
+	 * @Fields pageutil : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	private PageUtil<T> pageutil=null;
+
+	/**
+	 * 通过构造方法获取clazz
+	 */
+	public BaseAction(){
+		//this.getClass获取的并不是BaseAction的class，而是其‘当前操作的子类’的class
+		this.clazz = CastToClass.getSuperGenericClass(this.getClass());
+	}
+
+
+	/** 
+	 * 通过ModelDriven获取实体对象
+	 */
+	public T getModel() {
+		if (entity == null) {
+			try {
+				entity=(T)clazz.newInstance();
+			} catch (Exception e) {
+				System.out.println("通过ModelDriven获取实体对象出错了");
+				System.out.println(e.getMessage());
+			}
+		}
+		return entity;
+	}
 
 	/** 
 	 * 将jsonObject输出到页面，自动转为json
@@ -49,8 +101,11 @@ public class BaseAction {
 	 * @author 白攀
 	 * @date 2016-7-15 下午4:31:26
 	 */ 
-	protected void printJsonResult(PrintWriter out){
+	protected void printJsonResult(@Nullable PrintWriter out){
 		try {
+			if (out == null) {
+				out = getResponse(null).getWriter();
+			}
 			if (out != null) {
 				out.print(jsonObject);
 				out.close();
@@ -71,8 +126,11 @@ public class BaseAction {
 	 * @author 白攀
 	 * @date 2016-7-15 下午4:31:26
 	 */ 
-	protected void printJsonResult(PrintWriter out, String jsonStr){
+	protected void printJsonResult(@Nullable PrintWriter out, String jsonStr){
 		try {
+			if (out == null) {
+				out = getResponse(null).getWriter();
+			}
 			if (out != null) {
 				out.print(jsonStr);
 				out.close();
@@ -83,6 +141,31 @@ public class BaseAction {
 			LoggerUtils.error("ERROR-LocalizeMsg："+e.getLocalizedMessage());
 		}
 	}
+
+
+	/**
+	 * 获取HttpServletRequest
+	 * @return
+	 */
+	protected HttpServletRequest getRequest(){
+		return ServletActionContext.getRequest();
+	}
+
+	/**
+	 * 获取HttpServletReponse
+	 * @return
+	 */
+	protected HttpServletResponse getResponse(@Nullable String mime){
+		HttpServletResponse response = ServletActionContext.getResponse();
+		if (mime == null) {
+			response.setContentType("text/html; charset=UTF-8");
+		}else {
+			response.setContentType(mime);
+		}
+		return response;
+	}
+
+
 
 
 	public int getRows() {
@@ -97,5 +180,22 @@ public class BaseAction {
 	public void setPage(int page) {
 		this.page = page;
 	}
+	public PageUtil<T> getPageUtil() {
+		if (pageutil==null) {
+			pageutil = new PageUtil<T>(rows, page);	
+		}
+		return pageutil;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	public T getEntity() {
+		return entity;
+	}
+	public void setEntity(T entity) {
+		this.entity = entity;
+	}
 }
-

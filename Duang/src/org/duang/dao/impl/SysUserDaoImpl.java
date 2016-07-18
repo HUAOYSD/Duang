@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
  * @date 2016年7月17日 上午11:38:51      
  */  
 @Repository("sysuserdao")
-public abstract class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
+public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 
 	
 	public SysUserDaoImpl(){

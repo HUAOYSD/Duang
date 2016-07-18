@@ -8,7 +8,8 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd     
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-	<context:component-scan base-package="org" />
+	<context:component-scan base-package="org.duang.*" />
+	<context:annotation-config></context:annotation-config>
 
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
@@ -17,7 +18,16 @@
 			</list>
 		</property>
 	</bean>
+	<!-- <context:property-placeholder location="classpath:jdbc.properties"/> -->
 
+	<!-- - - - - - - - Apache 连接池 - - - - - - - -->
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${connection.driver_class}" />
+		<property name="url" value="${connection.url}" />
+		<property name="username" value="${connection.username}" />
+		<property name="password" value="${connection.password}" />
+	</bean> -->
+	
 	<!-- 数据源配置 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<!-- 指定连接数据库的驱动 -->
@@ -33,7 +43,6 @@
 			<value>${connection.username}</value>
 		</property>
 		<!-- 指定连接数据库的密码 -->
-		<property name="" value="root" />
 		<property name="password">
 			<value>${connection.password}</value>
 		</property>
@@ -48,7 +57,7 @@
 		<!-- 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数. Default:3 -->
 		<property name="acquireIncrement" value="5" />
 		<!-- JDBC的标准,用以控制数据源内加载的PreparedStatements数量。但由于预缓存的statements属于单个connection而不是整个连接池所以设置这个参数需要考虑到多方面的因数.如果maxStatements与maxStatementsPerConnection均为0,则缓存被关闭。Default:0 -->
-		<property name="maxStatements" value="0" />
+		<property name="maxStatements" value="5" />
 		<!-- 每60秒检查所有连接池中的空闲连接.Default:0 -->
 		<property name="idleConnectionTestPeriod" value="60" />
 		<!-- 定义在从数据库获取新连接失败后重复尝试的次数。 Default:30 -->
@@ -57,7 +66,7 @@
 		<property name="breakAfterAcquireFailure" value="true" />
 		<!-- 性能消耗大请只在需要的时候是打开它。如果设为true,那么在每个connection提交的时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable等提升连接测试的性能。 
 			Default:false -->
-		<property name="testConnectionOnCheckout" value="false" />
+		<property name="testConnectionOnCheckout" value="true" />
 		<!-- 检查获取的连接是否有效 -->
 		<property name="testConnectionOnCheckin" value="true" />
 		<!-- 测试语句 -->
@@ -71,10 +80,16 @@
 				<prop key="c3p0.min_size">10</prop>
 			</props>
 		</property>
-	</bean>
+	</bean> 
 
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<bean id="sessionFactory" name="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
+		<!-- hibernate自身属性 -->  
+        <property name="hibernateProperties">  
+            <props>  
+		  		<prop key="hibernate.connection.provider_class">org.hibernate.c3p0.internal.C3P0ConnectionProvider</prop>   
+            </props>  
+        </property>   
 		<property name="packagesToScan">
 			<list>
 				<value>org.duang.entity</value>
