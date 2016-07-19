@@ -1,11 +1,12 @@
 package org.duang.action.sys;
-
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
+import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
@@ -26,8 +27,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * @date 2016-7-17 下午2:07:35 
  */ 
 @Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
-@Namespaces(@Namespace("/"))
-@Action(value="sysseraction", interceptorRefs = {@InterceptorRef(value = "defaultStack")} )
+@Namespaces({@Namespace("/")})
+@Action(value="sysseraction")
+@ParentPackage("sys")
 @Results(value={
 		@Result(name="success",type="dispatcher",location="WEB-INF/page/test/list.jsp"),
 		@Result(name="info",type="dispatcher",location="WEB-INF/page/test/info.jsp"),

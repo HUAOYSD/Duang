@@ -21,11 +21,11 @@ import org.springframework.stereotype.Repository;
 @Repository("sysuserdao")
 public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 
-	
+
 	public SysUserDaoImpl(){
 		LoggerUtils.info("注入SysUserDaoImpl层");
 	}
-	
+
 
 	/**
 	 * 计数总数全部
@@ -34,8 +34,8 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	public int count() throws Exception{
 		return super.count();
 	}
-	
-	
+
+
 	/**
 	 * 计数总数全部
 	 * @param properties  字段属性
@@ -45,8 +45,8 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	public int count(String properties, Object value) throws Exception{
 		return super.count(properties, value);
 	}
-	
-	
+
+
 	/**
 	 * 计数总数全部
 	 * @param properties  条件名字集合  
@@ -57,8 +57,8 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
 		return super.countByDetachedCriteria(detachedCriteria);
 	}
-	
-	
+
+
 	/**
 	 * 查询全部
 	 * @param page        是否分页          null表示不分页
@@ -100,10 +100,10 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 */
 	public List<SysUser> queryEntity(List<String> properties, List<Object> values, PageUtil<SysUser> page) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
-		List<SysUser> list1 = super.queryByDetachedCriteria(detachedCriteria, page);
-		List<SysUser> list2 = super.query("name", "张三");
-		List<SysUser> list3 = super.queryBySQL("select * from sys_user where name='张三'");
-		List<SysUser> list4 = super.queryByHQL("from SysUser where name='张三'");
+		//List<SysUser> list1 = super.queryByDetachedCriteria(detachedCriteria, page);
+		//List<SysUser> list2 = super.query("name", "张三");
+		//List<SysUser> list3 = super.queryBySQL("select * from sys_user where name='张三'");
+		//List<SysUser> list4 = super.queryByHQL("from SysUser where name='张三'");
 		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
 
@@ -172,7 +172,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 		return true;
 	}
 
-	
+
 	/**
 	 * 根据sql语句执行sql代码
 	 * @param sql  sql语句
@@ -182,7 +182,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 		super.executeBySql(sql,params);
 		return true;
 	}
-	
+
 
 	/**
 	 * 根据sql语句集合执行sql代码

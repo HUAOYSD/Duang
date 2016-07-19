@@ -1,9 +1,12 @@
 package org.duang.common.interceptor;
 
+import java.util.Date;
+
 import org.apache.struts2.ServletActionContext;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.common.system.SessionTools;
+import org.duang.util.DateUtils;
+
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
 
@@ -32,11 +35,13 @@ public class SessionInterceptor extends MethodFilterInterceptor {
 	 * @throws Exception   
 	 * @see com.opensymphony.xwork2.interceptor.MethodFilterInterceptor#doIntercept(com.opensymphony.xwork2.ActionInvocation)   
 	 */  
+	@SuppressWarnings("unused")
 	@Override
 	protected String doIntercept(ActionInvocation arg0) throws Exception {
 		//SessionInfo sessionInfo = (SessionInfo) ServletActionContext.getRequest().getSession().getAttribute("sessionInfo");
-		LoggerUtils.info("进入了拦截器");
-		if (SessionTools.getSessionSysUser() == null) {
+		LoggerUtils.info(DateUtils.date2Str(new Date())+" 进入了Sys拦截器");
+		//if (org.duang.common.system.SessionTools.getSessionSysUser() == null) {
+		if (1+1==5) {
 			ServletActionContext.getRequest().setAttribute("msg", "您还没有登录或登录已超时，请重新登录，3秒后将跳转到登录页面！<br><a href='javascript:alert('自个儿跳');'>如不能自动跳转请点击此处</a>");
 			return ResultPath.NOSESSION;
 		}

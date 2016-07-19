@@ -54,7 +54,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * json对象   
 	 * @Fields jsonObject : TODO(用一句话描述这个变量表示什么)   
 	 */   
-	protected JSONObject jsonObject = new JSONObject(true);
+	protected JSONObject jsonObject = new JSONObject(false);
 	/**   
 	 * 查询使用的条件类
 	 * @Fields condsUtils : TODO(用一句话描述这个变量表示什么)   
