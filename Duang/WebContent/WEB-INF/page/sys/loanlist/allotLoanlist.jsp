@@ -31,7 +31,7 @@
 		  <table id="loanlist" style="table-layout:fixed;" ></table>
 	 	  <!-- 表格顶部工具按钮 -->
 	 	  <div class="footer-btn">
-				<a id="chose_loanlist_scale" class="btn-ok"><b>确认</b></a>
+				<a id="chose_loanlist_scale" class="btn-ok" style="width:80px;"><b>下一步</b></a>
 		  </div>
 	</div>
 	<script type="text/javascript" src="<%=path %>/ui/sys/loanlist/allotLoanlist.js"></script>

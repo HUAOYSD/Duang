@@ -2,13 +2,12 @@ package org.duang.dao.base;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.annotation.Resource;
-
 import org.duang.common.logger.LoggerUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.Criteria;
@@ -16,13 +15,13 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.AggregateProjection;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
-
 public class BaseDao<M> {
 	private SessionFactory sessionFactory;
 	@Resource(name="sessionFactory")
@@ -1603,6 +1602,16 @@ public class BaseDao<M> {
 						dt.createAlias(properties.get(i), (String) arg[0], JoinType.LEFT_OUTER_JOIN);
 					}else if("asright".equalsIgnoreCase(arg[arg.length-1].toString())){//createAlias
 						dt.createAlias(properties.get(i), (String) arg[0], JoinType.RIGHT_OUTER_JOIN);
+					}else if("or".equalsIgnoreCase(arg[arg.length-1].toString())){//or
+						if (arg[0] instanceof List) {
+							@SuppressWarnings("unchecked")
+							List<Object> orList = (List<Object>) arg[0];
+							List<Criterion> criterions = new ArrayList<Criterion>();
+							for (int j = 0; j < orList.size(); j++) {
+								criterions.add(Restrictions.eq(properties.get(i), orList.get(j).toString()));
+							}
+							dt.add(Restrictions.or((Criterion[]) criterions.toArray(new Criterion[criterions.size()])));
+						}
 					}
 				}else {//默认,order,isnull等
 					//eg:properties.add("order");

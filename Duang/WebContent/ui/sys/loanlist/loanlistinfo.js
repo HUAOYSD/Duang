@@ -2,7 +2,7 @@
  * 初始化
  */
 $(function() {
-	loadloanlist("scaleloanlist!findScaleLoanListInfo.do");
+	loadloanlist("scaleloanlist!findScaleLoanListInfo.do", {"scaleid": $("#scaleid").val()});
 });
 
 
@@ -61,7 +61,8 @@ function loadloanlist(url, dataObj){
 			            		 else	   
 			            			 return new Date(value).format("yyyy-MM-dd hh:mm:ss");
 			            	 }
-			             }
+			             },
+			             {field : "scaleName", title : "标名称", width : 100, align : "center" }
 		 ]],
 		columns : [ [
 		             {field : "loanMemberPhone", title : "手机号", width : 120, align : "center" },
@@ -91,6 +92,9 @@ function loadloanlist(url, dataObj){
 		             },
 		             onLoadSuccess: function(data){
 		            	 $('#allot_btn_loanlist').linkbutton('disable');
+		            	 if(data.msg!=null){
+		            		 layer.msg(data.msg,{time:1500});
+		            	 }
 		             }
 	});
 }

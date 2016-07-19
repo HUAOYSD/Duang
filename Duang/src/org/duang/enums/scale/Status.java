@@ -18,7 +18,7 @@ public enum Status {
 
 		@Override
 		public String getDesc() {
-			return "未知";
+			return "新建标";
 		}
 
 		@Override
@@ -33,7 +33,7 @@ public enum Status {
 		
 		@Override
 		public String toString() {
-			return "未知";
+			return "新建标";
 		}
 		
 	},

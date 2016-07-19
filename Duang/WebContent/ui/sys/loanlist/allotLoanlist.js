@@ -168,34 +168,23 @@ $("#chose_loanlist_scale").on("click",function(){
 		layer.msg("请选择一条记录",{time:1500});
 		return;
 	}
-	$.messager.confirm('确认','您确认操作吗？',function(r){    
-	    if (r){    
-	    	var selectedRows = $("#loanlist").datagrid('getSelections');
-	    	var selectedRowsId="";
-	    	for(var i = 0;i<selectedRows.length;i++){
-	    		selectedRowsId+=selectedRows[i].id;
-	    		if(i<selectedRows.length-1){
-	    			selectedRowsId+=",";
-	    		}
-	    	}
-	    	var scaleId = $("#scaleid").val();
-	    	var oprData = "scaleid="+scaleId+"&loanListIds="+selectedRowsId+"&optime="+new Date().getTime();
-	    	$.messager.progress();
-	    	$.ajax({
-	         	type:"post",
-	         	url:"scaleloanlist!confirmAllotLoanList.do?",
-	         	data:oprData,
-	         	success:function(msg) {
-	         		var result = eval('('+msg+')');
-	         		if(result.success) {
-	         			//window.parent.reloadDataGrid();
-	         			parent.layer.closeAll();
-	         		} else {
-	         			layer.msg("借贷分配失败",{time:1500});
-	         		}
-	         	}
-	        }); 
-	    	$.messager.progress("close");
-	    }    
-	});
+	var selectedRows = $("#loanlist").datagrid('getSelections');
+	var selectedRowsId="";
+	for(var i = 0;i<selectedRows.length;i++){
+		selectedRowsId+=selectedRows[i].id;
+		if(i<selectedRows.length-1){
+			selectedRowsId+=",";
+		}
+	}
+	var scaleId = $("#scaleid").val();
+	var oprData = "&loanListIds="+selectedRowsId+"&optime="+new Date().getTime();
+	layer.open({
+		type: 2,
+		title: '确认详情',
+		shadeClose: true,
+		maxmin:true,
+		shade: 0.8,
+		area: ['60%', '85%'],
+		content: 'loanlist!queryLoanListInfoByIds.do?scaleid='+scaleId+oprData
+	}); 
 });

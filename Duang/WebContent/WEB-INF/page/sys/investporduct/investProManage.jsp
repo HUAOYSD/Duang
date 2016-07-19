@@ -64,7 +64,7 @@
 			}
 			indexLayer = layer.open({
 				type: 2,
-				title: '添加产品',
+				title: '编辑产品',
 				shadeClose: true,
 				shade: 0.8,
 				area: ['450px', '97%'],

@@ -386,7 +386,7 @@ a:hover {
     text-decoration: none;
     text-align:center;
     display: inline-block;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 .footer-btn  .btn-cancel{

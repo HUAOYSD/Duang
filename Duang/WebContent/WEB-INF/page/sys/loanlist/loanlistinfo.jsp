@@ -4,6 +4,7 @@
 <body class="easyui-layout">
 	<div class="body" id="body_loanlistinfo" region="center" style="border:0px;" >	
 		  <!-- 查询条件区域 -->
+		  <input type="hidden" value="${scaleid }" id="scaleid" >
 		  <!-- 数据表格区域 -->
 		  <table id="loanlistinfo" style="table-layout:fixed;" ></table>
 	 	  <!-- 表格顶部工具按钮 -->

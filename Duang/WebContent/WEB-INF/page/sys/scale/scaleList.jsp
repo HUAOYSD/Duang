@@ -53,6 +53,7 @@
 						  	<td class="showRight"><span class="investPro-search">状态：</span></td>
 						  	<td><select style="width: 140px;" class="easyui-combobox" name="status" data-options="panelHeight:'auto'">   
 								    <option value="null" selected="selected">--请选择--</option>   
+								    <option value="0">新建标</option>   
 								    <option value="1">可投入</option>   
 					    			<option value="2">还有机会</option>
 					    			<option value="3">已完成</option>

@@ -3,8 +3,11 @@ package org.duang.action.sys;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import net.sf.json.JSONArray;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
@@ -106,11 +109,16 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 	 */  
 	public void findScaleLoanListInfo() {
 		try {
-			condsUtils.addProperties(true, "scale", "loanList", "loanListAlias.memberInfo", "order");
-			condsUtils.addValues(true, new Object[]{"scaleAlias","as"}, new Object[]{"loanListAlias","as"}, new Object[]{"memberInfoAlias","as"}, Order.desc("loanListAlias.createTime"));
-			@SuppressWarnings("rawtypes")
-			List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			fillDatagridCons(list);
+			if (DataUtils.notEmpty(getRequest().getParameter("scaleid"))) {
+				condsUtils.addProperties(true, "scale", "loanList", "loanListAlias.memberInfo", "scaleAlias.id", "order");
+				condsUtils.addValues(true, new Object[]{"scaleAlias","as"}, new Object[]{"loanListAlias","as"}, new Object[]{"memberInfoAlias","as"}, getRequest().getParameter("scaleid"), Order.desc("loanListAlias.createTime"));
+				
+				@SuppressWarnings("rawtypes")
+				List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+				fillDatagridCons(list);
+			}else {
+				throw new Exception("理财标标异常：未找到");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("借贷记录与理财标关联ACTION方法findScaleLoanListInfo错误："+e.getMessage(), this.getClass());
@@ -119,6 +127,7 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 			jsonObject.put("currPage", 0);
 			jsonObject.put("pageSize", 0);
 			jsonObject.put("rows",new JSONArray());
+			jsonObject.put("msg",e.getMessage());
 		} finally {
 			printJsonResult();
 		}
@@ -142,6 +151,7 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 					Map<String,Object> resultMap = new HashMap<String,Object>();
 					LoanList loanlist = (LoanList)((Object[])temp)[0];
 					MemberInfo memberinfo = (MemberInfo)((Object[])temp)[1];
+					org.duang.entity.Scale scale = (org.duang.entity.Scale)((Object[])temp)[2];
 					if (loanlist != null) {
 						resultMap.put("loanType", LoanMode.valueOf("M"+loanlist.getLoanType()).toString());
 						resultMap.put("createTime", DateUtils.getTimeStamp(loanlist.getCreateTime()));
@@ -159,6 +169,9 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 						resultMap.put("loanMemberName", memberinfo.getRealName());
 						resultMap.put("loanMemberPhone", memberinfo.getPhone());
 						resultMap.put("loanMemberIdcard", memberinfo.getIdCard());
+					}
+					if (scale != null) {
+						resultMap.put("scaleName", scale.getName());
 					}
 					listMap.add(resultMap);
 				}

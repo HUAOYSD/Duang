@@ -1,6 +1,7 @@
 package org.duang.action.sys;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import org.duang.enums.loan.Poundage;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
 import org.duang.service.LoanListService;
+import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
@@ -50,6 +52,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Results(value = { 
 		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/loanlist/loanlist.jsp"),
 		@Result(name = "allot", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/allotLoanlist.jsp"),
+		@Result(name = "confirm", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/confirmLoanlist.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 })
 public class LoanListAction extends BaseAction<LoanList> {
@@ -60,10 +63,65 @@ public class LoanListAction extends BaseAction<LoanList> {
 	private static final long serialVersionUID = 1L;
 
 	private LoanListService service;
+	private ScaleService scaleService;
 
-	@Resource()
+	@Resource
 	public void setService(LoanListService service) {
 		this.service = service;
+	}
+	@Resource
+	public void setScaleService(ScaleService scaleService) {
+		this.scaleService = scaleService;
+	}
+
+
+
+	/**   
+	 * 根据id获取借贷信息
+	 * @Title: queryLoanListInfoByIds   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年9月1日 上午10:16:06
+	 * @return: String      
+	 * @throws   
+	 */  
+	public String queryLoanListInfoByIds(){
+		try {
+			String scaleId = getRequest().getParameter("scaleid");
+			String loanListIds = getRequest().getParameter("loanListIds");
+			if(DataUtils.notEmpty(loanListIds)){
+				String[] loanListIdsArray = loanListIds.split(","); 
+				if (DataUtils.notEmpty(scaleId) && loanListIdsArray!=null && loanListIdsArray.length>0) {
+					condsUtils.addProperties(true, "memberInfo", "order");
+					condsUtils.addValues(true, new Object[]{"memberAlias","as"}, Order.desc("createTime"));
+					List<Object> orList = new ArrayList<Object>(); 
+					for (int j = 0; j < loanListIdsArray.length; j++) {
+						orList.add(loanListIdsArray[j]);
+					}
+					condsUtils.concat("id", new Object[]{orList,"or"});
+					List<LoanList> loanLists = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+					org.duang.entity.Scale scale = scaleService.findById(scaleId);
+					if (scale == null) {
+						throw new Exception("理财标非法");
+					}else if (scale.getProduct() == null) {
+						throw new Exception("理财标产品非法");
+					}else {
+						getRequest().setAttribute("days", scale.getProduct().getDays());
+					}
+					getRequest().setAttribute("scaleid", scaleId);
+					getRequest().setAttribute("loanListIds", loanListIds);
+					getRequest().setAttribute("loanLists", loanLists);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("借贷记录ACTION方法queryLoanListInfoByIds错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("借贷记录ACTION方法queryLoanListInfoByIds错误："+e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("success", false);
+			msg = "匹配错误，请检查借贷记录";
+		}
+		return "confirm";
 	}
 
 

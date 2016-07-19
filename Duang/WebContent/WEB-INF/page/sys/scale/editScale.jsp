@@ -75,10 +75,10 @@
 		        <label for="turnDate" class="add_edit_form_label">截止转让日期：</label>  
 		        <input name="turnDate" type="text" style="width: 216px;" value="${entity.turnDate }" class="easyui-datebox" data-options="required:false,missingMessage:''"/>
 		    </div>
-		    <div>   
+		    <%-- <div>   
 		        <label for="totalMoney" class="add_edit_form_label">标总额：</label>  
 		        <input class="easyui-validatebox" name="totalMoney" value="${entity.totalMoney }" data-options="required:true,validType:'intOrFloat',missingMessage:'请输入标总额'" /> 
-		    </div> 
+		    </div>  --%>
 		    <!-- <div>   
 		        <label for="residueMoney" class="add_edit_form_label">可投金额：</label>  
 		        <input class="easyui-validatebox" name="residueMoney" data-options="required:false,validType:'intOrFloat',missingMessage:''" /> 

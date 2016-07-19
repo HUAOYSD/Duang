@@ -180,7 +180,7 @@ function reloadDataGrid(){
 $("#add_btn_scale").on("click",function(){
 	layer.open({
 		type: 2,
-		title: '添加客户经理',
+		title: '添加理财标',
 		shadeClose: true,
 		shade: 0.8,
 		area: ['460px', '85%'],
@@ -239,6 +239,9 @@ $("#allot_btn_scale").on("click",function(){
 	if(selectedRow==null){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
+	}else if("新建标"!=selectedRow.status){
+		layer.msg("该标已分配，请查寻借贷匹配详情",{time:2000});
+		return;
 	}
 	layer.open({
 		type: 2,
@@ -260,6 +263,9 @@ $("#match_btn_scale").on("click",function(){
 	if(selectedRow==null){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
+	}else if("新建标"==selectedRow.status){
+		layer.msg("该标未分配，请分配借贷",{time:2000});
+		return;
 	}
 	layer.open({
 		type: 2,
@@ -268,6 +274,6 @@ $("#match_btn_scale").on("click",function(){
 		maxmin:true,
 		shade: 0.8,
 		area: ['80%', '90%'],
-		content: 'scale!openDialog.do?path=loanlistinfo&id='+selectedRow.id
+		content: 'scale!openDialog.do?path=loanlistinfo&scaleid='+selectedRow.id
 	}); 
 });

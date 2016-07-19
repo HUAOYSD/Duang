@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.config.Basic;
 import org.duang.dao.LoanListDao;
+import org.duang.dao.ScaleDao;
 import org.duang.dao.ScaleLoanListDao;
 import org.duang.dao.StockDao;
 import org.duang.entity.InvestMember;
@@ -40,7 +43,8 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	private ScaleLoanListDao dao;
 	private LoanListDao loanListDao;
 	private StockDao stockDao;
-	@Resource()
+	private ScaleDao scaleDao;
+	@Resource
 	public void setDao(ScaleLoanListDao dao) {
 		this.dao = dao;
 	}
@@ -52,7 +56,11 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	public void setStockDao(StockDao stockDao) {
 		this.stockDao = stockDao;
 	}
-
+	@Resource
+	public void setScaleDao(ScaleDao scaleDao) {
+		this.scaleDao = scaleDao;
+	}
+	
 	public ScaleLoanListServiceImpl(){
 		LoggerUtils.info("注入ScaleLoanListServiceImpl服务层", this.getClass());
 	}
@@ -73,6 +81,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 		if (loanListIds == null || loanListIds.length == 0) {
 			return false;
 		}
+		double money = 0;
 		//1、获取所有借贷记录
 		String hql = " FROM LoanList ";
 		for (int j = 0; j < loanListIds.length; j++) {
@@ -84,17 +93,28 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 		}
 		List<LoanList> loanLists = loanListDao.queryByHQL(hql, null);
 
-		//2、放入表scale_loan_list
-		Scale scale = new Scale(scaleId);
+		//2、找到理财标对象scale
+		Scale scale = scaleDao.findById(scaleId);
+		if (scale == null) {
+			return false;
+		}
+		
+		//3、放入表scale_loan_list
 		List<ScaleLoanList> scaleLoanLists = new LinkedList<ScaleLoanList>();
 		for (LoanList loanList : loanLists) {
+			money += loanList.getMoney();//这个就是申请的借款金额
 			scaleLoanLists.add(new ScaleLoanList(DataUtils.randomUUID(), scale, loanList));
 		}
 		for (ScaleLoanList scaleLoanList : scaleLoanLists) {
 			dao.saveEntity(scaleLoanList);
 		}
+		
+		//4、计算理财标总额度
+		scale.setTotalMoney(money);
+		scale.setStatus(org.duang.enums.scale.Status.S1.getVal());
+		scaleDao.updateEntity(scale);
 
-		//3、分配库存
+		//5、分配库存
 		List<Stock> stocks = new ArrayList<Stock>();
 		for (LoanList loanList : loanLists) {
 			if (loanList.getMoney()!=0) {
@@ -109,18 +129,20 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 			}
 		}
 
-		//4、保存库存
+		//6、保存库存
 		for (Stock stock : stocks) {
 			stockDao.saveEntity(stock);
 		}
 
-		//5、改变借贷记录的状态
+		//7、改变借贷记录的状态
 		Map<String, Object> datas = new HashMap<String, Object>();
 		datas.put("isSell", org.duang.enums.loan.Scale.S2.getVal());
 		for (String id : loanListIds) {
 			loanListDao.updateEntity(datas, "id", id);
 		}
 		return true;
+		
+		
 	}
 	
 

@@ -304,6 +304,7 @@ public class ScaleAction extends BaseAction<Scale> {
 				}
 				return ResultPath.INFO;
 			}else if ("loanlistinfo".equals(path)) {
+				getRequest().setAttribute("scaleid", getRequest().getParameter("scaleid"));
 				return "loanlistinfo";
 			}
 		} catch (Exception e) {
