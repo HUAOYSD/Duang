@@ -7,7 +7,6 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
-import org.duang.common.ResultPath;
 import org.duang.entity.SysUser;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -24,8 +23,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value="customer")
 @ParentPackage("sys")
 @Results(value={
-		@Result(name=ResultPath.RETURN_TO_CUSTOMERINFO,type="dispatcher",location="WEB-INF/page/customer/customerInfo.jsp"),
-		@Result(name=ResultPath.ERROR,type="dispatcher",location="error.jsp")
+		@Result(name="customerinfo", type="dispatcher",location="WEB-INF/page/customer/customerInfo.jsp"),
+		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher",location="error.jsp")
 })
 public class CustomerAction extends BaseAction<SysUser>{
 	private static final long serialVersionUID = 1L;
@@ -41,7 +40,6 @@ public class CustomerAction extends BaseAction<SysUser>{
 	 * @throws   
 	 */  
 	public String queryCustomers(){
-		System.out.println("asdfasdfsd");
-		return ResultPath.RETURN_TO_CUSTOMERINFO;
+		return "customerinfo";
 	}
 }
