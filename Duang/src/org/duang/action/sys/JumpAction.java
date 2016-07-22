@@ -22,7 +22,7 @@ import com.opensymphony.xwork2.ActionSupport;
 @Namespaces(@Namespace("/"))
 @Action(value="jumpaction", results={
 		@Result(name="testAdd",type="dispatcher",location="WEB-INF/page/test/add.jsp"),
-		@Result(name="error",type="dispatcher",location="error.jsp")
+		@Result(name=com.opensymphony.xwork2.Action.ERROR,type="dispatcher",location="error.jsp")
 })
 public class JumpAction extends ActionSupport{
 

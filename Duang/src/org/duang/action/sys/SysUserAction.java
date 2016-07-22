@@ -31,9 +31,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value="sysseraction")
 @ParentPackage("sys")
 @Results(value={
-		@Result(name="success",type="dispatcher",location="WEB-INF/page/test/list.jsp"),
-		@Result(name="info",type="dispatcher",location="WEB-INF/page/test/info.jsp"),
-		@Result(name="error",type="dispatcher",location="error.jsp")
+		@Result(name=ResultPath.INFO,type="dispatcher",location="WEB-INF/page/test/info.jsp"),
+		@Result(name=com.opensymphony.xwork2.Action.SUCCESS,type="dispatcher",location="WEB-INF/page/test/list.jsp"),
+		@Result(name=com.opensymphony.xwork2.Action.ERROR,type="dispatcher",location="error.jsp")
 })
 public class SysUserAction extends BaseAction<SysUser>{
 
