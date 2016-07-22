@@ -1,0 +1,18 @@
+.accordion-item{
+    display: block;
+    height:40px;
+    padding-left:20px;
+}
+
+.accordion-item:hover{
+    background-color:#EBEBEB;
+}
+
+.accordion-item .name{
+   padding-top:10px;
+}
+
+.accordion-item .name a{
+    font-size:14px;
+    text-decoration: none;
+}
