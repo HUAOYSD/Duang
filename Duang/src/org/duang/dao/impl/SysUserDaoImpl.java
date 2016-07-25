@@ -23,7 +23,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 
 
 	public SysUserDaoImpl(){
-		LoggerUtils.info("注入SysUserDaoImpl层");
+		LoggerUtils.info("注入SysUserDaoImpl层", this.getClass());
 	}
 
 

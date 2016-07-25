@@ -360,7 +360,7 @@ public class FileUtil {
 				length = fis.available();
 			} else {
 				f.createNewFile();
-				LoggerUtils.info("文件不存在");
+				LoggerUtils.info("文件不存在", FileUtil.class);
 			}
 			return length;
 		} catch (Exception e) {

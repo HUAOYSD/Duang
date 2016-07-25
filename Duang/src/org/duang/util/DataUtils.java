@@ -110,7 +110,7 @@ public class DataUtils {
 	 */
 	public static String randomUUID(){
 		UUID uuid = UUID.randomUUID();
-		return uuid.toString().replace("-", "");
+		return uuid.toString().replaceAll("-", "");
 	}
 
 

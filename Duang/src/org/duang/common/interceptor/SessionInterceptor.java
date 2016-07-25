@@ -39,7 +39,7 @@ public class SessionInterceptor extends MethodFilterInterceptor {
 	@Override
 	protected String doIntercept(ActionInvocation arg0) throws Exception {
 		//SessionInfo sessionInfo = (SessionInfo) ServletActionContext.getRequest().getSession().getAttribute("sessionInfo");
-		LoggerUtils.info(DateUtils.date2Str(new Date())+" 进入了Sys拦截器");
+		LoggerUtils.info(DateUtils.date2Str(new Date())+" 进入了Sys拦截器", this.getClass());
 		//if (org.duang.common.system.SessionTools.getSessionSysUser() == null) {
 		if (1+1==5) {
 			ServletActionContext.getRequest().setAttribute("msg", "您还没有登录或登录已超时，请重新登录，3秒后将跳转到登录页面！<br><a href='javascript:alert('自个儿跳');'>如不能自动跳转请点击此处</a>");

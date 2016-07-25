@@ -83,8 +83,9 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 			try {
 				entity=(T)clazz.newInstance();
 			} catch (Exception e) {
-				System.out.println("通过ModelDriven获取实体对象出错了");
-				System.out.println(e.getMessage());
+				LoggerUtils.error("通过ModelDriven获取实体对象出错了", this.clazz);
+				LoggerUtils.error(e.getMessage(), this.clazz);
+				LoggerUtils.error(e.getLocalizedMessage(), this.clazz);
 			}
 		}
 		return entity;
@@ -109,8 +110,8 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("ERROR-Msg："+e.getMessage());
-			LoggerUtils.error("ERROR-LocalizeMsg："+e.getLocalizedMessage());
+			LoggerUtils.error("ERROR-Msg："+e.getMessage(), this.clazz);
+			LoggerUtils.error("ERROR-LocalizeMsg："+e.getLocalizedMessage(), this.clazz);
 		}
 	}
 
@@ -134,8 +135,8 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("ERROR-Msg："+e.getMessage());
-			LoggerUtils.error("ERROR-LocalizeMsg："+e.getLocalizedMessage());
+			LoggerUtils.error("ERROR-Msg："+e.getMessage(), this.clazz);
+			LoggerUtils.error("ERROR-LocalizeMsg："+e.getLocalizedMessage(), this.clazz);
 		}
 	}
 

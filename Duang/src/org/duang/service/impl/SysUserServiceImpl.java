@@ -31,7 +31,7 @@ public class SysUserServiceImpl implements SysUserService{
 	}
 
 	public SysUserServiceImpl(){
-		LoggerUtils.info("注入SysUserServiceImpl服务层");
+		LoggerUtils.info("注入SysUserServiceImpl服务层", this.getClass());
 	}
 
 	/**

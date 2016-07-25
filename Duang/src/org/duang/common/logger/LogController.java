@@ -33,7 +33,7 @@ public class LogController {
 		String[] contents = this.getMthodRemark(joinPoint);
 		//msg = DateUtils.getCurrentDate("yyyy年MM月dd日 HH时mm分ss秒")+"执行方法'"+methoName+"',警告：此方法为不明方法";
 		String msg = DateUtils.getCurrentDate("yyyy年MM月dd日 HH时mm分ss秒")+"执行方法——"+joinPoint.getTarget().getClass()+"."+methoName+"[方法序号："+contents[1]+"；类型："+contents[2]+"；所属模块："+contents[0]+"]";
-		LoggerUtils.info(msg);
+		LoggerUtils.info(msg, this.getClass());
 		return joinPoint.proceed();//当做继续的意思
 	}
 

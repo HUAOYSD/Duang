@@ -79,8 +79,8 @@ public class SysUserAction extends BaseAction<SysUser>{
 			list = sysUserService.queryEntity(super.condsUtils.getPropertys(), super.condsUtils.getValues(), null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("系统用户ACTION查询错误："+e.getMessage());
-			LoggerUtils.error("系统用户ACTION查询错误："+e.getLocalizedMessage());
+			LoggerUtils.error("系统用户ACTION查询错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("系统用户ACTION查询错误："+e.getLocalizedMessage(), this.getClass());
 			super.msg = "系统用户ACTION查询错误："+e.getMessage();
 			return ERROR;
 		}
@@ -106,8 +106,8 @@ public class SysUserAction extends BaseAction<SysUser>{
 				super.entity = sysUserService.findById(id);
 			} catch (Exception e) {
 				e.printStackTrace();
-				LoggerUtils.error("系统用户ACTION查询错误："+e.getMessage());
-				LoggerUtils.error("系统用户ACTION查询错误："+e.getLocalizedMessage());
+				LoggerUtils.error("系统用户ACTION查询错误："+e.getMessage(), this.getClass());
+				LoggerUtils.error("系统用户ACTION查询错误："+e.getLocalizedMessage(), this.getClass());
 				super.msg = "系统用户ACTION查询错误："+e.getMessage();
 				return ERROR;
 			}
@@ -136,8 +136,8 @@ public class SysUserAction extends BaseAction<SysUser>{
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				LoggerUtils.error("系统用户ACTION增加错误："+e.getMessage());
-				LoggerUtils.error("系统用户ACTION增加错误："+e.getLocalizedMessage());
+				LoggerUtils.error("系统用户ACTION增加错误："+e.getMessage(), this.getClass());
+				LoggerUtils.error("系统用户ACTION增加错误："+e.getLocalizedMessage(), this.getClass());
 				super.msg = "系统用户ACTION增加错误："+e.getMessage();
 				return ERROR;
 			}
@@ -168,8 +168,8 @@ public class SysUserAction extends BaseAction<SysUser>{
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				LoggerUtils.error("系统用户ACTION增加错误："+e.getMessage());
-				LoggerUtils.error("系统用户ACTION增加错误："+e.getLocalizedMessage());
+				LoggerUtils.error("系统用户ACTION增加错误："+e.getMessage(), this.getClass());
+				LoggerUtils.error("系统用户ACTION增加错误："+e.getLocalizedMessage(), this.getClass());
 				super.msg = "系统用户ACTION增加错误："+e.getMessage();
 				return ERROR;
 			}

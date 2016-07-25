@@ -27,7 +27,7 @@ public class BaseDao<M> {
 	@Resource(name="sessionFactory")
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-		LoggerUtils.info("BaseDao注入SessionFactory");
+		LoggerUtils.info("BaseDao注入SessionFactory", this.getClass());
 	}
 
 	/** 
