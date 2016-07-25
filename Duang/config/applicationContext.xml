@@ -158,6 +158,7 @@
             <tx:method name="count*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
             <tx:method name="find*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
             <tx:method name="query*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="show*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
             <tx:method name="go*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
             <tx:method name="to*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>
             <tx:method name="*" rollback-for="java.lang.Exception"/>

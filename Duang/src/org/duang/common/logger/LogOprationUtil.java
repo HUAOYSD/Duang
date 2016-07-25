@@ -64,7 +64,7 @@ public enum LogOprationUtil {
 	},UPDATE {
 		@Override
 		public String getStartWords() {
-			return "update,edit,modify,send";
+			return "update,edit,modify,send,move";
 		}
 
 		@Override
@@ -194,7 +194,7 @@ public enum LogOprationUtil {
 	},QUERY {
 		@Override
 		public String getStartWords() {
-			return "get,is,exist,check,count,find,query";
+			return "get,is,exist,check,count,find,query,show";
 		}
 
 		@Override

@@ -21,14 +21,14 @@ import org.springframework.context.annotation.ScopedProxyMode;
 
 /**
  * 系统用户控制类 
- * @ClassName: EnglishAction 
+ * @ClassName: SysUserAction 
  * @Description: TODO(这里用一句话描述这个类的作用) 
  * @author 白攀
  * @date 2016-7-17 下午2:07:35 
  */ 
 @Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
 @Namespaces({@Namespace("/")})
-@Action(value="sysseraction")
+@Action(value="sysuser")
 @ParentPackage("sys")
 @Results(value={
 		@Result(name=ResultPath.INFO,type="dispatcher",location="WEB-INF/page/test/info.jsp"),
@@ -48,8 +48,23 @@ public class SysUserAction extends BaseAction<SysUser>{
 	public void setSysUserService(SysUserService sysUserService) {
 		this.sysUserService = sysUserService;
 	}
-
-
+	
+	
+	/**   
+	 * 去系统用户列表
+	 * @Title: showUser   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年7月25日 下午2:24:02
+	 * @return: String      
+	 * @throws   
+	 */  
+	public String showUser() {
+		return "userlist";
+	}
+	
+	
 	/**   
 	 * 查询全部或根据条件查询
 	 * @Title: queryList   
