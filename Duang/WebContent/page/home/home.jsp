@@ -20,6 +20,7 @@
 <script type="text/javascript" src="<%=path%>/js/home.js"></script>
 <script type="text/javascript" src="<%=path%>/js/extends.js"></script>
 <script type="text/javascript" src="<%=path%>/js/json.js"></script>
+<script type="text/javascript" src="<%=path%>/js/util.js"></script>
 </head>
 <body class="easyui-layout">
 	<!-- 头部标题 -->

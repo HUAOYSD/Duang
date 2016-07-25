@@ -10,7 +10,7 @@
 			</tr>
 		 </table>   
 <div style="height:94.3%;"  >
-				<table id="sysUserList" ></table>
+<table id="sysUserList" ></table>
 </div>    
 <div id="addSysUserView" class="easyui-dialog"  closed="true"></div>
 <div id="editSysUserView" class="easyui-dialog"  closed="true"></div>
