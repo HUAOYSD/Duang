@@ -1,9 +1,14 @@
 package org.duang.entity;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -15,12 +20,6 @@ public class SysPower implements java.io.Serializable {
 
 	// Fields
 
-	/**   
-	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
-	 */   
-	private static final long serialVersionUID = -7413186991393949927L;
-	
-	
 	private String id;
 	private String name;
 	private String url;
@@ -29,6 +28,7 @@ public class SysPower implements java.io.Serializable {
 	private Timestamp optionTime;
 	private String icon;
 	private String desc;
+	private Set<SysRolePower> sysRolePowers = new HashSet<SysRolePower>(0);
 
 	// Constructors
 
@@ -45,7 +45,8 @@ public class SysPower implements java.io.Serializable {
 
 	/** full constructor */
 	public SysPower(String id, String name, String url, String parentId,
-			Integer sortIndex, Timestamp optionTime, String icon, String desc) {
+			Integer sortIndex, Timestamp optionTime, String icon, String desc,
+			Set<SysRolePower> sysRolePowers) {
 		this.id = id;
 		this.name = name;
 		this.url = url;
@@ -54,6 +55,7 @@ public class SysPower implements java.io.Serializable {
 		this.optionTime = optionTime;
 		this.icon = icon;
 		this.desc = desc;
+		this.sysRolePowers = sysRolePowers;
 	}
 
 	// Property accessors
@@ -128,6 +130,15 @@ public class SysPower implements java.io.Serializable {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sysPower")
+	public Set<SysRolePower> getSysRolePowers() {
+		return this.sysRolePowers;
+	}
+
+	public void setSysRolePowers(Set<SysRolePower> sysRolePowers) {
+		this.sysRolePowers = sysRolePowers;
 	}
 
 }

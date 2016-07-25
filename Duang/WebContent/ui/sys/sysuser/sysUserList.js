@@ -1,10 +1,10 @@
-
 /**
  * 初始化
  */
 $(function() {
 	loadUserList("sysUser_queryUserList.action");
 });
+
 /**
  * 加载用户列表
  * @memberOf {TypeName} 
@@ -84,7 +84,7 @@ function loadUserList(url){
 					] ]
 			
 		});
-	}
+}
 	
 
 /**

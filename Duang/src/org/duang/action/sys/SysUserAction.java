@@ -42,11 +42,10 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 */   
 	private static final long serialVersionUID = 8766958805913002975L;
 
-	private SysUserService sysUserService;
-
+	private SysUserService service;
 	@Resource(name="sysuserserviceimpl")
-	public void setSysUserService(SysUserService sysUserService) {
-		this.sysUserService = sysUserService;
+	public void setService(SysUserService service) {
+		this.service = service;
 	}
 	
 	
@@ -91,7 +90,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 		List<SysUser> list = null;
 		try {
 			//null表示不分页
-			list = sysUserService.queryEntity(super.condsUtils.getPropertys(), super.condsUtils.getValues(), null);
+			list = service.queryEntity(super.condsUtils.getPropertys(), super.condsUtils.getValues(), null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("系统用户ACTION查询错误："+e.getMessage(), this.getClass());
@@ -118,7 +117,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 		String id = super.getRequest().getParameter("id");
 		if (DataUtils.notEmpty(id)) {
 			try {
-				super.entity = sysUserService.findById(id);
+				super.entity = service.findById(id);
 			} catch (Exception e) {
 				e.printStackTrace();
 				LoggerUtils.error("系统用户ACTION查询错误："+e.getMessage(), this.getClass());
@@ -145,9 +144,9 @@ public class SysUserAction extends BaseAction<SysUser>{
 		List<SysUser> list = null;
 		if (entity!=null && DataUtils.notEmpty(entity.getName())) {
 			try {
-				boolean issuccess = sysUserService.saveEntity(entity);
+				boolean issuccess = service.saveEntity(entity);
 				if (issuccess) {
-					list = sysUserService.queryEntity(super.condsUtils.getPropertys(), super.condsUtils.getValues(), null);
+					list = service.queryEntity(super.condsUtils.getPropertys(), super.condsUtils.getValues(), null);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -177,9 +176,9 @@ public class SysUserAction extends BaseAction<SysUser>{
 		List<SysUser> list = null;
 		if (entity!=null && DataUtils.notEmpty(entity.getId())) {
 			try {
-				boolean issuccess = sysUserService.deleteEntity(entity);
+				boolean issuccess = service.deleteEntity(entity);
 				if (issuccess) {
-					list = sysUserService.queryEntity(super.condsUtils.getPropertys(), super.condsUtils.getValues(), null);
+					list = service.queryEntity(super.condsUtils.getPropertys(), super.condsUtils.getValues(), null);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

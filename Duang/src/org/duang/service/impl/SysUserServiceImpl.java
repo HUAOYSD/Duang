@@ -1,6 +1,7 @@
 package org.duang.service.impl;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -155,6 +156,16 @@ public class SysUserServiceImpl implements SysUserService{
 	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
 		return dao.deleteEntity(id);
+	}
+	
+	
+	/**
+	 * 通过map条件对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
+	public boolean deleteEntity(Map<String, Object> map) throws Exception{
+		return dao.deleteEntity(map);
 	}
 
 

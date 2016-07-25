@@ -1,6 +1,8 @@
 package org.duang.baseInterface;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+
 import org.duang.util.PageUtil;
 
 
@@ -110,6 +112,14 @@ public interface CommonInterface<T> {
 	 * @return   是否删除成功
 	 */
 	public abstract boolean deleteEntity(Serializable id) throws Exception;
+	
+	
+	/**
+	 * 通过map条件对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
+	public abstract boolean deleteEntity(Map<String, Object> map) throws Exception;
 
 
 	/**

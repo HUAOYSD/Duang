@@ -1,6 +1,5 @@
 package org.duang.entity;
-
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -23,13 +22,14 @@ public class SysRole implements java.io.Serializable {
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
-	private static final long serialVersionUID = 677443352872756359L;
+	private static final long serialVersionUID = 8782870330009810856L;
 	
 	
 	private String id;
 	private String roleName;
 	private String roleDesc;
-	private Timestamp optionTime;
+	private Date optionTime;
+	private Set<SysRolePower> sysRolePowers = new HashSet<SysRolePower>(0);
 	private Set<SysUser> sysUsers = new HashSet<SysUser>(0);
 
 	// Constructors
@@ -39,7 +39,7 @@ public class SysRole implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public SysRole(String id, String roleName, Timestamp optionTime) {
+	public SysRole(String id, String roleName, Date optionTime) {
 		this.id = id;
 		this.roleName = roleName;
 		this.optionTime = optionTime;
@@ -47,11 +47,13 @@ public class SysRole implements java.io.Serializable {
 
 	/** full constructor */
 	public SysRole(String id, String roleName, String roleDesc,
-			Timestamp optionTime, Set<SysUser> sysUsers) {
+			Date optionTime, Set<SysRolePower> sysRolePowers,
+			Set<SysUser> sysUsers) {
 		this.id = id;
 		this.roleName = roleName;
 		this.roleDesc = roleDesc;
 		this.optionTime = optionTime;
+		this.sysRolePowers = sysRolePowers;
 		this.sysUsers = sysUsers;
 	}
 
@@ -85,12 +87,21 @@ public class SysRole implements java.io.Serializable {
 	}
 
 	@Column(name = "option_time", nullable = false, length = 19)
-	public Timestamp getOptionTime() {
+	public Date getOptionTime() {
 		return this.optionTime;
 	}
 
-	public void setOptionTime(Timestamp optionTime) {
+	public void setOptionTime(Date optionTime) {
 		this.optionTime = optionTime;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sysRole")
+	public Set<SysRolePower> getSysRolePowers() {
+		return this.sysRolePowers;
+	}
+
+	public void setSysRolePowers(Set<SysRolePower> sysRolePowers) {
+		this.sysRolePowers = sysRolePowers;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sysRole")

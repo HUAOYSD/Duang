@@ -5,27 +5,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.SysUserDao;
+import org.duang.dao.SysRolePowerDao;
 import org.duang.dao.base.BaseDao;
-import org.duang.entity.SysUser;
+import org.duang.entity.SysRolePower;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.stereotype.Repository;
 
 
 /**   
- * 系统用户dao实现类
- * @ClassName:  SysUserDaoImpl   
+ * 系统用户权限多对多参照表dao接口实现类
+ * @ClassName:  SysRolePowerDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 白攀
- * @date 2016年7月17日 上午11:38:51      
+ * @date 2016年7月25日 下午4:25:51      
  */  
-@Repository("sysuserdao")
-public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
+@Repository("sysrolepowerdao")
+public class SysRolePowerDaoImpl extends BaseDao<SysRolePower> implements SysRolePowerDao{
 
 
-	public SysUserDaoImpl(){
-		LoggerUtils.info("注入SysUserDaoImpl层", this.getClass());
+	public SysRolePowerDaoImpl(){
+		LoggerUtils.info("注入SysRolePowerDaoImpl层", this.getClass());
 	}
 
 
@@ -66,7 +66,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysUser> queryAllEntity() throws Exception {
+	public List<SysRolePower> queryAllEntity() throws Exception {
 		return super.queryAll();
 	}
 
@@ -76,7 +76,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysUser> queryAllEntity(PageUtil<SysUser> page) throws Exception{
+	public List<SysRolePower> queryAllEntity(PageUtil<SysRolePower> page) throws Exception{
 		return super.queryAll(page);
 	}
 
@@ -88,7 +88,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysUser> queryEntity(String field, Object value, PageUtil<SysUser> page) throws Exception{
+	public List<SysRolePower> queryEntity(String field, Object value, PageUtil<SysRolePower> page) throws Exception{
 		return super.query(field, value, page);
 	}
 
@@ -100,7 +100,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysUser> queryEntity(List<String> properties, List<Object> values, PageUtil<SysUser> page) throws Exception{
+	public List<SysRolePower> queryEntity(List<String> properties, List<Object> values, PageUtil<SysRolePower> page) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
 		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
@@ -111,7 +111,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public SysUser findById(Serializable id) throws Exception{
+	public SysRolePower findById(Serializable id) throws Exception{
 		return super.find(id);
 	}
 
@@ -121,7 +121,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(SysUser t) throws Exception{
+	public boolean saveEntity(SysRolePower t) throws Exception{
 		super.save(t);
 		return true;
 	}
@@ -132,7 +132,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(SysUser t) throws Exception{
+	public boolean updateEntity(SysRolePower t) throws Exception{
 		super.update(t);
 		return true;
 	}
@@ -143,7 +143,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(SysUser t) throws Exception{
+	public boolean deleteEntity(SysRolePower t) throws Exception{
 		super.delete(t);
 		return true;
 	}
@@ -169,7 +169,7 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 		super.delete(map);
 		return true;
 	}
-
+	
 
 	/**
 	 * 根据sql语句执行sql代码

@@ -1,15 +1,21 @@
 package org.duang.action.base;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import net.sf.json.JSONObject;
+
 import org.apache.avro.reflect.Nullable;
 import org.apache.struts2.ServletActionContext;
 import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.util.CastToClass;
 import org.duang.util.PageUtil;
+
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -54,17 +60,28 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * json对象   
 	 * @Fields jsonObject : TODO(用一句话描述这个变量表示什么)   
 	 */   
-	protected JSONObject jsonObject = new JSONObject(false);
+	protected JSONObject jsonObject;
 	/**   
 	 * 查询使用的条件类
 	 * @Fields condsUtils : TODO(用一句话描述这个变量表示什么)   
 	 */   
-	protected CondsUtils condsUtils = new CondsUtils();
+	protected CondsUtils condsUtils;
 	/**   
 	 * 分页对象
 	 * @Fields pageutil : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private PageUtil<T> pageutil=null;
+	/**   
+	 * PrintWrite对象
+	 * @Fields out : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	private PrintWriter out;
+	/**   
+	 * listMap数据集
+	 * @Fields listMap : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	protected List<Map<String, Object>> listMap = null;
+
 
 	/**
 	 * 通过构造方法获取clazz
@@ -99,7 +116,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * @author 白攀
 	 * @date 2016-7-15 下午4:31:26
 	 */ 
-	protected void printJsonResult(@Nullable PrintWriter out){
+	protected void printJsonResult(){
 		try {
 			if (out == null) {
 				out = getResponse(null).getWriter();
@@ -124,7 +141,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * @author 白攀
 	 * @date 2016-7-15 下午4:31:26
 	 */ 
-	protected void printJsonResult(@Nullable PrintWriter out, String jsonStr){
+	protected void printJsonResult(String jsonStr){
 		try {
 			if (out == null) {
 				out = getResponse(null).getWriter();
@@ -195,5 +212,10 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	}
 	public void setEntity(T entity) {
 		this.entity = entity;
+	}
+	{
+		jsonObject = new JSONObject();
+		condsUtils = new CondsUtils();
+		listMap = new ArrayList<Map<String, Object>>();
 	}
 }

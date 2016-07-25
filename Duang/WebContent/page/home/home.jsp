@@ -9,7 +9,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>后台管理系统</title>
-<link rel="stylesheet" type="text/css" href="<%=path%>/css/home.css">
+<%@ include file="/page/inc/inc.jsp"%>
+
+<%-- <link rel="stylesheet" type="text/css" href="<%=path%>/css/home.css">
 <link rel="stylesheet" type="text/css" href="<%=path%>/css/left.css">
 <link rel="stylesheet" type="text/css" href="<%=path%>/js/easyui/themes/gray/easyui.css">
 <link rel="stylesheet" type="text/css" href="<%=path%>/js/easyui/themes/icon.css" />
@@ -18,9 +20,8 @@
 <script type="text/javascript" src="<%=path%>/js/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/layer/layer.js"></script>
 <script type="text/javascript" src="<%=path%>/js/home.js"></script>
-<script type="text/javascript" src="<%=path%>/js/extends.js"></script>
-<script type="text/javascript" src="<%=path%>/js/json.js"></script>
-<script type="text/javascript" src="<%=path%>/js/util.js"></script>
+<script type="text/javascript" src="<%=path%>/js/extends.js"></script> --%>
+
 </head>
 <body class="easyui-layout">
 	<!-- 头部标题 -->
