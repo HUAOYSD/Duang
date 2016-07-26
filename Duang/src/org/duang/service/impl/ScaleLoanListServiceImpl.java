@@ -122,8 +122,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 		}
 		return true;
 	}
-
-
+	
 
 	/**
 	 * 计数总数全部

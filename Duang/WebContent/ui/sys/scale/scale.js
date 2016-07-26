@@ -254,7 +254,7 @@ $("#allot_btn_scale").on("click",function(){
 
 
 /**
- * 打开借贷匹配 
+ * 打开借贷记录详情
  */
 $("#match_btn_scale").on("click",function(){
 	var selectedRow = $("#scale").datagrid('getSelected');
@@ -264,11 +264,11 @@ $("#match_btn_scale").on("click",function(){
 	}
 	layer.open({
 		type: 2,
-		title: '借贷匹配',
+		title: '借贷记录详情',
 		shadeClose: true,
 		maxmin:true,
 		shade: 0.8,
-		area: ['80%', '85%'],
-		content: 'scale!openDialog.do?path=info&id='+selectedRow.id
+		area: ['80%', '90%'],
+		content: 'scale!openDialog.do?path=loanlistinfo&id='+selectedRow.id
 	}); 
 });

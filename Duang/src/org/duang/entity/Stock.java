@@ -27,7 +27,7 @@ public class Stock implements java.io.Serializable {
 	private Scale scale;
 	private LoanList loanList;
 	private InvestList investListByTurnInvestListId;
-	private InvestList investListByInvestListId;
+	private InvestList investList;
 	private double money;
 	private double fetch;
 	private Date createTime;
@@ -37,7 +37,6 @@ public class Stock implements java.io.Serializable {
 	private int isTurn;
 
 	// Constructors
-
 	/** default constructor */
 	public Stock() {
 	}
@@ -48,12 +47,12 @@ public class Stock implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Stock(String id, Scale scale, LoanList loanList, InvestList investListByTurnInvestListId, InvestList investListByInvestListId, double money, double fetch, Date createTime, Date fetchTime, double difference, int status, int isTurn) {
+	public Stock(String id, Scale scale, LoanList loanList, InvestList investListByTurnInvestListId, InvestList investList, double money, double fetch, Date createTime, Date fetchTime, double difference, int status, int isTurn) {
 		this.id = id;
 		this.scale = scale;
 		this.loanList = loanList;
 		this.investListByTurnInvestListId = investListByTurnInvestListId;
-		this.investListByInvestListId = investListByInvestListId;
+		this.investList = investList;
 		this.money = money;
 		this.fetch = fetch;
 		this.createTime = createTime;
@@ -106,12 +105,12 @@ public class Stock implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "invest_list_id")
-	public InvestList getInvestListByInvestListId() {
-		return this.investListByInvestListId;
+	public InvestList getInvestList() {
+		return this.investList;
 	}
 
-	public void setInvestListByInvestListId(InvestList investListByInvestListId) {
-		this.investListByInvestListId = investListByInvestListId;
+	public void setInvestList(InvestList investList) {
+		this.investList = investList;
 	}
 
 	@Column(name = "money", precision = 22, scale = 0)

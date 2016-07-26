@@ -21,7 +21,6 @@ public class LogController {
 
 	/** 
 	 * 记录日志方法
-	 * 做的时候参考book_shop
 	 * @Title: methodCacheHold 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @param joinPoint
