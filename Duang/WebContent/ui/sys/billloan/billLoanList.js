@@ -2,16 +2,16 @@ var tableObj;
 var editRow = undefined; //定义全局变量：当前编辑的行
 $(function(){
 	//隐藏显示查询条件区域
-	$('#billInvestList_open_close').on("click",function(){
-		$('#billInvestList_conditon').toggle(80);
+	$('#billLoanList_open_close').on("click",function(){
+		$('#billLoanList_conditon').toggle(80);
 		setTimeout(domresize,100);//条件隐藏，改变表格高度
 	});
 	//表格初始化
-	tableObj = $("#billInvestList_table").datagrid({
-		height:$("#billInvestList_body").height()-$('#billInvestList_search_area').height()-5,
-		width:$("#billInvestList_body").width(),
+	tableObj = $("#billLoanList_table").datagrid({
+		height:$("#billLoanList_body").height()-$('#billLoanList_search_area').height()-5,
+		width:$("#billLoanList_body").width(),
 		loadMsg : "正在加载，请稍后...",
-		url:"billinvest!queryAllBillInvest.do",  
+		url:"billloan!queryByPar.do",  
 		singleSelect:true,  
 		nowrap:true,
 		rownumbers:true,
@@ -40,38 +40,32 @@ $(function(){
 		columns:[[
 				{field:'email',title:'邮箱',halign:"center", align:"center",width:150},
 				{field:'phone',title:'电话',halign:"center", align:"center",width:150},
-				{field:'scaleName',title:'投资标名称',halign:"center", align:"center",width:200},
+				{field:'pactNumber',title:'借款合同号',halign:"center", align:"center",width:200},
 				{field:'status',title:'状态',halign:"center", align:"center",width:150,
-					//1进行中，2成功，3失败
+					//状态，1放款，2还款，3增加逾期费，4还逾期费
 					formatter: function(value,row,index){
 						if(value==1){
-							return "进行中";
+							return "放款";
 						}else if(value == 2){
-							return "成功";
+							return "还款";
 						}else if(value == 3){
-							return "失败";
+							return "增加逾期费";
+						}else if(value == 4){
+							return "还逾期费";
 						}else{
 							return "--";
 						}
 					}
 				},
-				{field:'useType',title:'资金类型',halign:"center", align:"center",width:200,
-					//资金类型，1充值，2提现，3消费（购买理财产品），4购买手续费，5赎回（仅本金），6收益，7转让手续费
+				{field:'billStatus',title:'账单状态',halign:"center", align:"center",width:200,
+					//状态，1操作中，2成功，3失败
 					formatter: function(value,row,index){
 						if(value==1){
-							return "充值";
+							return "操作中";
 						}else if(value == 2){
-							return "提现";
+							return "成功";
 						}else if(value == 3){
-							return "消费（购买理财产品）";
-						}else if(value == 4){
-							return "购买手续费";
-						}else if(value == 5){
-							return "赎回（仅本金）";
-						}else if(value == 6){
-							return "收益";
-						}else if(value == 7){
-							return "转让手续费";
+							return "失败";
 						}else{
 							return "--";
 						}
@@ -109,15 +103,14 @@ $(function(){
 						}
 					}
 		        },  
-		        {field:'money',title:'变动金额',halign:"center", align:"center",width:200},
-				{field:'balance',title:'变动后账户余额',halign:"center", align:"center",width:200},
-				{field:'asset',title:'变动后总资产',halign:"center", align:"center",width:200},
+		        {field:'money',title:'金额',halign:"center", align:"center",width:200},
+		        {field:'doneMoney',title:'剩余金额',halign:"center", align:"center",width:200},
 				{field:'optTime',title:'操作时间',halign:"center", align:"center",width:200},
 				{field:'remark',title:'操作说明',halign:"center", align:"center",width:600}				
 		]]
 	});
-	$('#querybillInvestListForm').form({    
-	    url:"billinvest!queryByPar.do",    
+	$('#querybillLoanListForm').form({    
+	    url:"billloan!queryByPar.do",    
 	    onSubmit: function(){    
 	        
 	    },    
@@ -140,8 +133,8 @@ window.onresize = function(){
 };
 //改变表格宽高
 function domresize(){
-	$('#billInvestList_table').datagrid('resize',{  
-		height:$("#billInvestList_body").height()-$('#billInvestList_search_area').height()-5,
-		width:$("#billInvestList_body").width()
+	$('#billLoanList_table').datagrid('resize',{  
+		height:$("#billLoanList_body").height()-$('#billLoanList_search_area').height()-5,
+		width:$("#billLoanList_body").width()
 	});
 }

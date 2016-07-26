@@ -35,11 +35,16 @@ public interface ConstantCode {
 	 * 默认
 	 */
 	String DEFAULT = "0";
+	/*
+	 * 默认
+	 */
+	int INT_DEFAULT = 0;
 	
 	/**
 	 * select标签没有选择
 	 */
 	int NOSELECTED = -1;
+	
 	/**
 	 * select标签没有选择
 	 */

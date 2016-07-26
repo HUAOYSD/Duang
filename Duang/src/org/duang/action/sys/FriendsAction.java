@@ -18,9 +18,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.Friends;
 import org.duang.entity.MemberInfo;
-import org.duang.entity.Message;
 import org.duang.service.FriendsService;
-import org.duang.service.MessageService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
@@ -45,7 +43,7 @@ public class FriendsAction extends BaseAction<Friends> {
 	private static final long serialVersionUID = 1L;
 	
 	private FriendsService friendsService;
-	@Resource(name = "messageserviceimpl")
+	@Resource(name = "friendsserviceimpl")
 	public void setService(FriendsService friendsService) {
 		this.friendsService = friendsService;
 	}
@@ -77,11 +75,10 @@ public class FriendsAction extends BaseAction<Friends> {
 	public void queryAll() {
 		try {
 			List<Friends> list = friendsService.queryAllEntity(Order.asc("optTime"));
-			int count = friendsService.count();
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", list.size());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -175,42 +172,41 @@ public class FriendsAction extends BaseAction<Friends> {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
 	 * @author LiYonghui    
-	 * @date 2016年8月18日 下午2:53:19
+	 * @date 2016年8月23日 下午2:53:19
 	 * @return: void      
 	 * @throws
 	 */
 	public void queryByParameter() {
 		try {
 			
-			condsUtils.addProperties(true, "memberInfoByReceiver");
-			condsUtils.concatValue(new String[] { "receiver", "as" });
-			if (DataUtils.notEmpty(entity.getMemberInfoByReceiver().getRealName())) {
-				condsUtils.addProperties(false, "receiver.realName");
-				condsUtils.concatValue(new String[] {entity.getMemberInfoByReceiver().getRealName(), "like" });
+			condsUtils.addProperties(true, "memberInfoBySelf");
+			condsUtils.concatValue(new String[] { "self", "as" });
+			if (DataUtils.notEmpty(entity.getMemberInfoBySelf().getRealName())) {
+				condsUtils.addProperties(false, "self.realName");
+				condsUtils.concatValue(new String[] {entity.getMemberInfoBySelf().getRealName(), "like" });
 			}
-			condsUtils.addProperties(false, "memberInfoBySender");
-			condsUtils.concatValue(new String[] { "sender", "as" });
-			if (DataUtils.notEmpty(entity.getMemberInfoBySender().getRealName())) {
-				condsUtils.addProperties(false, "sender.realName");
-				condsUtils.concatValue(new String[] {entity.getMemberInfoBySender().getRealName(), "like" });
+			if (DataUtils.notEmpty(entity.getMemberInfoBySelf().getLoginName())) {
+				condsUtils.addProperties(false, "self.loginName");
+				condsUtils.concatValue(new String[] {entity.getMemberInfoBySelf().getLoginName(), "like" });
 			}
-			if (DataUtils.notEmpty(entity.getTitle())) {
-				condsUtils.addProperties(false, "title");
-				condsUtils.concatValue(new String[] {entity.getTitle(), "like" });
+			condsUtils.addProperties(false, "memberInfoByTarget");
+			condsUtils.concatValue(new String[] { "target", "as" });
+			if (DataUtils.notEmpty(entity.getMemberInfoByTarget().getRealName())) {
+				condsUtils.addProperties(false, "target.realName");
+				condsUtils.concatValue(new String[] {entity.getMemberInfoByTarget().getRealName(), "like" });
 			}
-			if (DataUtils.notEmpty(getRequest().getParameter("startTime")) && DataUtils.notEmpty(getRequest().getParameter("endTime"))) {
-				condsUtils.concat("time", new Object[]{DateUtils.str2Date(getRequest().getParameter("startTime")+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), DateUtils.str2Date(getRequest().getParameter("endTime")+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "between"});
+			if (DataUtils.notEmpty(entity.getMemberInfoByTarget().getLoginName())) {
+				condsUtils.addProperties(false, "target.loginName");
+				condsUtils.concatValue(new String[] {entity.getMemberInfoByTarget().getLoginName(), "like" });
 			}
 			//查询数据
 			@SuppressWarnings("rawtypes")
-			List list = messageService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = messageService.count(condsUtils.getPropertys(), condsUtils.getValues());
+			List list = friendsService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			//封装json
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
-				//fillDataObjectArray方法用于重新组合数据集，让其能够符合页面展示
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

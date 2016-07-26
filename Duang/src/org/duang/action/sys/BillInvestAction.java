@@ -16,18 +16,12 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.BindCard;
-import org.duang.entity.InvestList;
-import org.duang.entity.InvestMember;
-import org.duang.entity.InvestTicket;
 import org.duang.entity.BillInvest;
+import org.duang.entity.BindCard;
 import org.duang.entity.MemberInfo;
-import org.duang.enums.If;
-import org.duang.enums.Platform;
-import org.duang.enums.invest.Status;
-import org.duang.enums.invest.TurnStatus;
-import org.duang.enums.invest.UseTicket;
+import org.duang.entity.Scale;
 import org.duang.service.BillInvestService;
+import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
@@ -87,11 +81,10 @@ public class BillInvestAction extends BaseAction<BillInvest> {
 	public void queryAllBillInvest() {
 		try {
 			List<BillInvest> list = billInvestService.queryAllEntity(Order.desc("optTime"));
-			int count = billInvestService.count();
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", list.size());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -132,31 +125,8 @@ public class BillInvestAction extends BaseAction<BillInvest> {
 				map.put("remark", billInvest.getRemark());
 				map.put("style", billInvest.getStyle());
 				map.put("optTime", DateUtils.date2Str(billInvest.getOptTime()));
-				
-				InvestList pk = billInvest.getInvestList();//理财记录，只有消费、手续费、赎回、收益、手续费的时候用到这个字段
-				map.put("pkId", pk.getId());
-				map.put("money", pk.getMoney());
-				map.put("yetMoney", pk.getYetMoney());
-				map.put("spaceMoney", pk.getSpaceMoney());
-				map.put("backIncome", pk.getBackIncome());
-				map.put("backMoney", pk.getBackMoney());
-				map.put("useTicket", UseTicket.valueOf("UT"+pk.getUseTicket()).toString());
-				map.put("expectIncome", pk.getExpectIncome());
-				map.put("totalMoney", pk.getTotalMoney());
-				map.put("income", pk.getIncome());
-				map.put("ticketBonus", pk.getTicketBonus());
-				map.put("status", Status.valueOf("S"+pk.getStatus()).toString());
-				map.put("openDate", DateUtils.getTimeStamp(pk.getOpenDate()));
-				map.put("backDate", DateUtils.getTimeStamp(pk.getBackDate()));
-				map.put("calcBeginDate", DateUtils.getTimeStamp(pk.getBackDate()));
-				map.put("calcEndDate", DateUtils.getTimeStamp(pk.getBackDate()));
-				map.put("pactNumber", pk.getPactNumber());
-				map.put("investStyle", Platform.valueOf("P"+pk.getInvestStyle()).toString());
-				map.put("poundageTurn", pk.getPoundageTurn());
-				map.put("poundagePrivilege", pk.getPoundagePrivilege());
-				map.put("isTurn", If.valueOf("If"+pk.getIsTurn()).toString());
-				map.put("turnStatus", TurnStatus.valueOf("TS"+pk.getTurnStatus()).toString());
-				
+				Scale pk = billInvest.getInvestList().getScale();//理财记录，只有消费、手续费、赎回、收益、手续费的时候用到这个字段
+				map.put("scaleName", pk.getName());
 				MemberInfo memberInfo = billInvest.getMemberInfo();
 				map.put("realName", memberInfo.getRealName());
 				map.put("nickname", memberInfo.getNickname());
@@ -165,9 +135,9 @@ public class BillInvestAction extends BaseAction<BillInvest> {
 				map.put("phone", memberInfo.getPhone());
 				
 				BindCard bindCard = billInvest.getBindCard();
-				map.put("idcard", bindCard.getIdcard());
 				map.put("bankNo", bindCard.getBankNo());
 				map.put("openBank", bindCard.getOpenBank());
+				map.put("type", bindCard.getType());
 				listMap.add(map);
 			}
 		} catch (Exception e) {
@@ -196,8 +166,29 @@ public class BillInvestAction extends BaseAction<BillInvest> {
 			for (int i = 0; i < list.size(); i++) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				Object[] array = (Object[]) list.get(i);
-				BillInvest mtr = (BillInvest) array[1];
+				BillInvest billInvest = (BillInvest) array[3];
+				map.put("id", billInvest.getId());
+				map.put("useType", billInvest.getUseType());
+				map.put("money", billInvest.getMoney());
+				map.put("balance", billInvest.getBalance());
+				map.put("asset", billInvest.getAsset());
+				map.put("status", billInvest.getStatus());
+				map.put("remark", billInvest.getRemark());
+				map.put("style", billInvest.getStyle());
+				map.put("optTime", DateUtils.date2Str(billInvest.getOptTime()));
+				Scale pk = billInvest.getInvestList().getScale();//理财记录，只有消费、手续费、赎回、收益、手续费的时候用到这个字段
+				map.put("scaleName", pk.getName());
+				MemberInfo memberInfo = billInvest.getMemberInfo();
+				map.put("realName", memberInfo.getRealName());
+				map.put("nickname", memberInfo.getNickname());
+				map.put("email", memberInfo.getEmail());
+				map.put("sex", memberInfo.getSex());
+				map.put("phone", memberInfo.getPhone());
 				
+				BindCard bindCard = billInvest.getBindCard();
+				map.put("bankNo", bindCard.getBankNo());
+				map.put("openBank", bindCard.getOpenBank());
+				map.put("type", bindCard.getType());
 				listMap.add(map);
 			}
 		} catch (Exception e) {
@@ -220,15 +211,34 @@ public class BillInvestAction extends BaseAction<BillInvest> {
 	 */
 	public void queryByPar() {
 		try {
-			/*condsUtils.addProperties(true, "investTicket");
-			condsUtils.concatValue(new String[] { "infoAlias", "as" });
-			if(DataUtils.notEmpty(entity.getInvestTicket().getName())){
-				condsUtils.addProperties(false, "infoAlias.name");
-				condsUtils.concatValue(new String[] { entity.getInvestTicket().getName(), "like" });
+			condsUtils.addProperties(true, "memberInfo", "investList", "asil.scale", "order");
+			condsUtils.addValues(true, new String[] { "mi", "as" }, new String[] { "asil", "as" }, new String[] { "asscale", "as" }, Order.desc("optTime"));
+			if(DataUtils.notEmpty(entity.getMemberInfo().getRealName())){
+				condsUtils.addProperties(false, "mi.realName");
+				condsUtils.concatValue(new String[] { entity.getMemberInfo().getRealName(), "like" });
 			}
-			if (DataUtils.notEmpty(getRequest().getParameter("useTime"))) {
-				condsUtils.concat("useTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("useTime")+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), DateUtils.str2Date(getRequest().getParameter("useTime")+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "between"});
-			}*/
+			if(DataUtils.notEmpty(entity.getMemberInfo().getPhone())){
+				condsUtils.addProperties(false, "mi.phone");
+				condsUtils.concatValue(new String[] { entity.getMemberInfo().getPhone(), "like" });
+			}
+			
+			if(DataUtils.notEmpty(entity.getInvestList().getScale().getName())){
+				condsUtils.addProperties(false, "asscale.name");
+				condsUtils.concatValue(new String[] { entity.getInvestList().getScale().getName(), "like" });
+			}
+			
+			if(entity.getStatus()!=ConstantCode.NOSELECTED){
+				condsUtils.addProperties(false, "status");
+				condsUtils.addValues(false, entity.getStatus());
+			}
+			if(entity.getUseType()!=ConstantCode.NOSELECTED){
+				condsUtils.addProperties(false, "useType");
+				condsUtils.addValues(false, entity.getUseType());
+			}
+			
+			if (DataUtils.notEmpty(getRequest().getParameter("optTime"))) {
+				condsUtils.concat("optTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("optTime")+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), DateUtils.str2Date(getRequest().getParameter("optTime")+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "between"});
+			}
 			
 			@SuppressWarnings("rawtypes")
 			List list = billInvestService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
