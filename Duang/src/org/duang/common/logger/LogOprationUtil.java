@@ -220,7 +220,7 @@ public enum LogOprationUtil {
 	},GO {
 		@Override
 		public String getStartWords() {
-			return "go,to";
+			return "go,to,open";
 		}
 
 		@Override

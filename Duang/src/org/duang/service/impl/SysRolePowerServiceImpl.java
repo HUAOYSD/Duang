@@ -11,6 +11,7 @@ import org.duang.dao.SysRolePowerDao;
 import org.duang.entity.SysRolePower;
 import org.duang.service.SysRolePowerService;
 import org.duang.util.PageUtil;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 
 /**   
@@ -70,8 +71,8 @@ public class SysRolePowerServiceImpl implements SysRolePowerService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysRolePower> queryAllEntity() throws Exception {
-		return dao.queryAllEntity();
+	public List<SysRolePower> queryAllEntity(Order order) throws Exception {
+		return dao.queryAllEntity(order);
 	}
 
 
@@ -80,8 +81,8 @@ public class SysRolePowerServiceImpl implements SysRolePowerService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysRolePower> queryAllEntity(PageUtil<SysRolePower> page) throws Exception{
-		return dao.queryAllEntity(page);
+	public List<SysRolePower> queryAllEntity(PageUtil<SysRolePower> page, Order order) throws Exception{
+		return dao.queryAllEntity(page, order);
 	}
 
 
@@ -92,8 +93,8 @@ public class SysRolePowerServiceImpl implements SysRolePowerService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysRolePower> queryEntity(String field, Object value, PageUtil<SysRolePower> page) throws Exception{
-		return dao.queryEntity(field, value, page);
+	public List<SysRolePower> queryEntity(String field, Object value, PageUtil<SysRolePower> page, Order order) throws Exception{
+		return dao.queryEntity(field, value, page, order);
 	}
 
 
