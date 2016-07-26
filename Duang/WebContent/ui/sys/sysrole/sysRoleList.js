@@ -123,12 +123,12 @@ function updateRoleView(sysRoleId) {
 			height:260,
 			title:"修改角色",
 			modal:true,
-			href:'role_openDialog.action?sysRoleId='+sysRoleId+'&path=editRoleView'
-			//href:'user/editMember.jsp?memberId='+memberId +'&path=updateMemberView'
-			//href:'member_openDialog.action'
-		});
-		$('#editRoleView').dialog('open');
+			href:'sysrole!openDialog.do?path=editRoleView&sysRoleId='+sysRoleId
+	});
+	$('#editRoleView').dialog('open');
 }
+
+
 /**
  * 删除权限
  * @param {Object} powerId
@@ -138,8 +138,8 @@ function deleteRole(sysRoleId) {
 	    if (r){    
 	        $.ajax({
 	        	type:"post",
-	        	url:"role_deleteRole.action?sysRoleId="+sysRoleId,
-	        	//data:"",
+	        	url:"sysrole!deleteRole.do?",
+	        	data:{"sysRoleId": sysRoleId},
 	        	success:function(msg) {
 	        		var result = eval('('+msg+')');
 	        		if(result) {
@@ -147,12 +147,13 @@ function deleteRole(sysRoleId) {
 	        		} else {
 	        			$.messager.alert("消息","删除失败","info");
 	        		}
-	        		loadRoleList("role_queryRolePageList.action");
+	        		loadRoleList("sysrole!queryRolePageList.do");
 	        	}
 	        });   
 	    }    
 	});
-  }
+}
+
 
 /** 
  * 打开分配权限页面
@@ -165,9 +166,9 @@ function openAllotPowerView(sysRoleId) {
 			height:600,
 			title:"分配权限",
 			modal:true,
-			href:'role_openDialog.action?sysRoleId='+sysRoleId+'&path=powerToRoleView'
-		});
-		$('#powerToRoleView').dialog('open');
+			href:'sysrole!openDialog.do?path=powerToRoleView&sysRoleId='+sysRoleId
+	});
+	$('#powerToRoleView').dialog('open');
 }
  
 

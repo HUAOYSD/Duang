@@ -2720,7 +2720,7 @@ function setCheckAll(objid,subName){
  * @return boolean 符合返回true,否则返回false (注:空字符串返回 false)
  */
 String.prototype.isNotNull = function() {
-	if(this == null || this.trim().length == 0){
+	if(this == null || this == "null" || this == "undefined" || this.trim().length == 0){
 		return false;
 	}
     return true;

@@ -1,5 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<form id="RoleAddForm"  method="post">
+<form id="RoleAddForm" class="easyui-form"  method="post" data-options="novalidate:true">
 	<table colspan=4 border="0" style="width: 400px;" cellspacing="10" cellpadding="5">
 		<tr>
 			<td align="right" style="width: 110px;">
@@ -25,7 +25,7 @@
 			</td>
 			<td>
 				<div align="left">
-					<ul id="powerTree1"  class="easyui-tree" data-options="url:'privilege_getPowerTreeCheckbox.action',checkbox:true,state:'closed'"></ul>
+					<ul id="powerTree"  class="easyui-tree" data-options="url:'syspower_getPowerTreeCheckbox.do',checkbox:true,state:'closed'"></ul>
 				</div>	
 			</td>
 		</tr>
@@ -39,64 +39,56 @@
 		
 <script type="text/javascript">
 var closeAll = function(){
-	$("#powerTree1").tree("collapseAll");
+	$("#powerTree").tree("collapseAll");
 }
 
 /**
  * 添加角色
  */
 function addRole() {
-	  var nodes = $('#powerTree1').tree('getChecked');
+	  var nodes = $('#powerTree').tree('getChecked');
 	  var powerIds = "";
 	  $.each(nodes,function(i,n){
 		  powerIds += n["id"]+"space";
 	  });
 	  $("#powerIds").val(powerIds);
-<%--	  $.ajax({--%>
-<%--	        	type:"post",--%>
-<%--	        	url:"role_saveRole.action",--%>
-<%--	        	data:"powerIds=" + powerIds ,--%>
-<%--	        	success:function(msg) {--%>
-<%--	        		var result = eval('('+msg+')');--%>
-<%--	        		if(result) {--%>
-<%--	        			$.messager.alert("消息","删除成功","info");--%>
-<%--	        		} else {--%>
-<%--	        			$.messager.alert("消息","删除失败","info");--%>
-<%--	        		}--%>
-<%--	        		loadRoleList("role_queryRolePageList.action");--%>
-<%--	        	}--%>
-<%--	        });   --%>
-		var name = $.trim($("#sysRoleName").val());
-	    $("#RoleAddForm").form('submit',{
-		   	url:"role_saveRole.action",
+   	  var name = $.trim($("#sysRoleName").val());
+      $("#RoleAddForm").form('submit',{
+		   	url:"sysrole_saveRole.do",
 		   	onSubmit: function() {
-		 		var con = true;
-		 		$.ajax({
-		 			 url:"role_checkRoleName.action",
-		 			 dataType:'json',
-		 			 async: false,
-		 			 data:"name="+name,
-		 			 success:function(data) {
-		 				 if(!data.success) {
-		 					 $.messager.alert('错误','角色名称已经存在，请重新填写！','error');
-		 					 con = false;
-		 				 }
-		 			 }
-		 		 });
-		 		return con;
+		   		if($(this).form('enableValidation').form('validate')){
+		   			if(name.isNotNull){
+			   			var con = true;
+				 		$.ajax({
+				 			 url:"sysrole_checkRoleName.do",
+				 			 dataType:'json',
+				 			 async: false,
+				 			 data:"name="+name,
+				 			 success:function(data) {
+				 				 if(!data.success) {
+				 					 $.messager.alert('错误','角色名称已经存在，请重新填写！','error');
+				 					 con = false;
+				 				 }
+				 			 }
+				 		 });
+				 		return con;
+			   		}else{
+			   			return false;
+			   		}
+		   		}else{
+		 			return false;
+		 		}
 		 	},
 			success : function(data) {
 				var result = eval('(' + data + ')');
 				if(result.success){
-					// 成功
 					$.messager.alert('成功','添加成功','info');
 				}else{
-					// 失败
 					$.messager.alert('错误','添加失败','error');
 				}
 				$('#addRoleView').window('close');
 				loadRoleList("sysrole!queryRolePageList.do");
 			}
-		});
+	   });
 }
 </script>

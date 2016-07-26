@@ -29,7 +29,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  */  
 @Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
 @Namespaces({@Namespace("/")})
-@Action(value="sysrole")
+@Action(value="syspower")
 @ParentPackage("sys")
 @Results(value={
 		@Result(name=ResultPath.INFO,type="dispatcher",location="WEB-INF/page/test/info.jsp"),

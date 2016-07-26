@@ -1,8 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-
-
-<form id="RoleEditForm" action="role_updateRole.action" method="post">
-<input type="hidden" name="sysRoleId" id="sysRoleId">
+<form id="RoleEditForm" action="sysrole!updateRole.do" method="post" data-options="novalidate:true">
+	<input type="hidden" name="sysRoleId" id="sysRoleId">
 	<table colspan=4 border="0" style="width: 400px;" cellspacing="10" cellpadding="5">
 		<tr>
 			<td align="right" style="width: 110px;">
@@ -42,33 +40,57 @@
 		</div>
 		</form>
 <script type="text/javascript">
-
 $(function (){
 	$.ajax({
 		type:'GET',
-		url:"role_getRoleInfo.action",
+		url:"sysrole!getRoleInfo.do",
 		data:"sysRoleId=" + "<%=request.getParameter("sysRoleId")%>",
 		dataType:'json',
 		success:function(msg) {
-			$("#RoleEditForm").form('load',msg);
-		}
-	})
-});
-
-function updatePower() { 
-	$("#RoleEditForm").form('submit',{
-		success : function(data) {
-			var result = eval('(' + data + ')');
-			if(result.success){
-				// 成功
-				$.messager.alert('成功','更新成功','info');
-			}else{
-				// 失败
-				$.messager.alert('错误','更新失败','error');
-			}
-			$('#editRoleView').window('close');
-			loadRoleList("role_queryRolePageList.action");
+			$("#RoleEditForm").form('load', msg);
 		}
 	});
+});
+
+
+function updatePower() {
+ 	  var name = $.trim($("#sysRoleName").val());
+      $("#RoleEditForm").form('submit',{
+		   	url:"sysrole!updateRole.do",
+		   	onSubmit: function() {
+		   		if($(this).form('enableValidation').form('validate')){
+		   			if(name.isNotNull){
+			   			var con = true;
+				 		$.ajax({
+				 			 url:"sysrole_checkRoleName.do",
+				 			 dataType:'json',
+				 			 async: false,
+				 			 data:"name="+name,
+				 			 success:function(data) {
+				 				 if(!data.success) {
+				 					 $.messager.alert('错误','角色名称已经存在，请重新填写！','error');
+				 					 con = false;
+				 				 }
+				 			 }
+				 		 });
+				 		return con;
+			   		}else{
+			   			return false;
+			   		}
+		   		}else{
+		 			return false;
+		 		}
+		 	},
+			success : function(data) {
+				var result = eval('(' + data + ')');
+				if(result.success){
+					$.messager.alert('成功','更新成功','info');
+				}else{
+					$.messager.alert('错误','更新失败','error');
+				}
+				$('#editRoleView').window('close');
+				loadRoleList("sysrole!queryRolePageList.do");
+			}
+	   });
 }
 </script>

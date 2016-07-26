@@ -1,8 +1,10 @@
 package org.duang.action.sys;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -17,7 +19,10 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.entity.SysPower;
 import org.duang.entity.SysRole;
+import org.duang.entity.SysRolePower;
+import org.duang.service.SysPowerService;
 import org.duang.service.SysRoleService;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
@@ -38,23 +43,27 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Results(value={
 		@Result(name="addRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/addRole.jsp"),
 		@Result(name="editRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/editRole.jsp?sysRoleId=${sysRoleId}"),
-		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/sysrole/sysRoleList.jsp"),
+		@Result(name="powerToRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/powerToRole.jsp?sysRoleId=${sysRoleId}"),
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/sysrole/sysRoleList.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
 public class SysRoleAction extends BaseAction<SysRole>{
-	
-	/**   
+
+	/** 
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = -2338429900391951446L;
 
 	private SysRoleService service;
+	private SysPowerService powerService;
 	@Resource(name="sysroleserviceimpl")
 	public void setService(SysRoleService service) {
 		this.service = service;
 	}
-
+	@Resource
+	public void setPowerService(SysPowerService powerService) {
+		this.powerService = powerService;
+	}
 
 	/**   
 	 * 跳转到角色管理界面
@@ -161,29 +170,54 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	}
 
 
-	//	/**
-	//	 * 查询角色下拉列表
-	//	 * @Title: queryRoleList 
-	//	 * @Description: TODO(这里用一句话描述这个方法的作用) 
-	//	 * @return void    返回类型 
-	//	 */
-	//	public void queryRoleList() {
-	//		String json = "";
-	//		try {
-	//			List<SysRole> list = roleService.queryRoleList();
-	//			for(SysRole role : list){
-	//				Map<String,Object> map = new HashMap<String,Object>();
-	//				map.put("roleId", role.getSysRoleId());
-	//				map.put("roleName", role.getSysRoleName());
-	//				listMap.add(map);
-	//			}
-	//			json = JSONArray.fromObject(listMap).toString();
-	//		} catch (Exception e) {
-	//			e.printStackTrace();
-	//		} finally {
-	//			printJsonResult(json);
-	//		}
-	//	}
+	/**   
+	 * 添加权限
+	 * @Title: saveRole   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年7月26日 下午1:42:28
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void saveRole() {
+		try {
+			String powerIdsStr = getRequest().getParameter("powerIds");
+			if (DataUtils.notEmpty(powerIdsStr)) {
+				String[] powerIds = powerIdsStr.split("space");
+				if (powerIds!=null && powerIds.length>0) {
+					entity.setId(DataUtils.randomUUID());
+					entity.setOptionTime(new Date());
+					Set<SysRolePower> sysRolePowers = new HashSet<SysRolePower>(0);
+					for(String powerId : powerIds) {
+						SysPower sysPower = powerService.findById(powerId);
+						if (sysPower != null) {
+							SysRolePower rolePower = new SysRolePower();
+							rolePower.setRolePowerId(DataUtils.randomUUID());
+							rolePower.setSysPower(sysPower);
+							rolePower.setSysRole(entity);
+							sysRolePowers.add(rolePower);
+						}
+					}
+					entity.setSysRolePowers(sysRolePowers);
+					if (service.saveEntity(entity)) {
+						jsonObject.put("success", true);
+					}else {
+						jsonObject.put("success", false);
+					}
+				}
+			}else {
+				jsonObject.put("success", false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("系统角色ACTION填充数据错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("系统角色ACTION填充数据错误："+e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("success", false);
+		} finally {
+			printJsonResult();
+		}
+	}
 
 
 	/**   
@@ -211,47 +245,10 @@ public class SysRoleAction extends BaseAction<SysRole>{
 			e.printStackTrace();
 			LoggerUtils.error("系统角色ACTION查询错误："+e.getMessage(), this.getClass());
 			LoggerUtils.error("系统角色ACTION查询错误："+e.getLocalizedMessage(), this.getClass());
-			super.msg = "系统角色ACTION查询错误："+e.getMessage();
-			jsonObject.put("msg", super.msg);
 		} finally {
 			super.printJsonResult();
 		}
 	}
-
-
-	/**   
-	 * 添加权限
-	 * @Title: saveRole   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author 白攀    
-	 * @date 2016年7月25日 下午3:55:17
-	 * @return: void      
-	 * @throws   
-	 */  
-	//	public void saveRole() {
-	//		try {
-	//			String powerIdsStr = request.getParameter("powerIds");
-	//			String[] powerIds = powerIdsStr.split("space");
-	//			role.setSysRoleId(DataUtil.randomUUID());
-	//			role.setOptDate(new Date());
-	//			roleService.save(role);
-	//			for(String powerId : powerIds) {
-	//				Power p = priService.queryPowerById(powerId);
-	//				RolePower rolePower = new RolePower();
-	//				rolePower.setRolePowerId(DataUtil.randomUUID());
-	//				rolePower.setPower(p);
-	//				rolePower.setSysRole(role);
-	//				rpService.saveRolePower(rolePower);
-	//			}
-	//			jsonObject.put("success", true);
-	//		} catch (Exception e) {
-	//			e.printStackTrace();
-	//			jsonObject.put("success", false);
-	//		} finally {
-	//			printJsonResult();
-	//		}
-	//	}
 
 
 	/**   
@@ -278,9 +275,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 			e.printStackTrace();
 			LoggerUtils.error("系统角色ACTION修改错误："+e.getMessage(), this.getClass());
 			LoggerUtils.error("系统角色ACTION修改错误："+e.getLocalizedMessage(), this.getClass());
-			super.msg = "系统角色ACTION修改错误："+e.getMessage();
 			jsonObject.put("success", false);
-			jsonObject.put("msg", super.msg);
 		} finally {
 			super.printJsonResult();
 		}
@@ -313,11 +308,107 @@ public class SysRoleAction extends BaseAction<SysRole>{
 			e.printStackTrace();
 			LoggerUtils.error("系统角色ACTION删除错误："+e.getMessage(), this.getClass());
 			LoggerUtils.error("系统角色ACTION删除错误："+e.getLocalizedMessage(), this.getClass());
-			super.msg = "系统角色ACTION删除错误："+e.getMessage();
 			jsonObject.put("success", false);
-			jsonObject.put("msg", super.msg);
 		} finally {
 			super.printJsonResult();
+		}
+	}
+
+
+	/**   
+	 * 检验角色名称是否存在
+	 * @Title: checkRoleName   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年7月26日 下午1:30:58
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void checkRoleName() {
+		try {
+			String name = getRequest().getParameter("name");
+			List<SysRole> roles = service.queryEntity("roleName", name, null, null);
+			if(roles == null || roles.size()==0) {
+				jsonObject.put("success", true);
+			} else {
+				jsonObject.put("success", false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("系统角色ACTION根据name查询错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("系统角色ACTION根据name查询错误："+e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("success", false);
+		} finally {
+			printJsonResult();
+		}
+	}
+
+
+	/**   
+	 * 分配权限
+	 * @Title: updateRolePower   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年7月26日 下午2:14:21
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void updateRolePower() {
+		try {
+			String powerIdsString = getRequest().getParameter("powerIds");
+			if (DataUtils.notEmpty(powerIdsString)) {
+				String[] powerIds = powerIdsString.split("space");
+				if (service.updateRoleToPower(getRequest().getParameter("sysRoleId"), powerIds)) {
+					jsonObject.put("success", true);
+				}else {
+					jsonObject.put("success", false);
+				}
+			}else {
+				jsonObject.put("success", false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("系统角色ACTION权限分配错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("系统角色ACTION权限分配错误："+e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("success", false);
+		} finally {
+			printJsonResult();
+		}
+	}
+
+
+	/**   
+	 * 得到角色所拥有权限信息
+	 * @Title: getRolePowerInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年7月26日 下午2:59:30
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void getRolePowerInfo() {
+		JSONArray jsonArray = new JSONArray();
+		try {
+			List<SysRolePower> list = service.getRolePowerInfoByRole(getRequest().getParameter("sysRoleId"));
+			if (list!=null && list.size()>0) {
+				for(SysRolePower rolePower : list) {
+					Map<String,Object> map = new HashMap<String,Object>();
+					SysPower power = rolePower.getSysPower();
+					if (power != null) {
+						map.put("id", power.getId());
+						jsonArray.add(map);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("系统角色ACTION得到角色所拥有权限信息错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("系统角色ACTION得到角色所拥有权限信息错误："+e.getLocalizedMessage(), this.getClass());
+		} finally {
+			printJsonResult(jsonArray);
 		}
 	}
 }
