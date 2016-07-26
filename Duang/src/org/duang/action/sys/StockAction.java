@@ -44,7 +44,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value = "stock")
 @ParentPackage("sys")
 @Results(value = { 
-		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/stock/stock.jsp"),
+		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/stock/stockList.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 })
 public class StockAction extends BaseAction<Stock> {
@@ -60,6 +60,7 @@ public class StockAction extends BaseAction<Stock> {
 	public void setService(StockService service) {
 		this.service = service;
 	}
+	
 
 
 	/**   
@@ -178,7 +179,9 @@ public class StockAction extends BaseAction<Stock> {
 	 */  
 	public String openDialog() {
 		try {
-			//String path = getRequest().getParameter("path");
+			@SuppressWarnings("unused")
+			String path = getRequest().getParameter("path");
+			//System.out.println(path);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("借贷理财库存记录ACTION方法openDialog错误："+e.getMessage(), this.getClass());

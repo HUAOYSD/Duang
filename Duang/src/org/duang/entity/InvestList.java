@@ -338,7 +338,7 @@ public class InvestList implements java.io.Serializable {
 		this.poundagePrivilege = poundagePrivilege;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investListByInvestListId")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investList")
 	public Set<Stock> getStocksForInvestListId() {
 		return this.stocksForInvestListId;
 	}
