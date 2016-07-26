@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.duang.util.PageUtil;
+import org.hibernate.criterion.Order;
 
 
 /**
@@ -43,7 +44,7 @@ public interface CommonInterface<T> {
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public abstract List<T> queryAllEntity() throws Exception;
+	public abstract List<T> queryAllEntity(Order order) throws Exception;
 
 
 	/**
@@ -51,7 +52,7 @@ public interface CommonInterface<T> {
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public abstract List<T> queryAllEntity(PageUtil<T> page) throws Exception;
+	public abstract List<T> queryAllEntity(PageUtil<T> page, Order order) throws Exception;
 
 	
 	/**
@@ -61,7 +62,7 @@ public interface CommonInterface<T> {
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public abstract List<T> queryEntity(String field,Object value,PageUtil<T> page) throws Exception;
+	public abstract List<T> queryEntity(String field, Object value, PageUtil<T> page, Order order) throws Exception;
 	
 	
 	/**

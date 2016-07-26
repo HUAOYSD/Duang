@@ -36,12 +36,14 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value="sysrole")
 @ParentPackage("sys")
 @Results(value={
+		@Result(name="addRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/addRole.jsp"),
+		@Result(name="editRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/editRole.jsp?sysRoleId=${sysRoleId}"),
+		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/sysrole/sysRoleList.jsp"),
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/sysrole/sysRoleList.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
 public class SysRoleAction extends BaseAction<SysRole>{
-
-
+	
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
@@ -68,6 +70,28 @@ public class SysRoleAction extends BaseAction<SysRole>{
 		return ResultPath.LIST;
 	}
 
+	/**   
+	 * 页面跳转
+	 * @Title: openDialog   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年7月26日 上午10:44:12
+	 * @return: String      
+	 * @throws   
+	 */  
+	public String openDialog() {
+		String path = getRequest().getParameter("path");
+		if("addRoleView".equals(path)) {
+			return "addRoleView";
+		} else if("editRoleView".equals(path)) {
+			return "editRoleView";
+		} else if("powerToRoleView".equals(path)) {
+			return "powerToRoleView";
+		}
+		return ResultPath.LIST;
+	}
+
 
 	/**   
 	 * 查询角色列表
@@ -82,7 +106,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	public void queryRolePageList() {
 		List<SysRole> list;
 		try {
-			list = service.queryAllEntity(getPageUtil());
+			list = service.queryAllEntity(getPageUtil(), null);
 			fillDatagridCons(list);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,8 +120,8 @@ public class SysRoleAction extends BaseAction<SysRole>{
 			printJsonResult();
 		}
 	}
-	
-	
+
+
 	/**   
 	 * 填充List数据
 	 * @Title: fillDatagridCons   
@@ -135,7 +159,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 			LoggerUtils.error("系统角色ACTION填充数据错误："+e.getLocalizedMessage(), this.getClass());
 		}
 	}
-	
+
 
 	//	/**
 	//	 * 查询角色下拉列表

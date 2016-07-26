@@ -106,11 +106,11 @@ function openAddRoleView(memberId) {
 			height:400,
 			title:"添加角色",
 			modal:true,
-			//href:'user/memberView.jsp?memberId='+memberId 
-			href:'role_openDialog.action?path=addRoleView'
+			href:'sysrole!openDialog.do?path=addRoleView'
 		});	
 		$('#addRoleView').dialog('open');
 };
+
 
 /**
  * 打开更改角色页面

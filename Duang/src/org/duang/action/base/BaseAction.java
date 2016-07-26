@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.avro.reflect.Nullable;
@@ -123,6 +124,31 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 			}
 			if (out != null) {
 				out.print(jsonObject);
+				out.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("ERROR-Msg："+e.getMessage(), this.clazz);
+			LoggerUtils.error("ERROR-LocalizeMsg："+e.getLocalizedMessage(), this.clazz);
+		}
+	}
+	
+	
+	/** 
+	 * 将jsonArray输出到页面，自动转为json
+	 * @Title: printJsonResult 
+	 * @Description: TODO(这里用一句话描述这个方法的作用) 
+	 * @return void    返回类型 
+	 * @author 白攀
+	 * @date 2016-7-15 下午4:31:26
+	 */ 
+	protected void printJsonResult(JSONArray jsonArray){
+		try {
+			if (out == null) {
+				out = getResponse(null).getWriter();
+			}
+			if (out != null) {
+				out.print(jsonArray);
 				out.close();
 			}
 		} catch (Exception e) {

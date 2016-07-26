@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
-
 import org.duang.common.logger.LoggerUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.Criteria;
@@ -444,6 +443,42 @@ public class BaseDao<M> {
 		}
 		return criteria.list();
 	}
+	
+	
+	/**
+	 * 分页查询
+	 * @Title: query 
+	 * @Description: TODO(这里用一句话描述这个方法的作用) 
+	 * @param entity
+	 * @param property
+	 * @param value
+	 * @param startIndex
+	 * @param pageSize
+	 * @return
+	 * @return List<M>    返回类型 
+	 * @author 白攀
+	 * @date 2014-3-25 上午9:29:39
+	 */
+	@SuppressWarnings("unchecked")
+	public List<M> queryAll(PageUtil<M> page, Order order) throws Exception{
+		Criteria criteria = this.getCriteria();
+		if (order != null) {
+			criteria.addOrder(order);
+		}
+		if (page != null) {
+			int countRecords = count();
+			//设置总条数
+			page.setCountRecords(countRecords);
+			//设置总页数（加判断是by zero）
+			if(page.getPageRecords()!= 0){
+				page.setCountPages(true,(countRecords%page.getPageRecords()==0)?countRecords/page.getPageRecords():countRecords/page.getPageRecords()+1);
+			}
+			int maxResult = page.getPageRecords();
+			int firstResult = (page.getCurrentPageNum() - 1) * maxResult;
+			criteria.setFirstResult(firstResult).setMaxResults(maxResult);
+		}
+		return criteria.list();
+	}
 
 
 	/**
@@ -566,6 +601,62 @@ public class BaseDao<M> {
 		return q.list();
 	}
 
+	/** 
+	 * 根据criteria查询数据集合
+	 * @Title: queryByDetacheadCriteria 
+	 * @Description: TODO(这里用一句话描述这个方法的作用) 
+	 * @param dt
+	 * @return
+	 * @return List    返回类型 
+	 * @author 白攀
+	 * @date 2014-4-25 下午05:11:49
+	 */ 
+	@SuppressWarnings("unchecked")
+	public List<M> queryByCriteria(Criteria criteria, Order order) throws Exception{
+		if (order != null) {
+			criteria.addOrder(order);
+		}
+		return criteria.list();
+	}
+	
+	
+	/**
+	 * 分页查询
+	 * @Title: query 
+	 * @Description: TODO(这里用一句话描述这个方法的作用) 
+	 * @param entity
+	 * @param property
+	 * @param value
+	 * @param startIndex
+	 * @param pageSize
+	 * @return
+	 * @return List<M>    返回类型 
+	 * @author 白攀
+	 * @date 2014-3-25 上午9:29:39
+	 */
+	@SuppressWarnings("unchecked")
+	public List<M> query(String field, Object value, PageUtil<M> page, Order order) throws Exception{
+		Criteria criteria = this.getCriteria();
+		criteria.add(Restrictions.eq(field, value));
+		if (order != null) {
+			criteria.addOrder(order);
+		}
+		if (page != null) {
+			int countRecords = count();
+			//设置总条数
+			page.setCountRecords(countRecords);
+			//设置总页数（加判断是by zero）
+			if(page.getPageRecords()!= 0){
+				page.setCountPages(true,(countRecords%page.getPageRecords()==0)?countRecords/page.getPageRecords():countRecords/page.getPageRecords()+1);
+			}
+			int maxResult = page.getPageRecords();
+			int firstResult = (page.getCurrentPageNum() - 1) * maxResult;
+			criteria.setFirstResult(firstResult).setMaxResults(maxResult);
+		}
+		return criteria.list();
+	}
+
+	
 
 	/** 
 	 * 根据离线criteria查询数据集合

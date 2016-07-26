@@ -11,6 +11,7 @@ import org.duang.dao.SysUserDao;
 import org.duang.entity.SysUser;
 import org.duang.service.SysUserService;
 import org.duang.util.PageUtil;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 
 /**   
@@ -70,8 +71,8 @@ public class SysUserServiceImpl implements SysUserService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysUser> queryAllEntity() throws Exception {
-		return dao.queryAllEntity();
+	public List<SysUser> queryAllEntity(Order order) throws Exception {
+		return dao.queryAllEntity(order);
 	}
 
 
@@ -80,8 +81,8 @@ public class SysUserServiceImpl implements SysUserService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysUser> queryAllEntity(PageUtil<SysUser> page) throws Exception{
-		return dao.queryAllEntity(page);
+	public List<SysUser> queryAllEntity(PageUtil<SysUser> page, Order order) throws Exception{
+		return dao.queryAllEntity(page, order);
 	}
 
 
@@ -92,8 +93,8 @@ public class SysUserServiceImpl implements SysUserService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysUser> queryEntity(String field, Object value, PageUtil<SysUser> page) throws Exception{
-		return dao.queryEntity(field, value, page);
+	public List<SysUser> queryEntity(String field, Object value, PageUtil<SysUser> page, Order order) throws Exception{
+		return dao.queryEntity(field, value, page, order);
 	}
 
 

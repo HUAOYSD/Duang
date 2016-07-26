@@ -10,6 +10,7 @@ import org.duang.dao.base.BaseDao;
 import org.duang.entity.SysPower;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
 /**   
@@ -65,8 +66,8 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysPower> queryAllEntity() throws Exception {
-		return super.queryAll();
+	public List<SysPower> queryAllEntity(Order order) throws Exception {
+		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
 
@@ -75,8 +76,8 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysPower> queryAllEntity(PageUtil<SysPower> page) throws Exception{
-		return super.queryAll(page);
+	public List<SysPower> queryAllEntity(PageUtil<SysPower> page, Order order) throws Exception{
+		return super.queryAll(page, order);
 	}
 
 
@@ -87,8 +88,8 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysPower> queryEntity(String field, Object value, PageUtil<SysPower> page) throws Exception{
-		return super.query(field, value, page);
+	public List<SysPower> queryEntity(String field, Object value, PageUtil<SysPower> page, Order order) throws Exception{
+		return super.query(field, value, page, order);
 	}
 
 
