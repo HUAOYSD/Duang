@@ -122,7 +122,7 @@ public class SysUser implements java.io.Serializable {
 		this.remark = remark;
 	}
 
-	@Column(name = "remark", length = 15)
+	@Column(name = "phone", length = 15)
 	public String getPhone() {
 		return phone;
 	}
@@ -131,7 +131,7 @@ public class SysUser implements java.io.Serializable {
 		this.phone = phone;
 	}
 
-	@Column(name = "remark", length = 100)
+	@Column(name = "email", length = 100)
 	public String getEmail() {
 		return email;
 	}
@@ -140,7 +140,7 @@ public class SysUser implements java.io.Serializable {
 		this.email = email;
 	}
 
-	@Column(name = "remark", length = 18)
+	@Column(name = "idcard", length = 18)
 	public String getIdcard() {
 		return idcard;
 	}
