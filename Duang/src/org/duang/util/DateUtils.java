@@ -440,6 +440,27 @@ public class DateUtils {
 			return null;
 		}
 	}
+	
+	
+	/**   
+	 * 获取时间戳值
+	 * @Title: getTimeStamp   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param date
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年7月27日 上午11:06:18
+	 * @return: long      
+	 * @throws   
+	 */  
+	public static long getTimeStamp(Date date){
+		if (date!=null) {
+			return date.getTime();
+		}else{
+			return 0;
+		}
+	}
+	
 
 	/**
 	 * 从指定Timestamp中得到相应的日期的字符串形式 日期"XXXX-XX-XX"

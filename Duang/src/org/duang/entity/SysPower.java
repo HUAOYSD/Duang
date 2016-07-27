@@ -1,8 +1,9 @@
 package org.duang.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,11 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+
 /**
  * SysPower entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "sys_power", catalog = "duang")
+@DynamicInsert(true)
 public class SysPower implements java.io.Serializable {
 
 	// Fields
@@ -24,10 +29,10 @@ public class SysPower implements java.io.Serializable {
 	private String name;
 	private String url;
 	private String parentId;
-	private Integer sortIndex;
-	private Timestamp optionTime;
+	private int sortIndex;
+	private Date optionTime;
 	private String icon;
-	private String desc;
+	private String remark;
 	private Set<SysRolePower> sysRolePowers = new HashSet<SysRolePower>(0);
 
 	// Constructors
@@ -45,7 +50,7 @@ public class SysPower implements java.io.Serializable {
 
 	/** full constructor */
 	public SysPower(String id, String name, String url, String parentId,
-			Integer sortIndex, Timestamp optionTime, String icon, String desc,
+			int sortIndex, Date optionTime, String icon, String remark,
 			Set<SysRolePower> sysRolePowers) {
 		this.id = id;
 		this.name = name;
@@ -54,7 +59,7 @@ public class SysPower implements java.io.Serializable {
 		this.sortIndex = sortIndex;
 		this.optionTime = optionTime;
 		this.icon = icon;
-		this.desc = desc;
+		this.remark = remark;
 		this.sysRolePowers = sysRolePowers;
 	}
 
@@ -97,20 +102,20 @@ public class SysPower implements java.io.Serializable {
 	}
 
 	@Column(name = "sort_index")
-	public Integer getSortIndex() {
+	public int getSortIndex() {
 		return this.sortIndex;
 	}
 
-	public void setSortIndex(Integer sortIndex) {
+	public void setSortIndex(int sortIndex) {
 		this.sortIndex = sortIndex;
 	}
 
 	@Column(name = "option_time", length = 19)
-	public Timestamp getOptionTime() {
+	public Date getOptionTime() {
 		return this.optionTime;
 	}
 
-	public void setOptionTime(Timestamp optionTime) {
+	public void setOptionTime(Date optionTime) {
 		this.optionTime = optionTime;
 	}
 
@@ -123,13 +128,13 @@ public class SysPower implements java.io.Serializable {
 		this.icon = icon;
 	}
 
-	@Column(name = "desc", length = 1000)
-	public String getDesc() {
-		return this.desc;
+	@Column(name = "remark", length = 1000)
+	public String getRemark() {
+		return this.remark;
 	}
 
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sysPower")

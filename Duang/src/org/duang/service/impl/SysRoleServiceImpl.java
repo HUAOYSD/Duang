@@ -92,12 +92,9 @@ public class SysRoleServiceImpl implements SysRoleService{
 	 */  
 	public boolean updateRoleToPower(String roleId, String[] powerIds) throws Exception {
 		if (DataUtils.notEmpty(roleId)) {
-			SysRole role = dao.findById(roleId);
-			if (role != null) {
-				//先删除再添加
-				//1、删除
-				SysRolePower rolePower = new SysRolePower(null, null, role);
-				rolePowerDao.deleteEntity(rolePower);
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("sysRole.id", roleId);
+			if (rolePowerDao.deleteEntity(map)) {
 				//2、添加
 				if (powerIds != null && powerIds.length > 0) {
 					List<SysRolePower> rps = new ArrayList<SysRolePower>();
@@ -105,7 +102,7 @@ public class SysRoleServiceImpl implements SysRoleService{
 					for(String id : powerIds) {
 						SysPower power = powerDao.findById(id);
 						if (power != null) {
-							rps.add(new SysRolePower(DataUtils.randomUUID(), power, role));
+							rps.add(new SysRolePower(DataUtils.randomUUID(), power, new SysRole(roleId, null, null)));
 						}
 					}
 					rolePowerDao.saveRolePowers(rps);

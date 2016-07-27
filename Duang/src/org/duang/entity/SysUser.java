@@ -1,6 +1,6 @@
 package org.duang.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +12,7 @@ import javax.persistence.Table;
 /**
  * SysUser entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "sys_user", catalog = "duang")
 public class SysUser implements java.io.Serializable {
@@ -22,9 +23,12 @@ public class SysUser implements java.io.Serializable {
 	private SysRole sysRole;
 	private String name;
 	private String password;
-	private Timestamp createTime;
-	private Timestamp updateTime;
+	private Date createTime;
+	private Date updateTime;
 	private String remark;
+	private String phone;
+	private String email;
+	private String idcard;
 
 	// Constructors
 
@@ -39,7 +43,7 @@ public class SysUser implements java.io.Serializable {
 
 	/** full constructor */
 	public SysUser(String id, SysRole sysRole, String name, String password,
-			Timestamp createTime, Timestamp updateTime, String remark) {
+			Date createTime, Date updateTime, String remark, String phone, String email, String idcard) {
 		this.id = id;
 		this.sysRole = sysRole;
 		this.name = name;
@@ -47,6 +51,9 @@ public class SysUser implements java.io.Serializable {
 		this.createTime = createTime;
 		this.updateTime = updateTime;
 		this.remark = remark;
+		this.phone = phone;
+		this.email = email;
+		this.idcard = idcard;
 	}
 
 	// Property accessors
@@ -89,20 +96,20 @@ public class SysUser implements java.io.Serializable {
 	}
 
 	@Column(name = "create_time", length = 19)
-	public Timestamp getCreateTime() {
+	public Date getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
 	@Column(name = "update_time", length = 19)
-	public Timestamp getUpdateTime() {
+	public Date getUpdateTime() {
 		return this.updateTime;
 	}
 
-	public void setUpdateTime(Timestamp updateTime) {
+	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
 
@@ -113,6 +120,33 @@ public class SysUser implements java.io.Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	@Column(name = "remark", length = 15)
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	@Column(name = "remark", length = 100)
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Column(name = "remark", length = 18)
+	public String getIdcard() {
+		return idcard;
+	}
+
+	public void setIdcard(String idcard) {
+		this.idcard = idcard;
 	}
 
 }

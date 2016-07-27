@@ -42,8 +42,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("sys")
 @Results(value={
 		@Result(name="addRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/addRole.jsp"),
-		@Result(name="editRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/editRole.jsp?sysRoleId=${sysRoleId}"),
-		@Result(name="powerToRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/powerToRole.jsp?sysRoleId=${sysRoleId}"),
+		@Result(name="editRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/editRole.jsp"),
+		@Result(name="powerToRoleView", type="dispatcher", location="WEB-INF/page/sys/sysrole/powerToRole.jsp"),
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/sysrole/sysRoleList.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
@@ -183,29 +183,25 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	public void saveRole() {
 		try {
 			String powerIdsStr = getRequest().getParameter("powerIds");
-			if (DataUtils.notEmpty(powerIdsStr)) {
-				String[] powerIds = powerIdsStr.split("space");
-				if (powerIds!=null && powerIds.length>0) {
-					entity.setId(DataUtils.randomUUID());
-					entity.setOptionTime(new Date());
-					Set<SysRolePower> sysRolePowers = new HashSet<SysRolePower>(0);
-					for(String powerId : powerIds) {
-						SysPower sysPower = powerService.findById(powerId);
-						if (sysPower != null) {
-							SysRolePower rolePower = new SysRolePower();
-							rolePower.setRolePowerId(DataUtils.randomUUID());
-							rolePower.setSysPower(sysPower);
-							rolePower.setSysRole(entity);
-							sysRolePowers.add(rolePower);
-						}
-					}
-					entity.setSysRolePowers(sysRolePowers);
-					if (service.saveEntity(entity)) {
-						jsonObject.put("success", true);
-					}else {
-						jsonObject.put("success", false);
+			String[] powerIds = DataUtils.notEmpty(powerIdsStr) ? powerIdsStr.split("space") : null;
+			entity.setId(DataUtils.randomUUID());
+			entity.setOptionTime(new Date());
+			if (powerIds!=null && powerIds.length>0) {
+				Set<SysRolePower> sysRolePowers = new HashSet<SysRolePower>(0);
+				for(String powerId : powerIds) {
+					SysPower sysPower = powerService.findById(powerId);
+					if (sysPower != null) {
+						SysRolePower rolePower = new SysRolePower();
+						rolePower.setRolePowerId(DataUtils.randomUUID());
+						rolePower.setSysPower(sysPower);
+						rolePower.setSysRole(entity);
+						sysRolePowers.add(rolePower);
 					}
 				}
+				entity.setSysRolePowers(sysRolePowers);
+			}
+			if (service.saveEntity(entity)) {
+				jsonObject.put("success", true);
 			}else {
 				jsonObject.put("success", false);
 			}
@@ -236,9 +232,9 @@ public class SysRoleAction extends BaseAction<SysRole>{
 			if (DataUtils.notEmpty(sysRoleId)) {
 				entity = service.findById(sysRoleId);
 				if(entity != null) {
-					jsonObject.put("sysRoleName", entity.getRoleName());
-					jsonObject.put("sysRoleDesc", entity.getRoleDesc());
-					jsonObject.put("sysRoleId", entity.getId());
+					jsonObject.put("roleName", entity.getRoleName());
+					jsonObject.put("roleDesc", entity.getRoleDesc());
+					jsonObject.put("id", entity.getId());
 				}
 			}
 		} catch (Exception e) {
@@ -328,10 +324,24 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	public void checkRoleName() {
 		try {
 			String name = getRequest().getParameter("name");
-			List<SysRole> roles = service.queryEntity("roleName", name, null, null);
-			if(roles == null || roles.size()==0) {
-				jsonObject.put("success", true);
-			} else {
+			name = java.net.URLDecoder.decode(name,"UTF-8");  
+			String roleid = getRequest().getParameter("roleid"); //编辑的时候用的判断
+			if (DataUtils.notEmpty(name)) {
+				List<SysRole> list = service.queryEntity("roleName", name, null, null);
+				if (DataUtils.notEmpty(roleid)) {
+					if ((list==null || list.size()<=0) || (list.size() == 1 && roleid.equals(list.get(0).getId()))) {
+						jsonObject.put("success", true);
+					}else {
+						jsonObject.put("success", false);
+					}
+				}else {
+					if (list==null || list.size()<=0) {
+						jsonObject.put("success", true);
+					}else {
+						jsonObject.put("success", false);
+					}
+				}
+			}else {
 				jsonObject.put("success", false);
 			}
 		} catch (Exception e) {

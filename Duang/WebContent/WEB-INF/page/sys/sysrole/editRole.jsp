@@ -1,13 +1,13 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<form id="RoleEditForm" action="sysrole!updateRole.do" method="post" data-options="novalidate:true">
-	<input type="hidden" name="sysRoleId" id="sysRoleId">
-	<table colspan=4 border="0" style="width: 400px;" cellspacing="10" cellpadding="5">
+<form id="RoleEditForm"  method="post" data-options="novalidate:true">
+	<input type="hidden" name="id" id="sysRoleId">
+	<table colspan=4 border="0" style="" cellspacing="8" cellpadding="5">
 		<tr>
 			<td align="right" style="width: 110px;">
 				角色名称：
 			</td>
 				<td>
-				<input  name="sysRoleName" id="sysRoleName" style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
+				<input  name="roleName" id="sysRoleNameByEdit" style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
 					 class="easyui-validatebox" data-options="required:true,missingMessage:'请填写角色名称'" />
 			</td>
 		</tr>
@@ -16,7 +16,7 @@
 				角色描述：
 			</td>
 			<td>
-				<input name="sysRoleDesc" id="sysRoleDesc"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
+				<input name="roleDesc" id="sysRoleDesc"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
 					 class="easyui-validatebox " data-options="required:true,missingMessage:'请填写角色描述'"/>
 			</td>
 		</tr>
@@ -26,7 +26,7 @@
 <%--			</td>--%>
 <%--			<td>--%>
 <%--				<div align="left">--%>
-<%--					<ul id="powerTree"  class="easyui-tree" data-options="url:'privilege_getPowerTreeCheckbox.action',onLoadSuccess:'',checkbox:true,state:'closed'"></ul>--%>
+<%--					<ul id="powerTree"  class="easyui-tree" data-options="url:'privilege!getPowerTreeCheckbox.do',onLoadSuccess:'',checkbox:true,state:'closed'"></ul>--%>
 <%--				</div>	--%>
 <%--			--%>
 <%--			</td>--%>
@@ -54,18 +54,20 @@ $(function (){
 
 
 function updatePower() {
- 	  var name = $.trim($("#sysRoleName").val());
+	  var id = $.trim($("#sysRoleId").val());
+ 	  var name = $.trim($("#sysRoleNameByEdit").val());
       $("#RoleEditForm").form('submit',{
 		   	url:"sysrole!updateRole.do",
 		   	onSubmit: function() {
 		   		if($(this).form('enableValidation').form('validate')){
 		   			if(name.isNotNull){
 			   			var con = true;
+			   			name = encodeURI(encodeURI(name));
 				 		$.ajax({
-				 			 url:"sysrole_checkRoleName.do",
+				 			 url:"sysrole!checkRoleName.do",
 				 			 dataType:'json',
 				 			 async: false,
-				 			 data:"name="+name,
+				 			 data:"name="+name+"&roleid="+id,
 				 			 success:function(data) {
 				 				 if(!data.success) {
 				 					 $.messager.alert('错误','角色名称已经存在，请重新填写！','error');

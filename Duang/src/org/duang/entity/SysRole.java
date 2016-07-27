@@ -2,6 +2,7 @@ package org.duang.entity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,11 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+
 /**
  * SysRole entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "sys_role", catalog = "duang")
+@DynamicInsert(true)
 public class SysRole implements java.io.Serializable {
 
 	// Fields
