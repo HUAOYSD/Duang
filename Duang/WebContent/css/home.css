@@ -107,7 +107,7 @@ a:hover {
 	margin-right: 3px;
 	border: 1px solid #ccc !important;
 	padding: 0 5px 0 0 !important;
-	background: url('../images/button_plain_hover.png') repeat-x !important;	
+	background: url('../images/button_plain_hover.png') repeat-x !important; 
 }
 
 .x {
@@ -159,4 +159,12 @@ a:hover {
 }
 #dataCharts{
 	margin-top:80px;
+}
+.investPro-search{
+	font-family:"Microsoft YaHei";
+	font-size: 13px;
+}
+#conditon{
+	margin-top:10px;
+	margin-left:20px;
 }

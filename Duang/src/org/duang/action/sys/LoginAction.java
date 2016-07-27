@@ -1,5 +1,7 @@
 package org.duang.action.sys;
 
+import java.io.IOException;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
@@ -9,6 +11,7 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.entity.SysUser;
+import org.duang.util.DrawImage;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -56,5 +59,15 @@ public class LoginAction extends BaseAction<SysUser>{
 	 */  
 	public String loginSuccess(){
 		return ResultPath.RETURN_TO_HOME;
+	}
+	
+	public String checkCode(){
+		try {
+			DrawImage draw = new DrawImage();
+			draw.drawImage(getRequest(), getResponse(null), "nl");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
