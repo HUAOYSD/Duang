@@ -25,6 +25,7 @@ import org.duang.entity.SysRolePower;
 import org.duang.service.SysPowerService;
 import org.duang.service.SysRoleService;
 import org.duang.util.DataUtils;
+import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -78,6 +79,36 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	public String showRole() {
 		return ResultPath.LIST;
 	}
+
+
+	/**   
+	 * 查询角色下拉列表
+	 * @Title: queryRoleList   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年7月28日 下午1:54:00
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void queryRoleList() {
+		String json = "";
+		try {
+			List<SysRole> list = service.queryAllEntity(Order.desc("optionTime"));
+			for(SysRole role : list){
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("roleId", role.getId());
+				map.put("roleName", role.getRoleName());
+				listMap.add(map);
+			}
+			json = JSONArray.fromObject(listMap).toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			printJsonResult(json);
+		}
+	}
+
 
 	/**   
 	 * 页面跳转

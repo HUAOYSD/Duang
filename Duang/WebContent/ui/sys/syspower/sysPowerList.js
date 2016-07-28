@@ -42,7 +42,7 @@ function loadPowerList(url){
 						width : $(this).width() * 0.1,
 						align : "center",
 						formatter: function(value,row,index){
-									   if(value==0)
+								  if(value==0)
 										   return "-&nbsp;&nbsp;-";
 									   else	   
 										   return new Date(value).format("yyyy-MM-dd hh:mm:ss");
@@ -101,7 +101,7 @@ function openAddPowerView() {
 	 $("#PowerAddForm").form('submit',{
 			onSubmit: function() {
 		   		if($(this).form('enableValidation').form('validate')){
-		   			if(name.isNotNull){
+		   			if(name.isNotNull()){
 		   				name = encodeURI(encodeURI(name));  
 			   			var con = true;
 				 		$.ajax({
@@ -169,7 +169,7 @@ function editPower() {
 	 	url:"syspower!updatePower.do",
 		onSubmit: function() {
 	   		if($(this).form('enableValidation').form('validate')){
-	   			if(name.isNotNull){
+	   			if(name.isNotNull()){
 	   				name = encodeURI(encodeURI(name));
 		   			var con = true;
 			 		$.ajax({

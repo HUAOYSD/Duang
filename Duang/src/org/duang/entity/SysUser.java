@@ -67,7 +67,7 @@ public class SysUser implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "role_id")
 	public SysRole getSysRole() {
 		return this.sysRole;
@@ -101,9 +101,10 @@ public class SysUser implements java.io.Serializable {
 	}
 
 	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+		this.createTime	= createTime;
 	}
 
+	
 	@Column(name = "update_time", length = 19)
 	public Date getUpdateTime() {
 		return this.updateTime;

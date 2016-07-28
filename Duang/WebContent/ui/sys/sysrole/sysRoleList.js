@@ -57,8 +57,11 @@ function loadRoleList(url){
 						width : $(this).width() * 0.1,
 						align : "center",
 						formatter: function(value,row,index){
-									   return new Date(value).format("yyyy-MM-dd hh:mm:ss");
-									}
+							  if(value==0)
+								   return "-&nbsp;&nbsp;-";
+							   else	   
+								   return new Date(value).format("yyyy-MM-dd hh:mm:ss");
+						   }
 					},
 					{
 						field : "sysRoleId",
