@@ -12,8 +12,8 @@ $(function(){
 		rownumbers:true,
 		pagination:true,
 		fitColumns:false,
-		pageSize:10,
-		pageList:[10,20,30,40,50],
+		pageSize:50,
+		pageList:[50,100,150,200,250],
 		sortOrder:'desc',
 		columns:[[
 			{field:'nameZh',title:'总名称',width:100,halign:"center", align:"center",editor: { type: 'validatebox', options: { required: true}}},
@@ -36,7 +36,7 @@ $(function(){
 			{field:'risk_control',title:'风险控制',width:500,halign:"center", align:"left",editor:'text'},
 			{field:'details',title:'更多详情',width:500,halign:"center", align:"left",editor:'text'}
 		]],
-		toolbar:'#tt_btn',
+		toolbar:'#tt_toolbar',
 		onDblClickRow:function(rowIndex, rowData){
 			//双击开启编辑行
 			if (editRow != undefined) {
@@ -52,6 +52,15 @@ $(function(){
 			console.info(rowData);
 			editRow = undefined;
 		}
+	});
+	
+	//新增弹出框
+	$("#save").on("click", function(){
+		
+	});
+	//修改
+	$("#update").on("click", function(){
+		$parent.messager.alert("提示","update", "info");
 	});
 	//删除
 	$("#delete").on("click", function(){
@@ -69,6 +78,7 @@ $(function(){
 	    },    
 	    success:function(data){ 
 	    	data = JSON.parse(data);
+	    	console.info(data);
 	    	$('#tt').datagrid('loadData', {
 	    		"rows":data.rows,
 	    		"total":data.total,

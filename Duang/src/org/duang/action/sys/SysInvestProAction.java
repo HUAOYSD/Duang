@@ -20,6 +20,7 @@ import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.SysInvestProduct;
 import org.duang.entity.SysPower;
+import org.duang.entity.SysUser;
 import org.duang.service.SysInvestProService;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
@@ -40,6 +41,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("sys")
 @Results(value={
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/invest/investProList.jsp"),
+		@Result(name="investPromanage", type="dispatcher", location="WEB-INF/page/sys/invest/investProManage.jsp"),
+		@Result(name="addInvestPro", type="dispatcher", location="WEB-INF/page/sys/invest/addInvestPro.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
 public class SysInvestProAction extends BaseAction<SysInvestProduct>{
@@ -54,10 +57,68 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 		this.service = service;
 	}
 	
+	/**
+	 * 返回产品列表
+	 * 
+	 * @Title: investProList   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年7月27日 下午2:26:47
+	 * @return: String      
+	 * @throws
+	 */
 	public String  investProList(){
 		return ResultPath.LIST;
 	}
 	
+	public String addInvestPro(){
+		return "addInvestPro";
+	}
+	
+	public void saveInvestPro(){
+		if (entity!=null && DataUtils.notEmpty(entity.getName())) {
+			try {
+				entity.setId(DataUtils.randomUUID());
+				boolean issuccess = service.saveEntity(entity);
+				if (issuccess) {
+					jsonObject.put("row", entity);
+					printJsonResult();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				LoggerUtils.error("系统用户ACTION增加错误："+e.getMessage(), this.getClass());
+				LoggerUtils.error("系统用户ACTION增加错误："+e.getLocalizedMessage(), this.getClass());
+			}
+		}
+	}
+	
+	/**
+	 * 返回产品管理
+	 * @Title: investProManage   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年7月27日 下午2:27:10
+	 * @return: String      
+	 * @throws
+	 */
+	public String  investProManage(){
+		return "investPromanage";
+	}
+	
+	
+	
+	/**
+	 * 查询所有的产品，并用json方式返回
+	 * @Title: queryInvestPro   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年7月27日 下午2:27:37
+	 * @return: void      
+	 * @throws
+	 */
 	public void  queryInvestPro(){
 		List<SysInvestProduct> list = null;
 		try {
@@ -110,6 +171,18 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 			printJsonResult();
 		}
 	}
+	
+	/**
+	 * 重新组合产品集合
+	 * @Title: fillDataObject   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param list
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年7月27日 下午2:28:18
+	 * @return: List<Map<String,Object>>      
+	 * @throws
+	 */
 	public List<Map<String,Object>> fillDataObject(List<SysInvestProduct> list){
 		List<Map<String,Object>> listMapOj = new ArrayList<Map<String,Object>>();
 		for(SysInvestProduct pro : list){

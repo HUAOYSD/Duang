@@ -166,3 +166,25 @@ a:hover {
 	margin-top:10px;
 	margin-left:20px;
 }
+
+#investPro_add_contans{
+	padding:10px;
+	font-family:"Microsoft YaHei";
+	font-size:13px;
+}
+#investPro_add_contans #investProSaveForm div{
+	margin-top:10px;
+}
+#investPro_add_contans #investProSaveForm div input,#investPro_add_contans #investProSaveForm div select{
+	width:150px;
+	height:30px;
+}
+#body_add_investpro .combo-p .combo-panel{
+	height:40px;
+}
+
+.investPro_add_from_label{
+	display:inline-block;
+	width:100px;
+	text-align:right;
+}
