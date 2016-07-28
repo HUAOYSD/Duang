@@ -11,6 +11,7 @@ import javax.persistence.Table;
 /**
  * SysRolePower entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "sys_role_power", catalog = "duang")
 public class SysRolePower implements java.io.Serializable {

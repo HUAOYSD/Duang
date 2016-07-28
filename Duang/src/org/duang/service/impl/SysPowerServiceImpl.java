@@ -1,5 +1,6 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.SysPowerDao;
+import org.duang.dao.SysRolePowerDao;
 import org.duang.entity.SysPower;
 import org.duang.service.SysPowerService;
 import org.duang.util.PageUtil;
@@ -26,11 +28,17 @@ import org.springframework.stereotype.Service;
 public class SysPowerServiceImpl implements SysPowerService{
 
 	private SysPowerDao dao;
+	private SysRolePowerDao rolePowerDao;
 
 	@Resource(name="syspowerdao")
 	public void setDao(SysPowerDao dao) {
 		this.dao = dao;
 	}
+	@Resource
+	public void setRolePowerDao(SysRolePowerDao rolePowerDao) {
+		this.rolePowerDao = rolePowerDao;
+	}
+
 
 	public SysPowerServiceImpl(){
 		LoggerUtils.info("注入SysPowerServiceImpl服务层", this.getClass());
@@ -159,7 +167,35 @@ public class SysPowerServiceImpl implements SysPowerService{
 		return dao.deleteEntity(id);
 	}
 
-	
+
+	/**   
+	 * 根据他（含）的所有子权限，一起删除，并且删除SysRolePower
+	 * @Title: deletePower   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param list
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年7月26日 下午4:54:50
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public boolean deletePower(List<SysPower> list) throws Exception{
+		if (list != null && list.size() > 0) {
+			for (SysPower sysPower : list) {
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("sysPower.id", sysPower.getId());
+				if (rolePowerDao.deleteEntity(map)) {
+					if (!dao.deleteEntity(sysPower.getId())) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
@@ -168,7 +204,7 @@ public class SysPowerServiceImpl implements SysPowerService{
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
 		return dao.deleteEntity(map);
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码

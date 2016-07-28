@@ -137,6 +137,8 @@ a:hover {
 	overflow:hidden;
 	position:absolute;
 	left:10px;
+	text-align:center;
+	align:center;
 }
 #nowTime{
 	border:0px solid red;

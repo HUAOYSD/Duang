@@ -29,6 +29,28 @@ public class SysRolePowerDaoImpl extends BaseDao<SysRolePower> implements SysRol
 		LoggerUtils.info("注入SysRolePowerDaoImpl层", this.getClass());
 	}
 
+	
+	/**   
+	 * 添加角色权限列表
+	 * @Title: saveRolePowers   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param rps
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年7月26日 下午2:49:30
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public boolean saveRolePowers(List<SysRolePower> rps) throws Exception{
+		if (rps!=null && rps.size()>0) {
+			for (SysRolePower rp : rps) {
+				save(rp);
+			}
+		}
+		return true;
+	}
+
 
 	/**
 	 * 计数总数全部
@@ -159,7 +181,7 @@ public class SysRolePowerDaoImpl extends BaseDao<SysRolePower> implements SysRol
 		super.delete(id);
 		return true;
 	}
-	
+
 
 	/**
 	 * 通过map条件对象删除实体数据
@@ -170,7 +192,7 @@ public class SysRolePowerDaoImpl extends BaseDao<SysRolePower> implements SysRol
 		super.delete(map);
 		return true;
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码

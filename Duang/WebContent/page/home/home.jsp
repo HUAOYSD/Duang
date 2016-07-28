@@ -37,8 +37,8 @@
 		style="width: 200px;"></div>
 
 	<!-- 页脚信息 -->
-	<div data-options="region:'south'" style="height: 20px; background: #F3F3F3; padding: 2px; vertical-align: middle;">
-		<span id="sysVersion">系统版本：V1.0</span> <span id="nowTime"></span>
+	<div data-options="region:'south'"  style="text-align:center;align:center;height: 20px; background: #F3F3F3; padding: 2px; vertical-align: middle;">
+		<span id="" style="text-align:center;align:center;">系统版本：V1.0</span> <span id="nowTime"></span>
 	</div>
 
 	<!-- 内容tabs -->

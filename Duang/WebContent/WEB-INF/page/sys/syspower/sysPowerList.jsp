@@ -3,10 +3,10 @@
 <%@ include file="/page/inc/inc.jsp"%>
 <body>
 	<script type="text/javascript"
-		src="<%=request.getContextPath() %>/ui/system/sysPowerList.js"></script>
+		src="<%=request.getContextPath() %>/ui/sys/syspower/sysPowerList.js"></script>
 	<table id="powerToolbar" style="width: 100%">
 		<tr style="float: left">
-			<td><a href="javascript:void();" onclick="openAddPowerView();"
+			<td><a href="javascript:void(0);" onclick="openAddPowerView();"
 				class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加权限</a>
 			</td>
 		</tr>
@@ -18,6 +18,6 @@
 	<div id="editPowerView" class="easyui-dialog" closed="true"></div>
 
 	<script type="text/javascript">
-		//$("body").height($(document).height());
+		$("body").height($(document).height());
 	</script>
 </body>

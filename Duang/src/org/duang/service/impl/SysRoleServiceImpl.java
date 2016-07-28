@@ -1,17 +1,20 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Resource;
-
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.SysPowerDao;
 import org.duang.dao.SysRoleDao;
 import org.duang.dao.SysRolePowerDao;
+import org.duang.entity.SysPower;
 import org.duang.entity.SysRole;
+import org.duang.entity.SysRolePower;
 import org.duang.service.SysRoleService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -30,8 +33,8 @@ import org.springframework.stereotype.Service;
 public class SysRoleServiceImpl implements SysRoleService{
 
 	private SysRoleDao dao;
+	private SysPowerDao powerDao;
 	private SysRolePowerDao rolePowerDao;
-
 	@Resource(name="sysroledao")
 	public void setDao(SysRoleDao dao) {
 		this.dao = dao;
@@ -40,11 +43,77 @@ public class SysRoleServiceImpl implements SysRoleService{
 	public void setRolePowerDao(SysRolePowerDao rolePowerDao) {
 		this.rolePowerDao = rolePowerDao;
 	}
+	@Resource
+	public void setPowerDao(SysPowerDao powerDao) {
+		this.powerDao = powerDao;
+	}
 
 
 	public SysRoleServiceImpl(){
 		LoggerUtils.info("注入SysRoleServiceImpl服务层", this.getClass());
 	}
+
+	/**   
+	 * 根据角色id得到角色所拥有权限信息
+	 * @Title: getRolePowerInfoByRole   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param roleid
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年7月26日 下午3:02:24
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public List<SysRolePower> getRolePowerInfoByRole(String roleid) throws Exception{
+		List<SysRolePower> list = null;
+		if (DataUtils.notEmpty(roleid)) {
+			SysRole role = dao.findById(roleid);
+			//得到该角色下的RolePower集合
+			if (role != null) {
+				list = rolePowerDao.queryEntity("sysRole", role, null, null);
+			}
+		}
+		return list;
+	}
+
+
+	/**   
+	 * 更新角色的权限
+	 * @Title: updateRoleToPower   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param roleId
+	 * @param: @param powerIds
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年7月26日 下午2:35:52
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public boolean updateRoleToPower(String roleId, String[] powerIds) throws Exception {
+		if (DataUtils.notEmpty(roleId)) {
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("sysRole.id", roleId);
+			if (rolePowerDao.deleteEntity(map)) {
+				//2、添加
+				if (powerIds != null && powerIds.length > 0) {
+					List<SysRolePower> rps = new ArrayList<SysRolePower>();
+					//插入新的关系到中间表
+					for(String id : powerIds) {
+						SysPower power = powerDao.findById(id);
+						if (power != null) {
+							rps.add(new SysRolePower(DataUtils.randomUUID(), power, new SysRole(roleId, null, null)));
+						}
+					}
+					rolePowerDao.saveRolePowers(rps);
+				}
+			}
+			return true;
+		}else {
+			return false;
+		}
+	}
+
 
 	/**
 	 * 计数总数全部
@@ -176,7 +245,7 @@ public class SysRoleServiceImpl implements SysRoleService{
 		return false;
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
@@ -185,7 +254,7 @@ public class SysRoleServiceImpl implements SysRoleService{
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
 		return dao.deleteEntity(map);
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -215,6 +284,5 @@ public class SysRoleServiceImpl implements SysRoleService{
 	public boolean executeSql(List<String> sqls) throws Exception{
 		return dao.executeSql(sqls);
 	}
-
 
 }

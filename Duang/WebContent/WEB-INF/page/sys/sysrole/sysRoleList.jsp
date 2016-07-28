@@ -7,7 +7,7 @@
 		src="<%=request.getContextPath() %>/ui/sys/sysrole/sysRoleList.js"></script>
 	<table id="roleToolbar" style="width: 100%">
 		<tr style="float: left">
-			<td><a href="javascript:void();" onclick="openAddRoleView();"
+			<td><a href="javascript:void(0);" onclick="openAddRoleView();"
 				class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加角色</a>
 			</td>
 		</tr>

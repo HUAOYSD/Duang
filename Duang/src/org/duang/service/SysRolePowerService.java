@@ -13,4 +13,6 @@ import org.duang.entity.SysRolePower;
  */  
 public interface SysRolePowerService extends CommonInterface<SysRolePower>{
 
+	
+	
 }

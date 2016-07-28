@@ -1,5 +1,7 @@
 package org.duang.dao; 
 
+import java.util.List;
+
 import org.duang.baseInterface.CommonInterface;
 import org.duang.entity.SysRolePower;
 
@@ -12,5 +14,19 @@ import org.duang.entity.SysRolePower;
  */  
 public interface SysRolePowerDao extends CommonInterface<SysRolePower>  {
 
+	/**   
+	 * 添加角色权限列表
+	 * @Title: saveRolePowers   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param rps
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年7月26日 下午2:49:30
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public abstract boolean saveRolePowers(List<SysRolePower> rps) throws Exception;
+	
 }
 
