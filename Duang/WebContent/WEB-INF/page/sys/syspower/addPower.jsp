@@ -47,6 +47,6 @@
 		</div>
 </form>
 <script type="text/javascript">
-clearFormVal("PowerAddForm");
-clearFormVal("UserEditForm");
+//clearFormVal("PowerAddForm");
+//clearFormVal("PowerEditForm");
 </script>

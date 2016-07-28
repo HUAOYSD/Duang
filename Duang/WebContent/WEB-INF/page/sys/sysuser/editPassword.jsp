@@ -8,7 +8,7 @@
 				新密码：
 			</td>
 			<td>
-				<input name="password" id="password" type="password" style="width: 220px; height: 24px"
+				<input name="password" id="passwordByReset" type="password" style="width: 220px; height: 24px"
 					 class="easyui-validatebox" data-options="required:true,missingMessage:'请填写密码！'" />
 			</td>
 		</tr>
@@ -17,7 +17,7 @@
 				确认密码：
 			</td>
 			<td>
-				<input name="resPass" id="resPass" type="password" style="width: 220px; height: 24px"
+				<input name="resPass" id="resPassByReset" type="password" style="width: 220px; height: 24px"
 					  	 class="easyui-validatebox" data-options="required:true,missingMessage:'请再次填写密码！'" />
 			</td>
 		</tr>
@@ -30,8 +30,8 @@
 		</form>
 <script type="text/javascript">
 function updateSysUserPassword() { 
-	var txtNewPass = $('#password').val().trim();
-	var txtRePass = $('#resPass').val().trim();
+	var txtNewPass = $('#passwordByReset').val().trim();
+	var txtRePass = $('#resPassByReset').val().trim();
 	if(txtNewPass == ""){
 		$.messager.alert('警告','密码不能为空！','warning');
 		return ;

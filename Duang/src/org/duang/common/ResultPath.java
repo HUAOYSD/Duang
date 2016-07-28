@@ -18,7 +18,7 @@ public class ResultPath {
 	/**
 	 * 跳转到主页面
 	 */
-	public static final String RETURN_TO_HOME="home";
+	public static final String HOME="home";
 	
 }
 

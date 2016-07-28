@@ -38,7 +38,9 @@
 </form>
 		
 <script type="text/javascript">
-$('#editRoleView').dialog("destroy",true);
+//clearFormVal("RoleAddForm");
+//clearFormVal("RoleEditForm");
+//clearFormVal("PowerToRoleForm");
 var closeAll = function(){
 	$("#powerTree").tree("collapseAll");
 }

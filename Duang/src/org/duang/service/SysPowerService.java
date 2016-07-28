@@ -29,5 +29,21 @@ public interface SysPowerService extends CommonInterface<SysPower>{
 	 * @throws   
 	 */  
 	public abstract boolean deletePower(List<SysPower> list) throws Exception;
+	
+	
+	/**   
+	 * 根据用户id和父id获取拥有的权限
+	 * @Title: queryPowerByUserAndParent   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param userid
+	 * @param: @param parentid
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年7月28日 下午9:56:52
+	 * @return: List<SysPower>      
+	 * @throws   
+	 */  
+	public abstract List<SysPower> queryPowerByUserAndParent(String userid, String parentid) throws Exception;
 
 }

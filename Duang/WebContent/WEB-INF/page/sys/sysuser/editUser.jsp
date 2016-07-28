@@ -18,7 +18,7 @@
 				用户名：
 			</td>
 			<td>
-				<input name="name" id="sysUserName"  style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
+				<input name="name" id="sysUserNameByEdit"  style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
 					 class="easyui-validatebox " data-options="required:true, missingMessage:'请填写用户名！'"/>
 			</td>
 		</tr>
@@ -27,7 +27,7 @@
 				手机号码：
 			</td>
 			<td>
-				<input name="phone" id="phone"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
+				<input name="phone" id="phoneByEdit"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
 					 class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
 			</td>
 		</tr>
@@ -36,7 +36,7 @@
 				邮箱：
 			</td>
 			<td>
-				<input name="email" id="email"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
+				<input name="email" id="emailByEdit"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
 					 class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
 			</td>
 		</tr>
@@ -45,7 +45,7 @@
 				身份证号：
 			</td>
 			<td>
-				<input name="idcard" id="idcard"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
+				<input name="idcard" id="idcardByEdit"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
 					 class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
 			</td>
 		</tr>
@@ -66,8 +66,8 @@
 		</div>
 		</form>
 <script type="text/javascript">
-clearFormVal("UserAddForm");
-clearFormVal("UserEditForm");
+//clearFormVal("UserAddForm");
+//clearFormVal("UserEditForm");
 $(function (){
 	$.ajax({
 		type:'GET',
@@ -82,25 +82,25 @@ $(function (){
 
 
 function updateSysUser(){
-	if($('#phone').val().isNotNull()){
-		if(!$('#phone').val().isPhone()){
+	if($('#phoneByEdit').val().isNotNull()){
+		if(!$('#phoneByEdit').val().isPhone()){
 			$.messager.alert('警告','手机号码不合法！','warning');
 			return ;
 		}
 	}
-	if($('#email').val().isNotNull()){
-		if(!$('#email').val().isEmail()){
+	if($('#emailByEdit').val().isNotNull()){
+		if(!$('#emailByEdit').val().isEmail()){
 			$.messager.alert('警告','邮箱地址不合法！','warning');
 			return ;
 		}
 	}
-	if($('#idcard').val().isNotNull()){
-		if(!$('#idcard').val().isIDCard()){
+	if($('#idcardByEdit').val().isNotNull()){
+		if(!$('#idcardByEdit').val().isIDCard()){
 			$.messager.alert('警告','身份证号码不合法！','warning');
 			return ;
 		}
 	}
-	var name = $('#sysUserName').val().trim();
+	var name = $('#sysUserNameByEdit').val().trim();
 	$("#UserEditForm").form('submit',{
 		url:"sysuser!updateSysUser.do",
 		onSubmit: function() {

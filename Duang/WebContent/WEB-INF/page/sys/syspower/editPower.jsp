@@ -51,6 +51,8 @@
 		</div>
 		</form>
 <script type="text/javascript">
+//clearFormVal("PowerAddForm");
+//clearFormVal("PowerEditForm");
 $(function (){
 	$.ajax({
 		type:'GET',

@@ -8,6 +8,7 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.SysPowerDao;
 import org.duang.dao.base.BaseDao;
 import org.duang.entity.SysPower;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -58,6 +59,33 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	public int count(List<String> properties,List<Object> values) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
 		return super.countByDetachedCriteria(detachedCriteria);
+	}
+
+	/**   
+	 * 根据用户id和父id获取拥有的权限
+	 * @Title: queryPowerByUserAndParent   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param userid
+	 * @param: @param parentid
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年7月28日 下午9:56:52
+	 * @return: List<SysPower>      
+	 * @throws   
+	 */  
+	public List<SysPower> queryPowerByUserAndParent(String userid, String parentid) throws Exception{
+		if (DataUtils.notEmpty(userid)) {
+			String sql = "SELECT SYS_POWER.* FROM SYS_POWER ";
+			sql += "INNER JOIN SYS_ROLE_POWER ON SYS_ROLE_POWER.POWER_ID = SYS_POWER.ID ";
+			sql += "INNER JOIN SYS_ROLE ON SYS_ROLE.ID = SYS_ROLE_POWER.ROLE_ID ";
+			sql += "INNER JOIN SYS_USER ON SYS_USER.ROLE_ID = SYS_ROLE.ID ";
+			sql += "WHERE SYS_POWER.PARENT_ID = ? AND SYS_USER.ID = ? ";
+			sql += "ORDER BY SYS_POWER.SORT_INDEX DESC";
+			return queryBySQL(sql, userid, parentid);
+		}else {
+			return null;
+		}
 	}
 
 

@@ -28,7 +28,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("sys")
 @Results(value={
 		@Result(name=com.opensymphony.xwork2.Action.LOGIN, type="dispatcher",location="login.jsp"),
-		@Result(name=ResultPath.RETURN_TO_HOME, type="dispatcher",location="page/home/home.jsp"),
+		@Result(name=ResultPath.HOME, type="dispatcher",location="page/home/home.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher",location="error.jsp")
 })
 public class LoginAction extends BaseAction<SysUser>{
@@ -58,7 +58,7 @@ public class LoginAction extends BaseAction<SysUser>{
 	 * @throws   
 	 */  
 	public String loginSuccess(){
-		return ResultPath.RETURN_TO_HOME;
+		return ResultPath.HOME;
 	}
 	
 	public String checkCode(){

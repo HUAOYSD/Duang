@@ -29,7 +29,9 @@
 		</div>
 		</form>
 <script type="text/javascript">
-$('#addRoleView').dialog("destroy",true);
+//clearFormVal("RoleAddForm");
+//clearFormVal("RoleEditForm");
+//clearFormVal("PowerToRoleForm");
 $(function (){
 	$.ajax({
 		type:'GET',

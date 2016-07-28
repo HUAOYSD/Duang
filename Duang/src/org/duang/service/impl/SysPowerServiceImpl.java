@@ -73,6 +73,23 @@ public class SysPowerServiceImpl implements SysPowerService{
 		return dao.count(properties, values);
 	}
 
+	/**   
+	 * 根据用户id和父id获取拥有的权限
+	 * @Title: queryPowerByUserAndParent   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param userid
+	 * @param: @param parentid
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年7月28日 下午9:56:52
+	 * @return: List<SysPower>      
+	 * @throws   
+	 */  
+	public List<SysPower> queryPowerByUserAndParent(String userid, String parentid) throws Exception{
+		return dao.queryPowerByUserAndParent(userid, parentid);
+	}
+	
 
 	/**
 	 * 查询全部

@@ -34,7 +34,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * @author 白攀
  * @date 2016-7-17 下午2:07:35 
  */ 
-@Scope(value="prototype",proxyMode=ScopedProxyMode.DEFAULT)
+@Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
 @Namespaces({@Namespace("/")})
 @Action(value="sysuser")
 @ParentPackage("sys")
@@ -57,15 +57,6 @@ public class SysUserAction extends BaseAction<SysUser>{
 	@Resource(name="sysuserserviceimpl")
 	public void setService(SysUserService service) {
 		this.service = service;
-	}
-
-
-	/**
-	 * 跳转到登录页面
-	 * @return
-	 */
-	public String showLogin() {
-		return "login";
 	}
 
 
@@ -370,84 +361,5 @@ public class SysUserAction extends BaseAction<SysUser>{
 			printJsonResult();
 		}
 	}
-
-
-	//	/**   
-	//	 * 系统的左边权限列表
-	//	 * @Title: left   
-	//	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	//	 * @param: @return  
-	//	 * @author 白攀    
-	//	 * @date 2016年7月27日 下午5:23:50
-	//	 * @return: String      
-	//	 * @throws   
-	//	 */  
-	//	public String left(){
-	//		SysUser user=SessionTools.getSessionSysUser();
-	//		List<Power> topMenuList=powerService.queryPowers(user.getSysUserId(), "syspowers"); //获取一级菜单
-	//		ServletActionContext.getContext().put("topMenuList", topMenuList);
-	//		return "left";
-	//	}
-
-
-	//	/**   
-	//	 * 得到当前用户所有权限
-	//	 * @Title: getAllPower   
-	//	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	//	 * @param: @return  
-	//	 * @author 白攀    
-	//	 * @date 2016年7月27日 下午5:24:11
-	//	 * @return: List<Power>      
-	//	 * @throws   
-	//	 */  
-	//	public List<Power> getAllPower() {
-	//		SysUser user = SessionTools.getSessionSysUser();
-	//		SysRole role = user.getSysRole();
-	//		List<RolePower> rpList = rpService.getRolePowerListByRole(role);
-	//		List<Power> allPower = new ArrayList<Power>();
-	//		for(RolePower rp:rpList) {
-	//			allPower.add(rp.getPower());
-	//		}
-	//		return allPower;
-	//	}
-
-
-	//	/**   
-	//	 * 得到父菜单下有权限的子菜单
-	//	 * @Title: submenu   
-	//	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	//	 * @param:   
-	//	 * @author 白攀    
-	//	 * @date 2016年7月27日 下午5:24:36
-	//	 * @return: void      
-	//	 * @throws   
-	//	 */  
-	//	public void submenu() {
-	//		try {
-	//			JSONArray json = new JSONArray();
-	//			String powerId = request.getParameter("powerId");
-	//			SysUser sysUser=SessionTools.getSessionSysUser();
-	//			List<Power> permitPowerList = powerService.queryPowers(sysUser.getSysUserId(), powerId);
-	//			//子菜单
-	//			if(permitPowerList.size()>0) {
-	//				for(Power subP:permitPowerList) {
-	//					Map<String,Object> map = new HashMap<String,Object>();
-	//					map.put("id", subP.getPowerId());
-	//					map.put("text", subP.getPowerName());
-	//					map.put("iconCls", subP.getIconCls());
-	//					map.put("url", subP.getPowerUrl());
-	//					json.add(map);
-	//				}
-	//			}
-	//			out.print(json);
-	//		} catch (Exception e) {
-	//			// TODO Auto-generated catch block
-	//			e.printStackTrace();
-	//		} finally {
-	//			if(out != null) {
-	//				out.close();
-	//			}
-	//		}
-	//	}
 
 }

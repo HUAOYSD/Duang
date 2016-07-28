@@ -176,7 +176,3 @@ function deleteSysUser(sysUserId) {
 	    }    
 	});
 }
-
-
-
-

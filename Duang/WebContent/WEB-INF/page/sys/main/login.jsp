@@ -24,7 +24,7 @@
 		});
 	});
 	function getCheckCode(){
-		document.getElementById("validateCodeImg").src="login!checkCode.do?"+Math.random();
+		document.getElementById("validateCodeImg").src="<%=path %>/sys!getValidateCode.do?v="+Math.random();
 	}
 </script>
 <style>
@@ -105,12 +105,12 @@
 					<hr>
 				</div>
 				<div class="info" align="left">
-					<form>
+					<form action="<%=path %>/sys!login.do" method="post">
 						<div class="col-lg-12">
 							<label class="control-label">用户名</label>&nbsp;&nbsp;<label class="text-danger error-text">（用户名不能为空）</label>
 						</div>
 						<div class="form-group">
-							<input style="height:40px;" type="text" class="form-control error-input" name="userName" placeholder="用户名">
+							<input style="height:40px;" type="text" class="form-control error-input" name="name" placeholder="用户名">
 						</div>
 						<div class="col-lg-12">
 							<label class="control-label">密码</label>
@@ -127,7 +127,7 @@
 							</div>
 						</div>
 						<div class="col-lg-4" style="padding:0px 8px 0px 8px;">
-							<img  src="login!checkCode.do" id="validateCodeImg" onclick="getCheckCode()"></img>
+							<img  src="<%=path %>/sys!getValidateCode.do" id="validateCodeImg" name="validateCode" onclick="getCheckCode()"></img>
 						</div>
 						<div class="col-lg-2" style="padding:8px 0px 0px 10px;">
 							<a href="javascript:void(0)" onclick="getCheckCode()" style="text-decoration:none;font-size:13px;">换一张</a>
