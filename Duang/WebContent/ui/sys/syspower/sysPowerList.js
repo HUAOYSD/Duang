@@ -12,23 +12,23 @@ $(function() {
  * @return {TypeName} 
  */
 function loadPowerList(url){
-	$('#powerList').treegrid({
-			width : "auto",
-			height : "auto",
-			nowrap : true,
+	$('#powerlist').treegrid({
 			autoRowHeight : false,
 			striped : true,
 			collapsible : true,
-			url :url,
-			fit : true,
 			border : false,
 			idField:'powerId',
 			treeField:'powerName',
-			sortName : '',
 			remoteSort : false,
-			rownumbers : true,
-			rownumbers : true,
 			fitColumns : true,
+			height:$("#body_powerlist").height()-5,
+			width:$("#body_powerlist").width(),
+			loadMsg : "正在加载，请稍后...",
+			url :url,
+			singleSelect:true, 
+			nowrap:true,
+			rownumbers:true,
+			toolbar:'#tt_toolbar_powerlist',
 			columns : [ [
 					{
 						field : "powerName",
@@ -83,134 +83,49 @@ function loadPowerList(url){
 		});
 }
 
+
+/**
+ * 刷新数据
+ */
+function reloadDataGrid(){
+	loadPowerList("syspower!queryPoweTreeList.do"); 
+}
+
+
 /**
  * 打开添加权限窗口
  */
-function openAddPowerView() {	
-	$("#addPowerView").dialog({
-		cache: false,
-		width:430,
-		height:350,
-		title:"添加权限",
-		modal:true,
-		href:'syspower!openDialog.do?path=addPowerView'
-	});
-	$("#addPowerView").dialog('open');
-}
+$("#add_btn_powerlist").on("click",function(){
+	var indexLayer = layer.open({
+		type: 2,
+		title: '添加权限',
+		shadeClose: true,
+		shade: 0.8,
+		area: ['460px', '438px'],
+		content: 'syspower!openDialog.do?path=addPowerView'
+	});  
+});
 
 
 /**
- * 保存权限
- */
- function addPower() {
-	 var name = $.trim($("#powerName").val());
-	 $("#PowerAddForm").form('submit',{
-			onSubmit: function() {
-		   		if($(this).form('enableValidation').form('validate')){
-		   			if(name.isNotNull()){
-		   				name = encodeURI(encodeURI(name));  
-			   			var con = true;
-				 		$.ajax({
-				 			 url:"syspower!checkPowerName.do",
-				 			 dataType:'json',
-				 			 async: false,
-				 			 data:"name="+name,
-				 			 success:function(data) {
-				 				 if(!data.success) {
-				 					 $.messager.alert('错误','权限名称已经存在！','error');
-				 					 con = false;
-				 				 }
-				 			 }
-				 		 });
-				 		return con;
-			   		}else{
-			   			return false;
-			   		}
-		   		}else{
-		 			return false;
-		 		}
-		 	},
-			success : function(data) {
-				var result = eval('(' + data + ')');
-				if(result.success){
-					$.messager.alert('成功','添加成功','info');
-				}else{
-					$.messager.alert('错误','添加失败','error');
-				}
-				$('#addPowerView').window('close');
-				loadPowerList("syspower!queryPoweTreeList.do");
-			}
-	});
-}
- 
-
-/**
- * 编辑权限
+ * 打开编辑权限窗口
  * @param {Object} powerId
  */
 function editPowerView(powerId, isnotdel) {
 	if(isnotdel){
-		alert("顶级权限禁止操作");
+		$.messager.alert("提示","顶级权限禁止操作","info");
 	}else{
-		$("#editPowerView").dialog({
-				cache: false,
-				width:430,
-				height:350,
-				title:"编辑权限",
-				modal:true,
-				href:'syspower!openDialog.do?powerId='+powerId+"&path=editPowerView"
-		 });
-		 $("#editPowerView").dialog('open');
+		var indexLayer = layer.open({
+			type: 2,
+			title: '编辑产品',
+			shadeClose: true,
+			shade: 0.8,
+			area: ['460px', '438px'],
+			content: 'syspower!openDialog.do?powerId='+powerId+"&path=editPowerView"
+		}); 
 	}
 }
-
  
-/**
- * 更新权限
- */
-function editPower() {
-	var id = $.trim($("#powerId").val());
-	var name = $.trim($("#powerNameByEdit").val());
-	$("#PowerEditForm").form('submit',{
-	 	url:"syspower!updatePower.do",
-		onSubmit: function() {
-	   		if($(this).form('enableValidation').form('validate')){
-	   			if(name.isNotNull()){
-	   				name = encodeURI(encodeURI(name));
-		   			var con = true;
-			 		$.ajax({
-			 			 url:"syspower!checkPowerName.do",
-			 			 dataType:'json',
-			 			 async: false,
-			 			 data:"name="+name+"&powerid="+id,
-			 			 success:function(data) {
-			 				 if(!data.success) {
-			 					 $.messager.alert('错误','权限名称已经存在！','error');
-			 					 con = false;
-			 				 }
-			 			 }
-			 		 });
-			 		return con;
-		   		}else{
-		   			return false;
-		   		}
-	   		}else{
-	 			return false;
-	 		}
-	 	},
-		success : function(data) {
-			var result = eval('(' + data + ')');
-			if(result.success){
-				$.messager.alert('成功','更新成功','info');
-			}else{
-				$.messager.alert('错误','更新失败','error');
-			}
-			$('#editPowerView').window('close');
-			loadPowerList("syspower!queryPoweTreeList.do");
-		}
-	});
-}
-  
 
 /**
  * 删除权限
@@ -218,7 +133,7 @@ function editPower() {
  */
 function deletePower(powerId, isnotdel) {
 	if(isnotdel){
-		alert("顶级权限禁止操作");
+		$.messager.alert("提示","顶级权限禁止操作","info");
 	}else{
 	  $.messager.confirm('确认','您确认想要删除记录吗？',function(r){    
 		 if (r){    
@@ -228,7 +143,6 @@ function deletePower(powerId, isnotdel) {
 		    	success:function(msg) {
 		    		var result = eval('('+msg+')');
 		    		if(result.success) {
-		    			$.messager.alert("消息","删除成功","info");
 		    			loadPowerList("syspower!queryPoweTreeList.do");
 		    		} else {
 		    			$.messager.alert("消息","删除失败","info");

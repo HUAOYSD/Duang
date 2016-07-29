@@ -1,112 +1,60 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-
-<form id="UserEditForm" action="" method="post" data-options="novalidate:true">
-	<input type="hidden" name="id" id="sysUserId" value=""/>
-	<input type="hidden" id="password" name="password" >
-	<table colspan=4 border="0" style="" cellspacing="8" cellpadding="5">
-		<tr>
-			<td align="right" style="width: 105px;">
-				所属角色：
-			</td>
-			<td>
-				<input class="easyui-combobox" id="sysRole" name="sysRole.id" style="width: 216px; height: 24px" 
-					data-options="valueField:'roleId',textField:'roleName',editable:false,url:'sysrole!queryRoleList.do',panelHeight:'auto',required:'true', missingMessage:'请选择所属角色！'" />
-			</td>
-		</tr>
-		<tr>
-			<td align="right" style="width: 105px;">
-				用户名：
-			</td>
-			<td>
-				<input name="name" id="sysUserNameByEdit"  style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
-					 class="easyui-validatebox " data-options="required:true, missingMessage:'请填写用户名！'"/>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" style="width: 105px;">
-				手机号码：
-			</td>
-			<td>
-				<input name="phone" id="phoneByEdit"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
-					 class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" style="width: 105px;">
-				邮箱：
-			</td>
-			<td>
-				<input name="email" id="emailByEdit"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
-					 class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" style="width: 105px;">
-				身份证号：
-			</td>
-			<td>
-				<input name="idcard" id="idcardByEdit"style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
-					 class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" style="width: 105px;">
-				备注(部门)：
-			</td>
-			<td>
-				<input name="remark" id="remark" style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"/>
-			</td>
-		</tr>
-		</table>
-		<br>
-		<div  align="center">
-				 <a href="javascript:;" 
-				 class="easyui-linkbutton" icon="icon-ok"
-				  onclick="javascript:updateSysUser()">保存</a>  
-		</div>
-		</form>
-<script type="text/javascript">
-//clearFormVal("UserAddForm");
-//clearFormVal("UserEditForm");
-$(function (){
-	$.ajax({
-		type:'GET',
-		url:"sysuser!getUserInfo.do",
-		data:"sysUserId=" + "<%=request.getParameter("sysUserId")%>",
-		dataType:'json',
-		success:function(msg) {
-			$("#UserEditForm").form('load',msg);
-		}
-	});
-});
-
-
-function updateSysUser(){
-	if($('#phoneByEdit').val().isNotNull()){
-		if(!$('#phoneByEdit').val().isPhone()){
-			$.messager.alert('警告','手机号码不合法！','warning');
-			return ;
-		}
-	}
-	if($('#emailByEdit').val().isNotNull()){
-		if(!$('#emailByEdit').val().isEmail()){
-			$.messager.alert('警告','邮箱地址不合法！','warning');
-			return ;
-		}
-	}
-	if($('#idcardByEdit').val().isNotNull()){
-		if(!$('#idcardByEdit').val().isIDCard()){
-			$.messager.alert('警告','身份证号码不合法！','warning');
-			return ;
-		}
-	}
-	var name = $('#sysUserNameByEdit').val().trim();
-	$("#UserEditForm").form('submit',{
-		url:"sysuser!updateSysUser.do",
-		onSubmit: function() {
-			if($(this).form('enableValidation').form('validate')){
-	   			if(name.isNotNull()){
-	   				name = encodeURI(encodeURI(name));
+<%@ include file="/page/inc/inc.jsp"%>
+<% String path = request.getContextPath();%>
+<body style="background-color:#fff;">
+	<div class="operate_div_form">
+	  	<form id="user_edit_form" method="post"> 
+			<input type="hidden" name="id" id="sysUserId" value=""/>
+			<input type="hidden" id="password" name="password" >
+	  		<div>   
+		        <label for="sysRole.id" class="add_edit_form_label">所属角色：</label>  
+	        	<input class="easyui-combobox" id="sysRole" name="sysRole.id" style="width: 216px;"	data-options="valueField:'roleId',textField:'roleName',editable:false,url:'sysrole!queryRoleList.do',panelHeight:'auto',required:'true',missingMessage:'请选择角色！'" />
+		    </div> 
+		    <div>   
+		        <label for="name" class="add_edit_form_label">用户名：</label>  
+				<input name="name" id="sysUserName" class="easyui-validatebox " data-options="required:true,missingMessage:'请填写用户名！'"/>
+		    </div> 
+		    <div>   
+		        <label for="phone" class="add_edit_form_label">手机号码：</label>  
+				<input name="phone" id="phone" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
+		    </div> 
+		    <div>   
+		        <label for="email" class="add_edit_form_label">邮箱：</label>  
+				<input name="email" id="email" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
+		    </div> 
+		    <div>   
+		        <label for="idcard" class="add_edit_form_label">身份证号：</label>  
+				<input name="idcard" id="idcard" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
+		    </div> 
+		    <div>   
+		        <label for="remark" class="add_edit_form_label">描述：</label>   
+		       	<textarea rows="5" cols="20" id="remark" name="remark"></textarea>  
+		    </div>
+		</form>  
+	</div>
+	<div align="center" class="footer-oper">
+   	    <div class="content-oper">
+	    	 <a id="user_edit_form_submitbtn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
+		     &nbsp;&nbsp;&nbsp;&nbsp;
+		     <a onclick="javascript:$('#user_edit_form').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
+    	</div>
+	</div>  
+	<script type="text/javascript">
+		$(function(){
+			$.ajax({
+				type:'GET',
+				url:"sysuser!getUserInfo.do",
+				data:"sysUserId=" + "<%=request.getParameter("sysUserId")%>",
+				dataType:'json',
+				success:function(msg) {
+					$("#user_edit_form").form('load',msg);
+				}
+			});
+			
+			$('#user_edit_form').form({    
+			    url:"sysuser!updateSysUser.do",
+			    onSubmit: function(){    
+	   				var name = encodeURI(encodeURI($.trim($("#sysUserName").val())));  
 		   			var con = true;
 			 		$.ajax({
 			 			 url:"sysuser!checkSysUserName.do",
@@ -121,23 +69,46 @@ function updateSysUser(){
 			 			 }
 			 		 });
 			 		return con;
-		   		}else{
-		   			return false;
-		   		}
-	   		}else{
-	 			return false;
-	 		}
-	 	},
-		success:function(data) {
-			var result = eval('(' + data + ')');
-			if(result.success){
-				$.messager.alert('成功','更改成功','info');
-			}else{
-				$.messager.alert('错误','更改失败','error');
+			    },   
+			    success: function(data) {
+			    	$.messager.progress('close');	
+					var result = eval('(' + data + ')');
+					if(result.success){
+						window.parent.reloadDataGrid();
+			    		parent.layer.closeAll();
+					}else{
+						layer.msg("编辑失败", {time: 1500});
+					}
+				} 
+			});
+		});
+		
+		
+		$("#user_edit_form_submitbtn").on("click", function(){
+			if(!$("#user_edit_form").form('validate')){
+				return false;
 			}
-			$('#editSysUserView').window('close');
-			loadUserList("sysuser!queryUserList.do");
-		 }
-	});
-}
-</script>
+			var name = $('#sysUserName').val().trim();
+			if($('#phone').val().isNotNull()){
+				if(!$('#phone').val().isPhone()){
+					$.messager.alert('警告','手机号码不合法！','warning');
+					return false;
+				}
+			}
+			if($('#email').val().isNotNull()){
+				if(!$('#email').val().isEmail()){
+					$.messager.alert('警告','邮箱地址不合法！','warning');
+					return false;
+				}
+			}
+			if($('#idcard').val().isNotNull()){
+				if(!$('#idcard').val().isIDCard()){
+					$.messager.alert('警告','身份证号码不合法！','warning');
+					return false;
+				}
+			}
+			$.messager.progress();
+			$("#user_edit_form").submit();
+		});
+	</script>
+</body>

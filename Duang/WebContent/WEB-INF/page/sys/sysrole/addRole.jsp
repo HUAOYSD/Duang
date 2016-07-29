@@ -1,98 +1,87 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<form id="RoleAddForm" class="easyui-form"  method="post" data-options="novalidate:true">
-	<table colspan=4 border="0" style="" cellspacing="8" cellpadding="5">
-		<tr>
-			<td align="right" style="width: 110px;">
-				角色名称：
-			</td>
-				<td>
-				<input  name="roleName" id="sysRoleName" style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
-					 class="easyui-validatebox" data-options="required:true,missingMessage:'请填写角色名称'" />
-			</td>
-		</tr>
-		<tr>
-			<td align="right" style="width: 110px;">
-				角色描述：
-			</td>
-			<td>
-				<input name="roleDesc" id="sysRoleDesc" style="width: 216px; height: 24px;border: 1px solid rgb(149, 184, 231);"
-					 class="easyui-validatebox " data-options="required:true,missingMessage:'请填写角色描述'"/>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" style="width: 110px;">
-				设定权限：
-			</td>
-			<td>
-				<div align="left">
-					<ul id="powerTree"  class="easyui-tree" data-options="url:'syspower!getPowerTreeCheckbox.do',checkbox:true,state:'closed'"></ul>
-				</div>	
-			</td>
-		</tr>
-	</table>
-	<input type="hidden" name="powerIds" id="powerIds"/>
-	<br>
-	<div align="center" >
-		<a href="javascript:;" class="easyui-linkbutton" icon="icon-ok"  onclick="javascript:addRole()">保存</a>  
+<%@ include file="/page/inc/inc.jsp"%>
+<% String path = request.getContextPath();%>
+<body style="background-color:#fff;">
+	<div class="operate_div_form">
+	  	<form id="role_add_form" method="post"> 
+	  		<input type="hidden" name="powerIds" id="powerIds"/>
+	  		<div>   
+		        <label for="roleName" class="add_edit_form_label">角色名称：</label>  
+		        <input class="easyui-validatebox" name="roleName" id="sysRoleName" data-options="required:true,missingMessage:'请填写角色名称'" /> 
+		    </div> 
+		    <div>   
+		        <label for="roleDesc" class="add_edit_form_label">角色描述：</label>   
+		       	<textarea rows="5" cols="20" id="sysRoleDesc" name="roleDesc"></textarea>  
+		    </div>
+		    <div>   
+		        <label for="powerTree" style="float: left;" class="add_edit_form_label">设定权限：</label>   
+		       	<ul style="float: left;height: 180px; width:216px;margin-bottom:10px;overflow: scroll;border:0px solid #000;" id="powerTree" name="powerTree" class="easyui-tree" data-options="url:'syspower!getPowerTreeCheckbox.do',checkbox:true,state:'closed'"></ul>
+		    </div>
+		</form>  
 	</div>
-</form>
+	<div align="center" class="footer-oper">
+   	    <div class="content-oper">
+	    	 <a id="role_add_form_submitbtn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
+		     &nbsp;&nbsp;&nbsp;&nbsp;
+		     <a onclick="javascript:$('#role_add_form').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
+    	</div>
+	</div>  
+	<script type="text/javascript">
+		$(function(){
+			$('#role_add_form').form({    
+			    url:"sysrole!saveRole.do",
+			    onSubmit: function(){    
+	   				var name = encodeURI(encodeURI($.trim($("#sysRoleName").val())));  
+		   			var con = true;
+			 		$.ajax({
+			 			 url:"sysrole!checkRoleName.do",
+			 			 dataType:'json',
+			 			 async: false,
+			 			 data:"name="+name,
+			 			 success:function(data) {
+			 				 if(!data.success) {
+			 				 	 $.messager.progress('close');	
+			 					 $.messager.alert('错误','角色名称已经存在，请重新填写！','error');
+			 					 con = false;
+			 				 }else{
+				 				  var nodes = $('#powerTree').tree('getChecked');
+		  						  var powerIds = "";
+		  						  $.each(nodes,function(i,n){
+			  						powerIds += n["id"]+"space";
+		  						  });
+		  						  $("#powerIds").val(powerIds);
+			 				 }
+			 			 }
+			 		 });
+			 		return con;
+			    },   
+			    success: function(data) {
+			    	$.messager.progress('close');	
+					var result = eval('(' + data + ')');
+					if(result.success){
+						window.parent.reloadDataGrid();
+			    		parent.layer.closeAll();
+					}else{
+						layer.msg("添加失败", {
+			    			  icon: 5,
+			    			  time: 1500
+			    		});
+					}
+				} 
+			});
+		});
 		
-<script type="text/javascript">
-//clearFormVal("RoleAddForm");
-//clearFormVal("RoleEditForm");
-//clearFormVal("PowerToRoleForm");
-var closeAll = function(){
-	$("#powerTree").tree("collapseAll");
-}
-
-/**
- * 添加角色
- */
-function addRole() {
-	  var nodes = $('#powerTree').tree('getChecked');
-	  var powerIds = "";
-	  $.each(nodes,function(i,n){
-		  powerIds += n["id"]+"space";
-	  });
-	  $("#powerIds").val(powerIds);
-   	  var name = $.trim($("#sysRoleName").val());
-      $("#RoleAddForm").form('submit',{
-		   	url:"sysrole!saveRole.do",
-		   	onSubmit: function() {
-		   		if($(this).form('enableValidation').form('validate')){
-		   			if(name.isNotNull()){
-		   				name = encodeURI(encodeURI(name));
-			   			var con = true;
-				 		$.ajax({
-				 			 url:"sysrole!checkRoleName.do",
-				 			 dataType:'json',
-				 			 async: false,
-				 			 data:"name="+name,
-				 			 success:function(data) {
-				 				 if(!data.success) {
-				 					 $.messager.alert('错误','角色名称已经存在，请重新填写！','error');
-				 					 con = false;
-				 				 }
-				 			 }
-				 		 });
-				 		return con;
-			   		}else{
-			   			return false;
-			   		}
-		   		}else{
-		 			return false;
-		 		}
-		 	},
-			success : function(data) {
-				var result = eval('(' + data + ')');
-				if(result.success){
-					$.messager.alert('成功','添加成功','info');
-				}else{
-					$.messager.alert('错误','添加失败','error');
-				}
-				$('#addRoleView').window('close');
-				loadRoleList("sysrole!queryRolePageList.do");
+		
+		$("#role_add_form_submitbtn").on("click", function(){
+			if(!$("#role_add_form").form('validate')){
+				return false;
 			}
-	   });
-}
-</script>
+			$.messager.progress();
+			$("#role_add_form").submit();
+		});
+		
+		var closeAll = function(){
+			$("#powerTree").tree("collapseAll");
+		}
+	</script>
+</body>
