@@ -21,12 +21,10 @@ import org.hibernate.annotations.DynamicInsert;
 @Table(name = "invest_product", catalog = "duang")
 @DynamicInsert(true)
 public class SysInvestProduct implements Serializable {
-
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 1L;
-	
 	private String id;
 	private String nameZh; //总名称
 	private String name; //名称

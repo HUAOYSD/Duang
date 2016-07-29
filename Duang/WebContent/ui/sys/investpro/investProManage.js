@@ -1,6 +1,10 @@
 var tableObj;
 var editRow = undefined; //定义全局变量：当前编辑的行
 $(function(){
+	//初始化状态，更新和删除按钮时不能点击的
+	$('#investProManage-update-btn').linkbutton('disable');
+	$('#investProManage-delete-btn').linkbutton('disable');
+	//初始化表格
 	tableObj = $("#tt").datagrid({
 		height:$("#body").height()-$('#search_area').height()-5,
 		width:$("#body").width(),
@@ -11,47 +15,44 @@ $(function(){
 		nowrap:true,
 		rownumbers:true,
 		pagination:true,
-		fitColumns:false,
 		pageSize:50,
 		pageList:[50,100,150,200,250],
 		sortOrder:'desc',
 		columns:[[
-			{field:'nameZh',title:'总名称',width:100,halign:"center", align:"center",editor: { type: 'validatebox', options: { required: true}}},
+		    {field:'id',checkbox:true},
+			{field:'nameZh',title:'总名称',width:100,halign:"center", align:"center"},
 			{field:'name',title:'名称',width:100,halign:"center", align:"center",editor:'center'},
-			{field:'name_describe',title:'描述',width:200,halign:"center", align:"center",editor:'text'},
-			{field:'yield_describe',title:'收益率描述',width:250,halign:"center", align:"center",editor:'text'},
-			{field:'yield',title:'准确的收益率',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'charge_ratio',title:'手续费比例率',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'title1',title:'标题1',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'title2',title:'标题2',width:150,halign:"center", align:"center",editor:'text'},
-			{field:'min_deadline',title:'起投期限',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'min_money',title:'起投金额',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'refund_type',title:'还款方式',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'is_sell',title:'是否起售',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'is_lottery',title:'是否起售',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'is_red_envel',title:'是否红包',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'is_new_product',title:'是否新品',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'is_recommend',title:'推荐',width:100,halign:"center", align:"center",editor:'text'},
-			{field:'product_describe',title:'介绍',width:500,halign:"center", align:"left",editor:'text'},
-			{field:'risk_control',title:'风险控制',width:500,halign:"center", align:"left",editor:'text'},
-			{field:'details',title:'更多详情',width:500,halign:"center", align:"left",editor:'text'}
+			{field:'name_describe',title:'描述',width:200,halign:"center", align:"center" },
+			{field:'yield_describe',title:'收益率描述',width:250,halign:"center", align:"center" },
+			{field:'yield',title:'准确的收益率',width:100,halign:"center", align:"center",
+				formatter: function(value,row,index){
+					return value.toFixed(6);
+				}
+			},
+			{field:'charge_ratio',title:'手续费比例率',width:100,halign:"center", align:"center" },
+			{field:'title1',title:'标题1',width:100,halign:"center", align:"center" },
+			{field:'title2',title:'标题2',width:150,halign:"center", align:"center" },
+			{field:'min_deadline',title:'起投期限',width:100,halign:"center", align:"center" },
+			{field:'min_money',title:'起投金额',width:100,halign:"center", align:"center" },
+			{field:'refund_type',title:'还款方式',width:100,halign:"center", align:"center" },
+			{field:'is_sell',title:'是否起售',width:100,halign:"center", align:"center" },
+			{field:'is_lottery',title:'是否抽奖',width:100,halign:"center", align:"center" },
+			{field:'is_red_envel',title:'是否红包',width:100,halign:"center", align:"center" },
+			{field:'is_new_product',title:'是否新品',width:100,halign:"center", align:"center" },
+			{field:'is_recommend',title:'推荐',width:100,halign:"center", align:"center" },
+			{field:'product_describe',title:'介绍',width:500,halign:"center", align:"left" },
+			{field:'risk_control',title:'风险控制',width:500,halign:"center", align:"left" },
+			{field:'details',title:'更多详情',width:500,halign:"center", align:"left" }
 		]],
 		toolbar:'#tt_toolbar',
-		onDblClickRow:function(rowIndex, rowData){
-			//双击开启编辑行
-			if (editRow != undefined) {
-				tableObj.datagrid("endEdit", editRow);
-			}
-			if (editRow == undefined) {
-				tableObj.datagrid("beginEdit", rowIndex);
-				editRow = rowIndex;
-			}
+		onSelect:function(rowIndex, rowData){
+			$('#investProManage-update-btn').linkbutton('enable');
+			$('#investProManage-delete-btn').linkbutton('enable');
 		},
-		onAfterEdit: function (rowIndex, rowData, changes) {
-			//endEdit该方法触发此事件
-			console.info(rowData);
-			editRow = undefined;
-		}
+		onUnselect:function(rowIndex, rowData){
+			$('#investProManage-update-btn').linkbutton('disable');
+			$('#investProManage-delete-btn').linkbutton('disable');
+		},
 	});
 	
 	//新增弹出框

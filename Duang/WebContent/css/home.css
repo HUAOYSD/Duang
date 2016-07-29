@@ -190,3 +190,16 @@ a:hover {
 	width:100px;
 	text-align:right;
 }
+
+#footer-oper{
+	background-color:#f2f2f2;
+	width:100%;
+	height:50px;
+    clear:both;    
+}
+#footer-oper #content-oper{
+	padding-top:10px;
+}
+
+#investProManage-update-btn,#investProManage-delete-btn{
+}

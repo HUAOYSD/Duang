@@ -27,9 +27,9 @@
 	  <table id="tt" style="table-layout:fixed;" ></table>
 	  <!-- 表格顶部工具按钮 -->
 	  <div id="tt_toolbar">
-	      <a id="add" class="easyui-linkbutton" iconCls="icon-add" plain="true">新增</a>
-	      <a href="javascript:void(0)"  id="update" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
-	      <a href="javascript:void(0)"  id="delete" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+	      <a id="add_btn" class="easyui-linkbutton" iconCls="icon-add" plain="true">新增</a>
+	      <a id="investProManage-update-btn" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
+	      <a id="investProManage-delete-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
   	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path%>/ui/sys/investpro/investProManage.js"></script>
@@ -37,16 +37,77 @@
 		$("#submitInvest_btn").on("click", function(){
 			$('#queryInvestProForm').submit(); 
 		});
-		
-		$("#add").on("click",function(){
-			layer.open({
+		function reloadDataGrid(){
+	        $("#tt").datagrid('reload');  
+		}
+		function saveError(msg,iconNum){
+			layer.msg(msg, {
+  			  icon: iconNum,
+  			  time: 3000 //2秒关闭（如果不配置，默认是3秒）
+  			});
+		}
+		var indexLayer;
+		//添加
+		$("#add_btn").on("click",function(){
+			indexLayer = layer.open({
 				type: 2,
 				title: '添加产品',
 				shadeClose: true,
 				shade: 0.8,
-				area: ['380px', '90%'],
+				area: ['450px', '850px'],
 				content: 'investpro!addInvestPro.do'
 			});  
+		});
+		
+		$("#investProManage-update-btn").on("click",function(){
+			var selectedRow = $("#tt").datagrid('getSelected');
+			if(selectedRow==null){
+				layer.msg("请选择一个产品！",{time:1000});
+				return;
+			}
+			indexLayer = layer.open({
+				type: 2,
+				title: '添加产品',
+				shadeClose: true,
+				shade: 0.8,
+				area: ['450px', '850px'],
+				content: 'investpro!editInvestPro.do?id='+selectedRow.id
+			}); 
+		});
+		
+		//删除
+		$("#investProManage-delete-btn").on('click',function(){
+			var selectedRow = $("#tt").datagrid('getSelected'); 
+			if(selectedRow==null){
+				layer.msg("请选择一个产品！",{time:1000});
+				return;
+			}
+		    layer.confirm('您确定要删除产品'+selectedRow.nameZh+' 吗？', {
+				  icon: 7,
+				  btn: ['确定','取消'] //按钮
+				}, function(){ //确定
+					$.messager.progress('close');	// 如果提交成功则隐藏进度条
+					$.ajax({
+						   type: "POST",
+						   url: "investpro!deleteInvestPro.do",
+						   data: "id="+selectedRow.id,
+						   success: function(data){
+							 data = JSON.parse(data);
+						     if(data.result==true){
+						    	 var selectedRowIndex = $("#tt").datagrid('getRowIndex',selectedRow.id);
+						    	 $("#tt").datagrid('deleteRow',selectedRowIndex);
+						    	 layer.closeAll();
+						     }else{
+						    	 layer.msg(data.msg, {
+					    			  icon: 5,
+					    			  time: 3000 //2秒关闭（如果不配置，默认是3秒）
+					    		});
+						     }
+						   }
+						});
+				}, function(){//取消
+				  return;
+			});
 		});
 	</script>
 </body>
