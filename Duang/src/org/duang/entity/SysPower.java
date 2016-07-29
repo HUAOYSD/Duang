@@ -121,6 +121,9 @@ public class SysPower implements java.io.Serializable {
 
 	@Column(name = "icon", length = 200)
 	public String getIcon() {
+		if (this.icon==null) {
+			this.icon = "icon-server_chart";
+		}
 		return this.icon;
 	}
 

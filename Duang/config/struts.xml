@@ -22,7 +22,7 @@
 			<interceptor-stack name="sysLoginStack">
 				<interceptor-ref name="defaultStack"></interceptor-ref>
 				<interceptor-ref name="sessionInterceptor">
-					<param name="excludeMethods">login,showLogin,loginView</param>
+					<param name="excludeMethods">login,showLogin,goLoginView,getValidateCode,checkValidateCode</param>
 				</interceptor-ref>
 			</interceptor-stack>
 		</interceptors>

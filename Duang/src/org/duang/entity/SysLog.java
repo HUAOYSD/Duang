@@ -1,6 +1,7 @@
 package org.duang.entity;
 
 import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +10,7 @@ import javax.persistence.Table;
 /**
  * SysLog entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "sys_log", catalog = "duang")
 public class SysLog implements java.io.Serializable {

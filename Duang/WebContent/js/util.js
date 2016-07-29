@@ -2716,7 +2716,7 @@ function setCheckAll(objid,subName){
 
 
 /**
- * 将字符串转换成大写
+ * 字符串是否为空
  * @return boolean 符合返回true,否则返回false (注:空字符串返回 false)
  */
 String.prototype.isNotNull = function() {
@@ -2918,6 +2918,26 @@ function fillForm(formId,jsonData){
 		   }
 	   }
    }  
+}
+
+
+function clearFormVal(formId){
+	   var inputs = $("#"+formId+" input");
+	   for(var i=0; i<inputs.length; i++){
+		   if(inputs[i].type == "text" || inputs[i].type == "hidden" || inputs[i].type == "password"){
+			   inputs[i].value = "";
+		   }else if(inputs[i].type == "radio"){
+			   var radios = document.getElementsByName(inputs[i].name);
+			   for(var m=0; m<radios.length; m++){
+				   radios[m].value = 0;
+			   }
+		   }else if(inputs[i].type == "checkbox"){
+			   var checkboxs = document.getElementsByName(inputs[i].name);
+			   for(var m=0; m<checkboxs.length; m++){
+				   checkboxs[m].value = 0;
+			   }
+		   }
+	   }
 }
 
 

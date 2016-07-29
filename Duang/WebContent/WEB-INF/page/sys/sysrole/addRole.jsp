@@ -38,6 +38,9 @@
 </form>
 		
 <script type="text/javascript">
+//clearFormVal("RoleAddForm");
+//clearFormVal("RoleEditForm");
+//clearFormVal("PowerToRoleForm");
 var closeAll = function(){
 	$("#powerTree").tree("collapseAll");
 }
@@ -57,7 +60,7 @@ function addRole() {
 		   	url:"sysrole!saveRole.do",
 		   	onSubmit: function() {
 		   		if($(this).form('enableValidation').form('validate')){
-		   			if(name.isNotNull){
+		   			if(name.isNotNull()){
 		   				name = encodeURI(encodeURI(name));
 			   			var con = true;
 				 		$.ajax({

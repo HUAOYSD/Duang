@@ -57,8 +57,11 @@ function loadRoleList(url){
 						width : $(this).width() * 0.1,
 						align : "center",
 						formatter: function(value,row,index){
-									   return new Date(value).format("yyyy-MM-dd hh:mm:ss");
-									}
+							  if(value==0)
+								   return "-&nbsp;&nbsp;-";
+							   else	   
+								   return new Date(value).format("yyyy-MM-dd hh:mm:ss");
+						   }
 					},
 					{
 						field : "sysRoleId",
@@ -142,12 +145,16 @@ function deleteRole(sysRoleId) {
 	        	data:{"sysRoleId": sysRoleId},
 	        	success:function(msg) {
 	        		var result = eval('('+msg+')');
-	        		if(result) {
+	        		if(result.success) {
 	        			$.messager.alert("消息","删除成功","info");
+	        			loadRoleList("sysrole!queryRolePageList.do");
 	        		} else {
-	        			$.messager.alert("消息","删除失败","info");
+	        			if(result.msg.isNotNull()){
+	        				$.messager.alert("消息",result.msg,"info");
+	        			}else{
+	        				$.messager.alert("消息","删除失败","info");
+	        			}
 	        		}
-	        		loadRoleList("sysrole!queryRolePageList.do");
 	        	}
 	        });   
 	    }    

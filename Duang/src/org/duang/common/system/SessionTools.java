@@ -1,15 +1,8 @@
 package org.duang.common.system;
 
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts2.ServletActionContext;
 import org.duang.entity.SysUser;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 /**
@@ -22,19 +15,19 @@ public class SessionTools {
 
 	public static final String SYSUSER="sysUser"; //系统用户
 	public static final String MEMBER="member"; //会员
+	public static final String RANDOMCODEKEY = "RANDOMVALIDATECODEKEY";//验证码
 
 	/** 
 	 * 获取httpsession
 	 * @Title: getSession 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
-	 * @return HttpSession    返回类型 
+	 * @return Map<String,Object>    返回类型 
 	 * @author 白攀
 	 * @date 2016-7-16 下午2:07:29
 	 */ 
-	public static HttpSession getSession(){
-		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-		HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-		return request.getSession();
+	public static Map<String,Object> getSession(){
+		Map<String,Object> sessionMap = ServletActionContext.getContext().getSession();
+		return sessionMap;
 	}
 
 
@@ -50,7 +43,8 @@ public class SessionTools {
 	 */ 
 	public static boolean setSessionValue(String key,Object value){
 		try {
-			getSession().setAttribute(key, value);
+			Map<String,Object> sessionMap = ServletActionContext.getContext().getSession();
+			sessionMap.put(key, value);
 			return true;	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,7 +62,7 @@ public class SessionTools {
 	 * @date 2013-12-19 上午10:28:44
 	 */
 	public static Object getSessionValue(String key){
-		return getSession().getAttribute(key);
+		return ServletActionContext.getContext().getSession().get(key);
 	}
 
 
@@ -83,7 +77,7 @@ public class SessionTools {
 	 */ 
 	public static boolean removeSession(String key){
 		try {
-			getSession().removeAttribute(key);
+			ServletActionContext.getContext().getSession().remove(key);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,7 +85,7 @@ public class SessionTools {
 		}
 	}
 
-	
+
 	/**
 	 * 获取当前登陆的系统用户名
 	 * @Title: getSessionSysUserName 
@@ -107,7 +101,7 @@ public class SessionTools {
 		}
 		return sysUser.getName();
 	}
-	
+
 
 	/**
 	 * 获取系统当前的登陆的系统用户
@@ -121,7 +115,7 @@ public class SessionTools {
 		return (SysUser) sessionMap.get(SYSUSER);
 	}
 
-	
+
 	/**
 	 * 设置当前登陆的系统用户
 	 * @Title: setSessionSysUser 
@@ -135,7 +129,7 @@ public class SessionTools {
 		sessionMap.put(SYSUSER, sysUser);
 	}
 
-	
+
 	/**
 	 * 移除sessionSysUser
 	 * @Title: removeSessionSysUser 

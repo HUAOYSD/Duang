@@ -1,5 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<form id="PowerEditForm" action="" style="margin-top:10px;" method="post" data-options="novalidate:true">
+<form id="PowerEditForm" action="" style="" method="post" data-options="novalidate:true">
 	<input type="hidden" name="id" id="powerId">
 	<table colspan=4 border="0" style="" cellspacing="8" cellpadding="5">
 		<tr>
@@ -35,11 +35,29 @@
 		</tr>
 		<tr>	
 			<td align="right" style="width: 105px;">
+				图标样式：
+			</td>
+			<td>
+				<input  name="icon" id="icon" style="width: 216px; height: 24px"
+					 class="easyui-validatebox" data-options="required:false" />
+			</td>
+		</tr>
+		<tr>	
+			<td align="right" style="width: 105px;">
 				序号：
 			</td>
 			<td>
 				<input  name="sortIndex" id="sortIndex" style="width: 216px; height: 24px"
 					 class="easyui-validatebox" data-options="required:true, missingMessage:'请填写序号！'" />
+			</td>
+		</tr>
+		<tr>	
+			<td align="right" style="width: 105px;">
+				描述：
+			</td>
+			<td>
+				<input  name="remark" id="remark" style="width: 216px; height: 24px"
+					 class="easyui-validatebox" data-options="required:false" />
 			</td>
 		</tr>
 		</table>
@@ -51,6 +69,8 @@
 		</div>
 		</form>
 <script type="text/javascript">
+//clearFormVal("PowerAddForm");
+//clearFormVal("PowerEditForm");
 $(function (){
 	$.ajax({
 		type:'GET',

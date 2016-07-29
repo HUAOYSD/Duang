@@ -25,6 +25,31 @@
 	<listener>
 		 <listener-class>org.duang.common.system.SessionListener</listener-class>
 	</listener>
+	
+	
+	<filter>
+		<description>懒加载过滤器</description>
+		<filter-name>osiv</filter-name>
+		<!-- <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class> -->
+		<filter-class>org.duang.common.OpenSessionInViewFilter</filter-class>
+		<init-param>
+			<param-name>singleSession</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>flushMode</param-name>
+			<param-value>AUTO</param-value>
+		</init-param>
+		<init-param>  
+            <param-name>sessionFactoryBeanName</param-name>  
+            <param-value>sessionFactory</param-value>  
+        </init-param>  
+	</filter>
+	<filter-mapping>
+		<filter-name>osiv</filter-name>
+		<servlet-name>/*</servlet-name>
+	</filter-mapping>
+	
 
 	<filter>
 		<description>设置servlet编码</description>
@@ -58,25 +83,6 @@
 		<param-name>webAppRootKey</param-name>
 		<param-value>fes.root</param-value>
 	</context-param>
-
-
-	<filter>
-		<description>懒加载过滤器</description>
-		<filter-name>osiv</filter-name>
-		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
-		<init-param>
-			<param-name>singleSession</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<init-param>
-			<param-name>flushMode</param-name>
-			<param-value>AUTO</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>osiv</filter-name>
-		<servlet-name>/*</servlet-name>
-	</filter-mapping>
 
 
 	<filter>
@@ -119,7 +125,6 @@
 
 
 	<welcome-file-list>
-		<welcome-file>login.jsp</welcome-file>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
 		<welcome-file>index.jsp</welcome-file>

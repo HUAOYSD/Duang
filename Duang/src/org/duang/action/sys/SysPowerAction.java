@@ -177,6 +177,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("powerId", top.getId());
 				map.put("powerName", top.getName());
+				map.put("url", top.getUrl());
 				map.put("isnotdel", true);
 				map.put("optTime", DateUtils.getTimeStamp(top.getOptionTime()));
 				listMap.add(map);
@@ -211,6 +212,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("powerId", power.getId());
 				map.put("powerName", power.getName());
+				map.put("url", power.getUrl());
 				map.put("isnotdel", false);
 				map.put("optTime", DateUtils.getTimeStamp(power.getOptionTime()));
 				map.put("_parentId", power.getParentId());
@@ -275,6 +277,8 @@ public class SysPowerAction extends BaseAction<SysPower>{
 					jsonObject.put("name", power.getName());
 					jsonObject.put("url", power.getUrl());
 					jsonObject.put("sortIndex", power.getSortIndex());
+					jsonObject.put("icon", power.getIcon());
+					jsonObject.put("remark", power.getRemark());
 				}
 			}
 		} catch (Exception e) {

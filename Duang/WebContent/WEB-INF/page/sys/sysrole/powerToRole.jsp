@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <form id="PowerToRoleForm" method="post" data-options="novalidate:true">
-	<input type="hidden" name="sysRoleId" id="sysRoleId" value="${param.sysRoleId}">
+	<input type="hidden" name="sysRoleId" id="sysRoleIdByOpt" value="${param.sysRoleId}">
 	<tr>
 		<td align="right" style="width: 110px;" >
 			设定权限：
@@ -18,7 +18,11 @@
 	</div>
 </form>
 <script type="text/javascript">
+//clearFormVal("RoleAddForm");
+//clearFormVal("RoleEditForm");
+//clearFormVal("PowerToRoleForm");
 $('#addRoleView').dialog("destroy",true);
+$('#editRoleView').dialog("destroy",true);
 $("#powerTree").tree({
 		url:'syspower!getPowerTreeCheckbox.do',
 		checkbox:true,

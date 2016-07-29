@@ -20,17 +20,6 @@
 					 class="easyui-validatebox " data-options="required:true,missingMessage:'请填写角色描述'"/>
 			</td>
 		</tr>
-<%--		<tr>--%>
-<%--			<td align="right" style="width: 110px;">--%>
-<%--				设定权限：--%>
-<%--			</td>--%>
-<%--			<td>--%>
-<%--				<div align="left">--%>
-<%--					<ul id="powerTree"  class="easyui-tree" data-options="url:'privilege!getPowerTreeCheckbox.do',onLoadSuccess:'',checkbox:true,state:'closed'"></ul>--%>
-<%--				</div>	--%>
-<%--			--%>
-<%--			</td>--%>
-<%--		</tr>--%>
 		</table>
 		<br>
 		<div  align="center" >
@@ -40,6 +29,9 @@
 		</div>
 		</form>
 <script type="text/javascript">
+//clearFormVal("RoleAddForm");
+//clearFormVal("RoleEditForm");
+//clearFormVal("PowerToRoleForm");
 $(function (){
 	$.ajax({
 		type:'GET',
@@ -60,7 +52,7 @@ function updatePower() {
 		   	url:"sysrole!updateRole.do",
 		   	onSubmit: function() {
 		   		if($(this).form('enableValidation').form('validate')){
-		   			if(name.isNotNull){
+		   			if(name.isNotNull()){
 			   			var con = true;
 			   			name = encodeURI(encodeURI(name));
 				 		$.ajax({
