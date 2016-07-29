@@ -1,6 +1,7 @@
 var tableObj;
 var editRow = undefined; //定义全局变量：当前编辑的行
 $(function(){
+	//表格初始化
 	tableObj = $("#tt").datagrid({
 		height:$("#body").height()-$('#search_area').height()-5,
 		width:$("#body").width(),
