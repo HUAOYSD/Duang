@@ -37,6 +37,12 @@ function loadPowerList(url){
 						align : "left"
 					},
 					{
+						field : "url",
+						title : "访问路径",
+						width : $(this).width() * 0.1,
+						align : "left"
+					},
+					{
 						field : "optTime",
 						title : "操作时间",
 						width : $(this).width() * 0.1,
@@ -84,7 +90,7 @@ function openAddPowerView() {
 	$("#addPowerView").dialog({
 		cache: false,
 		width:430,
-		height:285,
+		height:350,
 		title:"添加权限",
 		modal:true,
 		href:'syspower!openDialog.do?path=addPowerView'
@@ -149,7 +155,7 @@ function editPowerView(powerId, isnotdel) {
 		$("#editPowerView").dialog({
 				cache: false,
 				width:430,
-				height:285,
+				height:350,
 				title:"编辑权限",
 				modal:true,
 				href:'syspower!openDialog.do?powerId='+powerId+"&path=editPowerView"
@@ -221,12 +227,12 @@ function deletePower(powerId, isnotdel) {
 		    	url:"syspower!deletePower.do?powerId="+powerId,
 		    	success:function(msg) {
 		    		var result = eval('('+msg+')');
-		    		if(result) {
+		    		if(result.success) {
 		    			$.messager.alert("消息","删除成功","info");
+		    			loadPowerList("syspower!queryPoweTreeList.do");
 		    		} else {
 		    			$.messager.alert("消息","删除失败","info");
 		    		}
-		    		loadPowerList("syspower!queryPoweTreeList.do");
 		        }
 		     });   
 		   }    

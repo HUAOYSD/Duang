@@ -82,7 +82,35 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 			sql += "INNER JOIN SYS_USER ON SYS_USER.ROLE_ID = SYS_ROLE.ID ";
 			sql += "WHERE SYS_POWER.PARENT_ID = ? AND SYS_USER.ID = ? ";
 			sql += "ORDER BY SYS_POWER.SORT_INDEX DESC";
-			return queryBySQL(sql, userid, parentid);
+			return queryBySQL(sql, parentid, userid);
+		}else {
+			return null;
+		}
+	}
+	
+	
+	/**   
+	 * 根据用户查询顶级权限
+	 * @Title: queryTopPowerByUser   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param userid
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年7月29日 下午3:41:27
+	 * @return: List<SysPower>      
+	 * @throws   
+	 */  
+	public List<SysPower> queryTopPowerByUser(String userid) throws Exception {
+		if (DataUtils.notEmpty(userid)) {
+			String sql = "SELECT * FROM SYS_POWER WHERE PARENT_ID = 'SYSPOWERS' ";
+			sql += "HAVING ID IN ";
+			sql += "(SELECT PARENT_ID FROM SYS_POWER  ";
+			sql += "WHERE PARENT_ID <> 'SYSPOWERS' ";
+			sql += "AND ID IN (SELECT POWER_ID FROM SYS_ROLE_POWER WHERE ROLE_ID = (SELECT ROLE_ID FROM SYS_USER WHERE ID = '"+userid+"')) ";
+			sql += ") ";
+			sql += "ORDER BY SYS_POWER.SORT_INDEX DESC";
+			return queryBySQL(sql);
 		}else {
 			return null;
 		}

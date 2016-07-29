@@ -22,8 +22,10 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.SysPower;
 import org.duang.entity.SysRole;
 import org.duang.entity.SysRolePower;
+import org.duang.entity.SysUser;
 import org.duang.service.SysPowerService;
 import org.duang.service.SysRoleService;
+import org.duang.service.SysUserService;
 import org.duang.util.DataUtils;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
@@ -57,6 +59,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 
 	private SysRoleService service;
 	private SysPowerService powerService;
+	private SysUserService sysUserService;
 	@Resource(name="sysroleserviceimpl")
 	public void setService(SysRoleService service) {
 		this.service = service;
@@ -65,7 +68,10 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	public void setPowerService(SysPowerService powerService) {
 		this.powerService = powerService;
 	}
-
+	@Resource
+	public void setSysUserService(SysUserService sysUserService) {
+		this.sysUserService = sysUserService;
+	}
 	/**   
 	 * 跳转到角色管理界面
 	 * @Title: showRole   
@@ -323,10 +329,16 @@ public class SysRoleAction extends BaseAction<SysRole>{
 		try {
 			String sysRoleId = super.getRequest().getParameter("sysRoleId");
 			if (DataUtils.notEmpty(sysRoleId)) {
-				if (service.deleteEntity(sysRoleId)) {//删除中间表数据 并且 删除角色表数据
-					jsonObject.put("success", true);
-				}else {
+				List<SysUser> users = sysUserService.queryEntity("sysRole.id", sysRoleId, null, null);
+				if (users!=null && users.size()>0) {
 					jsonObject.put("success", false);
+					jsonObject.put("msg", "该角色拥有已关联用户，禁止删除");
+				}else {
+					if (service.deleteEntity(sysRoleId)) {//删除中间表数据 并且 删除角色表数据
+						jsonObject.put("success", true);
+					}else {
+						jsonObject.put("success", false);
+					}
 				}
 			}else{
 				jsonObject.put("success", false);

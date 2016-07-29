@@ -85,7 +85,7 @@ function loadUserList(url){
 						rowspan :2,
 		           	  	formatter:function(value,rowData,index){
 		           	  			var html="";
-		           				html += "<a href='javascript:;' onclick = 'javascript:deleteSysUser(" +"&quot;"+ rowData.sysUserId +"&quot"+");'"+
+		           				html += "<a href='javascript:;' onclick = 'javascript:deleteSysUser(" +"&quot;"+ rowData.sysUserId +"&quot,"+rowData.isnotdel+");'"+
 		           						"style=\"color:rgb(51,102,153);text-decoration:none;\" " +"onmouseover=\"javascript:this.style.color='rgb(255,102,0)';\""+
 					           	  		"onmouseout=\"javascript:this.style.color='rgb(51,102,153)';\">[删除]</a>&nbsp;&nbsp;&nbsp;";
 		           				html += "<a href='javascript:;' onclick = 'javascript:editSysUserView(" +"&quot;"+ rowData.sysUserId +"&quot"+");'" +
@@ -157,22 +157,26 @@ function editSysUserView(sysUserId) {
  * 删除用户
  * @param {Object} userId
  */
-function deleteSysUser(sysUserId) {
-	$.messager.confirm('确认','您确认想要删除记录吗？',function(r){    
-	    if (r){    
-	        $.ajax({
-	        	type:"post",
-	        	url:"sysuser!deleteUser.do?sysUserId="+sysUserId,
-	        	success:function(msg) {
-	        		var result = eval('('+msg+')');
-	        		if(result) {
-	        			$.messager.alert("消息","删除成功","info");
-	        		} else {
-	        			$.messager.alert("消息","删除失败","info");
-	        		}
-	        		loadUserList("sysuser!queryUserList.do");;
-	        	}
-	        });   
-	    }    
-	});
+function deleteSysUser(sysUserId, isnotdel) {
+	if(isnotdel){
+		alert("超级用户禁止操作");
+	}else{
+		$.messager.confirm('确认','您确认想要删除记录吗？',function(r){    
+		    if (r){    
+		        $.ajax({
+		        	type:"post",
+		        	url:"sysuser!deleteUser.do?sysUserId="+sysUserId,
+		        	success:function(msg) {
+		        		var result = eval('('+msg+')');
+		        		if(result.success) {
+		        			loadUserList("sysuser!queryUserList.do");;
+		        			$.messager.alert("消息","删除成功","info");
+		        		} else {
+		        			$.messager.alert("消息","删除失败","info");
+		        		}
+		        	}
+		        });   
+		    }    
+		});
+	}
 }

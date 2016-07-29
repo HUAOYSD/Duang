@@ -145,12 +145,16 @@ function deleteRole(sysRoleId) {
 	        	data:{"sysRoleId": sysRoleId},
 	        	success:function(msg) {
 	        		var result = eval('('+msg+')');
-	        		if(result) {
+	        		if(result.success) {
 	        			$.messager.alert("消息","删除成功","info");
+	        			loadRoleList("sysrole!queryRolePageList.do");
 	        		} else {
-	        			$.messager.alert("消息","删除失败","info");
+	        			if(result.msg.isNotNull()){
+	        				$.messager.alert("消息",result.msg,"info");
+	        			}else{
+	        				$.messager.alert("消息","删除失败","info");
+	        			}
 	        		}
-	        		loadRoleList("sysrole!queryRolePageList.do");
 	        	}
 	        });   
 	    }    

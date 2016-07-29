@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/home.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/left.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/js/easyui/themes/gray/easyui.css">

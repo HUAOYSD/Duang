@@ -46,4 +46,19 @@ public interface SysPowerService extends CommonInterface<SysPower>{
 	 */  
 	public abstract List<SysPower> queryPowerByUserAndParent(String userid, String parentid) throws Exception;
 
+	
+	
+	/**   
+	 * 根据用户查询顶级权限
+	 * @Title: queryTopPowerByUser   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param userid
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年7月29日 下午3:41:27
+	 * @return: List<SysPower>      
+	 * @throws   
+	 */  
+	public abstract List<SysPower> queryTopPowerByUser(String userid) throws Exception;
 }

@@ -1,13 +1,11 @@
 package org.duang.action.sys;
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-
-import net.sf.json.JSONArray;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
@@ -89,15 +87,6 @@ public class SysLoginAction extends BaseAction<SysUser>{
 	 * @throws   
 	 */  
 	public String login() {
-		System.out.println(getRequest().getParameter("name"));
-		System.out.println(getRequest().getParameter("password"));
-		System.out.println(getRequest().getParameter("validateCode"));
-		Enumeration<String> params = getRequest().getAttributeNames();
-		while(params.hasMoreElements()){
-			String key = params.nextElement();
-			String value = getRequest().getParameter(key);
-			System.err.println(key+"\t"+value);
-		}
 		msg = "用户名或密码输入错误";
 		if(DataUtils.isEmpty(entity.getName()) || DataUtils.isEmpty(entity.getPassword())) {
 			return LOGIN;
@@ -137,8 +126,42 @@ public class SysLoginAction extends BaseAction<SysUser>{
 			draw.drawImage(getRequest(), getResponse(null), "nl");
 		} catch (IOException e) {
 			e.printStackTrace();
+			LoggerUtils.error("系统用户登录ACTION，方法getValidateCode错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("系统用户登录ACTION，方法getValidateCode错误："+e.getLocalizedMessage(), this.getClass());
 		}
 		return null;
+	}
+
+
+	/**   
+	 * 验证验证码
+	 * @Title: checkValidateCode   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年7月29日 上午9:53:23
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void checkValidateCode(){
+		try {
+			String validateCode = getRequest().getParameter("validateCode");
+			if (DataUtils.notEmpty(validateCode)) {
+				String readVal = (String) SessionTools.getSessionValue(SessionTools.RANDOMCODEKEY);
+				if (readVal.equalsIgnoreCase(validateCode)) {
+					SessionTools.removeSession(SessionTools.RANDOMCODEKEY);
+					jsonObject.put("success", true);
+				}else{
+					jsonObject.put("success", false);
+				}
+			}else {
+				jsonObject.put("success", false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			printJsonResult();
+		}
 	}
 
 
@@ -176,13 +199,19 @@ public class SysLoginAction extends BaseAction<SysUser>{
 		SysUser user = SessionTools.getSessionSysUser();
 		if (user != null) {
 			try {
+				Map<SysPower, List<Map<String, Object>>> map = new HashMap<SysPower, List<Map<String,Object>>>();
 				List<SysPower> topMenuList = null;
 				if ("admin".equals(user.getName())) {//超级系统用户
 					topMenuList = powerService.queryEntity("parentId", "syspowers", null, org.hibernate.criterion.Order.asc("sortIndex"));
 				}else{
-					topMenuList = powerService.queryPowerByUserAndParent(user.getId(), "syspowers");
+					topMenuList = powerService.queryTopPowerByUser(user.getId());
 				}
-				ServletActionContext.getContext().put("topMenuList", topMenuList);
+				if (topMenuList != null) {
+					for (int i = 0; i < topMenuList.size(); i++) {
+						map.put(topMenuList.get(i), getSubMenu(user, topMenuList.get(i).getId()));
+					}
+				}
+				ServletActionContext.getContext().put("menulist", map);
 				return "left";
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -203,24 +232,22 @@ public class SysLoginAction extends BaseAction<SysUser>{
 	 * @param:   
 	 * @author 白攀    
 	 * @date 2016年7月28日 下午10:11:38
-	 * @return: void      
+	 * @return: List<Map<String, Object>>      
 	 * @throws   
 	 */  
-	public void getSubMenu() {
-		JSONArray json = new JSONArray();
+	private List<Map<String, Object>> getSubMenu(SysUser sysUser, String parentId) {
+		List<Map<String, Object>> listmap = new ArrayList<Map<String,Object>>();
 		try {
-			String powerId = getRequest().getParameter("powerId");
-			SysUser sysUser = SessionTools.getSessionSysUser();
-			if (sysUser != null && DataUtils.notEmpty(powerId)) {
-				List<SysPower> permitPowerList = powerService.queryPowerByUserAndParent(sysUser.getId(), powerId);
+			if (sysUser != null && DataUtils.notEmpty(parentId)) {
+				List<SysPower> permitPowerList = powerService.queryPowerByUserAndParent(sysUser.getId(), parentId);
 				if(permitPowerList != null && permitPowerList.size() > 0) {
-					for(SysPower sub : permitPowerList) {
+					for (int i = 0; i < permitPowerList.size(); i++) {
 						Map<String,Object> map = new HashMap<String,Object>();
-						map.put("id", sub.getId());
-						map.put("text", sub.getName());
-						map.put("iconCls", DataUtils.isEmpty(sub.getIcon()) ? "tree-icon" : sub.getIcon());
-						map.put("url", sub.getUrl());
-						json.add(map);
+						map.put("id", permitPowerList.get(i).getId());
+						map.put("name", permitPowerList.get(i).getName());
+						map.put("iconCls", DataUtils.isEmpty(permitPowerList.get(i).getIcon()) ? "icon-text_list_numbers" : permitPowerList.get(i).getIcon());
+						map.put("url", permitPowerList.get(i).getUrl());
+						listmap.add(map);
 					}
 				}
 			}
@@ -228,9 +255,8 @@ public class SysLoginAction extends BaseAction<SysUser>{
 			e.printStackTrace();
 			LoggerUtils.error("系统用户登录ACTION，方法getSubMenu错误："+e.getMessage(), this.getClass());
 			LoggerUtils.error("系统用户登录ACTION，方法getSubMenu错误："+e.getLocalizedMessage(), this.getClass());
-		} finally {
-			super.printJsonResult(json);
 		}
+		return listmap;
 	}
 
 }

@@ -39,7 +39,7 @@ function login() {
 		<c:choose>
 			<c:when test="${sessionScope.sysUser == null}">
 				<span class="loginInfo">
-					欢迎使用本系统，您还未登录 &nbsp;&nbsp;&nbsp;&nbsp;
+					<font font-size="15" style="color:rgb(72,139,209);" >欢迎使用本系统，您还未登录 &nbsp;&nbsp;&nbsp;&nbsp;</font>
 					<a class="easyui-menubutton m-btn l-btn l-btn-plain"
 					   onclick="login()"
 					   href="javascript:void(0);"> 
@@ -47,14 +47,13 @@ function login() {
 				</span>
 			</c:when>
 			<c:otherwise>
-				<span class="loginInfo">
-					登录用户：[${sessionScope.sysUser.name}]&nbsp;&nbsp;
-					角色：[${sessionScope.sysUser.sysRole.roleName}]
-					<a class="easyui-menubutton m-btn l-btn l-btn-plain"
-					   onclick="$.messager.confirm('注销','您确定要退出么?',function(r){if(r){logout()};});"
-					   href="javascript:void(0);"> 
-					   <strong style="color:rgb(80,80,80);font-weight:normal;" >注销 </strong></a> 
-				</span>
+					<span class="loginInfo">
+						<font font-size="15" style="color:rgb(72,139,209);" >用户：[${sessionScope.sysUser.name}]</font>&nbsp;&nbsp;&nbsp;&nbsp;
+						<font font-size="15" style="color:rgb(72,139,209);" >角色：[${sessionScope.sysUser.sysRole.roleName}]</font>&nbsp;&nbsp;&nbsp;&nbsp;
+					    <a onclick="$.messager.confirm('注销','您确定要退出么?',function(r){if(r){logout()};});"  href="javascript:void(0);"> 
+					   		<strong style="color:rgb(72,139,209);font-weight:normal;" >注销 </strong>
+					   	</a> 
+				   </span>
 			</c:otherwise>
 		</c:choose>
 

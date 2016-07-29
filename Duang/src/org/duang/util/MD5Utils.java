@@ -33,7 +33,7 @@ public class MD5Utils {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(md5("y32dro4eyu10rxwnedd4li82o00ooxgp"));
+		System.out.println(md5("777777"));
 	}
 
 }

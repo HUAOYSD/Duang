@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 
-<form id="PowerAddForm" style="margin-top:10px;" action="syspower!savePower.do" method="post" data-options="novalidate:true">
+<form id="PowerAddForm" style="" action="syspower!savePower.do" method="post" data-options="novalidate:true">
 	<table colspan=4 border="0" style="" cellspacing="8" cellpadding="5">
 		<tr>
 			<td align="right" style="width: 105px;">
@@ -31,11 +31,29 @@
 		</tr>
 		<tr>	
 			<td align="right" style="width: 105px;">
+				图标样式：
+			</td>
+			<td>
+				<input  name="icon" id="icon" style="width: 216px; height: 24px"
+					 class="easyui-validatebox" data-options="required:false" />
+			</td>
+		</tr>
+		<tr>	
+			<td align="right" style="width: 105px;">
 				序号：
 			</td>
 			<td>
 				<input  name="sortIndex" id="sortIndex" style="width: 216px; height: 24px"
 					 class="easyui-validatebox" data-options="required:true, missingMessage:'请填写序号！'" />
+			</td>
+		</tr>
+		<tr>	
+			<td align="right" style="width: 105px;">
+				描述：
+			</td>
+			<td>
+				<input  name="remark" id="remark" style="width: 216px; height: 24px"
+					 class="easyui-validatebox" data-options="required:false" />
 			</td>
 		</tr>
 	</table>

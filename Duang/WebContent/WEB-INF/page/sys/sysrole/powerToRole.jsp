@@ -21,6 +21,8 @@
 //clearFormVal("RoleAddForm");
 //clearFormVal("RoleEditForm");
 //clearFormVal("PowerToRoleForm");
+$('#addRoleView').dialog("destroy",true);
+$('#editRoleView').dialog("destroy",true);
 $("#powerTree").tree({
 		url:'syspower!getPowerTreeCheckbox.do',
 		checkbox:true,

@@ -17,6 +17,7 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.entity.SysRole;
 import org.duang.entity.SysUser;
 import org.duang.service.SysUserService;
 import org.duang.util.DataUtils;
@@ -116,9 +117,11 @@ public class SysUserAction extends BaseAction<SysUser>{
 				resultMap.put("sysUserName", user.getName());
 				resultMap.put("phone", user.getPhone());
 				resultMap.put("email", user.getEmail());
-				resultMap.put("roleName", user.getSysRole().getRoleName());
+				SysRole role = user.getSysRole();
+				resultMap.put("roleName", role==null?"未分配":role.getRoleName());
 				resultMap.put("updateDate", DateUtils.getTimeStamp(user.getUpdateTime()));
 				resultMap.put("sysUserId", user.getId());
+				resultMap.put("isnotdel", "admin".equals(user.getName()) ? true : false);
 				listMap.add(resultMap);
 			}
 			jsonObject.put("total", getPageUtil().getCountRecords());
@@ -150,7 +153,8 @@ public class SysUserAction extends BaseAction<SysUser>{
 			if (DataUtils.notEmpty(sysUserId)) {
 				entity = service.findById(sysUserId);
 				if(entity != null) {
-					jsonObject.put("sysRole.id", entity.getSysRole().getId());
+					SysRole role = entity.getSysRole();
+					jsonObject.put("sysRole.id", role==null?"":role.getId());
 					jsonObject.put("name", entity.getName());
 					jsonObject.put("password", entity.getPassword());
 					jsonObject.put("passwordRes", entity.getPassword());
@@ -298,8 +302,9 @@ public class SysUserAction extends BaseAction<SysUser>{
 	public void updatePassword() {
 		try{
 			if (DataUtils.notEmpty(entity.getId())) {
+				String pwd = entity.getPassword();
 				entity = service.findById(entity.getId());
-				entity.setPassword(MD5Utils.md5(entity.getPassword()));
+				entity.setPassword(MD5Utils.md5(pwd));
 				if (service.updateEntity(entity)) {
 					jsonObject.put("success", true);
 				}else{

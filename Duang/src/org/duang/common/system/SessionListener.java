@@ -1,6 +1,4 @@
 package org.duang.common.system;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
@@ -13,8 +11,6 @@ import javax.servlet.http.HttpSessionListener;
  * @author 白攀
  */
 public class SessionListener implements HttpSessionListener {  
-  
-    public static Map<String,HttpSession> userMap = new HashMap<String,HttpSession>();  
       
     private MySessionContext myc = MySessionContext.getInstance();  
   
@@ -23,7 +19,7 @@ public class SessionListener implements HttpSessionListener {
     }  
   
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {  
-        HttpSession session = httpSessionEvent.getSession();  
+         HttpSession session = httpSessionEvent.getSession();  
         myc.delSession(session);  
     }  
   
