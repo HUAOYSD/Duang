@@ -93,7 +93,6 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 		try{
 			entity = service.findById(id);
 			if (entity!=null){
-				getRequest().setAttribute("investPro", entity);
 				getRequest().setAttribute("edit", "edit");
 			} 
 		}catch(Exception e){

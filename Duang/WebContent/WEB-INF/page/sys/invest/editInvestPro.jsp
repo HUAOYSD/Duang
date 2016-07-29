@@ -126,7 +126,7 @@
 		$(function(){
 			if(isEdit=='edit'){
 				<%
-					SysInvestProduct investPro = (SysInvestProduct)request.getAttribute("investPro");
+					SysInvestProduct investPro = (SysInvestProduct)request.getAttribute("entity");
 				    Field[] field = investPro.getClass().getDeclaredFields(); // 获取实体类的所有属性，返回Field数组
 				    for (int j = 0; j < field.length; j++) { // 遍历所有属性
 		                String name = field[j].getName(); // 获取属性的名字
