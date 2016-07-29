@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+
 /**
  * 理财产品实体类
  * @ClassName:  SysInvestProduct   
@@ -17,13 +19,12 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "invest_product", catalog = "duang")
+@DynamicInsert(true)
 public class SysInvestProduct implements Serializable {
-
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 1L;
-	
 	private String id;
 	private String nameZh; //总名称
 	private String name; //名称
@@ -33,15 +34,15 @@ public class SysInvestProduct implements Serializable {
 	private String charge_ratio; //手续费比例率
 	private String title1; //标题1
 	private String title2; //标题2
-	private int min_deadline; //起投期限
-	private int min_money; //起投金额
-	private int refund_type;//还款方式
+	private String min_deadline; //起投期限
+	private String min_money; //起投金额
+	private String refund_type;//还款方式
 	
-	private int is_sell; //是否起售
-	private int is_lottery; //是否抽奖
-	private int is_red_envel; //是否红包
-	private int is_new_product;//是否新品
-	private int is_recommend; //推荐
+	private String is_sell; //是否起售
+	private String is_lottery; //是否抽奖
+	private String is_red_envel; //是否红包
+	private String is_new_product;//是否新品
+	private String is_recommend; //推荐
 	private String product_describe;//介绍
 	private String risk_control; //风险控制
 	private String details; //详细
@@ -59,7 +60,7 @@ public class SysInvestProduct implements Serializable {
 		this.nameZh = nameZh;
 	}
 	
-	public SysInvestProduct(String id, String nameZh, String name, String name_describe, String yield_describe, float yield, String charge_ratio, String title1, String title2, int min_deadline, int min_money, int refund_type, int is_sell, int is_lottery, int is_red_envel, int is_new_product, int is_recommend, String product_describe, String risk_control, String details, int isdelete, Timestamp createtime, Timestamp modifytime, String createuser, String modifyuser) {
+	public SysInvestProduct(String id, String nameZh, String name, String name_describe, String yield_describe, float yield, String charge_ratio, String title1, String title2, String min_deadline, String min_money, String refund_type, String is_sell, String is_lottery, String is_red_envel, String is_new_product, String is_recommend, String product_describe, String risk_control, String details, int isdelete, Timestamp createtime, Timestamp modifytime, String createuser, String modifyuser) {
 		this.id = id;
 		this.nameZh = nameZh;
 		this.name = name;
@@ -153,66 +154,66 @@ public class SysInvestProduct implements Serializable {
 	}
 	
 	@Column(name="min_deadline")
-	public int getMin_deadline() {
+	public String getMin_deadline() {
 		return min_deadline;
 	}
-	public void setMin_deadline(int min_deadline) {
+	public void setMin_deadline(String min_deadline) {
 		this.min_deadline = min_deadline;
 	}
 	
 	@Column(name="min_money")
-	public int getMin_money() {
+	public String getMin_money() {
 		return min_money;
 	}
-	public void setMin_money(int min_money) {
+	public void setMin_money(String min_money) {
 		this.min_money = min_money;
 	}
 	
 	@Column(name="refund_type")
-	public int getRefund_type() {
+	public String getRefund_type() {
 		return refund_type;
 	}
-	public void setRefund_type(int refund_type) {
+	public void setRefund_type(String refund_type) {
 		this.refund_type = refund_type;
 	}
 	
 	@Column(name="is_sell")
-	public int getIs_sell() {
+	public String getIs_sell() {
 		return is_sell;
 	}
-	public void setIs_sell(int is_sell) {
+	public void setIs_sell(String is_sell) {
 		this.is_sell = is_sell;
 	}
 	
 	@Column(name="is_lottery")
-	public int getIs_lottery() {
+	public String getIs_lottery() {
 		return is_lottery;
 	}
-	public void setIs_lottery(int is_lottery) {
+	public void setIs_lottery(String is_lottery) {
 		this.is_lottery = is_lottery;
 	}
 	
 	@Column(name="is_red_envel")
-	public int getIs_red_envel() {
+	public String getIs_red_envel() {
 		return is_red_envel;
 	}
-	public void setIs_red_envel(int is_red_envel) {
+	public void setIs_red_envel(String is_red_envel) {
 		this.is_red_envel = is_red_envel;
 	}
 	
 	@Column(name="is_new_product")
-	public int getIs_new_product() {
+	public String getIs_new_product() {
 		return is_new_product;
 	}
-	public void setIs_new_product(int is_new_product) {
+	public void setIs_new_product(String is_new_product) {
 		this.is_new_product = is_new_product;
 	}
 	
 	@Column(name="is_recommend")
-	public int getIs_recommend() {
+	public String getIs_recommend() {
 		return is_recommend;
 	}
-	public void setIs_recommend(int is_recommend) {
+	public void setIs_recommend(String is_recommend) {
 		this.is_recommend = is_recommend;
 	}
 	

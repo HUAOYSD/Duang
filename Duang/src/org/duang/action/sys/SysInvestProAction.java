@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -20,6 +21,7 @@ import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.SysInvestProduct;
 import org.duang.entity.SysPower;
+import org.duang.entity.SysUser;
 import org.duang.service.SysInvestProService;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
@@ -40,6 +42,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("sys")
 @Results(value={
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/invest/investProList.jsp"),
+		@Result(name="investPromanage", type="dispatcher", location="WEB-INF/page/sys/invest/investProManage.jsp"),
+		@Result(name="addInvestPro", type="dispatcher", location="WEB-INF/page/sys/invest/addInvestPro.jsp"),
+		@Result(name="editInvestPro", type="dispatcher", location="WEB-INF/page/sys/invest/editInvestPro.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
 public class SysInvestProAction extends BaseAction<SysInvestProduct>{
@@ -54,10 +59,178 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 		this.service = service;
 	}
 	
+	/**
+	 * 返回产品列表
+	 * 
+	 * @Title: investProList   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年7月27日 下午2:26:47
+	 * @return: String      
+	 * @throws
+	 */
 	public String  investProList(){
 		return ResultPath.LIST;
 	}
 	
+	public String addInvestPro(){
+		return "addInvestPro";
+	}
+	
+	/**
+	 * 跳转到编辑页面
+	 * @Title: editInvestPro   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年7月29日 下午1:57:03
+	 * @return: String      
+	 * @throws
+	 */
+	public String editInvestPro(){
+		String id = getRequest().getParameter("id");
+		try{
+			entity = service.findById(id);
+			if (entity!=null){
+				getRequest().setAttribute("investPro", entity);
+				getRequest().setAttribute("edit", "edit");
+			} 
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("理财产品ACTION修改错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("理财产品ACTION修改错误："+e.getLocalizedMessage(), this.getClass());
+		}
+		return "editInvestPro";
+	}
+	
+	public void saveInvestPro(){
+		if (entity!=null && DataUtils.notEmpty(entity.getNameZh())) {
+			try {
+				if(!DataUtils.notEmpty(entity.getId())){//为空，说明为添加，否则为编辑
+					//判断是否存在相同总名称的数据，如果存在则取消添加
+					if(service.count("name",entity.getNameZh())>0){
+						jsonObject.put("result",false);
+						jsonObject.put("msg","添加失败，已经存在相同名称的产品！");
+						printJsonResult();
+					}else{
+						entity.setId(DataUtils.randomUUID());
+						boolean issuccess = service.saveEntity(entity);
+						jsonObject = getJSONObject();
+						if (issuccess) {
+							jsonObject.put("result",true);
+							jsonObject.put("msg","添加理财产品成功");
+							printJsonResult();
+						}else{
+							jsonObject.put("result",false);
+							jsonObject.put("msg","添加理财产品失败，请联系管理员");
+							printJsonResult();
+						}
+					}
+				}else{
+					boolean issuccess = service.updateEntity(entity);
+					jsonObject = getJSONObject();
+					if (issuccess) {
+						jsonObject.put("result",true);
+						jsonObject.put("msg","修改理财产品成功");
+						printJsonResult();
+					}else{
+						jsonObject.put("result",false);
+						jsonObject.put("msg","修改理财产品失败，请联系管理员");
+						printJsonResult();
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				LoggerUtils.error("理财产品ACTION增加错误："+e.getMessage(), this.getClass());
+				LoggerUtils.error("理财产品ACTION增加错误："+e.getLocalizedMessage(), this.getClass());
+			}
+		}
+	}
+	
+	public void deleteInvestPro(){
+		String id  = getRequest().getParameter("id");
+		if (DataUtils.notEmpty(id)) {
+			try {
+				boolean issuccess = service.deleteEntity(id);
+				if (issuccess) {
+					jsonObject.put("result",true);
+					jsonObject.put("msg","删除理财产品成功");
+					printJsonResult();
+				}else{
+					jsonObject.put("result",false);
+					jsonObject.put("msg","删除理财产品失败，请联系管理员");
+					printJsonResult();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				LoggerUtils.error("理财产品ACTION删除错误："+e.getMessage(), this.getClass());
+				LoggerUtils.error("理财产品ACTION删除错误："+e.getLocalizedMessage(), this.getClass());
+			}
+		}
+	}
+	
+	/**
+	 * 获取第一页前50条数据
+	 * @Title: getJSONObject   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年7月28日 下午2:59:12
+	 * @return: JSONObject      
+	 * @throws
+	 */
+	public JSONObject getJSONObject(){
+		List<SysInvestProduct> list = null;
+		try {
+			PageUtil<SysInvestProduct> page = new PageUtil<SysInvestProduct>();
+			page.setPageRecords(50);
+			page.setCurrentPageNum(1);
+			condsUtils.addProperties(true, "isdelete");
+			condsUtils.concatValue(new Object[]{1,"ne"});
+			list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), page);
+			int count = service.count(condsUtils.getPropertys(), condsUtils.getValues());
+			if(list != null && list.size() > 0) {
+				jsonObject.put("rows", fillDataObject(list));
+				jsonObject.put("total", count);
+			}else{
+				jsonObject.put("rows", new JSONArray());
+				jsonObject.put("total", 0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("理财产品类型ACTION查询错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("理财产品类型ACTION查询错误："+e.getLocalizedMessage(), this.getClass());
+		}
+		return jsonObject;
+	}
+	
+	/**
+	 * 返回产品管理
+	 * @Title: investProManage   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年7月27日 下午2:27:10
+	 * @return: String      
+	 * @throws
+	 */
+	public String  investProManage(){
+		return "investPromanage";
+	}
+	
+	
+	
+	/**
+	 * 查询所有的产品，并用json方式返回
+	 * @Title: queryInvestPro   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年7月27日 下午2:27:37
+	 * @return: void      
+	 * @throws
+	 */
 	public void  queryInvestPro(){
 		List<SysInvestProduct> list = null;
 		try {
@@ -92,6 +265,7 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 			list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), page);
 			int count = service.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if(list != null && list.size() > 0) {
+				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObject(list));
 				jsonObject.put("total", count);
 				jsonObject.put("currPage", getPageUtil().getCurrentPageNum());
@@ -110,6 +284,18 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 			printJsonResult();
 		}
 	}
+	
+	/**
+	 * 重新组合产品集合
+	 * @Title: fillDataObject   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param list
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年7月27日 下午2:28:18
+	 * @return: List<Map<String,Object>>      
+	 * @throws
+	 */
 	public List<Map<String,Object>> fillDataObject(List<SysInvestProduct> list){
 		List<Map<String,Object>> listMapOj = new ArrayList<Map<String,Object>>();
 		for(SysInvestProduct pro : list){

@@ -20,7 +20,11 @@ $(function(){
 			{field:'name',title:'名称',width:100,halign:"center", align:"center",editor:'center'},
 			{field:'name_describe',title:'描述',width:200,halign:"center", align:"center",editor:'text'},
 			{field:'yield_describe',title:'收益率描述',width:250,halign:"center", align:"center",editor:'text'},
-			{field:'yield',title:'准确的收益率',width:100,halign:"center", align:"center",editor:'text'},
+			{field:'yield',title:'准确的收益率',width:100,halign:"center", align:"center",editor:'text',
+				formatter: function(value,row,index){
+					return value.toFixed(6);
+				}
+			},
 			{field:'charge_ratio',title:'手续费比例率',width:100,halign:"center", align:"center",editor:'text'},
 			{field:'title1',title:'标题1',width:100,halign:"center", align:"center",editor:'text'},
 			{field:'title2',title:'标题2',width:150,halign:"center", align:"center",editor:'text'},
@@ -53,24 +57,6 @@ $(function(){
 			editRow = undefined;
 		}
 	});
-	
-	//新增弹出框
-	$("#save").on("click", function(){
-		
-	});
-	//修改
-	$("#update").on("click", function(){
-		$parent.messager.alert("提示","update", "info");
-	});
-	//删除
-	$("#delete").on("click", function(){
-		//获取选择的行
-		var selectedRow = tableObj.datagrid('getSelected');
-		//获取选择行的索引值index
-		var selectedRowIndex = tableObj.datagrid('getRowIndex',selectedRow);
-		//从表格中移除index
-		tableObj.datagrid('deleteRow',selectedRowIndex);
-	});
 	$('#queryInvestProForm').form({    
 	    url:"investpro!queryInvestPro.do",    
 	    onSubmit: function(){    
@@ -78,7 +64,6 @@ $(function(){
 	    },    
 	    success:function(data){ 
 	    	data = JSON.parse(data);
-	    	console.info(data);
 	    	$('#tt').datagrid('loadData', {
 	    		"rows":data.rows,
 	    		"total":data.total,
