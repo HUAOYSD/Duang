@@ -7,7 +7,7 @@ $(function(){
 		idField:'id',
 		loadMsg : "正在加载，请稍后...",
 		url:"investpro!queryInvestPro.do",  
-		singleSelect:true, 
+		singleSelect:true,  
 		nowrap:true,
 		rownumbers:true,
 		pagination:true,
