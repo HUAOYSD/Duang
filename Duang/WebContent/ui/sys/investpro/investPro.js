@@ -90,23 +90,7 @@ $(function(){
 			{field:'product_describe',title:'介绍',width:500,halign:"center", align:"left" },
 			{field:'risk_control',title:'风险控制',width:500,halign:"center", align:"left" },
 			{field:'details',title:'更多详情',width:500,halign:"center", align:"left" }
-		]],
-		toolbar:'#tt_btn',
-		onDblClickRow:function(rowIndex, rowData){
-			//双击开启编辑行
-			if (editRow != undefined) {
-				tableObj.datagrid("endEdit", editRow);
-			}
-			if (editRow == undefined) {
-				tableObj.datagrid("beginEdit", rowIndex);
-				editRow = rowIndex;
-			}
-		},
-		onAfterEdit: function (rowIndex, rowData, changes) {
-			//endEdit该方法触发此事件
-			console.info(rowData);
-			editRow = undefined;
-		}
+		]]
 	});
 	$('#queryInvestProForm').form({    
 	    url:"investpro!queryInvestPro.do",    
