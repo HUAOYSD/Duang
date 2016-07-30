@@ -33,8 +33,14 @@
 					$("#role_edit_form").form('load', msg);
 				}
 			});
-	
-			$('#role_edit_form').form({    
+		});
+		
+		
+		$("#role_edit_form_submitbtn").on("click", function(){
+			if(!$("#role_edit_form").form('validate')){
+				return false;
+			}
+			$("#role_edit_form").form("submit",{    
 			    url:"sysrole!updateRole.do",
 			    onSubmit: function(){    
 	   				var name = encodeURI(encodeURI($.trim($("#sysRoleName").val())));  
@@ -47,8 +53,8 @@
 			 			 data:"name="+name+"&roleid="+id,
 			 			 success:function(data) {
 			 				 if(!data.success) {
-			 				 	 $.messager.progress('close');	
-			 					 $.messager.alert('错误','角色名称已经存在，请重新填写！','error');
+			 					 //$.messager.alert('错误','角色名称已经存在，请重新填写！','error');
+			 					 layer.msg("角色名称已经存在，请重新填写", {time: 1500});
 			 					 con = false;
 			 				 }else{
 				 				  var nodes = $('#powerTree').tree('getChecked');
@@ -60,31 +66,23 @@
 			 				 }
 			 			 }
 			 		 });
-			 		return con;
+			 		 if(con){
+			 			$.messager.progress();
+			 		 }
+			 		 return con;
 			    },   
 			    success: function(data) {
-			    	$.messager.progress('close');	
+			    	$.messager.progress("close");	
 					var result = eval('(' + data + ')');
 					if(result.success){
+						layer.msg("编辑成功", {time: 1500});
 						window.parent.reloadDataGrid();
 			    		parent.layer.closeAll();
 					}else{
-						layer.msg("添加失败", {
-			    			  icon: 5,
-			    			  time: 1500
-			    		});
+						layer.msg("编辑失败", {time: 1500});
 					}
 				} 
 			});
-		});
-		
-		
-		$("#role_edit_form_submitbtn").on("click", function(){
-			if(!$("#role_edit_form").form('validate')){
-				return false;
-			}
-			$.messager.progress();
-			$("#role_edit_form").submit();
 		});
 	</script>
 </body>

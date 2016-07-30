@@ -50,37 +50,6 @@
 					$("#user_edit_form").form('load',msg);
 				}
 			});
-			
-			$('#user_edit_form').form({    
-			    url:"sysuser!updateSysUser.do",
-			    onSubmit: function(){    
-	   				var name = encodeURI(encodeURI($.trim($("#sysUserName").val())));  
-		   			var con = true;
-			 		$.ajax({
-			 			 url:"sysuser!checkSysUserName.do",
-			 			 dataType:'json',
-			 			 async: false,
-			 			 data:"name="+name+"&userid=${param.sysUserId}",
-			 			 success:function(data) {
-			 				 if(!data.success) {
-			 					 $.messager.alert('错误','用户名称已经存在，请重新填写！','error');
-			 					 con = false;
-			 				 }
-			 			 }
-			 		 });
-			 		return con;
-			    },   
-			    success: function(data) {
-			    	$.messager.progress('close');	
-					var result = eval('(' + data + ')');
-					if(result.success){
-						window.parent.reloadDataGrid();
-			    		parent.layer.closeAll();
-					}else{
-						layer.msg("编辑失败", {time: 1500});
-					}
-				} 
-			});
 		});
 		
 		
@@ -107,8 +76,40 @@
 					return false;
 				}
 			}
-			$.messager.progress();
-			$("#user_edit_form").submit();
+			$("#user_edit_form").form("submit",{    
+			    url:"sysuser!updateSysUser.do",
+			    onSubmit: function(){    
+	   				var name = encodeURI(encodeURI($.trim($("#sysUserName").val())));  
+		   			var con = true;
+			 		$.ajax({
+			 			 url:"sysuser!checkSysUserName.do",
+			 			 dataType:'json',
+			 			 async: false,
+			 			 data:"name="+name+"&userid=${param.sysUserId}",
+			 			 success:function(data) {
+			 				 if(!data.success) {
+		  						 layer.msg("用户名称已经存在，请重新填写", {time: 1500});
+			 					 con = false;
+			 				 }
+			 			 }
+			 		 });
+			 		 if(con){
+			 			$.messager.progress();
+			 		 }
+			 		 return con;
+			    },   
+			    success: function(data) {
+			    	$.messager.progress("close");	
+					var result = eval('(' + data + ')');
+					if(result.success){
+						layer.msg("编辑成功", {time: 1500});
+						window.parent.reloadDataGrid();
+			    		parent.layer.closeAll();
+					}else{
+						layer.msg("编辑失败", {time: 1500});
+					}
+				} 
+			});
 		});
 	</script>
 </body>

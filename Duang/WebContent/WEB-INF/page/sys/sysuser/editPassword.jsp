@@ -49,8 +49,10 @@
 				onSubmit: function() {
 			 	},
 				success : function(data) {
+					$.messager.progress("close");
 					var result = eval('(' + data + ')');
 					if(result.success){
+						layer.msg("更新成功",{time:1500});
 			    		parent.layer.closeAll();
 					}else{
 						layer.msg("更新失败",{time:1500});

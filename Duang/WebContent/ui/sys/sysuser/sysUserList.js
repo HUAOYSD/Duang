@@ -177,7 +177,7 @@ function openResetPwdDialog(sysUserId) {
 $("#del_btn_userlist").on('click',function(){
 	var selectedRow = $("#userlist").datagrid('getSelected');
 	if(selectedRow==null){
-		layer.msg("请选择一个角色",{time:1000});
+		layer.msg("请选择一个角色",{time:1500});
 		return;
 	}
 	if(selectedRow.isnotdel){

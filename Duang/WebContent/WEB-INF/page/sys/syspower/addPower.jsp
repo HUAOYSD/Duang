@@ -38,9 +38,12 @@
     	</div>
 	</div>  
 	<script type="text/javascript">
-		$(function(){
-			$('#power_add_form').form({    
-			    url:"syspower!savePower.do",    
+		$("#power_add_form_submitbtn").on("click", function(){
+			if(!$("#power_add_form").form('validate')){
+				return false;
+			}
+			$("#power_add_form").form("submit",{
+			 	url:"syspower!savePower.do",    
 			    onSubmit: function(){    
 	   				var name = encodeURI(encodeURI($.trim($("#powerName").val())));  
 		   			var con = true;
@@ -51,40 +54,29 @@
 			 			 data:"name="+name,
 			 			 success:function(data) {
 			 				 if(!data.success) {
-			 				 	 $.messager.progress('close');	
-			 					 $.messager.alert('错误','权限名称已经存在！','error');
+			 					 //$.messager.alert('错误','权限名称已经存在！','error');
+			 					 layer.msg("权限名称已经存在", {time: 1500	});
 			 					 con = false;
 			 				 }
 			 			 }
-			 		 });
+			 		});
+			 		if(con){
+			 			$.messager.progress();
+			 		}
 			 		return con;
-			    },   
-			    success: function(data) {
-			    	$.messager.progress('close');	
+			    }, 
+				success: function(data) {
+			    	$.messager.progress("close");	
 					var result = eval('(' + data + ')');
 					if(result.success){
+						layer.msg("添加成功", {time: 1500	});
 						window.parent.reloadDataGrid();
 			    		parent.layer.closeAll();
 					}else{
-						layer.msg("添加失败", {
-			    			  icon: 5,
-			    			  time: 1500
-			    		});
+						layer.msg("添加失败", {time: 1500	});
 					}
-				} 
+				}	 	
 			});
-		});
-		
-		
-		/**
-		 * 保存权限
-		 */
-		$("#power_add_form_submitbtn").on("click", function(){
-			if(!$("#power_add_form").form('validate')){
-				return false;
-			}
-			$.messager.progress();
-			$("#power_add_form").submit();
 		});
 	</script>
 </body>

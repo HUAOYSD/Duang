@@ -129,7 +129,7 @@ $("#add_btn_rolelist").on("click",function(){
 $("#edit_btn_rolelist").on("click",function(){
 	var selectedRow = $("#rolelist").datagrid('getSelected');
 	if(selectedRow==null){
-		layer.msg("请选择一个角色",{time:1000});
+		layer.msg("请选择一个角色",{time:1500});
 		return;
 	}
 	var indexLayer = layer.open({
@@ -150,7 +150,7 @@ $("#edit_btn_rolelist").on("click",function(){
 $("#del_btn_rolelist").on('click',function(){
 	var selectedRow = $("#rolelist").datagrid('getSelected'); 
 	if(selectedRow==null){
-		layer.msg("请选择一个角色",{time:1000});
+		layer.msg("请选择一个角色",{time:1500});
 		return;
 	}
 	$.messager.confirm('确认','您确认想要删除记录吗？',function(r){    
@@ -166,14 +166,14 @@ $("#del_btn_rolelist").on('click',function(){
 	         			loadRoleList("sysrole!queryRolePageList.do");
 	         		} else {
 	         			if(result.msg.isNotNull()){
-	         				$.messager.alert("消息",result.msg,"info");
+	         				layer.msg(result.msg,{time:1500});
 	         			}else{
-	         				$.messager.alert("消息","删除失败","info");
+	         				layer.msg("删除失败",{time:1500});
 	         			}
 	         		}
 	         	}
 	        }); 
-	    	$.messager.progress('close');
+	    	$.messager.progress("close");
 	    }    
 	});
 });

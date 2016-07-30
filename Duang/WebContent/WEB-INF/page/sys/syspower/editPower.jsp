@@ -49,8 +49,14 @@
 					$("#power_edit_form").form('load',msg);
 				}
 			});
-	
-			$('#power_edit_form').form({    
+		});
+		
+		
+		$("#power_edit_form_submitbtn").on("click", function(){
+			if(!$("#power_edit_form").form('validate')){
+				return false;
+			}
+			$("#power_edit_form").form("submit",{    
 			    url:"syspower!updatePower.do",   
 			    onSubmit: function(){    
 	   				var name = encodeURI(encodeURI($.trim($("#powerName").val())));  
@@ -63,37 +69,29 @@
 			 			 data:"name="+name+"&powerid="+id,
 			 			 success:function(data) {
 			 				 if(!data.success) {
-			 				 	 $.messager.progress('close');	
-			 					 $.messager.alert('错误','权限名称已经存在！','error');
+			 					 //$.messager.alert('错误','权限名称已经存在！','error');
+								 layer.msg("权限名称已经存在", {time: 1500	});
 			 					 con = false;
 			 				 }
 			 			 }
 			 		 });
-			 		return con;
+			 		 if(con){
+			 			$.messager.progress();
+			 		 }
+			 		 return con;
 			    },   
 			    success: function(data) {
-			    	$.messager.progress('close');	
+			    	$.messager.progress("close");	
 					var result = eval('(' + data + ')');
 					if(result.success){
+						layer.msg("编辑成功", {time: 1500	});
 						window.parent.reloadDataGrid();
 			    		parent.layer.closeAll();
 					}else{
-						layer.msg("添加失败", {
-			    			  icon: 5,
-			    			  time: 1500
-			    		});
+						layer.msg("编辑失败", { time: 1500});
 					}
 				} 
 			});
-		});
-		
-		
-		$("#power_edit_form_submitbtn").on("click", function(){
-			if(!$("#power_edit_form").form('validate')){
-				return false;
-			}
-			$.messager.progress();
-			$("#power_edit_form").submit();
 		});
 	</script>
 </body>

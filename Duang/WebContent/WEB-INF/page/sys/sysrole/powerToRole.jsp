@@ -61,16 +61,17 @@
 						success : function(data) {
 							var result = eval('(' + data + ')');
 							if(result.success){
-								$.messager.alert("消息","操作成功","info");
+								layer.msg("操作成功", {time: 1500});
 								parent.layer.closeAll();
 							}else{
-								$.messager.alert("消息","更新失败","info");
+								$.messager.progress("close");
+								layer.msg("更新失败", {time: 1500});
 							}
 						}
 				   });
-				   $.messager.progress('close');
+				   $.messager.progress("close");
 			  }else{
-			  	   $.messager.alert("消息","未选择","info");
+			  	   layer.msg("请选择权限", {time: 1500});
 			  }
 		}
 	</script>

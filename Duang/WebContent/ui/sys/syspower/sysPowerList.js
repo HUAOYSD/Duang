@@ -113,7 +113,7 @@ $("#add_btn_powerlist").on("click",function(){
  */
 function editPowerView(powerId, isnotdel) {
 	if(isnotdel){
-		$.messager.alert("提示","顶级权限禁止操作","info");
+		layer.msg("顶级权限禁止操作",{time:1500});
 	}else{
 		var indexLayer = layer.open({
 			type: 2,
@@ -133,10 +133,11 @@ function editPowerView(powerId, isnotdel) {
  */
 function deletePower(powerId, isnotdel) {
 	if(isnotdel){
-		$.messager.alert("提示","顶级权限禁止操作","info");
+		layer.msg("顶级权限禁止操作",{time:1500});
 	}else{
 	  $.messager.confirm('确认','您确认想要删除记录吗？',function(r){    
 		 if (r){    
+			$.messager.progress();
 		    $.ajax({
 		    	type:"post",
 		    	url:"syspower!deletePower.do?powerId="+powerId,
@@ -145,11 +146,12 @@ function deletePower(powerId, isnotdel) {
 		    		if(result.success) {
 		    			loadPowerList("syspower!queryPoweTreeList.do");
 		    		} else {
-		    			$.messager.alert("消息","删除失败","info");
+		    			layer.msg("删除失败",{time:1500});
 		    		}
 		        }
 		     });   
-		   }    
+		     $.messager.progress("close");
+		   }
 	   });
 	}
 }
