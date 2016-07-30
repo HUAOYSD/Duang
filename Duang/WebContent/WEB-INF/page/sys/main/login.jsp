@@ -44,7 +44,7 @@
 	}
 	#register-info-describe{
 		position: absolute;
-		top: 250px;
+		top: 15%;
 		width:100%;
 		font-size:18px;
 		font-family: 'Microsoft YaHei' , Helvetica, Arial, sans-serif;
