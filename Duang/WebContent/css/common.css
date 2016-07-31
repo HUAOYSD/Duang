@@ -1,0 +1,41 @@
+.body {
+	border: 0;
+	padding: 3px;
+	overflow: hidden;
+}
+
+.add_edit_form_label{
+	display:inline-block;
+	width:100px;
+	text-align:right;
+}
+
+.operate_div_form{
+	padding:3px;
+	font-family:"Microsoft YaHei";
+	font-size:13px;
+}
+
+.operate_div_form form div{
+	margin-top:10px;
+}
+
+.operate_div_form form div input, .operate_div_form form div select{
+	width:215px;
+	height:25px;
+}
+
+.operate_div_form form div textarea{
+	width:215px;
+}
+
+.footer-oper{
+	background-color:#f2f2f2;
+	width:100%;
+	height:50px;
+    clear:both;    
+}
+
+.footer-oper .content-oper{
+	padding-top:8px;
+}

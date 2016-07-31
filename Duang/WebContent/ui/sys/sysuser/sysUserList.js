@@ -2,6 +2,8 @@
  * 初始化
  */
 $(function() {
+	$('#edit_btn_userlist').linkbutton('disable');
+	$('#del_btn_userlist').linkbutton('disable');
 	loadUserList("sysuser!queryUserList.do");
 });
 
@@ -12,28 +14,34 @@ $(function() {
  * @return {TypeName} 
  */
 function loadUserList(url){
-	$('#sysUserList').datagrid({
-			width : "auto",
-			height : "auto",
-			nowrap : true,
+	$('#userlist').datagrid({
+			height:$("#body_userlist").height()-5,
+			width:$("#body_userlist").width(),
+			loadMsg : "正在加载，请稍后...",
+			singleSelect:true, 
+			nowrap:true,
+			rownumbers:true,
+			pagination:true,
+			pageSize:50,
+			pageList:[50,100,150,200,250],
+			sortOrder:'desc',
+			toolbar:'#tt_toolbar_userlist',
+			method:'post',
 			autoRowHeight : false,
-			striped : true,
-			fit : true,
 			border : false,
-			collapsible : true,
-			method:'get',
 			url :url,
 			sortName : "sysUserName",
+			fitColumns : true,
 			sortOrder : "desc",
 			remoteSort : false,
 			idField : "sysUserId",
-			pageSize : 15,
-			pageList : [10,15,20,30],
-			rownumbers : true,
-			fitColumns : true,
-			pagination : true,
-			rownumbers : true,
+			rowStyler: function(index,row){
+				//			if ((index % 2) != 0){
+				//				return 'background-color:rgb(212,233,255);color:#000000;font-weight:normal;';
+				//			}
+			},
 			columns : [ [
+			        {field:'sysUserId',checkbox:true},
 					{
 						field : "sysUserName",
 						title : "用户名",
@@ -59,13 +67,6 @@ function loadUserList(url){
 						align : "center"
 					},
 					{
-						field : "sysUserId",
-						title : "用户Id",
-						hidden : true, 
-						width : $(this).width() * 0.1,
-						align : "center"
-					},
-					{
 						field : "updateDate",
 						title : "更新时间",
 						width : $(this).width() * 0.1,
@@ -85,98 +86,120 @@ function loadUserList(url){
 						rowspan :2,
 		           	  	formatter:function(value,rowData,index){
 		           	  			var html="";
-		           				html += "<a href='javascript:;' onclick = 'javascript:deleteSysUser(" +"&quot;"+ rowData.sysUserId +"&quot,"+rowData.isnotdel+");'"+
-		           						"style=\"color:rgb(51,102,153);text-decoration:none;\" " +"onmouseover=\"javascript:this.style.color='rgb(255,102,0)';\""+
-					           	  		"onmouseout=\"javascript:this.style.color='rgb(51,102,153)';\">[删除]</a>&nbsp;&nbsp;&nbsp;";
-		           				html += "<a href='javascript:;' onclick = 'javascript:editSysUserView(" +"&quot;"+ rowData.sysUserId +"&quot"+");'" +
-		           						"style=\"color:rgb(51,102,153);text-decoration:none;\" " +"onmouseover=\"javascript:this.style.color='rgb(255,102,0)';\""+
-					           	  		"onmouseout=\"javascript:this.style.color='rgb(51,102,153)';\">[编辑]</a>&nbsp;&nbsp;&nbsp;";
+		           				//html += "<a href='javascript:;' onclick = 'javascript:deleteSysUser(" +"&quot;"+ rowData.sysUserId +"&quot,"+rowData.isnotdel+");'"+
+		           				//		"style=\"color:rgb(51,102,153);text-decoration:none;\" " +"onmouseover=\"javascript:this.style.color='rgb(255,102,0)';\""+
+					           	//  		"onmouseout=\"javascript:this.style.color='rgb(51,102,153)';\">[删除]</a>&nbsp;&nbsp;&nbsp;";
+		           				//html += "<a href='javascript:;' onclick = 'javascript:editSysUserView(" +"&quot;"+ rowData.sysUserId +"&quot"+");'" +
+		           				//		"style=\"color:rgb(51,102,153);text-decoration:none;\" " +"onmouseover=\"javascript:this.style.color='rgb(255,102,0)';\""+
+					           	//  		"onmouseout=\"javascript:this.style.color='rgb(51,102,153)';\">[编辑]</a>&nbsp;&nbsp;&nbsp;";
 		           				html += "<a href='javascript:;' onclick = 'javascript:openResetPwdDialog(" +"&quot;"+ rowData.sysUserId +"&quot"+");'" +
            								"style=\"color:rgb(51,102,153);text-decoration:none;\" " +"onmouseover=\"javascript:this.style.color='rgb(255,102,0)';\""+
            								"onmouseout=\"javascript:this.style.color='rgb(51,102,153)';\">[重置密码]</a>&nbsp;&nbsp;&nbsp;";
 		           				return html;  
 		                }
 					} 
-					] ]
-			
+			] ],
+			onSelect:function(rowIndex, rowData){
+				$('#edit_btn_userlist').linkbutton('enable');
+				$('#del_btn_userlist').linkbutton('enable');
+			},
+			onUnselect:function(rowIndex, rowData){
+				$('#edit_btn_userlist').linkbutton('disable');
+				$('#del_btn_userlist').linkbutton('disable');
+			}
 		});
 }
 
-
 /**
- * 弹出添加用户窗口
-  */
-function openAddSysUserView() {
-	$('#addSysUserView').dialog({
-		cache: false,
-		width:450,
-		height:435,
-		title:"添加用户",
-		modal:true,
-		href:'sysuser!openDialog.do?path=addSysUserView'
-	});
-	$('#addSysUserView').dialog('open');
+ * 刷新数据
+ */
+function reloadDataGrid(){
+	loadUserList("sysuser!queryUserList.do");
 }
- 
 
 /**
- * 打开重置密码页面
+ * 打开用户添加信息页面
  * @param {Object} userId
  */
-function openResetPwdDialog(sysUserId) {
-	$('#editPasswordView').dialog({
-		cache: false,
-		width:430,
-		height:200,
-		title:"重置密码",
-		modal:true,
-		href:'sysuser!openDialog.do?sysUserId='+sysUserId+'&path=editPassword'
-	});	
-	$('#editPasswordView').dialog('open');
-};
+$("#add_btn_userlist").on("click",function(){
+	var indexLayer = layer.open({
+		type: 2,
+		title: '添加用户',
+		shadeClose: true,
+		shade: 0.8,
+		area: ['470px', '485px'],
+		content: 'sysuser!openDialog.do?path=addSysUserView'
+	});  
+});
 
 
 /**
  * 打开用户详细信息页面
  * @param {Object} userId
  */
-function editSysUserView(sysUserId) {
-	$('#editSysUserView').dialog({
-		cache: false,
-		width:450,
-		height:410,
-		title:"编辑用户信息",
-		modal:true,
-		href:'sysuser!openDialog.do?sysUserId='+sysUserId+'&path=editSysUserView'
-	});	
-	$('#editSysUserView').dialog('open');
+$("#edit_btn_userlist").on("click",function(){
+	var selectedRow = $("#userlist").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一个角色",{time:1000});
+		return;
+	}
+	var indexLayer = layer.open({
+		type: 2,
+		title: '编辑用户信息',
+		shadeClose: true,
+		shade: 0.8,
+		area: ['470px', '422px'],
+		content: 'sysuser!openDialog.do?sysUserId='+selectedRow.sysUserId+'&path=editSysUserView'
+	}); 
+});
+
+
+/**
+ * 打开重置密码页面
+ * @param {Object} userId
+ */
+function openResetPwdDialog(sysUserId) {
+	var indexLayer = layer.open({
+		type: 2,
+		title: '重置密码',
+		shadeClose: true,
+		shade: 0.8,
+		area: ['470px', '205px'],
+		content: 'sysuser!openDialog.do?sysUserId='+sysUserId+'&path=editPassword'
+	});
 };
 
 
 /**
  * 删除用户
- * @param {Object} userId
+ * @param {Object} powerId
  */
-function deleteSysUser(sysUserId, isnotdel) {
-	if(isnotdel){
-		alert("超级用户禁止操作");
+$("#del_btn_userlist").on('click',function(){
+	var selectedRow = $("#userlist").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一个角色",{time:1500});
+		return;
+	}
+	if(selectedRow.isnotdel){
+		layer.msg("超级用户禁止操作",{time:1500});
 	}else{
 		$.messager.confirm('确认','您确认想要删除记录吗？',function(r){    
 		    if (r){    
 		        $.ajax({
 		        	type:"post",
-		        	url:"sysuser!deleteUser.do?sysUserId="+sysUserId,
+		        	url:"sysuser!deleteUser.do?sysUserId="+selectedRow.sysUserId,
 		        	success:function(msg) {
 		        		var result = eval('('+msg+')');
 		        		if(result.success) {
 		        			loadUserList("sysuser!queryUserList.do");;
-		        			$.messager.alert("消息","删除成功","info");
+		        			layer.msg("删除成功",{time:1500});
 		        		} else {
-		        			$.messager.alert("消息","删除失败","info");
+		        			layer.msg("删除失败",{time:1500});
 		        		}
 		        	}
 		        });   
 		    }    
 		});
 	}
-}
+});
+

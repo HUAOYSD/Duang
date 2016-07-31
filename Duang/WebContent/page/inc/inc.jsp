@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/home.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/common.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/left.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/js/easyui/themes/gray/easyui.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath( )%>/js/easyui/themes/icon.css" />
