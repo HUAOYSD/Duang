@@ -25,7 +25,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 
 	private SysInvestMemberDao dao;
 
-	@Resource(name="sysinvestprodao")
+	@Resource(name="sysinvestmemberdao")
 	public void setDao(SysInvestMemberDao dao) {
 		this.dao = dao;
 	}

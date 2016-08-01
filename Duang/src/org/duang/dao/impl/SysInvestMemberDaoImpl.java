@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
  * @author LiYonghui
  * @date 2016年7月26日 下午3:23:04      
  */  
-@Repository("sysinvestprodao")
+@Repository("sysinvestmemberdao")
 public class SysInvestMemberDaoImpl extends BaseDao<SysInvestMember> implements SysInvestMemberDao{
 
 
