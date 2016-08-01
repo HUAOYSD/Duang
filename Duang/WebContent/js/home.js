@@ -18,8 +18,6 @@ $(function(){
 		$('#conditon').toggle(80);
 		setTimeout(domresize,100);//条件隐藏，改变表格高度
 	});	
-	
-	
 });
 
 $(function() {

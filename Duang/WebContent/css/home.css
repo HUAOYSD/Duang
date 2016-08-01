@@ -46,10 +46,36 @@ a:hover {
 	padding: 3px;
 	overflow: hidden;
 }
+.body {
+	border: 0;
+	padding: 3px;
+	overflow: hidden;
+}
+#invest_member_body {
+	border: 0;
+	padding: 3px;
+	overflow: hidden;
+}
 #search_area {
 	margin-bottom: 3px;
 	border: 1px solid #99BBE8;
 	background-color: #EFEFEF;
+}
+.search_area {
+	margin-bottom: 3px;
+	border: 1px solid #99BBE8;
+	background-color: #EFEFEF;
+}
+.openOrClose {
+	display: block;
+	cursor: pointer;
+	background: url(../images/open.jpg) 0 0 no-repeat;
+	margin: 0px auto;
+	padding: 0px;
+	width: 50px;
+	height: 5px;
+	overflow: hidden;
+	text-indent: -999px;
 }
 #openOrClose {
 	display: block;
@@ -152,6 +178,9 @@ a:hover {
 #conditon{
 	overflow:hidden;
 }
+.conditon{
+	overflow:hidden;
+}
 .icon {
     padding-left: 18px;
     display: inline-block;
@@ -168,7 +197,10 @@ a:hover {
 	margin-top:10px;
 	margin-left:20px;
 }
-
+.conditon{
+	margin-top:10px;
+	margin-left:20px;
+}
 #investPro_add_contans{
 	padding:10px;
 	font-family:"Microsoft YaHei";

@@ -1,57 +1,38 @@
 var tableObj;
 var editRow = undefined; //定义全局变量：当前编辑的行
 $(function(){
+	//隐藏显示查询条件区域
+	$('#invest_member_open_close').on("click",function(){
+		$('#invest_memeber_conditon').toggle(80);
+		setTimeout(domresize,100);//条件隐藏，改变表格高度
+	});	
 	//表格初始化
-	tableObj = $("#tt").datagrid({
-		height:$("#body").height()-$('#search_area').height()-5,
-		width:$("#body").width(),
+	tableObj = $("#invest_memeber_table").datagrid({
+		height:$("#invest_member_body").height()-$('#invest_member_search_area').height()-5,
+		width:$("#invest_member_body").width(),
 		idField:'id',
 		loadMsg : "正在加载，请稍后...",
-		url:"investpro!queryInvestPro.do",  
+		url:"investmember!queryInvestMember.do",  
 		singleSelect:true,  
 		nowrap:true,
 		rownumbers:true,
 		pagination:true,
 		fitColumns:false,
-		pageSize:10,
-		pageList:[10,20,30,40,50],
+		pageSize:50,
+		pageList:[50,80,100,150,200],
 		sortOrder:'desc',
 		columns:[[
-			{field:'nameZh',title:'总名称',width:100,halign:"center", align:"center"},
-			{field:'name',title:'名称',width:100,halign:"center", align:"center",editor:'center'},
-			{field:'name_describe',title:'描述',width:200,halign:"center", align:"center" },
-			{field:'yield_describe',title:'收益率描述',width:250,halign:"center", align:"center" },
-			{field:'yield',title:'准确的收益率',width:100,halign:"center", align:"center" ,
-				formatter: function(value,row,index){
-					return value.toFixed(6);
-				}
-			},
-			{field:'charge_ratio',title:'手续费比例率',width:100,halign:"center", align:"center" },
-			{field:'title1',title:'标题1',width:100,halign:"center", align:"center" },
-			{field:'title2',title:'标题2',width:150,halign:"center", align:"center" },
-			{field:'min_deadline',title:'起投期限',width:100,halign:"center", align:"center" },
-			{field:'min_money',title:'起投金额',width:100,halign:"center", align:"center" },
-			{field:'refund_type',title:'还款方式',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==1){
-						return "等额本息";
-					}else if(value==2){
-						return "一次性还款";
-					}else if(value==3){
-						return "先息后本";
-					}
-				}
-			},
-			{field:'is_sell',title:'是否起售',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==1){
-						return "起售";
-					}else{
-						return "停售";
-					}
-				}
-			},
-			{field:'is_lottery',title:'是否抽奖',width:100,halign:"center", align:"center",
+			{field:'nameZh',title:'登录名',width:100,halign:"center", align:"center"},
+			{field:'name',title:'真实姓名',width:100,halign:"center", align:"center",editor:'center'},
+			{field:'name_describe',title:'昵称',width:100,halign:"center", align:"center" },
+			{field:'yield_describe',title:'投资金额',width:100,halign:"center", align:"center" },
+			{field:'yield',title:'投资中金额',width:100,halign:"center", align:"center"},
+			{field:'charge_ratio',title:'可用余额',width:100,halign:"center", align:"center" },
+			{field:'title1',title:'账面总金额',width:100,halign:"center", align:"center" },
+			{field:'title2',title:'冻结余额',width:150,halign:"center", align:"center" },
+			{field:'min_deadline',title:'未冻结余额',width:100,halign:"center", align:"center" },
+			{field:'min_money',title:'可用积分',width:100,halign:"center", align:"center" },
+			{field:'refund_type',title:'是否为金账户',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
 						return "是";
@@ -60,7 +41,18 @@ $(function(){
 					}
 				}
 			},
-			{field:'is_red_envel',title:'是否红包',width:100,halign:"center", align:"center",
+			{field:'is_sell',title:'活动时间',width:100,halign:"center", align:"center"},
+			{field:'is_lottery',title:'契约用户',width:100,halign:"center", align:"center",
+				formatter: function(value,row,index){
+					if(value==1){
+						return "允许";
+					}else{
+						return "不允许";
+					}
+				}
+			},
+			{field:'is_red_envel',title:'开户日期',width:100,halign:"center", align:"center"},
+			{field:'is_new_product',title:'允许上线',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
 						return "是";
@@ -69,27 +61,19 @@ $(function(){
 					}
 				}
 			},
-			{field:'is_new_product',title:'是否新品',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==1){
-						return "是";
-					}else{
-						return "否";
-					}
-				}
-			},
-			{field:'is_recommend',title:'推荐',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==1){
-						return "是";
-					}else{
-						return "否";
-					}
-				}
-			},
-			{field:'product_describe',title:'介绍',width:500,halign:"center", align:"left" },
-			{field:'risk_control',title:'风险控制',width:500,halign:"center", align:"left" },
-			{field:'details',title:'更多详情',width:500,halign:"center", align:"left" }
+			{field:'is_recommend',title:'身份证号',width:100,halign:"center", align:"center"},
+			{field:'product_describe',title:'手机号',width:100,halign:"center", align:"center" },
+			{field:'risk_control',title:'银行卡号',width:100,halign:"center", align:"center" },
+			{field:'details',title:'所属银行',width:100,halign:"center", align:"center" },
+			{field:'risk_control',title:'银行卡号',width:100,halign:"center", align:"center" },
+			{field:'risk_control',title:'性别',width:100,halign:"center", align:"center" },
+			{field:'risk_control',title:'年龄',width:100,halign:"center", align:"center" },
+			{field:'risk_control',title:'头像',width:200,halign:"center", align:"center" },
+			{field:'risk_control',title:'身份证前照',width:200,halign:"center", align:"center" },
+			{field:'risk_control',title:'身份证后照',width:200,halign:"center", align:"center" },
+			{field:'risk_control',title:'客户经理ID',width:100,halign:"center", align:"center" },
+			{field:'risk_control',title:'客户经理姓名',width:100,halign:"center", align:"center" },
+			{field:'risk_control',title:'邮箱',width:100,halign:"center", align:"center" }
 		]]
 	});
 	$('#queryInvestProForm').form({    
@@ -115,9 +99,9 @@ window.onresize = function(){
 };
 //改变表格宽高
 function domresize(){
-	$('#tt').datagrid('resize',{  
-		height:$("#body").height()-$('#search_area').height()-5,
-		width:$("#body").width()
+	$('#invest_memeber_table').datagrid('resize',{  
+		height:$("#invest_member_body").height()-$('#invest_member_search_area').height()-5,
+		width:$("#invest_member_body").width()
 	});
 }
 	

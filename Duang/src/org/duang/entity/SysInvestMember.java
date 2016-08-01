@@ -20,21 +20,23 @@ import javax.persistence.Table;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "investmember", catalog = "duang")
+@Table(name = "invest_member", catalog = "duang")
 public class SysInvestMember implements java.io.Serializable {
 	
 	private String id;
-	private SysUser user_id;
+	private SysMemberInfo memberinfo_id;
 	private String idCard;
 	private String bank_card;
-	private Date bank;
-	private Date user_image;
+	private String bank;
+	private String user_image;
 	private String idcard_img1;
 	private String idcard_img2;
 	private String cust_manager_id;
 	private String manager_name;
-
-	// Constructors
+    private String is_contract;
+    private String memberinfo_ids;
+    
+    
 
 	/** default constructor */
 	public SysInvestMember() {
@@ -45,14 +47,21 @@ public class SysInvestMember implements java.io.Serializable {
 		this.id = id;
 	}
 
-	
+	 @Column(name = "memberinfo_id", length = 36)
+	public String getMemberinfo_ids() {
+		return memberinfo_ids;
+	}
 
-	public SysInvestMember(String id, SysUser user_id, String idCard,
-			String bank_card, Date bank, Date user_image, String idcard_img1,
+	public void setMemberinfo_ids(String memberinfo_ids) {
+		this.memberinfo_ids = memberinfo_ids;
+	}
+
+	public SysInvestMember(String id, SysMemberInfo memberinfo_id, String idCard,
+			String bank_card, String bank, String user_image, String idcard_img1,
 			String idcard_img2, String cust_manager_id, String manager_name) {
 		super();
 		this.id = id;
-		this.user_id = user_id;
+		this.memberinfo_id = memberinfo_id;
 		this.idCard = idCard;
 		this.bank_card = bank_card;
 		this.bank = bank;
@@ -74,14 +83,23 @@ public class SysInvestMember implements java.io.Serializable {
 		this.id = id;
 	}
 	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id")
-	public SysUser getUser_id() {
-		return user_id;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "memberinfo_id")
+	public SysMemberInfo getMemberinfo_id() {
+		return memberinfo_id;
 	}
 
-	public void setUser_id(SysUser user_id) {
-		this.user_id = user_id;
+	public void setMemberinfo_id(SysMemberInfo memberinfo_id) {
+		this.memberinfo_id = memberinfo_id;
+	}
+
+	@Column(name = "is_contract", length = 255)
+	public String getIs_contract() {
+		return is_contract;
+	}
+
+	public void setIs_contract(String is_contract) {
+		this.is_contract = is_contract;
 	}
 
 	@Column(name = "idCard", length = 255)
@@ -103,20 +121,20 @@ public class SysInvestMember implements java.io.Serializable {
 	}
 
 	@Column(name = "bank", length = 255)
-	public Date getBank() {
+	public String getBank() {
 		return bank;
 	}
 
-	public void setBank(Date bank) {
+	public void setBank(String bank) {
 		this.bank = bank;
 	}
 
 	@Column(name = "user_image", length = 255)
-	public Date getUser_image() {
+	public String getUser_image() {
 		return user_image;
 	}
 
-	public void setUser_image(Date user_image) {
+	public void setUser_image(String user_image) {
 		this.user_image = user_image;
 	}
 
