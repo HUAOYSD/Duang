@@ -1,8 +1,7 @@
 package org.duang.dao; 
 
 import org.duang.baseInterface.CommonInterface;
-import org.duang.entity.SysInvestMember;
-import org.duang.entity.SysMemberInfo;
+import org.duang.entity.MemberInfo;
 /**   
  * 公共用户信息的dao接口
  * @ClassName:  SysMemberInfoDao   
@@ -10,7 +9,7 @@ import org.duang.entity.SysMemberInfo;
  * @author LiYonghui
  * @date 2016年7月26日 下午3:51:51      
  */  
-public interface SysMemberInfoDao extends CommonInterface<SysMemberInfo>  {
+public interface SysMemberInfoDao extends CommonInterface<MemberInfo>  {
 
 }
 

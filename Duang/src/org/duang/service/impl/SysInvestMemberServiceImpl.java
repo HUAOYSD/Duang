@@ -115,7 +115,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public SysInvestMember findById(Serializable id) throws Exception{
+	public InvestMember findById(Serializable id) throws Exception{
 		return dao.findById(id);
 	}
 

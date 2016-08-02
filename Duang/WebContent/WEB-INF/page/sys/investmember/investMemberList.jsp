@@ -10,21 +10,21 @@
 				  <table border="0">
 					<tr height="35px">
 					  	<td>&nbsp;&nbsp;<span class="investPro-search">登录名：</span></td>
-					  	<td ><input  name="fk_memberinfo_id.name"/></td>
+					  	<td ><input  name="memberInfo.name"/></td>
 					 	<td>&nbsp;<span class="investPro-search">真实姓名：</span></td>
-					  	<td><input  name="fk_memberinfo_id.real_name"/></td>
+					  	<td><input  name="memberInfo.realName"/></td>
 					  	<td>&nbsp;<span class="investPro-search">手机号码：</span></td>
-					  	<td><input  name="fk_memberinfo_id.phone"/></td>
+					  	<td><input  name="memberInfo.phone"/></td>
 					  	<td>&nbsp;<span class="investPro-search">客户经理ID：</span></td>
-					  	<td><input  name="cust_manager_id"/></td>
+					  	<td><input  name="custManagerId"/></td>
 					</tr>
 					<tr height="35px">
 						<td>&nbsp;&nbsp;<span class="investPro-search">客户经理姓名：</span></td>
-					  	<td><input  name="manager_name"/></td>
+					  	<td><input  name="managerName"/></td>
 					  	<td>&nbsp;<span class="investPro-search">客户类型：</span></td>
-					  	<td><input  name="fk_memberinfo_id.type"/></td>
+					  	<td><input  name="memberInfo.type"/></td>
 					  	<td>&nbsp;<span class="investPro-search">契约用户：</span></td>
-					  	<td><input  name="is_contract"/></td>
+					  	<td><input  name="isContract"/></td>
 					  	<td>
 							  &nbsp;&nbsp;
 							  <a  id="submit_invest_memeber_list_btn" class="easyui-linkbutton my-search-button" iconCls="icon-2012092109942" plain="true">查询</a>

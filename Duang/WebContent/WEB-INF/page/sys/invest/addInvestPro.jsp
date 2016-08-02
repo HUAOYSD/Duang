@@ -1,4 +1,4 @@
-<%@page import="org.duang.entity.SysInvestProduct"%>
+<%@page import="org.duang.entity.InvestProduct"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% String path = request.getContextPath();%>
 <%@ include file="/page/inc/inc.jsp"%>

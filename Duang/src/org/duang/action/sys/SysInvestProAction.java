@@ -19,9 +19,7 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.SysInvestProduct;
-import org.duang.entity.SysPower;
-import org.duang.entity.SysUser;
+import org.duang.entity.InvestProduct;
 import org.duang.service.SysInvestProService;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
@@ -47,7 +45,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name="editInvestPro", type="dispatcher", location="WEB-INF/page/sys/invest/editInvestPro.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
-public class SysInvestProAction extends BaseAction<SysInvestProduct>{
+public class SysInvestProAction extends BaseAction<InvestProduct>{
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
@@ -200,9 +198,9 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 	 * @throws
 	 */
 	public JSONObject getJSONObject(){
-		List<SysInvestProduct> list = null;
+		List<InvestProduct> list = null;
 		try {
-			PageUtil<SysInvestProduct> page = new PageUtil<SysInvestProduct>();
+			PageUtil<InvestProduct> page = new PageUtil<InvestProduct>();
 			page.setPageRecords(50);
 			page.setCurrentPageNum(1);
 			condsUtils.addProperties(true, "isdelete");
@@ -251,7 +249,7 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 	 * @throws
 	 */
 	public void  queryInvestPro(){
-		List<SysInvestProduct> list = null;
+		List<InvestProduct> list = null;
 		try {
 			
 			String name = super.getRequest().getParameter("name");
@@ -305,37 +303,37 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 	 * @return: List<Map<String,Object>>      
 	 * @throws
 	 */
-	public List<Map<String,Object>> fillDataObject(List<SysInvestProduct> list){
+	public List<Map<String,Object>> fillDataObject(List<InvestProduct> list){
 		List<Map<String,Object>> listMapOj = new ArrayList<Map<String,Object>>();
-		for(SysInvestProduct pro : list){
+		for(InvestProduct pro : list){
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("id", pro.getId());
 			map.put("name", pro.getName());
 			map.put("nameZh", pro.getNameZh());
-			map.put("name_describe", pro.getName_describe());
-			map.put("charge_ratio", pro.getCharge_ratio());
+			map.put("name_describe", pro.getNameDescribe());
+			map.put("charge_ratio", pro.getChargeRatio());
 			map.put("createtime", pro.getCreatetime());
 			map.put("createuser", pro.getCreateuser());
 			map.put("details", pro.getDetails());
-			map.put("is_lottery", pro.getIs_lottery());
-			map.put("is_new_product", pro.getIs_new_product());
-			map.put("is_recommend", pro.getIs_recommend());
+			map.put("is_lottery", pro.getIsLottery());
+			map.put("is_new_product", pro.getIsNewProduct());
+			map.put("is_recommend", pro.getIsRecommend());
 			
-			map.put("is_red_envel", pro.getIs_red_envel());
-			map.put("is_sell", pro.getIs_sell());
+			map.put("is_red_envel", pro.getIsRedEnvel());
+			map.put("is_sell", pro.getIsSell());
 			map.put("isdelete", pro.getIsdelete());
-			map.put("min_deadline", pro.getMin_deadline());
-			map.put("min_money", pro.getMin_money());
+			map.put("min_deadline", pro.getMinDeadline());
+			map.put("min_money", pro.getMinMoney());
 			map.put("modifytime", pro.getModifytime());
 			map.put("modifyuser", pro.getModifyuser());
 			
-			map.put("product_describe", pro.getProduct_describe());
-			map.put("refund_type", pro.getRefund_type());
-			map.put("risk_control", pro.getRisk_control());
+			map.put("product_describe", pro.getProductDescribe());
+			map.put("refund_type", pro.getRefundType());
+			map.put("risk_control", pro.getRiskControl());
 			map.put("title1", pro.getTitle1());
 			map.put("title2", pro.getTitle2());
 			map.put("yield", pro.getYield());
-			map.put("yield_describe", pro.getYield_describe());
+			map.put("yield_describe", pro.getYieldDescribe());
 			listMapOj.add(map);
 		}
 		return listMapOj;

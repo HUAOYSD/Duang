@@ -1,10 +1,5 @@
 package org.duang.action.sys;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -18,9 +13,8 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.MemberInfo;
-import org.duang.service.MemberInfoService;
+import org.duang.service.SysMemberInfoService;
 import org.duang.util.DataUtils;
-import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -40,16 +34,16 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/investmember/investMemberList.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
-public class MemberInfoAction extends BaseAction<MemberInfo>{
+public class SysMemberInfoAction extends BaseAction<MemberInfo>{
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 1L;
 	
-	private MemberInfoService MemberInfoService;
-	@Resource(name="MemberInfoserviceimpl")
-	public void setService(MemberInfoService MemberInfoService) {
-		this.MemberInfoService = MemberInfoService;
+	private SysMemberInfoService sysMemberInfoService;
+	@Resource(name="sysmemberinfoserviceimpl")
+	public void setService(SysMemberInfoService sysMemberInfoService) {
+		this.sysMemberInfoService = sysMemberInfoService;
 	}
 	
 	/**
@@ -62,12 +56,12 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 	 * @throws
 	 */
 	public void freezeMemberInfo(){
-		if (entity!=null && DataUtils.notEmpty(entity.getMemberInfo_id())) {
+		if (entity!=null && DataUtils.notEmpty(entity.getId())) {
 			try {
-				String is_freeze = entity.getIs_freeze();
-				entity = MemberInfoService.findById(entity.getMemberInfo_id());
-				entity.setIs_freeze(is_freeze);
-				boolean issuccess = MemberInfoService.updateEntity(entity);
+				String is_freeze = entity.getIsFreeze();
+				entity = sysMemberInfoService.findById(entity.getId());
+				entity.setIsFreeze(is_freeze);
+				boolean issuccess = sysMemberInfoService.updateEntity(entity);
 				if (issuccess) {
 					jsonObject.put("result",true);
 					jsonObject.put("msg","解冻或者冻结理财用户失败成功");

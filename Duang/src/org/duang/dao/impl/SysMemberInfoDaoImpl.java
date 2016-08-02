@@ -7,7 +7,7 @@ import java.util.Map;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.SysMemberInfoDao;
 import org.duang.dao.base.BaseDao;
-import org.duang.entity.SysMemberInfo;
+import org.duang.entity.MemberInfo;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
  * @date 2016年7月26日 下午3:23:04      
  */  
 @Repository("sysmemberinfodaoimpl")
-public class SysMemberInfoDaoImpl extends BaseDao<SysMemberInfo> implements SysMemberInfoDao{
+public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemberInfoDao{
 
 
 	public SysMemberInfoDaoImpl(){
@@ -65,7 +65,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<SysMemberInfo> implements SysM
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysMemberInfo> queryAllEntity(Order order) throws Exception {
+	public List<MemberInfo> queryAllEntity(Order order) throws Exception {
 		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
@@ -75,7 +75,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<SysMemberInfo> implements SysM
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysMemberInfo> queryAllEntity(PageUtil<SysMemberInfo> page, Order order) throws Exception{
+	public List<MemberInfo> queryAllEntity(PageUtil<MemberInfo> page, Order order) throws Exception{
 		return super.queryAll(page, order);
 	}
 
@@ -87,7 +87,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<SysMemberInfo> implements SysM
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysMemberInfo> queryEntity(String field, Object value, PageUtil<SysMemberInfo> page, Order order) throws Exception{
+	public List<MemberInfo> queryEntity(String field, Object value, PageUtil<MemberInfo> page, Order order) throws Exception{
 		return super.query(field, value, page, order);
 	}
 
@@ -99,7 +99,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<SysMemberInfo> implements SysM
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysMemberInfo> queryEntity(List<String> properties, List<Object> values, PageUtil<SysMemberInfo> page) throws Exception{
+	public List<MemberInfo> queryEntity(List<String> properties, List<Object> values, PageUtil<MemberInfo> page) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
 		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
@@ -110,7 +110,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<SysMemberInfo> implements SysM
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public SysMemberInfo findById(Serializable id) throws Exception{
+	public MemberInfo findById(Serializable id) throws Exception{
 		return super.find(id);
 	}
 
@@ -120,7 +120,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<SysMemberInfo> implements SysM
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(SysMemberInfo t) throws Exception{
+	public boolean saveEntity(MemberInfo t) throws Exception{
 		super.save(t);
 		return true;
 	}
@@ -131,7 +131,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<SysMemberInfo> implements SysM
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(SysMemberInfo t) throws Exception{
+	public boolean updateEntity(MemberInfo t) throws Exception{
 		super.update(t);
 		return true;
 	}
@@ -142,7 +142,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<SysMemberInfo> implements SysM
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(SysMemberInfo t) throws Exception{
+	public boolean deleteEntity(MemberInfo t) throws Exception{
 		super.delete(t);
 		return true;
 	}

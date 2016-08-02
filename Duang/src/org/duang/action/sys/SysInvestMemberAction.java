@@ -22,9 +22,8 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.CondsUtils;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.SysInvestMember;
-import org.duang.entity.SysInvestProduct;
-import org.duang.entity.SysMemberInfo;
+import org.duang.entity.InvestMember;
+import org.duang.entity.MemberInfo;
 import org.duang.service.SysInvestMemberService;
 import org.duang.service.SysMemberInfoService;
 import org.duang.util.DataUtils;
@@ -49,7 +48,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/investmember/investMemberList.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
-public class SysInvestMemberAction extends BaseAction<SysInvestMember>{
+public class SysInvestMemberAction extends BaseAction<InvestMember>{
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
@@ -85,7 +84,7 @@ public class SysInvestMemberAction extends BaseAction<SysInvestMember>{
 	 * @throws
 	 */
 	public void  queryAllInvestMember(){
-		List<SysInvestMember> list = null;
+		List<InvestMember> list = null;
 		try {
 			list = investMemberService.queryAllEntity(getPageUtil(), null);
 			int count = investMemberService.count();
@@ -117,35 +116,35 @@ public class SysInvestMemberAction extends BaseAction<SysInvestMember>{
 	 * @throws
 	 */
 	public void  queryInvestMemberByParameter(){
-		List<SysInvestMember> list = null;
+		List<InvestMember> list = null;
 		try {
-			if(DataUtils.notEmpty(entity.getFk_memberinfo_id().getName())){
-				condsUtils.addProperties(true, "fk_memberinfo_id.name");
-				condsUtils.addValues(true, entity.getFk_memberinfo_id().getName());
+			if(DataUtils.notEmpty(entity.getMemberInfo().getName())){
+				condsUtils.addProperties(true,"memberInfo", "memberInfo.name");
+				condsUtils.addValues(true, new String[]{"memberInfo","as"},entity.getMemberInfo().getName());
 			}
-			if(DataUtils.notEmpty(entity.getFk_memberinfo_id().getReal_name())){
-				condsUtils.addProperties(false, "fk_memberinfo_id.real_name");
-				condsUtils.addValues(false, entity.getFk_memberinfo_id().getReal_name());
+			if(DataUtils.notEmpty(entity.getMemberInfo().getRealName())){
+				condsUtils.addProperties(false,"memberInfo", "memberInfo.realName");
+				condsUtils.addValues(false, new String[]{"memberInfo","as"}, entity.getMemberInfo().getRealName());
 			}
-			if(DataUtils.notEmpty(entity.getFk_memberinfo_id().getPhone())){
-				condsUtils.addProperties(false, "fk_memberinfo_id.phone");
-				condsUtils.addValues(false, entity.getFk_memberinfo_id().getPhone());
+			if(DataUtils.notEmpty(entity.getMemberInfo().getPhone())){
+				condsUtils.addProperties(false,"memberInfo", "memberInfo.phone");
+				condsUtils.addValues(false, new String[]{"memberInfo","as"},entity.getMemberInfo().getPhone());
 			}
-			if(DataUtils.notEmpty(entity.getFk_memberinfo_id().getType())){
-				condsUtils.addProperties(false, "fk_memberinfo_id.type");
-				condsUtils.addValues(false, entity.getFk_memberinfo_id().getType());
+			if(DataUtils.notEmpty(entity.getMemberInfo().getType())){
+				condsUtils.addProperties(false,"memberInfo", "memberInfo.type");
+				condsUtils.addValues(false,new String[]{"memberInfo","as"}, entity.getMemberInfo().getType());
 			}
-			if(DataUtils.notEmpty(entity.getCust_manager_id())){
-				condsUtils.addProperties(false, "cust_manager_id");
-				condsUtils.addValues(false, entity.getCust_manager_id());
+			if(DataUtils.notEmpty(entity.getCustManagerId())){
+				condsUtils.addProperties(false, "custManagerId");
+				condsUtils.addValues(false, entity.getCustManagerId());
 			}
-			if(DataUtils.notEmpty(entity.getManager_name())){
-				condsUtils.addProperties(false, "manager_name");
-				condsUtils.addValues(false, entity.getManager_name());
+			if(DataUtils.notEmpty(entity.getManagerName())){
+				condsUtils.addProperties(false, "managerName");
+				condsUtils.addValues(false, entity.getManagerName());
 			}
-			if(DataUtils.notEmpty(entity.getIs_contract())){
-				condsUtils.addProperties(false, "is_contract.name");
-				condsUtils.addValues(false,entity.getIs_contract());
+			if(DataUtils.notEmpty(entity.getIsContract())){
+				condsUtils.addProperties(false, "isContract");
+				condsUtils.addValues(false,entity.getIsContract());
 			}
 			list = investMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			int count = investMemberService.count(condsUtils.getPropertys(), condsUtils.getValues());
@@ -166,14 +165,53 @@ public class SysInvestMemberAction extends BaseAction<SysInvestMember>{
 		}
 	}
 	
-	private List<Map<String,Object>> fillDataObject(List<SysInvestMember> list){
+	private List<Map<String,Object>> fillDataObject(List<InvestMember> list){
 		List<Map<String,Object>> listMap =  new ArrayList<Map<String,Object>>();
 		try{
-			for(SysInvestMember im : list){
+			for(InvestMember im : list){
 				Map<String,Object> map = new HashMap<String,Object>();
-				map = getObjectProValue(map,im);
-				SysMemberInfo memberInfo = im.getFk_memberinfo_id();
-				listMap.add(getObjectProValue(map,memberInfo));
+				map.put("id",im.getId());
+				map.put("idCard",im.getIdcard());
+				map.put("bankCard",im.getBankCard());
+				map.put("bank",im.getBank());
+				map.put("userImage",im.getUserImage());
+				map.put("idcardImg1",im.getIdcardImg1());
+				map.put("idcardImg2",im.getIdcardImg2());
+				map.put("custManagerId",im.getCustManagerId());
+				map.put("managerName",im.getManagerName());
+				map.put("isContract",im.getIsContract());
+				map.put("investMoney",im.getInvestMoney());
+				map.put("investingMoney",im.getInvestingMoney());
+				map.put("useableMoney",im.getUseableMoney());
+				map.put("accountTotalMoney",im.getAccountTotalMoney());
+				map.put("freezeMoney",im.getFreezeMoney());
+				map.put("unfreezeMoney",im.getUnfreezeMoney());
+				map.put("useableScore",im.getUseableScore());
+				map.put("allowOnline",im.getAllowOnline());
+				MemberInfo memberInfo = im.getMemberInfo();
+				map.put("memberInfoId",memberInfo.getId());
+				map.put("name",memberInfo.getId());
+				map.put("realName",memberInfo.getRealName());
+				map.put("nickName",memberInfo.getNickname());
+				map.put("email",memberInfo.getEmail());
+				map.put("age",memberInfo.getAge());
+				map.put("sex",memberInfo.getSex());
+				map.put("phone",memberInfo.getPhone());
+				map.put("describe",memberInfo.getDescribe());
+				map.put("isDelete",memberInfo.getIsdelete());
+				map.put("createTime",memberInfo.getCreateTime());
+				map.put("modifyTime",memberInfo.getModifyTime());
+				map.put("createuser",memberInfo.getCreateuser());
+				map.put("modifyuser",memberInfo.getModifyuser());
+				map.put("userImg",memberInfo.getUserImg());
+				map.put("isEliteAccount",memberInfo.getIsEliteAccount());
+				map.put("type",memberInfo.getType());
+				map.put("level",memberInfo.getLevel());
+				map.put("price",memberInfo.getPrice());
+				map.put("password",memberInfo.getPassword());
+				map.put("handPassword",memberInfo.getHandPassword());
+				map.put("isFreeze",memberInfo.getIsFreeze());
+				listMap.add(map);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -182,23 +220,5 @@ public class SysInvestMemberAction extends BaseAction<SysInvestMember>{
 		}
 		return listMap;
 	}
-	
-	private Map<String,Object> getObjectProValue(Map<String,Object> map,Object obj) throws  Exception{
-		Field[] field = obj.getClass().getDeclaredFields(); // 获取实体类的所有属性，返回Field数组
-	    for (int j = 0; j < field.length; j++) { // 遍历所有属性
-            String name = field[j].getName(); // 获取属性的名字
-            if(name.equals("serialVersionUID")){
-            	continue;
-            }
-            String bName = name.substring(0, 1).toUpperCase() + name.substring(1); // 将属性的首字符大写，方便构造get，set
-            Method m = obj.getClass().getMethod("get" + bName);
-            if(name.equals("createTime")){
-            	map.put(name, DateUtils.getTimeStamp((Date)m.invoke(obj)));
-            	
-            }else{
-            	map.put(name, m.invoke(obj));
-            }
-	    }   
-	    return map;
-	} 
+ 
 }	

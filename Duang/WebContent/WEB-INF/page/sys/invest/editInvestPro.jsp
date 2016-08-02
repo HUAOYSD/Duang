@@ -1,4 +1,4 @@
-<%@page import="org.duang.entity.SysInvestProduct"%>
+<%@page import="org.duang.entity.InvestProduct"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% String path = request.getContextPath();%>
 <%@ include file="/page/inc/inc.jsp"%>
@@ -126,7 +126,7 @@
 		$(function(){
 			if(isEdit=='edit'){
 				<%
-					SysInvestProduct investPro = (SysInvestProduct)request.getAttribute("entity");
+					InvestProduct investPro = (InvestProduct)request.getAttribute("entity");
 				    Field[] field = investPro.getClass().getDeclaredFields(); // 获取实体类的所有属性，返回Field数组
 				    for (int j = 0; j < field.length; j++) { // 遍历所有属性
 		                String name = field[j].getName(); // 获取属性的名字
@@ -140,7 +140,7 @@
 		            var value="<%=m.invoke(investPro)%>";
 				    //如果为is_*说明是select标签
 				    var checkNum = /^is_[A-Za-z]+$/;
-				    if(checkNum.test(key) || 'refund_type'==key){
+				    if(checkNum.test(key) || 'refundType'==key){
 				    	$('#'+key).combobox('select',value); 
 				    }else{
 				    	$("#"+key).val(value);

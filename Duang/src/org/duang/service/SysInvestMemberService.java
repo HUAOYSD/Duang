@@ -1,7 +1,7 @@
 package org.duang.service;
 
 import org.duang.baseInterface.CommonInterface;
-import org.duang.entity.SysInvestMember;
+import org.duang.entity.InvestMember;
 
 /**   
  * 理财客户业务接口
@@ -10,6 +10,6 @@ import org.duang.entity.SysInvestMember;
  * @author LiYonghui
  * @date 2016年7月25日 下午4:27:27      
  */ 
-public interface SysInvestMemberService extends CommonInterface<SysInvestMember>{
+public interface SysInvestMemberService extends CommonInterface<InvestMember>{
 
 }

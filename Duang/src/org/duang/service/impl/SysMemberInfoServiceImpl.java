@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.SysMemberInfoDao;
-import org.duang.entity.SysMemberInfo;
+import org.duang.entity.MemberInfo;
 import org.duang.service.SysMemberInfoService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -71,7 +71,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysMemberInfo> queryAllEntity(Order order) throws Exception {
+	public List<MemberInfo> queryAllEntity(Order order) throws Exception {
 		return dao.queryAllEntity(order);
 	}
 
@@ -81,7 +81,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysMemberInfo> queryAllEntity(PageUtil<SysMemberInfo> page, Order order) throws Exception{
+	public List<MemberInfo> queryAllEntity(PageUtil<MemberInfo> page, Order order) throws Exception{
 		return dao.queryAllEntity(page, order);
 	}
 
@@ -93,7 +93,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysMemberInfo> queryEntity(String field, Object value, PageUtil<SysMemberInfo> page, Order order) throws Exception{
+	public List<MemberInfo> queryEntity(String field, Object value, PageUtil<MemberInfo> page, Order order) throws Exception{
 		return dao.queryEntity(field, value, page, order);
 	}
 
@@ -105,7 +105,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysMemberInfo> queryEntity(List<String> properties, List<Object> values, PageUtil<SysMemberInfo> page) throws Exception{
+	public List<MemberInfo> queryEntity(List<String> properties, List<Object> values, PageUtil<MemberInfo> page) throws Exception{
 		return dao.queryEntity(properties, values, page);
 	}
 
@@ -115,7 +115,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public SysMemberInfo findById(Serializable id) throws Exception{
+	public MemberInfo findById(Serializable id) throws Exception{
 		return dao.findById(id);
 	}
 
@@ -125,7 +125,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(SysMemberInfo t) throws Exception{
+	public boolean saveEntity(MemberInfo t) throws Exception{
 		return dao.saveEntity(t);
 	}
 
@@ -135,7 +135,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(SysMemberInfo t) throws Exception{
+	public boolean updateEntity(MemberInfo t) throws Exception{
 		return dao.updateEntity(t);
 	}
 
@@ -145,7 +145,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(SysMemberInfo t) throws Exception{
+	public boolean deleteEntity(MemberInfo t) throws Exception{
 		return dao.deleteEntity(t);
 	}
 

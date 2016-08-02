@@ -25,16 +25,16 @@ $(function(){
 		columns:[[
 		    {field:'id',checkbox:true,halign:"center", align:"center"},
 			{field:'name',title:'登录名',width:150,halign:"center", align:"center"},
-			{field:'real_name',title:'真实姓名',width:100,halign:"center", align:"center",editor:'center'},
-			{field:'nickname',title:'昵称',width:100,halign:"center", align:"center" },
-			{field:'invest_money',title:'投资金额',width:100,halign:"center", align:"center" },
-			{field:'investing_money',title:'投资中金额',width:100,halign:"center", align:"center"},
-			{field:'useable_money',title:'可用余额',width:100,halign:"center", align:"center" },
-			{field:'account_total_money',title:'账面总金额',width:100,halign:"center", align:"center" },
-			{field:'freeze_money',title:'冻结余额',width:150,halign:"center", align:"center" },
-			{field:'unfreeze_money',title:'未冻结余额',width:100,halign:"center", align:"center" },
-			{field:'useable_score',title:'可用积分',width:100,halign:"center", align:"center" },
-			{field:'is_elite_account',title:'是否为金账户',width:100,halign:"center", align:"center",
+			{field:'realName',title:'真实姓名',width:100,halign:"center", align:"center",editor:'center'},
+			{field:'nickName',title:'昵称',width:100,halign:"center", align:"center" },
+			{field:'investMoney',title:'投资金额',width:100,halign:"center", align:"center" },
+			{field:'investingMoney',title:'投资中金额',width:100,halign:"center", align:"center"},
+			{field:'useableMoney',title:'可用余额',width:100,halign:"center", align:"center" },
+			{field:'accountTotalMoney',title:'账面总金额',width:100,halign:"center", align:"center" },
+			{field:'freezeMoney',title:'冻结余额',width:150,halign:"center", align:"center" },
+			{field:'unfreezeMoney',title:'未冻结余额',width:100,halign:"center", align:"center" },
+			{field:'useableScore',title:'可用积分',width:100,halign:"center", align:"center" },
+			{field:'isEliteAccount',title:'是否为金账户',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
 						return "金账户";
@@ -43,7 +43,7 @@ $(function(){
 					}
 				}
 			},
-			{field:'is_contract',title:'契约用户',width:100,halign:"center", align:"center",
+			{field:'isContract',title:'契约用户',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
 						return "是";
@@ -62,7 +62,7 @@ $(function(){
 				   }
 				}
 			},
-			{field:'is_new_product',title:'允许上线',width:100,halign:"center", align:"center",
+			{field:'isNewProduct',title:'允许上线',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
 						return "允许";
@@ -73,7 +73,7 @@ $(function(){
 			},
 			{field:'idCard',title:'身份证号',width:200,halign:"center", align:"center"},
 			{field:'phone',title:'手机号',width:150,halign:"center", align:"center" },
-			{field:'bank_card',title:'银行卡号',width:200,halign:"center", align:"center" },
+			{field:'bankCard',title:'银行卡号',width:200,halign:"center", align:"center" },
 			{field:'bank',title:'所属银行',width:100,halign:"center", align:"center" },
 			{field:'sex',title:'性别',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
@@ -85,13 +85,13 @@ $(function(){
 				}
 			},
 			{field:'age',title:'年龄',width:100,halign:"center", align:"center" },
-			{field:'user_image',title:'头像',width:200,halign:"center", align:"center" },
-			{field:'idcard_img1',title:'身份证前照',width:200,halign:"center", align:"center" },
-			{field:'idcard_img2',title:'身份证后照',width:200,halign:"center", align:"center" },
-			{field:'cust_manager_id',title:'客户经理ID',width:100,halign:"center", align:"center" },
-			{field:'manager_name',title:'客户经理姓名',width:100,halign:"center", align:"center" },
+			{field:'userImage',title:'头像',width:200,halign:"center", align:"center" },
+			{field:'idcardImg1',title:'身份证前照',width:200,halign:"center", align:"center" },
+			{field:'idcardImg2',title:'身份证后照',width:200,halign:"center", align:"center" },
+			{field:'custManagerId',title:'客户经理ID',width:100,halign:"center", align:"center" },
+			{field:'managerName',title:'客户经理姓名',width:100,halign:"center", align:"center" },
 			{field:'email',title:'邮箱',width:150,halign:"center", align:"center" },
-			{field:'memberInfo_id',title:'用户id',hidden:true}
+			{field:'memberInfoId',title:'用户id',hidden:true}
 		]]
 	});
 	$('#queryInvestMemberListForm').form({    
@@ -121,7 +121,7 @@ $("#investMemeber-freeze-btn").on('click',function(){
 	$.ajax({
 	   type: "POST",
 	   url: "memberinfo!freezeMemberInfo.do",
-	   data: "is_freeze=1&memberInfo_id="+selectedRow.memberInfo_id,
+	   data: "isFreeze=1&id="+selectedRow.memberInfoId,
 	   success: function(data){
 		   data = JSON.parse(data);
 		   console.info(data);

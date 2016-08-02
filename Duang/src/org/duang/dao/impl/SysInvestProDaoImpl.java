@@ -7,7 +7,7 @@ import java.util.Map;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.SysInvestProDao;
 import org.duang.dao.base.BaseDao;
-import org.duang.entity.SysInvestProduct;
+import org.duang.entity.InvestProduct;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
  * @date 2016年7月26日 下午3:23:04      
  */  
 @Repository("sysinvestprodao")
-public class SysInvestProDaoImpl extends BaseDao<SysInvestProduct> implements SysInvestProDao{
+public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysInvestProDao{
 
 
 	public SysInvestProDaoImpl(){
@@ -65,7 +65,7 @@ public class SysInvestProDaoImpl extends BaseDao<SysInvestProduct> implements Sy
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysInvestProduct> queryAllEntity(Order order) throws Exception {
+	public List<InvestProduct> queryAllEntity(Order order) throws Exception {
 		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
@@ -75,7 +75,7 @@ public class SysInvestProDaoImpl extends BaseDao<SysInvestProduct> implements Sy
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysInvestProduct> queryAllEntity(PageUtil<SysInvestProduct> page, Order order) throws Exception{
+	public List<InvestProduct> queryAllEntity(PageUtil<InvestProduct> page, Order order) throws Exception{
 		return super.queryAll(page, order);
 	}
 
@@ -87,7 +87,7 @@ public class SysInvestProDaoImpl extends BaseDao<SysInvestProduct> implements Sy
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysInvestProduct> queryEntity(String field, Object value, PageUtil<SysInvestProduct> page, Order order) throws Exception{
+	public List<InvestProduct> queryEntity(String field, Object value, PageUtil<InvestProduct> page, Order order) throws Exception{
 		return super.query(field, value, page, order);
 	}
 
@@ -99,7 +99,7 @@ public class SysInvestProDaoImpl extends BaseDao<SysInvestProduct> implements Sy
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysInvestProduct> queryEntity(List<String> properties, List<Object> values, PageUtil<SysInvestProduct> page) throws Exception{
+	public List<InvestProduct> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestProduct> page) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
 		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
@@ -110,7 +110,7 @@ public class SysInvestProDaoImpl extends BaseDao<SysInvestProduct> implements Sy
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public SysInvestProduct findById(Serializable id) throws Exception{
+	public InvestProduct findById(Serializable id) throws Exception{
 		return super.find(id);
 	}
 
@@ -120,7 +120,7 @@ public class SysInvestProDaoImpl extends BaseDao<SysInvestProduct> implements Sy
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(SysInvestProduct t) throws Exception{
+	public boolean saveEntity(InvestProduct t) throws Exception{
 		super.save(t);
 		return true;
 	}
@@ -131,7 +131,7 @@ public class SysInvestProDaoImpl extends BaseDao<SysInvestProduct> implements Sy
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(SysInvestProduct t) throws Exception{
+	public boolean updateEntity(InvestProduct t) throws Exception{
 		super.update(t);
 		return true;
 	}
@@ -142,7 +142,7 @@ public class SysInvestProDaoImpl extends BaseDao<SysInvestProduct> implements Sy
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(SysInvestProduct t) throws Exception{
+	public boolean deleteEntity(InvestProduct t) throws Exception{
 		super.delete(t);
 		return true;
 	}

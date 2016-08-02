@@ -83,7 +83,7 @@ public class InvestMember implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "memberinfo_id", nullable = false)
 	public MemberInfo getMemberInfo() {
 		return this.memberInfo;
