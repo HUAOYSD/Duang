@@ -8,15 +8,14 @@ $(function(){
 	tableObj = $("#tt").datagrid({
 		height:$("#body").height()-$('#search_area').height()-5,
 		width:$("#body").width(),
-		idField:'id',
 		loadMsg : "正在加载，请稍后...",
 		url:"investpro!queryInvestPro.do",  
 		singleSelect:true, 
 		nowrap:true,
 		rownumbers:true,
 		pagination:true,
-		pageSize:50,
-		pageList:[50,100,150,200,250],
+		pageSize:4,
+		pageList:[4,80,150,200,250],
 		sortOrder:'desc',
 		columns:[[
 		    {field:'id',checkbox:true},
@@ -103,25 +102,12 @@ $(function(){
 			$('#investProManage-update-btn').linkbutton('disable');
 			$('#investProManage-delete-btn').linkbutton('disable');
 		},
+		onLoadSuccess: function(data){
+			$('#investProManage-update-btn').linkbutton('disable');
+			$('#investProManage-delete-btn').linkbutton('disable');
+		}
 	});
 	
-	//新增弹出框
-	$("#save").on("click", function(){
-		
-	});
-	//修改
-	$("#update").on("click", function(){
-		$parent.messager.alert("提示","update", "info");
-	});
-	//删除
-	$("#delete").on("click", function(){
-		//获取选择的行
-		var selectedRow = tableObj.datagrid('getSelected');
-		//获取选择行的索引值index
-		var selectedRowIndex = tableObj.datagrid('getRowIndex',selectedRow);
-		//从表格中移除index
-		tableObj.datagrid('deleteRow',selectedRowIndex);
-	});
 	$('#queryInvestProForm').form({    
 	    url:"investpro!queryInvestPro.do",    
 	    onSubmit: function(){    
@@ -129,7 +115,6 @@ $(function(){
 	    },    
 	    success:function(data){ 
 	    	data = JSON.parse(data);
-	    	console.info(data);
 	    	$('#tt').datagrid('loadData', {
 	    		"rows":data.rows,
 	    		"total":data.total,

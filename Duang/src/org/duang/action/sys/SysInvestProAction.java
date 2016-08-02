@@ -103,6 +103,16 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 		return "editInvestPro";
 	}
 	
+	/**
+	 * 保存或者更新理财产品
+	 * @Title: saveInvestPro   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年8月2日 下午2:44:43
+	 * @return: void      
+	 * @throws
+	 */
 	public void saveInvestPro(){
 		if (entity!=null && DataUtils.notEmpty(entity.getNameZh())) {
 			try {
@@ -147,6 +157,16 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 		}
 	}
 	
+	/**
+	 * 删除理财产品
+	 * @Title: deleteInvestPro   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年8月2日 下午2:43:52
+	 * @return: void      
+	 * @throws
+	 */
 	public void deleteInvestPro(){
 		String id  = getRequest().getParameter("id");
 		if (DataUtils.notEmpty(id)) {
@@ -237,16 +257,6 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 			String name = super.getRequest().getParameter("name");
 			String nameZh = super.getRequest().getParameter("nameZh");
 			String min_deadline = super.getRequest().getParameter("min_deadline");
-			
-			PageUtil<SysInvestProduct> page = new PageUtil<SysInvestProduct>();
-			String pageRecords = super.getRequest().getParameter("rows");
-			String currentPageNum = super.getRequest().getParameter("page");
-			if(DataUtils.notEmpty(pageRecords)){
-				page.setPageRecords(Integer.parseInt(pageRecords));
-			}
-			if(DataUtils.notEmpty(currentPageNum)){
-				page.setCurrentPageNum(Integer.parseInt(currentPageNum));
-			}
 			condsUtils.addProperties(true, "isdelete");
 			condsUtils.concatValue(new Object[]{1,"ne"});
 			if(DataUtils.notEmpty(name)){
@@ -261,7 +271,7 @@ public class SysInvestProAction extends BaseAction<SysInvestProduct>{
 				condsUtils.addProperties(false, "min_deadline");
 				condsUtils.addValues(false,Integer.parseInt(min_deadline));
 			}
-			list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), page);
+			list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			int count = service.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if(list != null && list.size() > 0) {
 				jsonObject.put("result", true);

@@ -2,11 +2,13 @@ package org.duang.service.impl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.SysInvestMemberDao;
-import org.duang.entity.SysInvestMember;
+import org.duang.entity.InvestMember;
 import org.duang.service.SysInvestMemberService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -69,7 +71,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysInvestMember> queryAllEntity(Order order) throws Exception {
+	public List<InvestMember> queryAllEntity(Order order) throws Exception {
 		return dao.queryAllEntity(order);
 	}
 
@@ -79,7 +81,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysInvestMember> queryAllEntity(PageUtil<SysInvestMember> page, Order order) throws Exception{
+	public List<InvestMember> queryAllEntity(PageUtil<InvestMember> page, Order order) throws Exception{
 		return dao.queryAllEntity(page, order);
 	}
 
@@ -91,7 +93,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysInvestMember> queryEntity(String field, Object value, PageUtil<SysInvestMember> page, Order order) throws Exception{
+	public List<InvestMember> queryEntity(String field, Object value, PageUtil<InvestMember> page, Order order) throws Exception{
 		return dao.queryEntity(field, value, page, order);
 	}
 
@@ -103,7 +105,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysInvestMember> queryEntity(List<String> properties, List<Object> values, PageUtil<SysInvestMember> page) throws Exception{
+	public List<InvestMember> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestMember> page) throws Exception{
 		return dao.queryEntity(properties, values, page);
 	}
 
@@ -123,7 +125,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(SysInvestMember t) throws Exception{
+	public boolean saveEntity(InvestMember t) throws Exception{
 		return dao.saveEntity(t);
 	}
 
@@ -133,7 +135,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(SysInvestMember t) throws Exception{
+	public boolean updateEntity(InvestMember t) throws Exception{
 		return dao.updateEntity(t);
 	}
 
@@ -143,7 +145,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(SysInvestMember t) throws Exception{
+	public boolean deleteEntity(InvestMember t) throws Exception{
 		return dao.deleteEntity(t);
 	}
 
