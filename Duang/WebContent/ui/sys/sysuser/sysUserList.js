@@ -22,17 +22,16 @@ function loadUserList(url){
 			nowrap:true,
 			rownumbers:true,
 			pagination:true,
-			pageSize:50,
-			pageList:[50,100,150,200,250],
+			pageSize:30,
 			sortOrder:'desc',
 			toolbar:'#tt_toolbar_userlist',
 			method:'post',
 			autoRowHeight : false,
 			border : false,
 			url :url,
-			sortName : "sysUserName",
+			//sortName : "sysUserName",
+			//sortOrder : "desc",
 			fitColumns : true,
-			sortOrder : "desc",
 			remoteSort : false,
 			idField : "sysUserId",
 			rowStyler: function(index,row){
@@ -40,6 +39,8 @@ function loadUserList(url){
 				//				return 'background-color:rgb(212,233,255);color:#000000;font-weight:normal;';
 				//			}
 			},
+			showPageList: true,
+			pageList:[50,100,150,200,250],
 			columns : [ [
 			        {field:'sysUserId',checkbox:true},
 					{
@@ -99,15 +100,49 @@ function loadUserList(url){
 		                }
 					} 
 			] ],
+			onClickCell: function(rowIndex, rowData){
+				$("#userlist").datagrid('clearChecked');
+				$("#userlist").datagrid('clearSelections');
+			},
+			onDblClickCell: function(rowIndex, rowData){
+				$("#userlist").datagrid('clearChecked');
+				$("#userlist").datagrid('clearSelections');
+			},
 			onSelect:function(rowIndex, rowData){
+				var data = $("input[type='checkbox'][name='sysUserId']");
+				for (var i=0; i<data.length; i++ ){
+					if(rowData.sysUserId != data.get(i).value){
+						data[i].checked = 0;
+					}
+				}
 				$('#edit_btn_userlist').linkbutton('enable');
 				$('#del_btn_userlist').linkbutton('enable');
 			},
 			onUnselect:function(rowIndex, rowData){
 				$('#edit_btn_userlist').linkbutton('disable');
 				$('#del_btn_userlist').linkbutton('disable');
+			},
+			onLoadSuccess: function(data){
+				$("input[type='checkbox'][name='sysUserId']").on('click',function(){
+					checkOne(this);
+				});
+				$('#edit_btn_userlist').linkbutton('disable');
+				$('#del_btn_userlist').linkbutton('disable');
 			}
 		});
+}
+
+/**
+ * 单选
+ * @param obj
+ */
+function checkOne(obj){
+	var data = $("input[type='checkbox'][name='sysUserId']");
+	for (var i=0; i<data.length; i++ ){
+		if(obj != data.get(i)){
+			data[i].checked = 0;
+		}
+	}
 }
 
 /**

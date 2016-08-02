@@ -2,6 +2,7 @@ package org.duang.action.sys;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Results(value={
 		@Result(name="left", type="dispatcher", location="WEB-INF/page/sys/main/left.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.LOGIN, type="dispatcher", location="WEB-INF/page/sys/main/login.jsp"),
-		@Result(name=ResultPath.HOME,type="dispatcher", location="WEB-INF/page/sys/main/home.jsp"),
+		@Result(name=ResultPath.HOME,type="dispatcher", location="WEB-INF/page/sys/main/goHome.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
 public class SysLoginAction extends BaseAction<SysUser>{
@@ -65,8 +66,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 		this.powerService = powerService;
 	}
 
-
-
+	
 	/**
 	 * 跳转到系统用户登录页面
 	 * @return
@@ -97,6 +97,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 			List<SysUser> list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 			if(list!=null && list.size()==1) {
 				SessionTools.setSessionSysUser(list.get(0));
+				getRequest().setAttribute("sysmain", "go");
 				return ResultPath.HOME;
 			} else {
 				return LOGIN;
@@ -145,18 +146,20 @@ public class SysLoginAction extends BaseAction<SysUser>{
 	 */  
 	public void checkValidateCode(){
 		try {
-			String validateCode = getRequest().getParameter("validateCode");
-			if (DataUtils.notEmpty(validateCode)) {
-				String readVal = (String) SessionTools.getSessionValue(SessionTools.RANDOMCODEKEY);
-				if (readVal.equalsIgnoreCase(validateCode)) {
-					SessionTools.removeSession(SessionTools.RANDOMCODEKEY);
-					jsonObject.put("success", true);
-				}else{
-					jsonObject.put("success", false);
-				}
-			}else {
-				jsonObject.put("success", false);
-			}
+			jsonObject.put("success", true);
+			//先取消验证码
+			//			String validateCode = getRequest().getParameter("validateCode");
+			//			if (DataUtils.notEmpty(validateCode)) {
+			//				String readVal = (String) SessionTools.getSessionValue(SessionTools.RANDOMCODEKEY);
+			//				if (readVal.equalsIgnoreCase(validateCode)) {
+			//					SessionTools.removeSession(SessionTools.RANDOMCODEKEY);
+			//					jsonObject.put("success", true);
+			//				}else{
+			//					jsonObject.put("success", false);
+			//				}
+			//			}else {
+			//				jsonObject.put("success", false);
+			//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -199,7 +202,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 		SysUser user = SessionTools.getSessionSysUser();
 		if (user != null) {
 			try {
-				Map<SysPower, List<Map<String, Object>>> map = new HashMap<SysPower, List<Map<String,Object>>>();
+				Map<SysPower, List<Map<String, Object>>> map = new LinkedHashMap<SysPower, List<Map<String,Object>>>();
 				List<SysPower> topMenuList = null;
 				if ("admin".equals(user.getName())) {//超级系统用户
 					topMenuList = powerService.queryEntity("parentId", "syspowers", null, org.hibernate.criterion.Order.asc("sortIndex"));

@@ -30,9 +30,9 @@ function loadRoleList(url){
 			autoRowHeight : false,
 			border : false,
 			url :url,
-			sortName : "sysRoleName",
+			//sortName : "sysRoleName",
+			//sortOrder : "desc",
 			fitColumns : true,
-			sortOrder : "desc",
 			remoteSort : false,
 			idField : "sysRoleId",
 			rowStyler: function(index,row){
@@ -90,7 +90,21 @@ function loadRoleList(url){
 		                }
 					} 
 			] ],
+			onClickCell: function(rowIndex, rowData){
+				$("#rolelist").datagrid('clearChecked');
+				$("#rolelist").datagrid('clearSelections');
+			},
+			onDblClickCell: function(rowIndex, rowData){
+				$("#rolelist").datagrid('clearChecked');
+				$("#rolelist").datagrid('clearSelections');
+			},
 			onSelect:function(rowIndex, rowData){
+				var data = $("input[type='checkbox'][name='sysRoleId']");
+				for (var i=0; i<data.length; i++ ){
+					if(rowData.sysRoleId != data.get(i).value){
+						data[i].checked = 0;
+					}
+				}
 				$('#edit_btn_rolelist').linkbutton('enable');
 				$('#del_btn_rolelist').linkbutton('enable');
 			},
@@ -98,7 +112,25 @@ function loadRoleList(url){
 				$('#edit_btn_rolelist').linkbutton('disable');
 				$('#del_btn_rolelist').linkbutton('disable');
 			},
+			onLoadSuccess: function(data){
+				$("input[type='checkbox'][name='sysRoleId']").on('click',function(){
+					checkOne(this);
+				});
+			}
 		});
+}
+
+/**
+ * 单选
+ * @param obj
+ */
+function checkOne(obj){
+	var data = $("input[type='checkbox'][name='sysRoleId']");
+	for (var i=0; i<data.length; i++ ){
+		if(obj != data.get(i)){
+			data[i].checked = 0;
+		}
+	}
 }
 	
 /**
