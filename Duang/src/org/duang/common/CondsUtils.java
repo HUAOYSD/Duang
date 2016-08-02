@@ -9,9 +9,9 @@ import java.util.List;
 public class CondsUtils {
 
 	//条件名字
-	public List<String> propertys=new ArrayList<String>();
+	private List<String> propertys=new ArrayList<String>();
 	//条件值
-	public List<Object> values=new ArrayList<Object>();
+	private List<Object> values=new ArrayList<Object>();
 
 	/**
 	 * 清除properties和values
