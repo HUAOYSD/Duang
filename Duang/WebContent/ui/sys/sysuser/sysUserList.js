@@ -128,6 +128,8 @@ function loadUserList(url){
 				});
 				$('#edit_btn_userlist').linkbutton('disable');
 				$('#del_btn_userlist').linkbutton('disable');
+				$("#userlist").datagrid('clearChecked');
+				$("#userlist").datagrid('clearSelections');
 			}
 		});
 }

@@ -116,6 +116,10 @@ function loadRoleList(url){
 				$("input[type='checkbox'][name='sysRoleId']").on('click',function(){
 					checkOne(this);
 				});
+				$('#edit_btn_rolelist').linkbutton('disable');
+				$('#del_btn_rolelist').linkbutton('disable');
+				$("#rolelist").datagrid('clearChecked');
+				$("#rolelist").datagrid('clearSelections');
 			}
 		});
 }
