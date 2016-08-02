@@ -156,7 +156,6 @@ function getCheckCode(){
 }
 	
 function loginSubmit(){
-	  var con = true;
 	  var name = $("#name").val();
 	  var password = $("#password").val();
 	  var validateCode = $("#validateCode").val();
@@ -167,7 +166,8 @@ function loginSubmit(){
 		  $("#nameMsg").html("（用户名不能为空）");
 		  $("#nameMsg").show();
 		  $("#name").addClass("error-input");
-		  con = false;
+		  $("#name").focus();
+		  return false;
 	  }
 	  
 	  if(password.isNotNull()){
@@ -176,7 +176,8 @@ function loginSubmit(){
 	  }else{
 		  $("#pwdMsg").show();
 		  $("#password").addClass("error-input");
-		  con = false;
+		  $("#password").focus();
+		  return false;
 	  }
 	  
 	  if(validateCode.isNotNull()){
@@ -192,7 +193,8 @@ function loginSubmit(){
 	         		$("#vcMsg").html("（验证码填写错误）");
 	         		$("#vcMsg").show();
 	  			    $("#validateCode").addClass("error-input");
-	  			    con = false;
+	  			  	$("#validateCode").focus();
+	  			    return false;
 	         	 }else{
 	         		$("#loginForm").submit();
 	         	 }
@@ -205,9 +207,10 @@ function loginSubmit(){
 		  $("#vcMsg").html("（验证码不能为空）");
 		  $("#vcMsg").show();
 		  $("#validateCode").addClass("error-input");
-		  con = false;
+		  $("#validateCode").focus();
+		  return false;
 	  }
-	  return con;
+	  return true;
 }
 
 document.onkeydown=function(event){

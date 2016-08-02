@@ -81,7 +81,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 			sql += "INNER JOIN SYS_ROLE ON SYS_ROLE.ID = SYS_ROLE_POWER.ROLE_ID ";
 			sql += "INNER JOIN SYS_USER ON SYS_USER.ROLE_ID = SYS_ROLE.ID ";
 			sql += "WHERE SYS_POWER.PARENT_ID = ? AND SYS_USER.ID = ? ";
-			sql += "ORDER BY SYS_POWER.SORT_INDEX DESC";
+			sql += "ORDER BY SYS_POWER.SORT_INDEX ASC";
 			return queryBySQL(sql, parentid, userid);
 		}else {
 			return null;

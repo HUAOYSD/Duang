@@ -1,0 +1,25 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	String path = request.getContextPath();
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>后台管理系统</title>
+<%@ include file="/page/inc/inc.jsp"%>
+<script type="text/javascript">
+	<c:choose>
+		<c:when test="${requestScope.sysmain ne null && requestScope.sysmain eq 'go'}">
+			window.location.href="<%=path %>/jump!goSys.do";
+		</c:when>
+		<c:otherwise>
+			window.location.href="<%=path %>/sys!goLoginView.do";
+		</c:otherwise>
+	</c:choose>
+</script>
+</head>
+<body>
+	请稍后...
+</body>
+</html>

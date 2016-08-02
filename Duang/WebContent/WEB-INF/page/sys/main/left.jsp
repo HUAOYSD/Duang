@@ -22,7 +22,6 @@
 	            </div>
 	        </div>
 		</s:iterator>
-		
 		</div>
 	</s:iterator>    
 </div>
