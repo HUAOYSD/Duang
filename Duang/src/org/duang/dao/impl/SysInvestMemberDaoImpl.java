@@ -5,30 +5,28 @@ import java.util.List;
 import java.util.Map;
 
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.SysPowerDao;
+import org.duang.dao.SysInvestMemberDao;
 import org.duang.dao.base.BaseDao;
-import org.duang.entity.SysPower;
-import org.duang.util.DataUtils;
+import org.duang.entity.SysInvestMember;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
 /**   
- * 系统权限dao实现类
- * @ClassName:  SysPowerDaoImpl   
+ * 理财客户dao实现类
+ * @ClassName:  SysInvestMemberDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
- * @date 2016年7月25日 下午3:23:04      
+ * @author LiYonghui
+ * @date 2016年7月26日 下午3:23:04      
  */  
-@Repository("syspowerdao")
-public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
+@Repository("sysinvestmemberdao")
+public class SysInvestMemberDaoImpl extends BaseDao<SysInvestMember> implements SysInvestMemberDao{
 
 
-	public SysPowerDaoImpl(){
-		LoggerUtils.info("注入SysPowerDaoImpl层", this.getClass());
+	public SysInvestMemberDaoImpl(){
+		LoggerUtils.info("注入SysInvestMemberDaoImpl层", this.getClass());
 	}
-
 
 	/**
 	 * 计数总数全部
@@ -61,68 +59,13 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 		return super.countByDetachedCriteria(detachedCriteria);
 	}
 
-	/**   
-	 * 根据用户id和父id获取拥有的权限
-	 * @Title: queryPowerByUserAndParent   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param userid
-	 * @param: @param parentid
-	 * @param: @return
-	 * @param: @throws Exception  
-	 * @author 白攀    
-	 * @date 2016年7月28日 下午9:56:52
-	 * @return: List<SysPower>      
-	 * @throws   
-	 */  
-	public List<SysPower> queryPowerByUserAndParent(String userid, String parentid) throws Exception{
-		if (DataUtils.notEmpty(userid)) {
-			String sql = "SELECT SYS_POWER.* FROM SYS_POWER ";
-			sql += "INNER JOIN SYS_ROLE_POWER ON SYS_ROLE_POWER.POWER_ID = SYS_POWER.ID ";
-			sql += "INNER JOIN SYS_ROLE ON SYS_ROLE.ID = SYS_ROLE_POWER.ROLE_ID ";
-			sql += "INNER JOIN SYS_USER ON SYS_USER.ROLE_ID = SYS_ROLE.ID ";
-			sql += "WHERE SYS_POWER.PARENT_ID = ? AND SYS_USER.ID = ? ";
-			sql += "ORDER BY SYS_POWER.SORT_INDEX ASC";
-			return queryBySQL(sql, parentid, userid);
-		}else {
-			return null;
-		}
-	}
-	
-	
-	/**   
-	 * 根据用户查询顶级权限
-	 * @Title: queryTopPowerByUser   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param userid
-	 * @param: @return
-	 * @param: @throws Exception  
-	 * @author 白攀    
-	 * @date 2016年7月29日 下午3:41:27
-	 * @return: List<SysPower>      
-	 * @throws   
-	 */  
-	public List<SysPower> queryTopPowerByUser(String userid) throws Exception {
-		if (DataUtils.notEmpty(userid)) {
-			String sql = "SELECT * FROM SYS_POWER WHERE PARENT_ID = 'SYSPOWERS' ";
-			sql += "HAVING ID IN ";
-			sql += "(SELECT PARENT_ID FROM SYS_POWER  ";
-			sql += "WHERE PARENT_ID <> 'SYSPOWERS' ";
-			sql += "AND ID IN (SELECT POWER_ID FROM SYS_ROLE_POWER WHERE ROLE_ID = (SELECT ROLE_ID FROM SYS_USER WHERE ID = '"+userid+"')) ";
-			sql += ") ";
-			sql += "ORDER BY SYS_POWER.SORT_INDEX DESC";
-			return queryBySQL(sql);
-		}else {
-			return null;
-		}
-	}
-
 
 	/**
 	 * 查询全部
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysPower> queryAllEntity(Order order) throws Exception {
+	public List<SysInvestMember> queryAllEntity(Order order) throws Exception {
 		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
@@ -132,7 +75,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysPower> queryAllEntity(PageUtil<SysPower> page, Order order) throws Exception{
+	public List<SysInvestMember> queryAllEntity(PageUtil<SysInvestMember> page, Order order) throws Exception{
 		return super.queryAll(page, order);
 	}
 
@@ -144,7 +87,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysPower> queryEntity(String field, Object value, PageUtil<SysPower> page, Order order) throws Exception{
+	public List<SysInvestMember> queryEntity(String field, Object value, PageUtil<SysInvestMember> page, Order order) throws Exception{
 		return super.query(field, value, page, order);
 	}
 
@@ -156,7 +99,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<SysPower> queryEntity(List<String> properties, List<Object> values, PageUtil<SysPower> page) throws Exception{
+	public List<SysInvestMember> queryEntity(List<String> properties, List<Object> values, PageUtil<SysInvestMember> page) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
 		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
@@ -167,7 +110,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public SysPower findById(Serializable id) throws Exception{
+	public SysInvestMember findById(Serializable id) throws Exception{
 		return super.find(id);
 	}
 
@@ -177,7 +120,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(SysPower t) throws Exception{
+	public boolean saveEntity(SysInvestMember t) throws Exception{
 		super.save(t);
 		return true;
 	}
@@ -188,7 +131,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(SysPower t) throws Exception{
+	public boolean updateEntity(SysInvestMember t) throws Exception{
 		super.update(t);
 		return true;
 	}
@@ -199,7 +142,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(SysPower t) throws Exception{
+	public boolean deleteEntity(SysInvestMember t) throws Exception{
 		super.delete(t);
 		return true;
 	}
@@ -262,6 +205,8 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 		}
 		return true;
 	}
+
+	
 
 }
 
