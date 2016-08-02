@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
+
 import org.duang.common.logger.LoggerUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.Criteria;
@@ -20,6 +21,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 public class BaseDao<M> {
 	private SessionFactory sessionFactory;
@@ -1542,6 +1544,8 @@ public class BaseDao<M> {
 						dt.add(Restrictions.eq(properties.get(i), arg[0]));
 					}else if("ne".equalsIgnoreCase(arg[arg.length-1].toString())){//<>
 						dt.add(Restrictions.ne(properties.get(i), arg[0]));
+					}else if("as".equalsIgnoreCase(arg[arg.length-1].toString())){//createAlias
+						dt.createAlias(properties.get(i), (String) arg[0], JoinType.INNER_JOIN);
 					}
 				}else {//默认,order,isnull等
 					//eg:properties.add("order");
