@@ -17,8 +17,8 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.SysMemberInfo;
-import org.duang.service.SysMemberInfoService;
+import org.duang.entity.MemberInfo;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
@@ -40,16 +40,16 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/investmember/investMemberList.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
-public class SysMemberInfoAction extends BaseAction<SysMemberInfo>{
+public class MemberInfoAction extends BaseAction<MemberInfo>{
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 1L;
 	
-	private SysMemberInfoService sysMemberInfoService;
-	@Resource(name="sysmemberinfoserviceimpl")
-	public void setService(SysMemberInfoService sysMemberInfoService) {
-		this.sysMemberInfoService = sysMemberInfoService;
+	private MemberInfoService MemberInfoService;
+	@Resource(name="MemberInfoserviceimpl")
+	public void setService(MemberInfoService MemberInfoService) {
+		this.MemberInfoService = MemberInfoService;
 	}
 	
 	/**
@@ -65,9 +65,9 @@ public class SysMemberInfoAction extends BaseAction<SysMemberInfo>{
 		if (entity!=null && DataUtils.notEmpty(entity.getMemberInfo_id())) {
 			try {
 				String is_freeze = entity.getIs_freeze();
-				entity = sysMemberInfoService.findById(entity.getMemberInfo_id());
+				entity = MemberInfoService.findById(entity.getMemberInfo_id());
 				entity.setIs_freeze(is_freeze);
-				boolean issuccess = sysMemberInfoService.updateEntity(entity);
+				boolean issuccess = MemberInfoService.updateEntity(entity);
 				if (issuccess) {
 					jsonObject.put("result",true);
 					jsonObject.put("msg","解冻或者冻结理财用户失败成功");

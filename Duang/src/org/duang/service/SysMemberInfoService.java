@@ -10,6 +10,6 @@ import org.duang.entity.SysMemberInfo;
  * @author LiYonghui
  * @date 2016年7月25日 下午4:27:27      
  */ 
-public interface SysMemberInfoService extends CommonInterface<SysMemberInfo>{
+public interface SysMemberInfoService extends CommonInterface<member>{
 
 }
