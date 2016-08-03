@@ -82,8 +82,8 @@ public class SysInvestMemberAction extends BaseAction<InvestMember>{
 		try {
 			condsUtils.addProperties(true, "memberInfo");
 			condsUtils.concatValue(new String[]{"infoAlias","as"});
-			condsUtils.addProperties(true, "infoAlias.isdelete");
-			condsUtils.addValues(true, 0);
+			condsUtils.addProperties(false, "infoAlias.isdelete");
+			condsUtils.addValues(false, "0");
 			List list = investMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			int count = investMemberService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if(list != null && list.size() > 0) {
@@ -93,6 +93,8 @@ public class SysInvestMemberAction extends BaseAction<InvestMember>{
 			}else{
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "没有符合条件的数据！");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

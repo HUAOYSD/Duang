@@ -179,11 +179,45 @@ $("#investMemeberList-add-btn").on('click',function(){
 		title: '添加理财用户',
 		shadeClose: true,
 		shade: 0.8,
-		area: ['450px', '810px'],
+		area: ['450px', '97%'],
 		content: 'investmember!addInvestMember.do'
 	});  
 });
 
+//删除
+$("#investMemeberList-delete-btn").on('click',function(){
+	//判断是否选择
+	if(!isSelectedRow()){
+		return;
+	}
+    layer.confirm('您确定要删除 '+selectedRow.realName+' 吗？', {
+    	  title :'警告',
+		  icon: 7,
+		  btn: ['确定','取消'] //按钮
+		}, function(){ //确定
+			$.messager.progress('close');	// 如果提交成功则隐藏进度条
+			$.ajax({
+				   type: "POST",
+				   url: "memberinfo!deleteMemberInfo.do",
+				   data: "id="+selectedRow.memberInfoId,
+				   success: function(data){
+					 data = JSON.parse(data);
+				     if(data.result==true){
+				    	 var selectedRowIndex = $("#invest_memeber_table").datagrid('getRowIndex',selectedRow);
+				    	 $("#invest_memeber_table").datagrid('deleteRow',selectedRowIndex);
+				    	 layer.closeAll();
+				     }else{
+				    	 layer.msg(data.msg, {
+			    			  icon: 5,
+			    			  time: 3000 //2秒关闭（如果不配置，默认是3秒）
+			    		});
+				     }
+				   }
+				});
+		}, function(){//取消
+		  return;
+	});
+});
 function isSelectedRow(){
 	selectedRow = tableObj.datagrid("getSelected");
 	if(selectedRow==null){

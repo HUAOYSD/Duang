@@ -81,4 +81,27 @@ public class SysMemberInfoAction extends BaseAction<MemberInfo>{
 			}
 		}
 	}
+	
+	public void deleteMemberInfo(){
+		String id  = getRequest().getParameter("id");
+		if (DataUtils.notEmpty(id)) {
+			try {
+				String sql = "update member_info SET isdelete=1 where id="+id;
+				boolean issuccess = sysMemberInfoService.executeSql(sql);
+				if (issuccess) {
+					jsonObject.put("result",true);
+					jsonObject.put("msg","删除成功");
+					printJsonResult();
+				}else{
+					jsonObject.put("result",false);
+					jsonObject.put("msg","删除失败，请联系管理员");
+					printJsonResult();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				LoggerUtils.error("理财用户ACTION删除错误："+e.getMessage(), this.getClass());
+				LoggerUtils.error("理财用户ACTION删除错误："+e.getLocalizedMessage(), this.getClass());
+			}
+		}
+	}
 }	
