@@ -27,6 +27,15 @@ $(function(){
 			{field:'name',title:'登录名',width:150,halign:"center", align:"center"},
 			{field:'realName',title:'真实姓名',width:100,halign:"center", align:"center",editor:'center'},
 			{field:'nickName',title:'昵称',width:100,halign:"center", align:"center" },
+			{field:'isFreeze',title:'状态',width:100,halign:"center", align:"center",
+				formatter:function(value,row,index){
+					if(value==1){
+						return "已冻结";
+					}else{
+						return "已解冻";
+					}
+				}
+			},
 			{field:'investMoney',title:'投资金额',width:100,halign:"center", align:"center" },
 			{field:'investingMoney',title:'投资中金额',width:100,halign:"center", align:"center"},
 			{field:'useableMoney',title:'可用余额',width:100,halign:"center", align:"center" },
@@ -50,7 +59,6 @@ $(function(){
 					}else{
 						return "否";
 					}
-					
 				}
 			},
 			{field:'createTime',title:'开户日期',width:200,halign:"center", align:"center",
@@ -79,8 +87,10 @@ $(function(){
 				formatter: function(value,row,index){
 					if(value==1){
 						return "男";
-					}else{
+					}else if(value == 0){
 						return "女";
+					}else{
+						return "保密";
 					}
 				}
 			},
@@ -101,11 +111,13 @@ $(function(){
 	    },    
 	    success:function(data){ 
 	    	data = JSON.parse(data);
-	    	$('#tt').datagrid('loadData', {
+	    	console.info(data);
+	    	if(data.result==false){
+	    		layer.msg(data.msg,{time:2000});
+	    	}
+	    	$('#invest_memeber_table').datagrid('loadData', {
 	    		"rows":data.rows,
 	    		"total":data.total,
-	    		"pageSize":data.pageSize,
-	    		"pageNumber":data.currPage
 	    	}); 
 	    }    
 	});  
@@ -113,7 +125,7 @@ $(function(){
 
 var selectedRow = null;
 //冻结操作
-$("#investMemeber-freeze-btn").on('click',function(){
+$("#investMemeberList-freeze-btn").on('click',function(){
 	//判断是否选择
 	if(!isSelectedRow()){
 		return;
@@ -124,26 +136,52 @@ $("#investMemeber-freeze-btn").on('click',function(){
 	   data: "isFreeze=1&id="+selectedRow.memberInfoId,
 	   success: function(data){
 		   data = JSON.parse(data);
-		   console.info(data);
+		   layer.msg(data.msg,{time:1000});
+		   var selectRowIndex = $('#invest_memeber_table').datagrid('getRowIndex',selectedRow);
+		   $('#invest_memeber_table').datagrid('updateRow',{
+				index: selectRowIndex,
+				row: {
+					isFreeze: 1 //冻结
+				}
+			});
 	   }
 	});
 });
 
 //解冻操作
-$("#investMemeber-unfreeze-btn").on('click',function(){
+$("#investMemeberList-unfreeze-btn").on('click',function(){
 	//判断是否选择
 	if(!isSelectedRow()){
 		return;
 	}
 	$.ajax({
-	   type: "POST",
-	   url: "memberinfo!freezeMemberInfo.do",
-	   data: "is_freeze=0&memberInfo_id="+selectedRow.memberInfo_id,
-	   success: function(data){
-		   data = JSON.parse(data);
-		   console.info(data);
-	   }
-	});
+		   type: "POST",
+		   url: "memberinfo!freezeMemberInfo.do",
+		   data: "isFreeze=0&id="+selectedRow.memberInfoId,
+		   success: function(data){
+			   data = JSON.parse(data);
+			   layer.msg(data.msg,{time:1000});
+			   var selectRowIndex = $('#invest_memeber_table').datagrid('getRowIndex',selectedRow);
+			   $('#invest_memeber_table').datagrid('updateRow',{
+					index: selectRowIndex,
+					row: {
+						isFreeze: 0 //解冻
+					}
+				});
+		   }
+		});
+});
+
+//添加操作
+$("#investMemeberList-add-btn").on('click',function(){
+	indexLayer = layer.open({
+		type: 2,
+		title: '添加理财用户',
+		shadeClose: true,
+		shade: 0.8,
+		area: ['450px', '810px'],
+		content: 'investmember!addInvestMember.do'
+	});  
 });
 
 function isSelectedRow(){

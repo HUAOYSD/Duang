@@ -969,7 +969,7 @@ public class BaseDao<M> {
 	 * @see com.dao.BaseDao#executeBySql(java.lang.String) 
 	 */ 
 	public int executeBySql(String sql) throws Exception{
-		Query q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
+		Query q = this.getSession().createSQLQuery(sql);
 		return q.executeUpdate();
 	}
 

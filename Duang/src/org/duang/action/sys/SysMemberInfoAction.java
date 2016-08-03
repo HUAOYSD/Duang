@@ -14,6 +14,7 @@ import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.MemberInfo;
 import org.duang.service.SysMemberInfoService;
+import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -58,13 +59,15 @@ public class SysMemberInfoAction extends BaseAction<MemberInfo>{
 	public void freezeMemberInfo(){
 		if (entity!=null && DataUtils.notEmpty(entity.getId())) {
 			try {
-				String is_freeze = entity.getIsFreeze();
-				entity = sysMemberInfoService.findById(entity.getId());
-				entity.setIsFreeze(is_freeze);
-				boolean issuccess = sysMemberInfoService.updateEntity(entity);
+				String sql = "update member_info SET is_freeze="+entity.getIsFreeze()+" where id="+entity.getId();
+				boolean issuccess = sysMemberInfoService.executeSql(sql);
 				if (issuccess) {
 					jsonObject.put("result",true);
-					jsonObject.put("msg","解冻或者冻结理财用户失败成功");
+					if(ConstantCode.FREEZE.equals(entity.getIsFreeze())){
+						jsonObject.put("msg","冻结成功");
+					}else{
+						jsonObject.put("msg","解冻成功");
+					}
 					printJsonResult();
 				}else{
 					jsonObject.put("result",false);

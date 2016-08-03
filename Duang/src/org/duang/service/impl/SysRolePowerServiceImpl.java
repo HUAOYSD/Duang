@@ -176,7 +176,7 @@ public class SysRolePowerServiceImpl implements SysRolePowerService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql) throws Exception{
-		return dao.deleteEntity(sql);
+		return dao.executeSql(sql);
 	}
 
 

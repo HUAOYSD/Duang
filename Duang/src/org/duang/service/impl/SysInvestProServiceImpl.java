@@ -176,7 +176,7 @@ public class SysInvestProServiceImpl implements SysInvestProService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql) throws Exception{
-		return dao.deleteEntity(sql);
+		return dao.executeSql(sql);
 	}
 
 

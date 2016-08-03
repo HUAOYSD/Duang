@@ -44,15 +44,15 @@
 	  <!-- 表格顶部工具按钮 -->
 	   <!-- 表格顶部工具按钮 -->
 	  <div id="invest_memeber_table_toolbar">
-	  	  <a id="investMemeber-export-btn" class="easyui-linkbutton" iconCls="icon-2012080412486" plain="true">导出</a>
-	  	  <a id="investMemeber-freeze-btn" class="easyui-linkbutton" iconCls="icon-rosette" plain="true">冻结</a>
-	  	  <a id="investMemeber-unfreeze-btn" class="easyui-linkbutton" iconCls="icon-rosette_blue" plain="true">解冻</a>
-	  	  <a id="investMemeber-sereach-btn" class="easyui-linkbutton" iconCls="icon-find " plain="true">查询账户余额</a>
-	  	  <a id="investMemeber-sereach-btn" class="easyui-linkbutton" iconCls="icon-medal_silver_2 " plain="true">余额同步</a>
-	  	  <a id="investMemeber-sereach-btn" class="easyui-linkbutton" iconCls="icon-20130406015709810_easyicon_net_16" plain="true">信息同步</a>
-	      <a id="investMemeber-add-btn" class="easyui-linkbutton" iconCls="icon-add" plain="true">新增</a>
-	      <a id="investMemeber-update-btn" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
-	      <a id="investMember-delete-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+	  	  <a id="investMemeberList-export-btn" class="easyui-linkbutton" iconCls="icon-2012080412486" plain="true">导出</a>
+	  	  <a id="investMemeberList-freeze-btn" class="easyui-linkbutton" iconCls="icon-rosette" plain="true">冻结</a>
+	  	  <a id="investMemeberList-unfreeze-btn" class="easyui-linkbutton" iconCls="icon-rosette_blue" plain="true">解冻</a>
+	  	  <a id="investMemeberList-sereach-btn" class="easyui-linkbutton" iconCls="icon-find " plain="true">查询账户余额</a>
+	  	  <a id="investMemeberList-sereach-btn" class="easyui-linkbutton" iconCls="icon-medal_silver_2 " plain="true">余额同步</a>
+	  	  <a id="investMemeberList-sereach-btn" class="easyui-linkbutton" iconCls="icon-20130406015709810_easyicon_net_16" plain="true">信息同步</a>
+	      <a id="investMemeberList-add-btn" class="easyui-linkbutton" iconCls="icon-add" plain="true">新增</a>
+	      <a id="investMemeberList-update-btn" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
+	      <a id="investMemeberList-delete-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
   	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path%>/ui/sys/investmember/investMemberList.js"></script>

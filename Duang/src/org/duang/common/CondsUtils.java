@@ -59,6 +59,7 @@ public class CondsUtils {
 		return values;
 	}
 
+
 	/**   
 	 * 直接追加值给value
 	 * @Title: concatValue   
