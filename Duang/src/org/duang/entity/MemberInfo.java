@@ -94,7 +94,7 @@ public class MemberInfo implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "login_name", nullable = false)
 	public String getName() {
 		return this.name;
 	}
@@ -157,7 +157,7 @@ public class MemberInfo implements java.io.Serializable {
 		this.phone = phone;
 	}
 
-	@Column(name = "describe", length = 1000)
+	@Column(name = "mi_describe", length = 1000)
 	public String getDescribe() {
 		return this.describe;
 	}

@@ -5,27 +5,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.SysInvestProDao;
+import org.duang.dao.InvestMemberDao;
 import org.duang.dao.base.BaseDao;
-import org.duang.entity.InvestProduct;
+import org.duang.entity.InvestMember;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
 /**   
- * 理财产品dao实现类
- * @ClassName:  SysInvestProDaoImpl   
+ * 理财客户dao实现类
+ * @ClassName:  SysInvestMemberDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
  * @date 2016年7月26日 下午3:23:04      
  */  
-@Repository("sysinvestprodao")
-public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysInvestProDao{
+@Repository("sysinvestmemberdao")
+public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements InvestMemberDao{
 
 
-	public SysInvestProDaoImpl(){
-		LoggerUtils.info("注入SysInvestProDaoImpl层", this.getClass());
+	public InvestMemberDaoImpl(){
+		LoggerUtils.info("注入SysInvestMemberDaoImpl层", this.getClass());
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysIn
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryAllEntity(Order order) throws Exception {
+	public List<InvestMember> queryAllEntity(Order order) throws Exception {
 		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
@@ -75,7 +75,7 @@ public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysIn
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryAllEntity(PageUtil<InvestProduct> page, Order order) throws Exception{
+	public List<InvestMember> queryAllEntity(PageUtil<InvestMember> page, Order order) throws Exception{
 		return super.queryAll(page, order);
 	}
 
@@ -87,7 +87,7 @@ public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysIn
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryEntity(String field, Object value, PageUtil<InvestProduct> page, Order order) throws Exception{
+	public List<InvestMember> queryEntity(String field, Object value, PageUtil<InvestMember> page, Order order) throws Exception{
 		return super.query(field, value, page, order);
 	}
 
@@ -99,7 +99,7 @@ public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysIn
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestProduct> page) throws Exception{
+	public List<InvestMember> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestMember> page) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
 		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
@@ -110,7 +110,7 @@ public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysIn
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public InvestProduct findById(Serializable id) throws Exception{
+	public  InvestMember findById(Serializable id) throws Exception{
 		return super.find(id);
 	}
 
@@ -120,7 +120,7 @@ public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysIn
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(InvestProduct t) throws Exception{
+	public boolean saveEntity(InvestMember t) throws Exception{
 		super.save(t);
 		return true;
 	}
@@ -131,7 +131,7 @@ public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysIn
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(InvestProduct t) throws Exception{
+	public boolean updateEntity(InvestMember t) throws Exception{
 		super.update(t);
 		return true;
 	}
@@ -142,7 +142,7 @@ public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysIn
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestProduct t) throws Exception{
+	public boolean deleteEntity(InvestMember t) throws Exception{
 		super.delete(t);
 		return true;
 	}
@@ -206,7 +206,7 @@ public class SysInvestProDaoImpl extends BaseDao<InvestProduct> implements SysIn
 		return true;
 	}
 
-	
+
 
 }
 

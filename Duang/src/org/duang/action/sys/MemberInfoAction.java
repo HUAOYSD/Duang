@@ -13,7 +13,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.MemberInfo;
-import org.duang.service.SysMemberInfoService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
@@ -35,15 +35,15 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/investmember/investMemberList.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
-public class SysMemberInfoAction extends BaseAction<MemberInfo>{
+public class MemberInfoAction extends BaseAction<MemberInfo>{
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 1L;
 	
-	private SysMemberInfoService sysMemberInfoService;
+	private MemberInfoService sysMemberInfoService;
 	@Resource(name="sysmemberinfoserviceimpl")
-	public void setService(SysMemberInfoService sysMemberInfoService) {
+	public void setService(MemberInfoService sysMemberInfoService) {
 		this.sysMemberInfoService = sysMemberInfoService;
 	}
 	
@@ -59,7 +59,7 @@ public class SysMemberInfoAction extends BaseAction<MemberInfo>{
 	public void freezeMemberInfo(){
 		if (entity!=null && DataUtils.notEmpty(entity.getId())) {
 			try {
-				String sql = "update member_info SET is_freeze="+entity.getIsFreeze()+" where id="+entity.getId();
+				String sql = "update member_info SET is_freeze="+entity.getIsFreeze()+" where id='"+entity.getId()+"'";
 				boolean issuccess = sysMemberInfoService.executeSql(sql);
 				if (issuccess) {
 					jsonObject.put("result",true);
@@ -86,7 +86,7 @@ public class SysMemberInfoAction extends BaseAction<MemberInfo>{
 		String id  = getRequest().getParameter("id");
 		if (DataUtils.notEmpty(id)) {
 			try {
-				String sql = "update member_info SET isdelete=1 where id="+id;
+				String sql = "update member_info SET isdelete=1 where id= '"+id+"'";
 				boolean issuccess = sysMemberInfoService.executeSql(sql);
 				if (issuccess) {
 					jsonObject.put("result",true);

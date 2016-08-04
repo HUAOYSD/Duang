@@ -20,7 +20,8 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.InvestProduct;
-import org.duang.service.SysInvestProService;
+import org.duang.entity.SysRole;
+import org.duang.service.InvestProService;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.springframework.context.annotation.Scope;
@@ -45,15 +46,15 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name="editInvestPro", type="dispatcher", location="WEB-INF/page/sys/invest/editInvestPro.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
-public class SysInvestProAction extends BaseAction<InvestProduct>{
+public class InvestProAction extends BaseAction<InvestProduct>{
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 1L;
 	
-	private SysInvestProService service;
+	private InvestProService service;
 	@Resource(name="sysinvestproserviceimpl")
-	public void setService(SysInvestProService service) {
+	public void setService(InvestProService service) {
 		this.service = service;
 	}
 	
@@ -89,10 +90,7 @@ public class SysInvestProAction extends BaseAction<InvestProduct>{
 	public String editInvestPro(){
 		String id = getRequest().getParameter("id");
 		try{
-			entity = service.findById(id);
-			if (entity!=null){
-				getRequest().setAttribute("edit", "edit");
-			} 
+			getRequest().setAttribute("id", id);
 		}catch(Exception e){
 			e.printStackTrace();
 			LoggerUtils.error("理财产品ACTION修改错误："+e.getMessage(), this.getClass());
@@ -135,6 +133,7 @@ public class SysInvestProAction extends BaseAction<InvestProduct>{
 						}
 					}
 				}else{
+					entity.setIsdelete(0);
 					boolean issuccess = service.updateEntity(entity);
 					jsonObject = getJSONObject();
 					if (issuccess) {
@@ -166,10 +165,11 @@ public class SysInvestProAction extends BaseAction<InvestProduct>{
 	 * @throws
 	 */
 	public void deleteInvestPro(){
-		String id  = getRequest().getParameter("id");
-		if (DataUtils.notEmpty(id)) {
+		if (entity !=null && DataUtils.notEmpty(entity.getId())) {
 			try {
-				boolean issuccess = service.deleteEntity(id);
+				entity = service.findById(entity.getId());
+				entity.setIsdelete(1);
+				boolean issuccess = service.updateEntity(entity);
 				if (issuccess) {
 					jsonObject.put("result",true);
 					jsonObject.put("msg","删除理财产品成功");
@@ -310,32 +310,85 @@ public class SysInvestProAction extends BaseAction<InvestProduct>{
 			map.put("id", pro.getId());
 			map.put("name", pro.getName());
 			map.put("nameZh", pro.getNameZh());
-			map.put("name_describe", pro.getNameDescribe());
-			map.put("charge_ratio", pro.getChargeRatio());
+			map.put("nameDescribe", pro.getNameDescribe());
+			map.put("chargeRatio", pro.getChargeRatio());
 			map.put("createtime", pro.getCreatetime());
 			map.put("createuser", pro.getCreateuser());
 			map.put("details", pro.getDetails());
-			map.put("is_lottery", pro.getIsLottery());
-			map.put("is_new_product", pro.getIsNewProduct());
-			map.put("is_recommend", pro.getIsRecommend());
+			map.put("isLottery", pro.getIsLottery());
+			map.put("isNewProduct", pro.getIsNewProduct());
+			map.put("isRecommend", pro.getIsRecommend());
 			
-			map.put("is_red_envel", pro.getIsRedEnvel());
-			map.put("is_sell", pro.getIsSell());
+			map.put("isRedEnvel", pro.getIsRedEnvel());
+			map.put("isSell", pro.getIsSell());
 			map.put("isdelete", pro.getIsdelete());
-			map.put("min_deadline", pro.getMinDeadline());
-			map.put("min_money", pro.getMinMoney());
+			map.put("minDeadline", pro.getMinDeadline());
+			map.put("minMoney", pro.getMinMoney());
 			map.put("modifytime", pro.getModifytime());
 			map.put("modifyuser", pro.getModifyuser());
 			
-			map.put("product_describe", pro.getProductDescribe());
-			map.put("refund_type", pro.getRefundType());
-			map.put("risk_control", pro.getRiskControl());
+			map.put("productDescribe", pro.getProductDescribe());
+			map.put("refundType", pro.getRefundType());
+			map.put("riskControl", pro.getRiskControl());
 			map.put("title1", pro.getTitle1());
 			map.put("title2", pro.getTitle2());
 			map.put("yield", pro.getYield());
-			map.put("yield_describe", pro.getYieldDescribe());
+			map.put("yieldDescribe", pro.getYieldDescribe());
 			listMapOj.add(map);
 		}
 		return listMapOj;
+	}
+	
+	/**   
+	 * 得到理财产品
+	 * @Title: getInvestProInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年7月27日 下午5:02:21
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void getInvestProInfo() {
+		try {
+			if (entity != null && DataUtils.notEmpty(entity.getId())) {
+				entity = service.findById(entity.getId());
+				if(entity != null) {
+					jsonObject.put("id", entity.getId());
+					jsonObject.put("name", entity.getName());
+					jsonObject.put("nameZh", entity.getNameZh());
+					jsonObject.put("nameDescribe", entity.getNameDescribe());
+					jsonObject.put("chargeRatio", entity.getChargeRatio());
+					jsonObject.put("createtime", entity.getCreatetime());
+					jsonObject.put("createuser", entity.getCreateuser());
+					jsonObject.put("details", entity.getDetails());
+					jsonObject.put("isLottery", entity.getIsLottery());
+					jsonObject.put("isNewProduct", entity.getIsNewProduct());
+					jsonObject.put("isRecommend", entity.getIsRecommend());
+					
+					jsonObject.put("isRedEnvel", entity.getIsRedEnvel());
+					jsonObject.put("isSell", entity.getIsSell());
+					jsonObject.put("isdelete", entity.getIsdelete());
+					jsonObject.put("minDeadline", entity.getMinDeadline());
+					jsonObject.put("minMoney", entity.getMinMoney());
+					jsonObject.put("modifytime", entity.getModifytime());
+					jsonObject.put("modifyuser", entity.getModifyuser());
+					
+					jsonObject.put("product_describe", entity.getProductDescribe());
+					jsonObject.put("refundType", entity.getRefundType());
+					jsonObject.put("riskControl", entity.getRiskControl());
+					jsonObject.put("title1", entity.getTitle1());
+					jsonObject.put("title2", entity.getTitle2());
+					jsonObject.put("yield", entity.getYield());
+					jsonObject.put("yieldDescribe", entity.getYieldDescribe());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("理财产品ACTION，方法getInvestProInfo错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("理财产品ACTION，方法getInvestProInfo错误："+e.getLocalizedMessage(), this.getClass());
+		} finally {
+			printJsonResult();
+		}
 	}
 }	

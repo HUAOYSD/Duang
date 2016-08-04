@@ -10,6 +10,6 @@ import org.duang.entity.InvestProduct;
  * @author LiYonghui
  * @date 2016年7月25日 下午4:27:27      
  */ 
-public interface SysInvestProService extends CommonInterface<InvestProduct>{
+public interface InvestProService extends CommonInterface<InvestProduct>{
 
 }

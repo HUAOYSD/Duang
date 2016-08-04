@@ -70,7 +70,7 @@ $(function(){
 				   }
 				}
 			},
-			{field:'isNewProduct',title:'允许上线',width:100,halign:"center", align:"center",
+			{field:'allowOnline',title:'允许上线',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
 						return "允许";
@@ -101,7 +101,8 @@ $(function(){
 			{field:'custManagerId',title:'客户经理ID',width:100,halign:"center", align:"center" },
 			{field:'managerName',title:'客户经理姓名',width:100,halign:"center", align:"center" },
 			{field:'email',title:'邮箱',width:150,halign:"center", align:"center" },
-			{field:'memberInfoId',title:'用户id',hidden:true}
+			{field:'memberInfoId',title:'用户id',hidden:true},
+			{field:'id',hidden:true}
 		]]
 	});
 	$('#queryInvestMemberListForm').form({    
@@ -122,6 +123,10 @@ $(function(){
 	    }    
 	});  
 });
+
+function reloadDataGrid(){
+    $("#invest_memeber_table").datagrid('reload');  
+}
 
 var selectedRow = null;
 //冻结操作
@@ -183,6 +188,22 @@ $("#investMemeberList-add-btn").on('click',function(){
 		content: 'investmember!addInvestMember.do'
 	});  
 });
+//修改
+$("#investMemeberList-update-btn").on('click',function(){
+	//判断是否选择
+	if(!isSelectedRow()){
+		return;
+	}
+	alert(selectedRow.id);
+	indexLayer = layer.open({
+		type: 2,
+		title: '修改产品',
+		shadeClose: true,
+		shade: 0.8,
+		area: ['450px', '97%'],
+		content: "investmember!eidtInvestMember.do?id ="+selectedRow.id
+	}); 
+});
 
 //删除
 $("#investMemeberList-delete-btn").on('click',function(){
@@ -206,12 +227,8 @@ $("#investMemeberList-delete-btn").on('click',function(){
 				    	 var selectedRowIndex = $("#invest_memeber_table").datagrid('getRowIndex',selectedRow);
 				    	 $("#invest_memeber_table").datagrid('deleteRow',selectedRowIndex);
 				    	 layer.closeAll();
-				     }else{
-				    	 layer.msg(data.msg, {
-			    			  icon: 5,
-			    			  time: 3000 //2秒关闭（如果不配置，默认是3秒）
-			    		});
 				     }
+				    layer.msg(data.msg, {time: 1000});
 				   }
 				});
 		}, function(){//取消

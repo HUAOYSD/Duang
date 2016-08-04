@@ -1,6 +1,7 @@
 package org.duang.action.sys;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +19,11 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.common.system.SessionTools;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
-import org.duang.service.SysInvestMemberService;
+import org.duang.service.InvestMemberService;
+import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
@@ -41,17 +44,18 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Results(value={
 		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/investmember/investMemberList.jsp"),
 		@Result(name="addInvestMember", type="dispatcher", location="WEB-INF/page/sys/investmember/addInvestMember.jsp"),
+		@Result(name="editInvestMember", type="dispatcher", location="WEB-INF/page/sys/investmember/editInvestMember.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
-public class SysInvestMemberAction extends BaseAction<InvestMember>{
+public class InvestMemberAction extends BaseAction<InvestMember>{
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 1L;
 	
-	private SysInvestMemberService investMemberService;
+	private InvestMemberService investMemberService;
 	@Resource(name="sysinvestmemberserviceimpl")
-	public void setService(SysInvestMemberService investMemberService) {
+	public void setService(InvestMemberService investMemberService) {
 		this.investMemberService = investMemberService;
 	}
 	/**
@@ -310,6 +314,96 @@ public class SysInvestMemberAction extends BaseAction<InvestMember>{
 		return "addInvestMember";
 	}
 	
+	/**
+	 * 跳转到edit页面
+	 * @Title: eidtInvestMember   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年8月4日 下午2:45:07
+	 * @return: String      
+	 * @throws
+	 */
+	public String eidtInvestMember(){
+		try{
+			getRequest().setAttribute("id", entity.getId());
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("理财产品ACTION修改错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("理财产品ACTION修改错误："+e.getLocalizedMessage(), this.getClass());
+		}
+		return "editInvestMember";
+	}
+	
+	/**
+	 * 根据id获得一个理财用户对象
+	 * @Title: getInvestMemberInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年8月4日 下午2:45:44
+	 * @return: String      
+	 * @throws
+	 */
+	public void getInvestMemberInfo(){
+		try {
+			if (entity != null && DataUtils.notEmpty(entity.getId())) {
+				InvestMember im = investMemberService.findById(entity.getId());
+				
+				
+				if(im != null) {
+					jsonObject.put("id",im.getId());
+					jsonObject.put("idCard",im.getIdcard());
+					jsonObject.put("bankCard",im.getBankCard());
+					jsonObject.put("bank",im.getBank());
+					jsonObject.put("userImage",im.getUserImage());
+					jsonObject.put("idcardImg1",im.getIdcardImg1());
+					jsonObject.put("idcardImg2",im.getIdcardImg2());
+					jsonObject.put("custManagerId",im.getCustManagerId());
+					jsonObject.put("managerName",im.getManagerName());
+					jsonObject.put("isContract",im.getIsContract());
+					jsonObject.put("investMoney",im.getInvestMoney());
+					jsonObject.put("investingMoney",im.getInvestingMoney());
+					jsonObject.put("useableMoney",im.getUseableMoney());
+					jsonObject.put("accountTotalMoney",im.getAccountTotalMoney());
+					jsonObject.put("freezeMoney",im.getFreezeMoney());
+					jsonObject.put("unfreezeMoney",im.getUnfreezeMoney());
+					jsonObject.put("useableScore",im.getUseableScore());
+					jsonObject.put("allowOnline",im.getAllowOnline());
+					MemberInfo memberInfo = im.getMemberInfo();
+					jsonObject.put("memberInfoId",memberInfo.getId());
+					jsonObject.put("name",memberInfo.getName());
+					jsonObject.put("realName",memberInfo.getRealName());
+					jsonObject.put("nickName",memberInfo.getNickname());
+					jsonObject.put("email",memberInfo.getEmail());
+					jsonObject.put("age",memberInfo.getAge());
+					jsonObject.put("sex",memberInfo.getSex());
+					jsonObject.put("phone",memberInfo.getPhone());
+					jsonObject.put("describe",memberInfo.getDescribe());
+					jsonObject.put("isDelete",memberInfo.getIsdelete());
+					jsonObject.put("createTime",DateUtils.getTimeStamp(memberInfo.getCreateTime()));
+					jsonObject.put("modifyTime",DateUtils.getTimeStamp(memberInfo.getModifyTime()));
+					jsonObject.put("createuser",memberInfo.getCreateuser());
+					jsonObject.put("modifyuser",memberInfo.getModifyuser());
+					jsonObject.put("userImg",memberInfo.getUserImg());
+					jsonObject.put("isEliteAccount",memberInfo.getIsEliteAccount());
+					jsonObject.put("type",memberInfo.getType());
+					jsonObject.put("level",memberInfo.getLevel());
+					jsonObject.put("price",memberInfo.getPrice());
+					jsonObject.put("password",memberInfo.getPassword());
+					jsonObject.put("handPassword",memberInfo.getHandPassword());
+					jsonObject.put("isFreeze",memberInfo.getIsFreeze());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("理财用户ACTION，方法getInvestMemberInfo错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("理财用户ACTION，方法getInvestMemberInfo错误："+e.getLocalizedMessage(), this.getClass());
+		} finally {
+			printJsonResult();
+		}
+	}
+	
 	public void saveInvestMember(){
 		System.out.println("asdfasdf");
 		if (entity!=null) {
@@ -321,6 +415,13 @@ public class SysInvestMemberAction extends BaseAction<InvestMember>{
 					printJsonResult();
 				}else{
 					entity.setId(DataUtils.randomUUID());
+					entity.getMemberInfo().setId(DataUtils.randomUUID());
+					entity.getMemberInfo().setCreateTime(new Date());
+					entity.getMemberInfo().setModifyTime(new Date());
+					entity.getMemberInfo().setCreateuser(SessionTools.getSessionSysUser().getId());
+					entity.getMemberInfo().setModifyuser(SessionTools.getSessionSysUser().getId());
+					entity.getMemberInfo().setIsdelete(ConstantCode.UNDELETE);
+					entity.getMemberInfo().setIsFreeze(ConstantCode.UNFREEZE);
 					boolean issuccess = investMemberService.saveEntity(entity);
 					if (issuccess) {
 						jsonObject.put("result",true);
@@ -339,4 +440,6 @@ public class SysInvestMemberAction extends BaseAction<InvestMember>{
 			}
 		}
 	}
+	
+	
 }	

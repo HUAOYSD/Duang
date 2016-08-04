@@ -1,41 +1,48 @@
-package org.duang.dao.impl; 
-
+package org.duang.service.impl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.SysMemberInfoDao;
-import org.duang.dao.base.BaseDao;
-import org.duang.entity.MemberInfo;
+import org.duang.dao.InvestMemberDao;
+import org.duang.entity.InvestMember;
+import org.duang.service.InvestMemberService;
 import org.duang.util.PageUtil;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 /**   
- * 公共用户信息的dao实现类
- * @ClassName:  SysMemberInfoDaoImpl   
+ * 理财客户业务接口实现类
+ * @ClassName:  SysInvestMemberServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
- * @date 2016年7月26日 下午3:23:04      
+ * @date 2016年7月26日 下午3:25:24      
  */  
-@Repository("sysmemberinfodaoimpl")
-public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemberInfoDao{
+@ServiceLog(ModelName="理财客户服务管理")
+@Service(value="sysinvestmemberserviceimpl")
+public class InvestMemberServiceImpl implements InvestMemberService{
 
+	private InvestMemberDao dao;
 
-	public SysMemberInfoDaoImpl(){
-		LoggerUtils.info("注入SysMemberInfoDaoImpl层", this.getClass());
+	@Resource(name="sysinvestmemberdao")
+	public void setDao(InvestMemberDao dao) {
+		this.dao = dao;
 	}
 
+	public InvestMemberServiceImpl(){
+		LoggerUtils.info("注入SysInvestMemberServiceImpl服务层", this.getClass());
+	}
+	
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
 	 */
 	public int count() throws Exception{
-		return super.count();
+		return dao.count();
 	}
-
 
 	/**
 	 * 计数总数全部
@@ -44,7 +51,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @return 			    计数值
 	 */
 	public int count(String properties, Object value) throws Exception{
-		return super.count(properties, value);
+		return dao.count(properties, value);
 	}
 
 
@@ -55,8 +62,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @return 			    计数值
 	 */
 	public int count(List<String> properties,List<Object> values) throws Exception{
-		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
-		return super.countByDetachedCriteria(detachedCriteria);
+		return dao.count(properties, values);
 	}
 
 
@@ -65,8 +71,8 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<MemberInfo> queryAllEntity(Order order) throws Exception {
-		return super.queryByCriteria(super.getCriteria(), order);
+	public List<InvestMember> queryAllEntity(Order order) throws Exception {
+		return dao.queryAllEntity(order);
 	}
 
 
@@ -75,8 +81,8 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<MemberInfo> queryAllEntity(PageUtil<MemberInfo> page, Order order) throws Exception{
-		return super.queryAll(page, order);
+	public List<InvestMember> queryAllEntity(PageUtil<InvestMember> page, Order order) throws Exception{
+		return dao.queryAllEntity(page, order);
 	}
 
 
@@ -87,8 +93,8 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<MemberInfo> queryEntity(String field, Object value, PageUtil<MemberInfo> page, Order order) throws Exception{
-		return super.query(field, value, page, order);
+	public List<InvestMember> queryEntity(String field, Object value, PageUtil<InvestMember> page, Order order) throws Exception{
+		return dao.queryEntity(field, value, page, order);
 	}
 
 
@@ -99,9 +105,8 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<MemberInfo> queryEntity(List<String> properties, List<Object> values, PageUtil<MemberInfo> page) throws Exception{
-		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
-		return super.queryByDetachedCriteria(detachedCriteria, page);
+	public List<InvestMember> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestMember> page) throws Exception{
+		return dao.queryEntity(properties, values, page);
 	}
 
 
@@ -110,8 +115,8 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public MemberInfo findById(Serializable id) throws Exception{
-		return super.find(id);
+	public InvestMember findById(Serializable id) throws Exception{
+		return dao.findById(id);
 	}
 
 
@@ -120,9 +125,8 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(MemberInfo t) throws Exception{
-		super.save(t);
-		return true;
+	public boolean saveEntity(InvestMember t) throws Exception{
+		return dao.saveEntity(t);
 	}
 
 
@@ -131,9 +135,8 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(MemberInfo t) throws Exception{
-		super.update(t);
-		return true;
+	public boolean updateEntity(InvestMember t) throws Exception{
+		return dao.updateEntity(t);
 	}
 
 
@@ -142,9 +145,8 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(MemberInfo t) throws Exception{
-		super.delete(t);
-		return true;
+	public boolean deleteEntity(InvestMember t) throws Exception{
+		return dao.deleteEntity(t);
 	}
 
 
@@ -154,21 +156,19 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
-		super.delete(id);
-		return true;
+		return dao.deleteEntity(id);
 	}
 
-
+	
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
-		super.delete(map);
-		return true;
+		return dao.deleteEntity(map);
 	}
-
+	
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -176,8 +176,7 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql) throws Exception{
-		super.executeBySql(sql);
-		return true;
+		return dao.executeSql(sql);
 	}
 
 
@@ -187,9 +186,9 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql,Object... params) throws Exception{
-		super.executeBySql(sql,params);
-		return true;
+		return dao.executeSql(sql,params);
 	}
+
 
 	/**
 	 * 根据sql语句集合执行sql代码
@@ -197,12 +196,8 @@ public class SysMemberInfoDaoImpl extends BaseDao<MemberInfo> implements SysMemb
 	 * @return      是否执行成功
 	 */
 	public boolean executeSql(List<String> sqls) throws Exception{
-		if (sqls!=null && sqls.size()>0) {
-			for (String string : sqls) {
-				super.executeBySql(string);
-			}
-		}
-		return true;
-	}
-}
+		return dao.executeSql(sqls);
+	}	
 
+
+}

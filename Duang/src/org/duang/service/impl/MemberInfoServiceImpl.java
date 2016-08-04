@@ -7,33 +7,33 @@ import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.SysInvestProDao;
-import org.duang.entity.InvestProduct;
-import org.duang.service.SysInvestProService;
+import org.duang.dao.MemberInfoDao;
+import org.duang.entity.MemberInfo;
+import org.duang.service.MemberInfoService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 
 /**   
- * 理财产品业务接口实现类
- * @ClassName:  SysInvestProServiceImpl   
+ * 公共用户信息业务接口实现类
+ * @ClassName:  SysMemberInfoServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
  * @date 2016年7月26日 下午3:25:24      
  */  
-@ServiceLog(ModelName="理财产品服务管理")
-@Service(value="sysinvestproserviceimpl")
-public class SysInvestProServiceImpl implements SysInvestProService{
+@ServiceLog(ModelName="功能用户信息管理")
+@Service(value="sysmemberinfoserviceimpl")
+public class MemberInfoServiceImpl implements MemberInfoService{
 
-	private SysInvestProDao dao;
+	private MemberInfoDao dao;
 
-	@Resource(name="sysinvestprodao")
-	public void setDao(SysInvestProDao dao) {
+	@Resource(name="sysmemberinfodaoimpl")
+	public void setDao(MemberInfoDao dao) {
 		this.dao = dao;
 	}
 
-	public SysInvestProServiceImpl(){
-		LoggerUtils.info("注入SysInvestProServiceImpl服务层", this.getClass());
+	public MemberInfoServiceImpl(){
+		LoggerUtils.info("注入sysmemberinfoserviceimpl服务层", this.getClass());
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class SysInvestProServiceImpl implements SysInvestProService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryAllEntity(Order order) throws Exception {
+	public List<MemberInfo> queryAllEntity(Order order) throws Exception {
 		return dao.queryAllEntity(order);
 	}
 
@@ -81,7 +81,7 @@ public class SysInvestProServiceImpl implements SysInvestProService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryAllEntity(PageUtil<InvestProduct> page, Order order) throws Exception{
+	public List<MemberInfo> queryAllEntity(PageUtil<MemberInfo> page, Order order) throws Exception{
 		return dao.queryAllEntity(page, order);
 	}
 
@@ -93,7 +93,7 @@ public class SysInvestProServiceImpl implements SysInvestProService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryEntity(String field, Object value, PageUtil<InvestProduct> page, Order order) throws Exception{
+	public List<MemberInfo> queryEntity(String field, Object value, PageUtil<MemberInfo> page, Order order) throws Exception{
 		return dao.queryEntity(field, value, page, order);
 	}
 
@@ -105,7 +105,7 @@ public class SysInvestProServiceImpl implements SysInvestProService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestProduct> page) throws Exception{
+	public List<MemberInfo> queryEntity(List<String> properties, List<Object> values, PageUtil<MemberInfo> page) throws Exception{
 		return dao.queryEntity(properties, values, page);
 	}
 
@@ -115,7 +115,7 @@ public class SysInvestProServiceImpl implements SysInvestProService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public InvestProduct findById(Serializable id) throws Exception{
+	public MemberInfo findById(Serializable id) throws Exception{
 		return dao.findById(id);
 	}
 
@@ -125,7 +125,7 @@ public class SysInvestProServiceImpl implements SysInvestProService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(InvestProduct t) throws Exception{
+	public boolean saveEntity(MemberInfo t) throws Exception{
 		return dao.saveEntity(t);
 	}
 
@@ -135,7 +135,7 @@ public class SysInvestProServiceImpl implements SysInvestProService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(InvestProduct t) throws Exception{
+	public boolean updateEntity(MemberInfo t) throws Exception{
 		return dao.updateEntity(t);
 	}
 
@@ -145,7 +145,7 @@ public class SysInvestProServiceImpl implements SysInvestProService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestProduct t) throws Exception{
+	public boolean deleteEntity(MemberInfo t) throws Exception{
 		return dao.deleteEntity(t);
 	}
 

@@ -6,53 +6,53 @@
 <body style="background-color:#fff;" id="body_add_investpro">
 	<div id="investPro_add_contans">
 	  	<form id="investProSaveForm" method="post"> 
-	  		<input type="hidden" name="id" id="id"/> 
+	  		<input type="hidden" name="id"/> 
 		    <div>   
 		        <label for="nameZh" class="investPro_add_from_label">总名称：</label>   
-		        <input class="easyui-validatebox" type="text" id="nameZh" name="nameZh"/>   
+		        <input class="easyui-validatebox" type="text" name="nameZh" id="editInvestPro_nameZh"/>   
 		    </div>   
 		    <div>   
 		        <label for="name" class="investPro_add_from_label">名称：</label>   
-		        <input class="easyui-validatebox" type="text" id="name" name="name"/>   
+		        <input class="easyui-validatebox" type="text" name="name" id="editInvestPro_name"/>   
 		    </div>
 		    <div>   
-		        <label for="name_describe" class="investPro_add_from_label">描述：</label>   
-		        <input class="easyui-validatebox" type="text" id="name_describe" name="name_describe"/>   
+		        <label for="nameDescribe" class="investPro_add_from_label">描述：</label>   
+		        <input class="easyui-validatebox" type="text" name="nameDescribe" id="editInvestPro_nameDescribe"/>   
 		    </div> 
 		    <div>   
 		        <label for="yield" class="investPro_add_from_label">准确的收益率：</label>   
-		        <input class="easyui-validatebox" type="text" id="yield" name="yield"  />   
+		        <input class="easyui-validatebox" type="text"  name="yield"  id="editInvestPro_yield"/>   
 		    </div> 
 		    <div>   
-		        <label for="yield_describe" class="investPro_add_from_label">收益率描述：</label>   
-		        <input class="easyui-validatebox" type="text" id="yield_describe" name="yield_describe"/>   
+		        <label for="yieldDescribe" class="investPro_add_from_label">收益率描述：</label>   
+		        <input class="easyui-validatebox" type="text" name="yieldDescribe" id="editInvestPro_yieldDescribe"/>   
 		    </div>
 		    
 		    <div>   
-		        <label for="charge_ratio" class="investPro_add_from_label">手续费比例率：</label>   
-		        <input class="easyui-validatebox" type="text" id="charge_ratio" name="charge_ratio"/>   
+		        <label for="chargeRatio" class="investPro_add_from_label">手续费比例率：</label>   
+		        <input class="easyui-validatebox" type="text" name="chargeRatio" id="editInvestPro_chargeRatio"/>   
 		    </div> 
 		    
 		    <div>   
 		        <label for="title1" class="investPro_add_from_label">标题1：</label>   
-		        <input class="easyui-validatebox" type="text" id="title1" name="title1"/>   
+		        <input class="easyui-validatebox" type="text"  name="title1" id="editInvestPro_title1"/>   
 		    </div> 
 		    <div>   
 		        <label for="title2" class="investPro_add_from_label">标题2：</label>   
-		        <input class="easyui-validatebox" type="text" id="title2" name="title2"/>   
+		        <input class="easyui-validatebox" type="text"  name="title2" id="editInvestPro_title2"/>   
 		    </div> 
 		    
 		    <div>   
-		        <label for="min_deadline" class="investPro_add_from_label">起投期限：</label>   
-		        <input class="easyui-validatebox" type="text" id="min_deadline" name="min_deadline"/>   
+		        <label for="minDeadline" class="investPro_add_from_label">起投期限：</label>   
+		        <input class="easyui-validatebox" type="text" name="minDeadline" id="editInvestPro_minDeadline"/>   
 		    </div> 
 		     <div>   
-		        <label for="min_money" class="investPro_add_from_label">起投金额：</label>   
-		        <input class="easyui-validatebox" type="text" id="min_money" name="min_money"/>   
+		        <label for="minMoney" class="investPro_add_from_label">起投金额：</label>   
+		        <input class="easyui-validatebox" type="text" name="minMoney" id="editInvestPro_minMoney"/>   
 		    </div> 
 		    <div>   
-		        <label for="refund_type" class="investPro_add_from_label">还款方式：</label>   
-		       	<select id="refund_type" class="easyui-combobox" name="refund_type">   
+		        <label for="refundType" class="investPro_add_from_label">还款方式：</label>   
+		       	<select class="easyui-combobox" name="refundType">   
 				    <option value="1"  >等额本息</option>   
 				    <option value="2">一次性还款</option>   
 				    <option value="3">先息后本</option>   
@@ -60,52 +60,52 @@
 		    </div> 
 		    
 		    <div>   
-		        <label for="is_sell" class="investPro_add_from_label">是否起售：</label>   
-		       	<select id="is_sell" class="easyui-combobox" name="is_sell">   
+		        <label for="isSell" class="investPro_add_from_label">是否起售：</label>   
+		       	<select id="isSell" class="easyui-combobox" name="isSell">   
 				    <option value="1">起售</option>   
 				    <option value="0">停售</option>   
 				</select>   
 		    </div> 
 		    
 		    <div>   
-		        <label for="is_lottery" class="investPro_add_from_label">是否抽奖：</label>   
-		       	<select id="is_lottery" class="easyui-combobox" name="is_lottery">   
+		        <label for="isLottery" class="investPro_add_from_label">是否抽奖：</label>   
+		       	<select class="easyui-combobox" name="isLottery">   
 				    <option value="0">否</option>   
 				    <option value="1">是</option>   
 				</select>   
 		    </div>
 		    
 		    <div>   
-		        <label for="is_red_envel" class="investPro_add_from_label">是否红包：</label>   
-		       	<select id="is_red_envel" class="easyui-combobox" name="is_red_envel">   
+		        <label for="isRedEnvel" class="investPro_add_from_label">是否红包：</label>   
+		       	<select class="easyui-combobox" name="isRedEnvel">   
 				    <option value="0">否</option>   
 				    <option value="1">是</option>   
 				</select>   
 		    </div>  
 		    
 		    <div>   
-		        <label for="is_new_product" class="investPro_add_from_label">是否新品：</label>   
-		       	<select id="is_new_product" class="easyui-combobox" name="is_new_product">   
+		        <label for="isNewProduct" class="investPro_add_from_label">是否新品：</label>   
+		       	<select class="easyui-combobox" name="isNewProduct">   
 				    <option value="1">是</option>   
 				    <option value="0">否</option>   
 				</select>   
 		    </div>
 		    
 		    <div>   
-		        <label for="is_recommend" class="investPro_add_from_label">是否推荐：</label>   
-		       	<select id="is_recommend" class="easyui-combobox" name="is_recommend">   
+		        <label for="isRecommend" class="investPro_add_from_label">是否推荐：</label>   
+		       	<select class="easyui-combobox" name="isRecommend">   
 				    <option value="1">是</option>   
 				    <option value="0">否</option>   
 				</select>   
 		    </div> 
 		    
 		    <div>   
-		        <label for="product_describe" class="investPro_add_from_label">介绍：</label>   
-		       	<textarea rows="3" cols="25" id="product_describe" name="product_describe"></textarea>  
+		        <label for="productDescribe" class="investPro_add_from_label">介绍：</label>   
+		       	<textarea rows="3" cols="25" id="productDescribe" name="productDescribe"></textarea>  
 		    </div> 
 		    <div>   
-		        <label for="risk_control" class="investPro_add_from_label">风险控制：</label>   
-		       	<textarea rows="3" cols="25" id="risk_control" name="risk_control"></textarea>  
+		        <label for="riskControl" class="investPro_add_from_label">风险控制：</label>   
+		       	<textarea rows="3" cols="25" id="riskControl" name="riskControl"></textarea>  
 		    </div>
 		    <div>   
 		        <label for="details" class="investPro_add_from_label">更多详细：</label>   
@@ -115,40 +115,25 @@
 	</div>
 	<div align="center" id="footer-oper">
    	    <div id="content-oper">
-	    	 <a  id="submitInvest_btn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
+	    	 <a  id="submit_edit_investPro_btn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
 		     &nbsp;&nbsp;&nbsp;&nbsp;
 		     <a  onclick="javascript:$('#investProSaveForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
     	</div>
 	</div>  
 	<script type="text/javascript">
-		//如果isEdit==edit说明为修改
-		var isEdit = "${edit}";
 		$(function(){
-			if(isEdit=='edit'){
-				<%
-					InvestProduct investPro = (InvestProduct)request.getAttribute("entity");
-				    Field[] field = investPro.getClass().getDeclaredFields(); // 获取实体类的所有属性，返回Field数组
-				    for (int j = 0; j < field.length; j++) { // 遍历所有属性
-		                String name = field[j].getName(); // 获取属性的名字
-		                if(name.equals("serialVersionUID")){
-		                	continue;
-		                }
-		                String bName = name.substring(0, 1).toUpperCase() + name.substring(1); // 将属性的首字符大写，方便构造get，set
-		                Method m = investPro.getClass().getMethod("get" + bName);
-				%>
-		            var key ="<%=name%>";
-		            var value="<%=m.invoke(investPro)%>";
-				    //如果为is_*说明是select标签
-				    var checkNum = /^is_[A-Za-z]+$/;
-				    if(checkNum.test(key) || 'refundType'==key){
-				    	$('#'+key).combobox('select',value); 
-				    }else{
-				    	$("#"+key).val(value);
-				    }
-				    
-				<%}%>
-			}
-			
+			$.ajax({
+				type:'POST',
+				url:"investpro!getInvestProInfo.do",
+				data:"id =" + "<%=request.getParameter("id")%>",
+				dataType:'json',
+				success:function(msg) {
+					$("#investProSaveForm").form('load',msg);
+				}
+			});
+		});
+	
+		$(function(){
 			$('#investProSaveForm').form({    
 			    url:"investpro!saveInvestPro.do",    
 			    onSubmit: function(){    
@@ -169,38 +154,38 @@
 			    }    
 			});
 		});
-		$("#submitInvest_btn").on("click", function(){
-			var nameZh = $("#nameZh").val();
-			var name = $("#name").val();
-			var yield = $("#yield").val();
-			var min_deadline = $("#min_deadline").val();
-			var min_money = $("#min_money").val();
+		$("#submit_edit_investPro_btn").on("click", function(){
+			var nameZh = $("#editInvestPro_nameZh").val();
+			var name = $("#editInvestPro_name").val();
+			var yield = $("#editInvestPro_yield").val();
+			var min_deadline = $("#editInvestPro_minDeadline").val();
+			var min_money = $("#editInvestPro_minMoney").val();
 			if(isNull(nameZh)){
-				$('#nameZh').validatebox({    
+				$('#editInvestPro_nameZh').validatebox({    
 					required: true 
 				}); 
 				return;
 			}
 			if(isNull(name)){
-				$('#name').validatebox({    
+				$('#editInvestPro_name').validatebox({    
 				    required: true    
 				}); 
 				return;
 			}
 			if(isNull(yield)){
-				$('#yield').validatebox({    
+				$('#editInvestPro_yield').validatebox({    
 				    required: true
 				}); 
 				return;
 			}
 			if(isNull(min_deadline)){
-				$('#min_deadline').validatebox({    
+				$('#editInvestPro_minDeadline').validatebox({    
 				    required: true
 				}); 
 				return;
 			}
 			if(isNull(min_money)){
-				$('#min_money').validatebox({    
+				$('#editInvestPro_minMoney').validatebox({    
 				    required: true
 				}); 
 				return;

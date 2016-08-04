@@ -1,48 +1,41 @@
-package org.duang.service.impl;
+package org.duang.dao.impl; 
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.SysMemberInfoDao;
+import org.duang.dao.MemberInfoDao;
+import org.duang.dao.base.BaseDao;
 import org.duang.entity.MemberInfo;
-import org.duang.service.SysMemberInfoService;
 import org.duang.util.PageUtil;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 /**   
- * 公共用户信息业务接口实现类
- * @ClassName:  SysMemberInfoServiceImpl   
+ * 公共用户信息的dao实现类
+ * @ClassName:  SysMemberInfoDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
- * @date 2016年7月26日 下午3:25:24      
+ * @date 2016年7月26日 下午3:23:04      
  */  
-@ServiceLog(ModelName="功能用户信息管理")
-@Service(value="sysmemberinfoserviceimpl")
-public class SysMemberInfoServiceImpl implements SysMemberInfoService{
+@Repository("sysmemberinfodaoimpl")
+public class MemberInfoDaoImpl extends BaseDao<MemberInfo> implements MemberInfoDao{
 
-	private SysMemberInfoDao dao;
 
-	@Resource(name="sysmemberinfodaoimpl")
-	public void setDao(SysMemberInfoDao dao) {
-		this.dao = dao;
+	public MemberInfoDaoImpl(){
+		LoggerUtils.info("注入SysMemberInfoDaoImpl层", this.getClass());
 	}
 
-	public SysMemberInfoServiceImpl(){
-		LoggerUtils.info("注入sysmemberinfoserviceimpl服务层", this.getClass());
-	}
-	
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
 	 */
 	public int count() throws Exception{
-		return dao.count();
+		return super.count();
 	}
+
 
 	/**
 	 * 计数总数全部
@@ -51,7 +44,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return 			    计数值
 	 */
 	public int count(String properties, Object value) throws Exception{
-		return dao.count(properties, value);
+		return super.count(properties, value);
 	}
 
 
@@ -62,7 +55,8 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return 			    计数值
 	 */
 	public int count(List<String> properties,List<Object> values) throws Exception{
-		return dao.count(properties, values);
+		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
+		return super.countByDetachedCriteria(detachedCriteria);
 	}
 
 
@@ -72,7 +66,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return 			    返回操作实体类的泛型集合
 	 */
 	public List<MemberInfo> queryAllEntity(Order order) throws Exception {
-		return dao.queryAllEntity(order);
+		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
 
@@ -82,7 +76,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return 			    返回操作实体类的泛型集合
 	 */
 	public List<MemberInfo> queryAllEntity(PageUtil<MemberInfo> page, Order order) throws Exception{
-		return dao.queryAllEntity(page, order);
+		return super.queryAll(page, order);
 	}
 
 
@@ -94,7 +88,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return 			    返回操作实体类的泛型集合
 	 */
 	public List<MemberInfo> queryEntity(String field, Object value, PageUtil<MemberInfo> page, Order order) throws Exception{
-		return dao.queryEntity(field, value, page, order);
+		return super.query(field, value, page, order);
 	}
 
 
@@ -106,7 +100,8 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return 			    返回操作实体类的泛型集合
 	 */
 	public List<MemberInfo> queryEntity(List<String> properties, List<Object> values, PageUtil<MemberInfo> page) throws Exception{
-		return dao.queryEntity(properties, values, page);
+		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
+		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
 
 
@@ -116,7 +111,7 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return   返回的类对象
 	 */
 	public MemberInfo findById(Serializable id) throws Exception{
-		return dao.findById(id);
+		return super.find(id);
 	}
 
 
@@ -126,7 +121,8 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return   是否增加成功
 	 */
 	public boolean saveEntity(MemberInfo t) throws Exception{
-		return dao.saveEntity(t);
+		super.save(t);
+		return true;
 	}
 
 
@@ -136,7 +132,8 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return   是否修改成功
 	 */
 	public boolean updateEntity(MemberInfo t) throws Exception{
-		return dao.updateEntity(t);
+		super.update(t);
+		return true;
 	}
 
 
@@ -146,7 +143,8 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(MemberInfo t) throws Exception{
-		return dao.deleteEntity(t);
+		super.delete(t);
+		return true;
 	}
 
 
@@ -156,19 +154,21 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
-		return dao.deleteEntity(id);
+		super.delete(id);
+		return true;
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
-		return dao.deleteEntity(map);
+		super.delete(map);
+		return true;
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -176,7 +176,8 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql) throws Exception{
-		return dao.executeSql(sql);
+		super.executeBySql(sql);
+		return true;
 	}
 
 
@@ -186,9 +187,9 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql,Object... params) throws Exception{
-		return dao.executeSql(sql,params);
+		super.executeBySql(sql,params);
+		return true;
 	}
-
 
 	/**
 	 * 根据sql语句集合执行sql代码
@@ -196,8 +197,12 @@ public class SysMemberInfoServiceImpl implements SysMemberInfoService{
 	 * @return      是否执行成功
 	 */
 	public boolean executeSql(List<String> sqls) throws Exception{
-		return dao.executeSql(sqls);
-	}	
-
-
+		if (sqls!=null && sqls.size()>0) {
+			for (String string : sqls) {
+				super.executeBySql(string);
+			}
+		}
+		return true;
+	}
 }
+

@@ -4,7 +4,7 @@
 <%@ include file="/page/inc/inc.jsp"%>
 <body style="background-color:#fff;" class="bodyContent">
 	<div class="content">
-	  	<form id="investMemberSaveForm" method="post"> 
+	  	<form id="investMemberEditForm" method="post"> 
 	  		<input type="hidden" name="id"/> 
 	  		<h1>基本信息</h1>
 		    <div>   
@@ -137,15 +137,26 @@
 	</div>
 	<div align="center" class="footer-oper">
    	    <div class="content-oper">
-	    	 <a  id="submitInvestMember_btn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
+	    	 <a  id="submitInvestMemberEdit_btn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
 		     &nbsp;&nbsp;&nbsp;&nbsp;
 		     <a  onclick="javascript:$('#investMemberSaveForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
     	</div>
 	</div>  
 	<script type="text/javascript">
 		$(function(){
-			$('#investMemberSaveForm').form({    
-			    url:"investmember!saveInvestMember.do",    
+			$.ajax({
+				type:'POST',
+				url:"investmember!getInvestMemberInfo.do",
+				data:"id = ${id}",
+				dataType:'json',
+				success:function(msg) {
+					$("#investMemberEidtForm").form('load',msg);
+				}
+			});
+		});
+		$(function(){
+			$('#investMemberEidtForm').form({    
+			    url:"investmember!updateInvestMember.do",    
 			    onSubmit: function(){    
 			        
 			    },    
@@ -164,12 +175,12 @@
 			    }    
 			});
 		});
-		$("#submitInvestMember_btn").on("click", function(){
-			if(!$("#investMemberSaveForm").form('validate')){
+		$("#submitInvestMemberEdit_btn").on("click", function(){
+			if(!$("#investMemberEidtForm").form('validate')){
 				return false;
 			}
 			$.messager.progress();
-			$('#investMemberSaveForm').submit();
+			$('#investMemberEidtForm').submit();
 		});
 	</script>
 </body>

@@ -1,48 +1,41 @@
-package org.duang.service.impl;
+package org.duang.dao.impl; 
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.SysInvestMemberDao;
-import org.duang.entity.InvestMember;
-import org.duang.service.SysInvestMemberService;
+import org.duang.dao.InvestProDao;
+import org.duang.dao.base.BaseDao;
+import org.duang.entity.InvestProduct;
 import org.duang.util.PageUtil;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 /**   
- * 理财客户业务接口实现类
- * @ClassName:  SysInvestMemberServiceImpl   
+ * 理财产品dao实现类
+ * @ClassName:  SysInvestProDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
- * @date 2016年7月26日 下午3:25:24      
+ * @date 2016年7月26日 下午3:23:04      
  */  
-@ServiceLog(ModelName="理财客户服务管理")
-@Service(value="sysinvestmemberserviceimpl")
-public class SysInvestMemberServiceImpl implements SysInvestMemberService{
+@Repository("sysinvestprodao")
+public class InvestProDaoImpl extends BaseDao<InvestProduct> implements InvestProDao{
 
-	private SysInvestMemberDao dao;
 
-	@Resource(name="sysinvestmemberdao")
-	public void setDao(SysInvestMemberDao dao) {
-		this.dao = dao;
+	public InvestProDaoImpl(){
+		LoggerUtils.info("注入SysInvestProDaoImpl层", this.getClass());
 	}
 
-	public SysInvestMemberServiceImpl(){
-		LoggerUtils.info("注入SysInvestMemberServiceImpl服务层", this.getClass());
-	}
-	
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
 	 */
 	public int count() throws Exception{
-		return dao.count();
+		return super.count();
 	}
+
 
 	/**
 	 * 计数总数全部
@@ -51,7 +44,7 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @return 			    计数值
 	 */
 	public int count(String properties, Object value) throws Exception{
-		return dao.count(properties, value);
+		return super.count(properties, value);
 	}
 
 
@@ -62,7 +55,8 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @return 			    计数值
 	 */
 	public int count(List<String> properties,List<Object> values) throws Exception{
-		return dao.count(properties, values);
+		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
+		return super.countByDetachedCriteria(detachedCriteria);
 	}
 
 
@@ -71,8 +65,8 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestMember> queryAllEntity(Order order) throws Exception {
-		return dao.queryAllEntity(order);
+	public List<InvestProduct> queryAllEntity(Order order) throws Exception {
+		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
 
@@ -81,8 +75,8 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestMember> queryAllEntity(PageUtil<InvestMember> page, Order order) throws Exception{
-		return dao.queryAllEntity(page, order);
+	public List<InvestProduct> queryAllEntity(PageUtil<InvestProduct> page, Order order) throws Exception{
+		return super.queryAll(page, order);
 	}
 
 
@@ -93,8 +87,8 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestMember> queryEntity(String field, Object value, PageUtil<InvestMember> page, Order order) throws Exception{
-		return dao.queryEntity(field, value, page, order);
+	public List<InvestProduct> queryEntity(String field, Object value, PageUtil<InvestProduct> page, Order order) throws Exception{
+		return super.query(field, value, page, order);
 	}
 
 
@@ -105,8 +99,9 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestMember> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestMember> page) throws Exception{
-		return dao.queryEntity(properties, values, page);
+	public List<InvestProduct> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestProduct> page) throws Exception{
+		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
+		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
 
 
@@ -115,8 +110,8 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public InvestMember findById(Serializable id) throws Exception{
-		return dao.findById(id);
+	public InvestProduct findById(Serializable id) throws Exception{
+		return super.find(id);
 	}
 
 
@@ -125,8 +120,9 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(InvestMember t) throws Exception{
-		return dao.saveEntity(t);
+	public boolean saveEntity(InvestProduct t) throws Exception{
+		super.save(t);
+		return true;
 	}
 
 
@@ -135,8 +131,9 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(InvestMember t) throws Exception{
-		return dao.updateEntity(t);
+	public boolean updateEntity(InvestProduct t) throws Exception{
+		super.update(t);
+		return true;
 	}
 
 
@@ -145,8 +142,9 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
+	public boolean deleteEntity(InvestProduct t) throws Exception{
+		super.delete(t);
+		return true;
 	}
 
 
@@ -156,19 +154,21 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
-		return dao.deleteEntity(id);
+		super.delete(id);
+		return true;
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
-		return dao.deleteEntity(map);
+		super.delete(map);
+		return true;
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -176,7 +176,8 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql) throws Exception{
-		return dao.executeSql(sql);
+		super.executeBySql(sql);
+		return true;
 	}
 
 
@@ -186,7 +187,8 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql,Object... params) throws Exception{
-		return dao.executeSql(sql,params);
+		super.executeBySql(sql,params);
+		return true;
 	}
 
 
@@ -196,8 +198,15 @@ public class SysInvestMemberServiceImpl implements SysInvestMemberService{
 	 * @return      是否执行成功
 	 */
 	public boolean executeSql(List<String> sqls) throws Exception{
-		return dao.executeSql(sqls);
-	}	
+		if (sqls!=null && sqls.size()>0) {
+			for (String string : sqls) {
+				super.executeBySql(string);
+			}
+		}
+		return true;
+	}
 
+	
 
 }
+

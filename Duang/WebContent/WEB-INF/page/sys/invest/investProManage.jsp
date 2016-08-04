@@ -94,15 +94,11 @@
 						   success: function(data){
 							 data = JSON.parse(data);
 						     if(data.result==true){
-						    	 var selectedRowIndex = $("#tt").datagrid('getRowIndex',selectedRow.id);
+						    	 var selectedRowIndex = $("#tt").datagrid('getRowIndex',selectedRow);
 						    	 $("#tt").datagrid('deleteRow',selectedRowIndex);
 						    	 layer.closeAll();
-						     }else{
-						    	 layer.msg(data.msg, {
-					    			  icon: 5,
-					    			  time: 3000 //2秒关闭（如果不配置，默认是3秒）
-					    		});
 						     }
+					    	 layer.msg(data.msg, {time: 1000});
 						   }
 						});
 				}, function(){//取消

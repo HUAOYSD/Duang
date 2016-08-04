@@ -1,5 +1,6 @@
 package org.duang.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
+import org.hibernate.engine.internal.Cascade;
 
 /**
  * InvestMember entity. @author MyEclipse Persistence Tools
@@ -30,13 +32,13 @@ public class InvestMember implements java.io.Serializable {
 	private String custManagerId;
 	private String managerName;
 	private String isContract;
-	private Float investMoney;
-	private Float investingMoney;
-	private Float useableMoney;
-	private Float accountTotalMoney;
-	private Float freezeMoney;
-	private Float unfreezeMoney;
-	private Integer useableScore;
+	private double investMoney;
+	private double investingMoney;
+	private double useableMoney;
+	private double accountTotalMoney;
+	private double freezeMoney;
+	private double unfreezeMoney;
+	private int useableScore;
 	private String allowOnline;
 
 	// Constructors
@@ -52,7 +54,7 @@ public class InvestMember implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public InvestMember(String id, MemberInfo memberInfo, String idcard, String bankCard, String bank, String userImage, String idcardImg1, String idcardImg2, String custManagerId, String managerName, String isContract, Float investMoney, Float investingMoney, Float useableMoney, Float accountTotalMoney, Float freezeMoney, Float unfreezeMoney, Integer useableScore, String allowOnline) {
+	public InvestMember(String id, MemberInfo memberInfo, String idcard, String bankCard, String bank, String userImage, String idcardImg1, String idcardImg2, String custManagerId, String managerName, String isContract, double investMoney, double investingMoney, double useableMoney, double accountTotalMoney, double freezeMoney, double unfreezeMoney, int useableScore, String allowOnline) {
 		this.id = id;
 		this.memberInfo = memberInfo;
 		this.idcard = idcard;
@@ -85,7 +87,7 @@ public class InvestMember implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "memberinfo_id", nullable = false)
 	public MemberInfo getMemberInfo() {
 		return this.memberInfo;
@@ -176,66 +178,66 @@ public class InvestMember implements java.io.Serializable {
 		this.isContract = isContract;
 	}
 
-	@Column(name = "invest_money", precision = 11, scale = 6)
-	public Float getInvestMoney() {
+	@Column(name = "invest_money", precision = 25, scale = 6)
+	public double getInvestMoney() {
 		return this.investMoney;
 	}
 
-	public void setInvestMoney(Float investMoney) {
+	public void setInvestMoney(double investMoney) {
 		this.investMoney = investMoney;
 	}
 
-	@Column(name = "investing_money", precision = 11, scale = 6)
-	public Float getInvestingMoney() {
+	@Column(name = "investing_money", precision = 25, scale = 6)
+	public double getInvestingMoney() {
 		return this.investingMoney;
 	}
 
-	public void setInvestingMoney(Float investingMoney) {
+	public void setInvestingMoney(double investingMoney) {
 		this.investingMoney = investingMoney;
 	}
 
-	@Column(name = "useable_money", precision = 11, scale = 6)
-	public Float getUseableMoney() {
+	@Column(name = "useable_money", precision = 25, scale = 6)
+	public double getUseableMoney() {
 		return this.useableMoney;
 	}
 
-	public void setUseableMoney(Float useableMoney) {
+	public void setUseableMoney(double useableMoney) {
 		this.useableMoney = useableMoney;
 	}
 
-	@Column(name = "account_total_money", precision = 11, scale = 6)
-	public Float getAccountTotalMoney() {
+	@Column(name = "account_total_money", precision = 25, scale = 6)
+	public double getAccountTotalMoney() {
 		return this.accountTotalMoney;
 	}
 
-	public void setAccountTotalMoney(Float accountTotalMoney) {
+	public void setAccountTotalMoney(double accountTotalMoney) {
 		this.accountTotalMoney = accountTotalMoney;
 	}
 
-	@Column(name = "freeze_money", precision = 11, scale = 6)
-	public Float getFreezeMoney() {
+	@Column(name = "freeze_money", precision = 25, scale = 6)
+	public double getFreezeMoney() {
 		return this.freezeMoney;
 	}
 
-	public void setFreezeMoney(Float freezeMoney) {
+	public void setFreezeMoney(double freezeMoney) {
 		this.freezeMoney = freezeMoney;
 	}
 
-	@Column(name = "unfreeze_money", precision = 11, scale = 6)
-	public Float getUnfreezeMoney() {
+	@Column(name = "unfreeze_money", precision = 25, scale = 6)
+	public double getUnfreezeMoney() {
 		return this.unfreezeMoney;
 	}
 
-	public void setUnfreezeMoney(Float unfreezeMoney) {
+	public void setUnfreezeMoney(double unfreezeMoney) {
 		this.unfreezeMoney = unfreezeMoney;
 	}
 
 	@Column(name = "useable_score")
-	public Integer getUseableScore() {
+	public int getUseableScore() {
 		return this.useableScore;
 	}
 
-	public void setUseableScore(Integer useableScore) {
+	public void setUseableScore(int useableScore) {
 		this.useableScore = useableScore;
 	}
 

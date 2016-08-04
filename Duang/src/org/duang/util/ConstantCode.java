@@ -16,4 +16,19 @@ public interface ConstantCode {
 	 * 解冻
 	 */
 	String UNFREEZE = "0";
+	
+	/**
+	 * 未删除
+	 */
+	String UNDELETE = "0";
+	
+	/**
+	 * 删除
+	 */
+	String DELETE = "1";
+	
+	/**
+	 * 默认
+	 */
+	String DEFAULT = "0";
 }

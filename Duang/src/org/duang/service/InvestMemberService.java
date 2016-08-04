@@ -1,15 +1,15 @@
 package org.duang.service;
 
 import org.duang.baseInterface.CommonInterface;
-import org.duang.entity.MemberInfo;
+import org.duang.entity.InvestMember;
 
 /**   
- * 功能用户信息业务接口
- * @ClassName:  SysMemberInfoService   
+ * 理财客户业务接口
+ * @ClassName:  SysInvestMemberService   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
  * @date 2016年7月25日 下午4:27:27      
  */ 
-public interface SysMemberInfoService extends CommonInterface<MemberInfo>{
+public interface InvestMemberService extends CommonInterface<InvestMember>{
 
 }
