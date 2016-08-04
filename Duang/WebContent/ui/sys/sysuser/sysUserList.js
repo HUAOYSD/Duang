@@ -33,7 +33,7 @@ function loadUserList(url){
 			//sortOrder : "desc",
 			fitColumns : true,
 			remoteSort : false,
-			idField : "sysUserId",
+			//idField : "sysUserId",
 			rowStyler: function(index,row){
 				//			if ((index % 2) != 0){
 				//				return 'background-color:rgb(212,233,255);color:#000000;font-weight:normal;';
@@ -100,21 +100,7 @@ function loadUserList(url){
 		                }
 					} 
 			] ],
-			onClickCell: function(rowIndex, rowData){
-				$("#userlist").datagrid('clearChecked');
-				$("#userlist").datagrid('clearSelections');
-			},
-			onDblClickCell: function(rowIndex, rowData){
-				$("#userlist").datagrid('clearChecked');
-				$("#userlist").datagrid('clearSelections');
-			},
 			onSelect:function(rowIndex, rowData){
-				var data = $("input[type='checkbox'][name='sysUserId']");
-				for (var i=0; i<data.length; i++ ){
-					if(rowData.sysUserId != data.get(i).value){
-						data[i].checked = 0;
-					}
-				}
 				$('#edit_btn_userlist').linkbutton('enable');
 				$('#del_btn_userlist').linkbutton('enable');
 			},
@@ -123,29 +109,12 @@ function loadUserList(url){
 				$('#del_btn_userlist').linkbutton('disable');
 			},
 			onLoadSuccess: function(data){
-				$("input[type='checkbox'][name='sysUserId']").on('click',function(){
-					checkOne(this);
-				});
 				$('#edit_btn_userlist').linkbutton('disable');
 				$('#del_btn_userlist').linkbutton('disable');
-				$("#userlist").datagrid('clearChecked');
-				$("#userlist").datagrid('clearSelections');
 			}
 		});
 }
 
-/**
- * 单选
- * @param obj
- */
-function checkOne(obj){
-	var data = $("input[type='checkbox'][name='sysUserId']");
-	for (var i=0; i<data.length; i++ ){
-		if(obj != data.get(i)){
-			data[i].checked = 0;
-		}
-	}
-}
 
 /**
  * 刷新数据
@@ -159,7 +128,7 @@ function reloadDataGrid(){
  * @param {Object} userId
  */
 $("#add_btn_userlist").on("click",function(){
-	var indexLayer = layer.open({
+	layer.open({
 		type: 2,
 		title: '添加用户',
 		shadeClose: true,
@@ -180,7 +149,7 @@ $("#edit_btn_userlist").on("click",function(){
 		layer.msg("请选择一个角色",{time:1000});
 		return;
 	}
-	var indexLayer = layer.open({
+	layer.open({
 		type: 2,
 		title: '编辑用户信息',
 		shadeClose: true,
@@ -196,7 +165,7 @@ $("#edit_btn_userlist").on("click",function(){
  * @param {Object} userId
  */
 function openResetPwdDialog(sysUserId) {
-	var indexLayer = layer.open({
+	layer.open({
 		type: 2,
 		title: '重置密码',
 		shadeClose: true,

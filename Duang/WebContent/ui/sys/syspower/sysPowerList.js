@@ -96,7 +96,7 @@ function reloadDataGrid(){
  * 打开添加权限窗口
  */
 $("#add_btn_powerlist").on("click",function(){
-	var indexLayer = layer.open({
+	layer.open({
 		type: 2,
 		title: '添加权限',
 		shadeClose: true,
@@ -115,7 +115,7 @@ function editPowerView(powerId, isnotdel) {
 	if(isnotdel){
 		layer.msg("顶级权限禁止操作",{time:1500});
 	}else{
-		var indexLayer = layer.open({
+		layer.open({
 			type: 2,
 			title: '编辑产品',
 			shadeClose: true,
