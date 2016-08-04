@@ -125,7 +125,7 @@
 			$.ajax({
 				type:'POST',
 				url:"investpro!getInvestProInfo.do",
-				data:"id =" + "<%=request.getParameter("id")%>",
+				data:"id=<%=request.getParameter("id")%>",
 				dataType:'json',
 				success:function(msg) {
 					$("#investProSaveForm").form('load',msg);

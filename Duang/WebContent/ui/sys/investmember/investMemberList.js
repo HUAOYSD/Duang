@@ -79,7 +79,7 @@ $(function(){
 					}
 				}
 			},
-			{field:'idCard',title:'身份证号',width:200,halign:"center", align:"center"},
+			{field:'idcard',title:'身份证号',width:200,halign:"center", align:"center"},
 			{field:'phone',title:'手机号',width:150,halign:"center", align:"center" },
 			{field:'bankCard',title:'银行卡号',width:200,halign:"center", align:"center" },
 			{field:'bank',title:'所属银行',width:100,halign:"center", align:"center" },
@@ -101,8 +101,7 @@ $(function(){
 			{field:'custManagerId',title:'客户经理ID',width:100,halign:"center", align:"center" },
 			{field:'managerName',title:'客户经理姓名',width:100,halign:"center", align:"center" },
 			{field:'email',title:'邮箱',width:150,halign:"center", align:"center" },
-			{field:'memberInfoId',title:'用户id',hidden:true},
-			{field:'id',hidden:true}
+			{field:'memberInfoId',title:'用户id',hidden:true}
 		]]
 	});
 	$('#queryInvestMemberListForm').form({    
@@ -194,14 +193,13 @@ $("#investMemeberList-update-btn").on('click',function(){
 	if(!isSelectedRow()){
 		return;
 	}
-	alert(selectedRow.id);
 	indexLayer = layer.open({
 		type: 2,
 		title: '修改产品',
 		shadeClose: true,
 		shade: 0.8,
 		area: ['450px', '97%'],
-		content: "investmember!eidtInvestMember.do?id ="+selectedRow.id
+		content: "investmember!eidtInvestMember.do?id="+selectedRow.id
 	}); 
 });
 

@@ -16,6 +16,7 @@ import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
+import org.aspectj.apache.bcel.classfile.Constant;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
@@ -193,7 +194,7 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 				Object[] array= (Object[])list.get(i);
 				InvestMember im = (InvestMember)array[1];
 				map.put("id",im.getId());
-				map.put("idCard",im.getIdcard());
+				map.put("idcard",im.getIdcard());
 				map.put("bankCard",im.getBankCard());
 				map.put("bank",im.getBank());
 				map.put("userImage",im.getUserImage());
@@ -260,7 +261,7 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 			for(InvestMember im : list){
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("id",im.getId());
-				map.put("idCard",im.getIdcard());
+				map.put("idcard",im.getIdcard());
 				map.put("bankCard",im.getBankCard());
 				map.put("bank",im.getBank());
 				map.put("userImage",im.getUserImage());
@@ -325,13 +326,6 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 	 * @throws
 	 */
 	public String eidtInvestMember(){
-		try{
-			getRequest().setAttribute("id", entity.getId());
-		}catch(Exception e){
-			e.printStackTrace();
-			LoggerUtils.error("理财产品ACTION修改错误："+e.getMessage(), this.getClass());
-			LoggerUtils.error("理财产品ACTION修改错误："+e.getLocalizedMessage(), this.getClass());
-		}
 		return "editInvestMember";
 	}
 	
@@ -348,12 +342,11 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 	public void getInvestMemberInfo(){
 		try {
 			if (entity != null && DataUtils.notEmpty(entity.getId())) {
+				System.out.println(entity.getId());
 				InvestMember im = investMemberService.findById(entity.getId());
-				
-				
 				if(im != null) {
 					jsonObject.put("id",im.getId());
-					jsonObject.put("idCard",im.getIdcard());
+					jsonObject.put("idcard",im.getIdcard());
 					jsonObject.put("bankCard",im.getBankCard());
 					jsonObject.put("bank",im.getBank());
 					jsonObject.put("userImage",im.getUserImage());
@@ -371,28 +364,28 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 					jsonObject.put("useableScore",im.getUseableScore());
 					jsonObject.put("allowOnline",im.getAllowOnline());
 					MemberInfo memberInfo = im.getMemberInfo();
-					jsonObject.put("memberInfoId",memberInfo.getId());
-					jsonObject.put("name",memberInfo.getName());
-					jsonObject.put("realName",memberInfo.getRealName());
-					jsonObject.put("nickName",memberInfo.getNickname());
-					jsonObject.put("email",memberInfo.getEmail());
-					jsonObject.put("age",memberInfo.getAge());
-					jsonObject.put("sex",memberInfo.getSex());
-					jsonObject.put("phone",memberInfo.getPhone());
-					jsonObject.put("describe",memberInfo.getDescribe());
-					jsonObject.put("isDelete",memberInfo.getIsdelete());
-					jsonObject.put("createTime",DateUtils.getTimeStamp(memberInfo.getCreateTime()));
-					jsonObject.put("modifyTime",DateUtils.getTimeStamp(memberInfo.getModifyTime()));
-					jsonObject.put("createuser",memberInfo.getCreateuser());
-					jsonObject.put("modifyuser",memberInfo.getModifyuser());
-					jsonObject.put("userImg",memberInfo.getUserImg());
-					jsonObject.put("isEliteAccount",memberInfo.getIsEliteAccount());
-					jsonObject.put("type",memberInfo.getType());
-					jsonObject.put("level",memberInfo.getLevel());
-					jsonObject.put("price",memberInfo.getPrice());
-					jsonObject.put("password",memberInfo.getPassword());
-					jsonObject.put("handPassword",memberInfo.getHandPassword());
-					jsonObject.put("isFreeze",memberInfo.getIsFreeze());
+					jsonObject.put("memberInfo.id",memberInfo.getId());
+					jsonObject.put("memberInfo.name",memberInfo.getName());
+					jsonObject.put("memberInfo.realName",memberInfo.getRealName());
+					jsonObject.put("memberInfo.nickname",memberInfo.getNickname());
+					jsonObject.put("memberInfo.email",memberInfo.getEmail());
+					jsonObject.put("memberInfo.age",memberInfo.getAge());
+					jsonObject.put("memberInfo.sex",memberInfo.getSex());
+					jsonObject.put("memberInfo.phone",memberInfo.getPhone());
+					jsonObject.put("memberInfo.describe",memberInfo.getDescribe());
+					jsonObject.put("memberInfo.userImg",memberInfo.getUserImg());
+					jsonObject.put("memberInfo.isEliteAccount",memberInfo.getIsEliteAccount());
+					jsonObject.put("memberInfo.type",memberInfo.getType());
+					jsonObject.put("memberInfo.level",memberInfo.getLevel());
+					jsonObject.put("memberInfo.price",memberInfo.getPrice());
+					jsonObject.put("memberInfo.password",memberInfo.getPassword());
+					jsonObject.put("memberInfo.isdelete",memberInfo.getIsdelete());
+					jsonObject.put("memberInfo.createTime",DateUtils.date2Str(memberInfo.getCreateTime()));
+					jsonObject.put("memberInfo.modifyTime",DateUtils.date2Str(memberInfo.getModifyTime()));
+					jsonObject.put("memberInfo.createuser",memberInfo.getCreateuser());
+					jsonObject.put("memberInfo.modifyuser",memberInfo.getModifyuser());
+					jsonObject.put("memberInfo.handPassword",memberInfo.getHandPassword());
+					jsonObject.put("memberInfo.isFreeze",memberInfo.getIsFreeze());
 				}
 			}
 		} catch (Exception e) {
@@ -404,14 +397,23 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 		}
 	}
 	
+	/**
+	 * 保存理财用户
+	 * @Title: saveInvestMember   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年8月4日 下午4:43:24
+	 * @return: void      
+	 * @throws
+	 */
 	public void saveInvestMember(){
-		System.out.println("asdfasdf");
 		if (entity!=null) {
 			try {
 				//判断是否存在相同总名称的数据，如果存在则取消添加
 				if(investMemberService.count("memberInfo.name",entity.getMemberInfo().getName())>0){
 					jsonObject.put("result",false);
-					jsonObject.put("msg","添加失败，已经存在相同名称的产品！");
+					jsonObject.put("msg","添加失败，已经存在相同名称的用户！");
 					printJsonResult();
 				}else{
 					entity.setId(DataUtils.randomUUID());
@@ -422,21 +424,63 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 					entity.getMemberInfo().setModifyuser(SessionTools.getSessionSysUser().getId());
 					entity.getMemberInfo().setIsdelete(ConstantCode.UNDELETE);
 					entity.getMemberInfo().setIsFreeze(ConstantCode.UNFREEZE);
+					entity.getMemberInfo().setHandPassword(ConstantCode.DEFAULT);
 					boolean issuccess = investMemberService.saveEntity(entity);
 					if (issuccess) {
 						jsonObject.put("result",true);
-						jsonObject.put("msg","添加理财产品成功");
+						jsonObject.put("msg","添加理财用户成功");
 						printJsonResult();
 					}else{
 						jsonObject.put("result",false);
-						jsonObject.put("msg","添加理财产品失败，请联系管理员");
+						jsonObject.put("msg","添加理财用户失败，请联系管理员");
 						printJsonResult();
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				LoggerUtils.error("理财产品ACTION增加错误："+e.getMessage(), this.getClass());
-				LoggerUtils.error("理财产品ACTION增加错误："+e.getLocalizedMessage(), this.getClass());
+				LoggerUtils.error("理财用户ACTION增加错误："+e.getMessage(), this.getClass());
+				LoggerUtils.error("理财用户ACTION增加错误："+e.getLocalizedMessage(), this.getClass());
+			}
+		}
+	}
+	
+	/**
+	 * 更新理财用户
+	 * @Title: updateInvestMember   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年8月4日 下午4:43:56
+	 * @return: void      
+	 * @throws
+	 */
+	public void updateInvestMember(){
+		if (entity!=null && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(entity.getMemberInfo().getId())) {
+			try {
+				InvestMember im = investMemberService.findById(entity.getId()); 
+				entity.getMemberInfo().setModifyTime(new Date());
+				entity.getMemberInfo().setModifyuser(SessionTools.getSessionSysUser().getId());
+				entity.getMemberInfo().setCreateTime(im.getMemberInfo().getCreateTime());
+				entity.getMemberInfo().setCreateuser(im.getMemberInfo().getCreateuser());
+				entity.getMemberInfo().setHandPassword(im.getMemberInfo().getHandPassword());
+				entity.getMemberInfo().setIsdelete(im.getMemberInfo().getIsdelete());
+				entity.getMemberInfo().setIsFreeze(im.getMemberInfo().getIsFreeze());
+				boolean issuccess = investMemberService.updateEntity(entity);
+				if (issuccess) {
+					jsonObject.put("result",true);
+					jsonObject.put("msg","修改理财用户成功");
+					printJsonResult();
+				}else{
+					jsonObject.put("result",false);
+					jsonObject.put("msg","修改理财用户失败，请联系管理员");
+					printJsonResult();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				LoggerUtils.error("理财用户ACTION修改错误："+e.getMessage(), this.getClass());
+				LoggerUtils.error("理财用户ACTION修改错误："+e.getLocalizedMessage(), this.getClass());
+			}finally {
+				printJsonResult();
 			}
 		}
 	}

@@ -4,8 +4,9 @@
 <%@ include file="/page/inc/inc.jsp"%>
 <body style="background-color:#fff;" class="bodyContent">
 	<div class="content">
-	  	<form id="investMemberEditForm" method="post"> 
-	  		<input type="hidden" name="id"/> 
+	  	<form id="investMemberEidtForm" method="post"> 
+	  		<input type="hidden" name="id" value="${entity.id}"/> 
+	  		<input type="hidden" name="memberInfo.id" value="${entity.memberInfo.id}"/> 
 	  		<h1>基本信息</h1>
 		    <div>   
 		        <label for="memberInfo.name" class="from_label">登录名：</label>   
@@ -76,7 +77,6 @@
 		        <label for="memberInfo.describe" class="from_label">介绍：</label>   
 		       	<textarea rows="5" cols="30" name="memberInfo.describe"></textarea>  
 		    </div> 
-		    <hr>
 		   <h1>理财信息</h1>
 		    <div>   
 		        <label for="idcard" class="from_label">身份证号：</label>   
@@ -147,7 +147,7 @@
 			$.ajax({
 				type:'POST',
 				url:"investmember!getInvestMemberInfo.do",
-				data:"id = ${id}",
+				data:"id=${entity.id}",
 				dataType:'json',
 				success:function(msg) {
 					$("#investMemberEidtForm").form('load',msg);
@@ -166,12 +166,8 @@
 			    	if(data.result==true){
 			    		window.parent.reloadDataGrid();
 			    		parent.layer.closeAll();
-			    	}else{
-			    		layer.msg(data.msg, {
-			    			  icon: 5,
-			    			  time: 3000 //2秒关闭（如果不配置，默认是3秒）
-			    		});
 			    	}
+			    	layer.msg(data.msg, {time: 2000});
 			    }    
 			});
 		});
