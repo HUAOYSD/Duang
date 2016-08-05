@@ -34,7 +34,7 @@ function loadRoleList(url){
 			//sortOrder : "desc",
 			fitColumns : true,
 			remoteSort : false,
-			idField : "sysRoleId",
+			//idField : "sysRoleId",
 			rowStyler: function(index,row){
 //				if ((index % 2) != 0){
 //					return 'background-color:rgb(212,233,255);color:#000000;font-weight:normal;';
@@ -90,21 +90,7 @@ function loadRoleList(url){
 		                }
 					} 
 			] ],
-			onClickCell: function(rowIndex, rowData){
-				$("#rolelist").datagrid('clearChecked');
-				$("#rolelist").datagrid('clearSelections');
-			},
-			onDblClickCell: function(rowIndex, rowData){
-				$("#rolelist").datagrid('clearChecked');
-				$("#rolelist").datagrid('clearSelections');
-			},
 			onSelect:function(rowIndex, rowData){
-				var data = $("input[type='checkbox'][name='sysRoleId']");
-				for (var i=0; i<data.length; i++ ){
-					if(rowData.sysRoleId != data.get(i).value){
-						data[i].checked = 0;
-					}
-				}
 				$('#edit_btn_rolelist').linkbutton('enable');
 				$('#del_btn_rolelist').linkbutton('enable');
 			},
@@ -113,29 +99,12 @@ function loadRoleList(url){
 				$('#del_btn_rolelist').linkbutton('disable');
 			},
 			onLoadSuccess: function(data){
-				$("input[type='checkbox'][name='sysRoleId']").on('click',function(){
-					checkOne(this);
-				});
 				$('#edit_btn_rolelist').linkbutton('disable');
 				$('#del_btn_rolelist').linkbutton('disable');
-				$("#rolelist").datagrid('clearChecked');
-				$("#rolelist").datagrid('clearSelections');
 			}
 		});
 }
 
-/**
- * 单选
- * @param obj
- */
-function checkOne(obj){
-	var data = $("input[type='checkbox'][name='sysRoleId']");
-	for (var i=0; i<data.length; i++ ){
-		if(obj != data.get(i)){
-			data[i].checked = 0;
-		}
-	}
-}
 	
 /**
  * 刷新数据
@@ -148,7 +117,7 @@ function reloadDataGrid(){
  * 打开添加角色页面
  */
 $("#add_btn_rolelist").on("click",function(){
-	var indexLayer = layer.open({
+	layer.open({
 		type: 2,
 		title: '添加角色',
 		shadeClose: true,
@@ -168,7 +137,7 @@ $("#edit_btn_rolelist").on("click",function(){
 		layer.msg("请选择一个角色",{time:1500});
 		return;
 	}
-	var indexLayer = layer.open({
+	layer.open({
 		type: 2,
 		title: '编辑角色',
 		shadeClose: true,
@@ -220,7 +189,7 @@ $("#del_btn_rolelist").on('click',function(){
  * @param {Object} sysRoleId
  */
 function openAllotPowerView(sysRoleId) {
-	var indexLayer = layer.open({
+	layer.open({
 		type: 2,
 		title: '分配权限',
 		shadeClose: true,
