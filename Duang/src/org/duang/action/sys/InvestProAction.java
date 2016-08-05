@@ -1,6 +1,7 @@
 package org.duang.action.sys;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +20,10 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.InvestProduct;
-import org.duang.entity.SysRole;
-import org.duang.service.InvestProService;
+import org.duang.common.system.SessionTools;
+import org.duang.entity.Product;
+import org.duang.service.ProductService;
+import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.springframework.context.annotation.Scope;
@@ -46,15 +48,15 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name="editInvestPro", type="dispatcher", location="WEB-INF/page/sys/invest/editInvestPro.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
-public class InvestProAction extends BaseAction<InvestProduct>{
+public class InvestProAction extends BaseAction<Product>{
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 1L;
 	
-	private InvestProService service;
-	@Resource(name="sysinvestproserviceimpl")
-	public void setService(InvestProService service) {
+	private ProductService service;
+	@Resource(name="productserviceimpl")
+	public void setService(ProductService service) {
 		this.service = service;
 	}
 	
@@ -120,6 +122,12 @@ public class InvestProAction extends BaseAction<InvestProduct>{
 						printJsonResult();
 					}else{
 						entity.setId(DataUtils.randomUUID());
+						entity.setIsdelete(0);
+						entity.setCreatetime(new Date());
+						entity.setModifytime(new Date());
+						entity.setCreateuser(SessionTools.getSessionSysUser().getId());
+						entity.setModifyuser(SessionTools.getSessionSysUser().getId());
+						entity.setIsdelete(ConstantCode.UNDELETE_INT);
 						boolean issuccess = service.saveEntity(entity);
 						jsonObject = getJSONObject();
 						if (issuccess) {
@@ -134,6 +142,8 @@ public class InvestProAction extends BaseAction<InvestProduct>{
 					}
 				}else{
 					entity.setIsdelete(0);
+					entity.setModifytime(new Date());
+					entity.setModifyuser(SessionTools.getSessionSysUser().getId());
 					boolean issuccess = service.updateEntity(entity);
 					jsonObject = getJSONObject();
 					if (issuccess) {
@@ -198,9 +208,9 @@ public class InvestProAction extends BaseAction<InvestProduct>{
 	 * @throws
 	 */
 	public JSONObject getJSONObject(){
-		List<InvestProduct> list = null;
+		List<Product> list = null;
 		try {
-			PageUtil<InvestProduct> page = new PageUtil<InvestProduct>();
+			PageUtil<Product> page = new PageUtil<Product>();
 			page.setPageRecords(50);
 			page.setCurrentPageNum(1);
 			condsUtils.addProperties(true, "isdelete");
@@ -249,12 +259,11 @@ public class InvestProAction extends BaseAction<InvestProduct>{
 	 * @throws
 	 */
 	public void  queryInvestPro(){
-		List<InvestProduct> list = null;
+		List<Product> list = null;
 		try {
 			
 			String name = super.getRequest().getParameter("name");
 			String nameZh = super.getRequest().getParameter("nameZh");
-			String min_deadline = super.getRequest().getParameter("min_deadline");
 			condsUtils.addProperties(true, "isdelete");
 			condsUtils.concatValue(new Object[]{1,"ne"});
 			if(DataUtils.notEmpty(name)){
@@ -265,23 +274,16 @@ public class InvestProAction extends BaseAction<InvestProduct>{
 				condsUtils.addProperties(false, "nameZh");
 				condsUtils.concatValue(new Object[]{"%"+nameZh+"%","like"});
 			}
-			if(DataUtils.notEmpty(min_deadline)){
-				condsUtils.addProperties(false, "min_deadline");
-				condsUtils.addValues(false,Integer.parseInt(min_deadline));
-			}
 			list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			int count = service.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if(list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObject(list));
 				jsonObject.put("total", count);
-				jsonObject.put("currPage", getPageUtil().getCurrentPageNum());
-				jsonObject.put("pageSize",getPageUtil().getPageRecords());
 			}else{
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
-				jsonObject.put("currPage", 1);
-				jsonObject.put("pageSize",0);
+				jsonObject.put("msg", "未查到符合条件的产品！");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -303,23 +305,21 @@ public class InvestProAction extends BaseAction<InvestProduct>{
 	 * @return: List<Map<String,Object>>      
 	 * @throws
 	 */
-	public List<Map<String,Object>> fillDataObject(List<InvestProduct> list){
+	public List<Map<String,Object>> fillDataObject(List<Product> list){
 		List<Map<String,Object>> listMapOj = new ArrayList<Map<String,Object>>();
-		for(InvestProduct pro : list){
+		for(Product pro : list){
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("id", pro.getId());
+			map.put("category", pro.getCategory());
 			map.put("name", pro.getName());
 			map.put("nameZh", pro.getNameZh());
 			map.put("nameDescribe", pro.getNameDescribe());
-			map.put("chargeRatio", pro.getChargeRatio());
 			map.put("createtime", pro.getCreatetime());
 			map.put("createuser", pro.getCreateuser());
 			map.put("details", pro.getDetails());
-			map.put("isLottery", pro.getIsLottery());
 			map.put("isNewProduct", pro.getIsNewProduct());
 			map.put("isRecommend", pro.getIsRecommend());
 			
-			map.put("isRedEnvel", pro.getIsRedEnvel());
 			map.put("isSell", pro.getIsSell());
 			map.put("isdelete", pro.getIsdelete());
 			map.put("minDeadline", pro.getMinDeadline());
@@ -355,18 +355,15 @@ public class InvestProAction extends BaseAction<InvestProduct>{
 				entity = service.findById(entity.getId());
 				if(entity != null) {
 					jsonObject.put("id", entity.getId());
+					jsonObject.put("category", entity.getCategory());
 					jsonObject.put("name", entity.getName());
 					jsonObject.put("nameZh", entity.getNameZh());
 					jsonObject.put("nameDescribe", entity.getNameDescribe());
-					jsonObject.put("chargeRatio", entity.getChargeRatio());
 					jsonObject.put("createtime", entity.getCreatetime());
 					jsonObject.put("createuser", entity.getCreateuser());
 					jsonObject.put("details", entity.getDetails());
-					jsonObject.put("isLottery", entity.getIsLottery());
 					jsonObject.put("isNewProduct", entity.getIsNewProduct());
 					jsonObject.put("isRecommend", entity.getIsRecommend());
-					
-					jsonObject.put("isRedEnvel", entity.getIsRedEnvel());
 					jsonObject.put("isSell", entity.getIsSell());
 					jsonObject.put("isdelete", entity.getIsdelete());
 					jsonObject.put("minDeadline", entity.getMinDeadline());
@@ -374,7 +371,7 @@ public class InvestProAction extends BaseAction<InvestProduct>{
 					jsonObject.put("modifytime", entity.getModifytime());
 					jsonObject.put("modifyuser", entity.getModifyuser());
 					
-					jsonObject.put("product_describe", entity.getProductDescribe());
+					jsonObject.put("productDescribe", entity.getProductDescribe());
 					jsonObject.put("refundType", entity.getRefundType());
 					jsonObject.put("riskControl", entity.getRiskControl());
 					jsonObject.put("title1", entity.getTitle1());

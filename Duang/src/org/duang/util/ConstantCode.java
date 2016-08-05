@@ -21,6 +21,10 @@ public interface ConstantCode {
 	 * 未删除
 	 */
 	String UNDELETE = "0";
+	/**
+	 * 未删除
+	 */
+	int UNDELETE_INT = 0;
 	
 	/**
 	 * 删除
@@ -31,4 +35,9 @@ public interface ConstantCode {
 	 * 默认
 	 */
 	String DEFAULT = "0";
+	
+	/**
+	 * select标签没有选择
+	 */
+	String NOSELECTED = "noSelected";
 }

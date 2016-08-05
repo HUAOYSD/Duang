@@ -126,6 +126,13 @@
 				</select> 
 		    </div>
 		    <div>   
+		        <label for="isContract" class="from_label">契约用户：</label>   
+		       	<select  class="easyui-combobox" name="isContract">   
+				    <option value="0" selected="selected">否</option>   
+				    <option value="1">是</option>
+				</select> 
+		    </div>
+		    <div>   
 		        <label for="custManagerId" class="from_label">客户经理ID：</label>   
 		       	<input  type="text" name="custManagerId"/>
 		    </div>

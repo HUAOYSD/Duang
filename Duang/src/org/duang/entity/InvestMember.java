@@ -9,9 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Where;
-import org.hibernate.engine.internal.Cascade;
-
 /**
  * InvestMember entity. @author MyEclipse Persistence Tools
  */
@@ -19,26 +16,83 @@ import org.hibernate.engine.internal.Cascade;
 @Table(name = "invest_member", catalog = "duang")
 public class InvestMember implements java.io.Serializable {
 
-	// Fields
-
+	/**   
+	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	private static final long serialVersionUID = 1L;
+	
 	private String id;
+	/**
+	 * 用户基本类对象
+	 */
 	private MemberInfo memberInfo;
+	/**
+	 * 身份证id
+	 */
 	private String idcard;
+	/**
+	 * 银行卡号
+	 */
 	private String bankCard;
+	/**
+	 * 所有银行名称
+	 */
 	private String bank;
+	/**
+	 * 用户头像
+	 */
 	private String userImage;
+	/**
+	 * 身份证前照
+	 */
 	private String idcardImg1;
+	/**
+	 * 身份证后照
+	 */
 	private String idcardImg2;
+	/**
+	 * 客户经理Id
+	 */
 	private String custManagerId;
+	/**
+	 * 客户经理姓名
+	 */
 	private String managerName;
+	/**
+	 * 是否是契约用户
+	 */
 	private String isContract;
+	/**
+	 * 投资金额
+	 */
 	private double investMoney;
+	/**
+	 * 投资中金额
+	 */
 	private double investingMoney;
+	/**
+	 * 可用余额
+	 */
 	private double useableMoney;
+	/**
+	 * 账户总余额
+	 */
 	private double accountTotalMoney;
+	/**
+	 * 冻结金额
+	 */
 	private double freezeMoney;
+	/**
+	 * 未冻结金额
+	 */
 	private double unfreezeMoney;
+	/**
+	 * 可用积分
+	 */
 	private int useableScore;
+	/**
+	 * 是否允许上线
+	 */
 	private String allowOnline;
 
 	// Constructors

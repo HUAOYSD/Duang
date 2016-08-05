@@ -22,11 +22,13 @@ $(function(){
 		pageList:[50,80,100,150,200],
 		sortOrder:'desc',
 		toolbar:'#invest_memeber_table_toolbar',
+		frozenColumns:[[  
+						{field:'id',checkbox:true,halign:"center", align:"center"},
+						{field:'name',title:'登录名',width:150,halign:"center", align:"center"},
+						{field:'realName',title:'真实姓名',width:100,halign:"center", align:"center",editor:'center'},
+		            ]],
 		columns:[[
-		    {field:'id',checkbox:true,halign:"center", align:"center"},
-			{field:'name',title:'登录名',width:150,halign:"center", align:"center"},
-			{field:'realName',title:'真实姓名',width:100,halign:"center", align:"center",editor:'center'},
-			{field:'nickName',title:'昵称',width:100,halign:"center", align:"center" },
+			{field:'nickname',title:'昵称',width:100,halign:"center", align:"center" },
 			{field:'isFreeze',title:'状态',width:100,halign:"center", align:"center",
 				formatter:function(value,row,index){
 					if(value==1){
@@ -49,6 +51,15 @@ $(function(){
 						return "金账户";
 					}else{
 						return "非金账户";
+					}
+				}
+			},
+			{field:'type',title:'用户类型',width:100,halign:"center", align:"center",
+				formatter: function(value,row,index){
+					if(value==0){
+						return "个体用户";
+					}else if(value==1){
+						return "企业用户";
 					}
 				}
 			},

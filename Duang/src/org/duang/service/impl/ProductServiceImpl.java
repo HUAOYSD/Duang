@@ -7,9 +7,9 @@ import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.InvestProDao;
-import org.duang.entity.InvestProduct;
-import org.duang.service.InvestProService;
+import org.duang.dao.ProductDao;
+import org.duang.entity.Product;
+import org.duang.service.ProductService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -22,17 +22,17 @@ import org.springframework.stereotype.Service;
  * @date 2016年7月26日 下午3:25:24      
  */  
 @ServiceLog(ModelName="理财产品服务管理")
-@Service(value="sysinvestproserviceimpl")
-public class InvestProServiceImpl implements InvestProService{
+@Service(value="productserviceimpl")
+public class ProductServiceImpl implements ProductService{
 
-	private InvestProDao dao;
+	private ProductDao dao;
 
-	@Resource(name="sysinvestprodao")
-	public void setDao(InvestProDao dao) {
+	@Resource(name="productdaoimpl")
+	public void setDao(ProductDao dao) {
 		this.dao = dao;
 	}
 
-	public InvestProServiceImpl(){
+	public ProductServiceImpl(){
 		LoggerUtils.info("注入SysInvestProServiceImpl服务层", this.getClass());
 	}
 	
@@ -71,7 +71,7 @@ public class InvestProServiceImpl implements InvestProService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryAllEntity(Order order) throws Exception {
+	public List<Product> queryAllEntity(Order order) throws Exception {
 		return dao.queryAllEntity(order);
 	}
 
@@ -81,7 +81,7 @@ public class InvestProServiceImpl implements InvestProService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryAllEntity(PageUtil<InvestProduct> page, Order order) throws Exception{
+	public List<Product> queryAllEntity(PageUtil<Product> page, Order order) throws Exception{
 		return dao.queryAllEntity(page, order);
 	}
 
@@ -93,7 +93,7 @@ public class InvestProServiceImpl implements InvestProService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryEntity(String field, Object value, PageUtil<InvestProduct> page, Order order) throws Exception{
+	public List<Product> queryEntity(String field, Object value, PageUtil<Product> page, Order order) throws Exception{
 		return dao.queryEntity(field, value, page, order);
 	}
 
@@ -105,7 +105,7 @@ public class InvestProServiceImpl implements InvestProService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestProduct> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestProduct> page) throws Exception{
+	public List<Product> queryEntity(List<String> properties, List<Object> values, PageUtil<Product> page) throws Exception{
 		return dao.queryEntity(properties, values, page);
 	}
 
@@ -115,7 +115,7 @@ public class InvestProServiceImpl implements InvestProService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public InvestProduct findById(Serializable id) throws Exception{
+	public Product findById(Serializable id) throws Exception{
 		return dao.findById(id);
 	}
 
@@ -125,7 +125,7 @@ public class InvestProServiceImpl implements InvestProService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(InvestProduct t) throws Exception{
+	public boolean saveEntity(Product t) throws Exception{
 		return dao.saveEntity(t);
 	}
 
@@ -135,7 +135,7 @@ public class InvestProServiceImpl implements InvestProService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(InvestProduct t) throws Exception{
+	public boolean updateEntity(Product t) throws Exception{
 		return dao.updateEntity(t);
 	}
 
@@ -145,7 +145,7 @@ public class InvestProServiceImpl implements InvestProService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestProduct t) throws Exception{
+	public boolean deleteEntity(Product t) throws Exception{
 		return dao.deleteEntity(t);
 	}
 

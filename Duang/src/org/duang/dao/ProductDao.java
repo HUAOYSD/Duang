@@ -1,7 +1,7 @@
 package org.duang.dao; 
 
 import org.duang.baseInterface.CommonInterface;
-import org.duang.entity.InvestProduct;
+import org.duang.entity.Product;
 /**   
  * 理财产品dao接口
  * @ClassName:  SysInvestProduct   
@@ -9,7 +9,7 @@ import org.duang.entity.InvestProduct;
  * @author LiYonghui
  * @date 2016年7月26日 下午3:51:51      
  */  
-public interface InvestProDao extends CommonInterface<InvestProduct>  {
+public interface ProductDao extends CommonInterface<Product>  {
 
 }
 

@@ -1,7 +1,7 @@
 package org.duang.service;
 
 import org.duang.baseInterface.CommonInterface;
-import org.duang.entity.InvestProduct;
+import org.duang.entity.Product;
 
 /**   
  * 理财产品业务接口
@@ -10,6 +10,6 @@ import org.duang.entity.InvestProduct;
  * @author LiYonghui
  * @date 2016年7月25日 下午4:27:27      
  */ 
-public interface InvestProService extends CommonInterface<InvestProduct>{
+public interface ProductService extends CommonInterface<Product>{
 
 }

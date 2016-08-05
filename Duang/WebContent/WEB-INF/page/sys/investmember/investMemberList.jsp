@@ -22,16 +22,28 @@
 						<td>&nbsp;&nbsp;<span class="investPro-search">客户经理姓名：</span></td>
 					  	<td><input  name="managerName"/></td>
 					  	<td>&nbsp;<span class="investPro-search">客户类型：</span></td>
-					  	<td><input  name="memberInfo.type"/></td>
+					  	<td>
+					  		<select  class="easyui-combobox" name="memberInfo.type">   
+							    <option value="noSelected" selected="selected">--请选择--</option>   
+							    <option value="0">个体用户</option>   
+				    			<option value="1">企业用户</option>
+							</select> 
+					  	</td>
 					  	<td>&nbsp;<span class="investPro-search">契约用户：</span></td>
-					  	<td><input  name="isContract"/></td>
+					  	<td>
+						       	<select  class="easyui-combobox" name="isContract">
+						       		<option value="noSelected" selected="selected">--请选择--</option>    
+								    <option value="0">否</option>   
+								    <option value="1">是</option>
+								</select> 
+					  	</td>
 					  	<td>
 							  &nbsp;&nbsp;
 							  <a  id="submit_invest_memeber_list_btn" class="easyui-linkbutton my-search-button" iconCls="icon-2012092109942" plain="true">查询</a>
 						</td>
 						<td>
 							&nbsp;&nbsp;
-							  <a  onclick="javascript:c$.clearForm(document.getElementById('queryInvestProForm'))" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
+							  <a  onclick="javascript:$('#queryInvestMemberListForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
 						</td>
 					</tr>
 				  </table>

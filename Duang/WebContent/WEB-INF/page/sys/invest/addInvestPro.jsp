@@ -1,4 +1,4 @@
-<%@page import="org.duang.entity.InvestProduct"%>
+<%@page import="org.duang.entity.Product"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% String path = request.getContextPath();%>
 <%@ include file="/page/inc/inc.jsp"%>
@@ -15,6 +15,13 @@
 		        <input class="easyui-validatebox" type="text" name="name" data-options="required:true" />   
 		    </div>
 		    <div>   
+		        <label for="category" class="investPro_add_from_label">产品类型：</label>   
+		       	<select class="easyui-combobox" name="category">   
+				    <option value="0" selected="selected">信贷产品</option>   
+				    <option value="1">标类产品</option>   
+				</select>   
+		    </div> 
+		    <div>   
 		        <label for="nameDescribe" class="investPro_add_from_label">描述：</label>   
 		        <input class="easyui-validatebox" type="text" name="nameDescribe"/>   
 		    </div> 
@@ -26,12 +33,6 @@
 		        <label for="yieldDescribe" class="investPro_add_from_label">收益率描述：</label>   
 		        <input class="easyui-validatebox" type="text" name="yieldDescribe"/>   
 		    </div>
-		    
-		    <div>   
-		        <label for="chargeRatio" class="investPro_add_from_label">手续费比例率：</label>   
-		        <input class="easyui-validatebox" type="text"  name="chargeRatio"/>   
-		    </div> 
-		    
 		    <div>   
 		        <label for="title1" class="investPro_add_from_label">标题1：</label>   
 		        <input class="easyui-validatebox" type="text"  name="title1"/>   
@@ -65,23 +66,6 @@
 				    <option value="0">停售</option>   
 				</select>   
 		    </div> 
-		    
-		    <div>   
-		        <label for="isLottery" class="investPro_add_from_label">是否抽奖：</label>   
-		       	<select class="easyui-combobox" name="isLottery">   
-				    <option value="0" selected="selected">否</option>   
-				    <option value="1">是</option>   
-				</select>   
-		    </div>
-		    
-		    <div>   
-		        <label for="isRedEnvel" class="investPro_add_from_label">是否红包：</label>   
-		       	<select class="easyui-combobox" name="isRedEnvel">   
-				    <option value="0" selected="selected">否</option>   
-				    <option value="1">是</option>   
-				</select>   
-		    </div>  
-		    
 		    <div>   
 		        <label for="isNewProduct" class="investPro_add_from_label">是否新品：</label>   
 		       	<select class="easyui-combobox" name="isNewProduct">   
@@ -114,7 +98,7 @@
 	</div>
 	<div align="center" id="footer-oper">
    	    <div id="content-oper">
-	    	 <a  id="submitInvest_btn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
+	    	 <a  id="submit_addInvestPro" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
 		     &nbsp;&nbsp;&nbsp;&nbsp;
 		     <a  onclick="javascript:$('#investProSaveForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
     	</div>
@@ -133,16 +117,12 @@
 			    	if(data.result==true){
 			    		window.parent.reloadDataGrid();
 			    		parent.layer.closeAll();
-			    	}else{
-			    		layer.msg(data.msg, {
-			    			  icon: 5,
-			    			  time: 3000 //2秒关闭（如果不配置，默认是3秒）
-			    		});
 			    	}
+			    	layer.msg(data.msg, {time: 3000});
 			    }    
 			});
 		});
-		$("#submitInvest_btn").on("click", function(){
+		$("#submit_addInvestPro").on("click", function(){
 			if(!$("#investProSaveForm").form('validate')){
 				return false;
 			}

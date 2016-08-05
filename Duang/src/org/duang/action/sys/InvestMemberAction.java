@@ -126,17 +126,17 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 			condsUtils.concatValue(new String[]{"infoAlias","as"});
 			if(DataUtils.notEmpty(entity.getMemberInfo().getName())){
 				condsUtils.addProperties(false, "infoAlias.name");
-				condsUtils.addValues(false, entity.getMemberInfo().getName());
+				condsUtils.concatValue(new String[]{entity.getMemberInfo().getName(),"like"});
 			}
 			if(DataUtils.notEmpty(entity.getMemberInfo().getRealName())){
 				condsUtils.addProperties(false, "infoAlias.realName");
-				condsUtils.addValues(false, entity.getMemberInfo().getRealName());
+				condsUtils.concatValue(new String[]{entity.getMemberInfo().getRealName(),"like"});
 			}
 			if(DataUtils.notEmpty(entity.getMemberInfo().getPhone())){
 				condsUtils.addProperties(false, "infoAlias.phone");
-				condsUtils.addValues(false, entity.getMemberInfo().getPhone());
+				condsUtils.concatValue(new String[]{entity.getMemberInfo().getPhone(),"like"});
 			}
-			if(DataUtils.notEmpty(entity.getMemberInfo().getType())){
+			if(DataUtils.notEmpty(entity.getMemberInfo().getType()) && !ConstantCode.NOSELECTED.equals(entity.getMemberInfo().getType())){
 				condsUtils.addProperties(false, "infoAlias.type");
 				condsUtils.addValues(false, entity.getMemberInfo().getType());
 			}
@@ -146,14 +146,15 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 			}
 			if(DataUtils.notEmpty(entity.getManagerName())){
 				condsUtils.addProperties(false, "managerName");
-				condsUtils.addValues(false, entity.getManagerName());
+				condsUtils.concatValue(new String[]{entity.getManagerName(),"like"});
 			}
-			if(DataUtils.notEmpty(entity.getIsContract())){
+			if(DataUtils.notEmpty(entity.getIsContract()) && !ConstantCode.NOSELECTED.equals(entity.getIsContract())){
 				condsUtils.addProperties(false, "isContract");
 				condsUtils.addValues(false,entity.getIsContract());
 			}
 	
 			
+			@SuppressWarnings("rawtypes")
 			List list = investMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			int count = investMemberService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if(list != null && list.size() > 0) {
@@ -215,7 +216,7 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 				map.put("memberInfoId",memberInfo.getId());
 				map.put("name",memberInfo.getName());
 				map.put("realName",memberInfo.getRealName());
-				map.put("nickName",memberInfo.getNickname());
+				map.put("nickname",memberInfo.getNickname());
 				map.put("email",memberInfo.getEmail());
 				map.put("age",memberInfo.getAge());
 				map.put("sex",memberInfo.getSex());
@@ -224,73 +225,6 @@ public class InvestMemberAction extends BaseAction<InvestMember>{
 				map.put("isDelete",memberInfo.getIsdelete());
 				map.put("createTime", DateUtils.getTimeStamp(memberInfo.getCreateTime()));
 				map.put("modifyTime", DateUtils.getTimeStamp(memberInfo.getModifyTime()));
-				map.put("createuser",memberInfo.getCreateuser());
-				map.put("modifyuser",memberInfo.getModifyuser());
-				map.put("userImg",memberInfo.getUserImg());
-				map.put("isEliteAccount",memberInfo.getIsEliteAccount());
-				map.put("type",memberInfo.getType());
-				map.put("level",memberInfo.getLevel());
-				map.put("price",memberInfo.getPrice());
-				map.put("password",memberInfo.getPassword());
-				map.put("handPassword",memberInfo.getHandPassword());
-				map.put("isFreeze",memberInfo.getIsFreeze());
-				listMap.add(map);
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			LoggerUtils.error("封装理财用户错误："+e.getMessage(), this.getClass());
-			LoggerUtils.error("封装理财用户错误："+e.getLocalizedMessage(), this.getClass());
-		}
-		return listMap;
-	}
-	
-	/**
-	 * 查询全部的时候List<InvestMember>进行封装
-	 * @Title: fillDataObject   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param list
-	 * @param: @return  
-	 * @author LiYonghui    
-	 * @date 2016年8月3日 下午3:30:51
-	 * @return: List<Map<String,Object>>      
-	 * @throws
-	 */
-	private List<Map<String,Object>> fillDataObject(List<InvestMember> list){
-		List<Map<String,Object>> listMap =  new ArrayList<Map<String,Object>>();
-		try{
-			for(InvestMember im : list){
-				Map<String,Object> map = new HashMap<String,Object>();
-				map.put("id",im.getId());
-				map.put("idcard",im.getIdcard());
-				map.put("bankCard",im.getBankCard());
-				map.put("bank",im.getBank());
-				map.put("userImage",im.getUserImage());
-				map.put("idcardImg1",im.getIdcardImg1());
-				map.put("idcardImg2",im.getIdcardImg2());
-				map.put("custManagerId",im.getCustManagerId());
-				map.put("managerName",im.getManagerName());
-				map.put("isContract",im.getIsContract());
-				map.put("investMoney",im.getInvestMoney());
-				map.put("investingMoney",im.getInvestingMoney());
-				map.put("useableMoney",im.getUseableMoney());
-				map.put("accountTotalMoney",im.getAccountTotalMoney());
-				map.put("freezeMoney",im.getFreezeMoney());
-				map.put("unfreezeMoney",im.getUnfreezeMoney());
-				map.put("useableScore",im.getUseableScore());
-				map.put("allowOnline",im.getAllowOnline());
-				MemberInfo memberInfo = im.getMemberInfo();
-				map.put("memberInfoId",memberInfo.getId());
-				map.put("name",memberInfo.getName());
-				map.put("realName",memberInfo.getRealName());
-				map.put("nickName",memberInfo.getNickname());
-				map.put("email",memberInfo.getEmail());
-				map.put("age",memberInfo.getAge());
-				map.put("sex",memberInfo.getSex());
-				map.put("phone",memberInfo.getPhone());
-				map.put("describe",memberInfo.getDescribe());
-				map.put("isDelete",memberInfo.getIsdelete());
-				map.put("createTime",DateUtils.getTimeStamp(memberInfo.getCreateTime()));
-				map.put("modifyTime",DateUtils.getTimeStamp(memberInfo.getModifyTime()));
 				map.put("createuser",memberInfo.getCreateuser());
 				map.put("modifyuser",memberInfo.getModifyuser());
 				map.put("userImg",memberInfo.getUserImg());
