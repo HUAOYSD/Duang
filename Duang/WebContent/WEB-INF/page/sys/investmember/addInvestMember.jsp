@@ -140,6 +140,10 @@
 		        <label for="managerName" class="from_label">客户经理姓名：</label>   
 		       	<input  type="text" name="managerName"/>
 		    </div>
+		    <div>   
+		        <label for="idcardImg1" class="from_label">身份证前照：</label>
+				<input  type="text" id="addInvestMember_idcardImg1" name="idcardImg1" />   
+		    </div>
 		</form>  
 	</div>
 	<div align="center" class="footer-oper">
@@ -151,6 +155,12 @@
 	</div>  
 	<script type="text/javascript">
 		$(function(){
+			
+			$('#addInvestMember_idcardImg1').filebox({    
+			    buttonText: '选择文件', 
+			    buttonAlign: 'left' 
+			});
+			
 			$('#investMemberSaveForm').form({    
 			    url:"investmember!saveInvestMember.do",    
 			    onSubmit: function(){    

@@ -131,7 +131,7 @@ $(function(){
 	    		"total":data.total,
 	    	}); 
 	    }    
-	});  
+	});
 });
 
 function reloadDataGrid(){
