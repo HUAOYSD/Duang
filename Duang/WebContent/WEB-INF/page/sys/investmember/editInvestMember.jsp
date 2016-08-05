@@ -14,11 +14,11 @@
 		    </div>   
 		    <div>   
 		        <label for="memberInfo.realName" class="from_label">真实姓名：</label>   
-		        <input class="easyui-validatebox" type="text" name="memberInfo.realName"/>   
+		        <input class="easyui-validatebox" type="text" name="memberInfo.realName" data-options="validType:'name'"/>   
 		    </div>
 		    <div>   
 		        <label for="memberInfo.nickname" class="from_label">昵称：</label>   
-		        <input class="easyui-validatebox" type="text" name="memberInfo.nickname"/>   
+		        <input class="easyui-validatebox" type="text" name="memberInfo.nickname" data-options="validType:'name'"/>   
 		    </div>
 		    <div>   
 		        <label for="memberInfo.password" class="from_label">密码：</label>   
@@ -26,15 +26,15 @@
 		    </div>
 		    <div>   
 		        <label for="memberInfo.phone" class="from_label">手机：</label>   
-		        <input class="easyui-validatebox" type="text" name="memberInfo.phone"/>   
+		        <input class="easyui-validatebox" type="text" name="memberInfo.phone" data-options="validType:'mobile'"/>   
 		    </div> 
 		    <div>   
 		        <label for="memberInfo.email" class="from_label">邮箱：</label>   
-		        <input class="easyui-validatebox" type="text" name="memberInfo.email"/>   
+		        <input class="easyui-validatebox" type="text" name="memberInfo.email" data-options="validType:'email'"/>   
 		    </div> 
 		    <div>   
 		        <label for="memberInfo.age" class="from_label">年龄：</label>   
-		        <input class="easyui-validatebox" type="text" name="memberInfo.age"/>   
+		        <input class="easyui-numberbox" value="18" data-options="min:18,max:150" type="text" name="memberInfo.age"/>   
 		    </div>
 		    
 		    <div>   
@@ -71,7 +71,7 @@
 		    </div> 
 		    <div>   
 		        <label for="memberInfo.price" class="from_label">财力值：</label>   
-		       	<input class="easyui-validatebox" type="text" name="memberInfo.price"/>万元
+		       	<input type="text" name="memberInfo.price" class="easyui-numberbox" value="0" data-options="min:0"/>万元
 		    </div> 
 		    <div>   
 		        <label for="memberInfo.describe" class="from_label">介绍：</label>   
@@ -80,43 +80,43 @@
 		   <h1>理财信息</h1>
 		    <div>   
 		        <label for="idcard" class="from_label">身份证号：</label>   
-		       	<input type="text" name="idcard"/>
+		       	<input type="text" name="idcard" class="easyui-validatebox" data-options="validType:'idcard'"/>
 		    </div>
 		    <div>   
 		        <label for="bankCard" class="from_label">绑定银行卡号：</label>   
-		       	<input type="text" name="bankCard"/>
+		       	<input type="text" name="bankCard" class="easyui-validatebox"/>
 		    </div>
 		    <div>   
 		        <label for="bank" class="from_label">所属银行：</label>   
-		       	<input type="text" name="bank"/>
+		       	<input type="text" name="bank" class="easyui-validatebox" data-options="validType:'chinese'"/>
 		    </div> 
 		     <div>   
 		        <label for="investMoney" class="from_label">投资金额：</label>   
-		       	<input type="text" name="investMoney"/>
+		       	<input type="text" name="investMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
 		    </div>
 		     <div>   
 		        <label for="investingMoney" class="from_label">投资中金额：</label>   
-		       	<input  type="text" name="investingMoney"/>
+		       	<input  type="text" name="investingMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
 		    </div>
 		     <div>   
 		        <label for="useableMoney" class="from_label">可用余额：</label>   
-		       	<input  type="text" name="useableMoney"/>
+		       	<input  type="text" name="useableMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
 		    </div>
 		    <div>   
 		        <label for="accountTotalMoney" class="from_label">账面总余额：</label>   
-		       	<input  type="text" name="accountTotalMoney"/>
+		       	<input  type="text" name="accountTotalMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
 		    </div>
 		     <div>   
 		        <label for="freezeMoney" class="from_label">冻结余额：</label>   
-		       	<input  type="text" name="freezeMoney"/>
+		       	<input  type="text" name="freezeMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
 		    </div>
 		     <div>   
 		        <label for="unfreezeMoney" class="from_label">未冻结余额：</label>   
-		       	<input  type="text" name="unfreezeMoney"/>
+		       	<input  type="text" name="unfreezeMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
 		    </div>
 		     <div>   
 		        <label for="useableScore" class="from_label">可用积分：</label>   
-		       	<input  type="text" name="useableScore"/>
+		       	<input  type="text" name="useableScore" class="easyui-validatebox" data-options="validType:'integer'"/>
 		    </div>
 		    <div>   
 		        <label for="allowOnline" class="from_label">允许上线：</label>   
@@ -137,9 +137,7 @@
 	</div>
 	<div align="center" class="footer-oper">
    	    <div class="content-oper">
-	    	 <a  id="submitInvestMemberEdit_btn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
-		     &nbsp;&nbsp;&nbsp;&nbsp;
-		     <a  onclick="javascript:$('#investMemberSaveForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
+	    	 <a  id="submitInvestMemberEdit_btn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942',size:'large'" plain="true">保存</a>
     	</div>
 	</div>  
 	<script type="text/javascript">

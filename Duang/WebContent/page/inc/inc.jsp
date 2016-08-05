@@ -17,4 +17,5 @@
 <script type="text/javascript" src="<%=request.getContextPath() %>/js/extends.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath() %>/js/json.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath() %>/js/util.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath() %>/js/yxuiUtil.js"></script>
 		
