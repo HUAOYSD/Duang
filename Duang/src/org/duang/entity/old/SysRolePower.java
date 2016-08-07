@@ -1,4 +1,4 @@
-package org.duang.entity;
+package org.duang.entity.old;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,15 +8,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicInsert;
-
 /**
  * SysRolePower entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "sys_role_power", catalog = "duang")
-@DynamicInsert(true)
-@SuppressWarnings("serial")
 public class SysRolePower implements java.io.Serializable {
 
 	// Fields

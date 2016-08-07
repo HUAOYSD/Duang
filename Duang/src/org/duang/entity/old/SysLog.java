@@ -1,21 +1,18 @@
-package org.duang.entity;
+package org.duang.entity.old;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicInsert;
-
 /**
  * SysLog entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "sys_log", catalog = "duang")
-@DynamicInsert(true)
-@SuppressWarnings("serial")
 public class SysLog implements java.io.Serializable {
 
 	// Fields
@@ -27,7 +24,7 @@ public class SysLog implements java.io.Serializable {
 	private String logAction;
 	private String logType;
 	private String logIp;
-	private Date optionTime;
+	private Timestamp optionTime;
 	private String logStatus;
 
 	// Constructors
@@ -45,7 +42,7 @@ public class SysLog implements java.io.Serializable {
 	/** full constructor */
 	public SysLog(String id, String userName, String modelName,
 			String logContent, String logAction, String logType, String logIp,
-			Date optionTime, String logStatus) {
+			Timestamp optionTime, String logStatus) {
 		this.id = id;
 		this.userName = userName;
 		this.modelName = modelName;
@@ -86,7 +83,7 @@ public class SysLog implements java.io.Serializable {
 		this.modelName = modelName;
 	}
 
-	@Column(name = "log_content", length = 16777215)
+	@Column(name = "log_content", length = 2046)
 	public String getLogContent() {
 		return this.logContent;
 	}
@@ -123,11 +120,11 @@ public class SysLog implements java.io.Serializable {
 	}
 
 	@Column(name = "option_time", length = 19)
-	public Date getOptionTime() {
+	public Timestamp getOptionTime() {
 		return this.optionTime;
 	}
 
-	public void setOptionTime(Date optionTime) {
+	public void setOptionTime(Timestamp optionTime) {
 		this.optionTime = optionTime;
 	}
 

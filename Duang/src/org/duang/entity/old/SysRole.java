@@ -1,5 +1,4 @@
-package org.duang.entity;
-
+package org.duang.entity.old;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,11 +19,16 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "sys_role", catalog = "duang")
 @DynamicInsert(true)
-@SuppressWarnings("serial")
 public class SysRole implements java.io.Serializable {
 
 	// Fields
 
+	/**   
+	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
+	 */   
+	private static final long serialVersionUID = 8782870330009810856L;
+	
+	
 	private String id;
 	private String roleName;
 	private String roleDesc;
