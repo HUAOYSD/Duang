@@ -244,6 +244,37 @@ $("#investMemeberList-delete-btn").on('click',function(){
 		  return;
 	});
 });
+
+//上传身份证前照
+$("#investMemeberList-upload-idcard1-btn").on('click',function(){
+	//判断是否选择
+	if(!isSelectedRow()){
+		return;
+	}
+	indexLayer = layer.open({
+		type: 2,
+		title: '上传身份证前照',
+		shadeClose: true,
+		shade: 0.8,
+		area: ['450px', '30%'],
+		content: "investmember!touUpload.do?id="+selectedRow.id+"type=1" //1代表上传身份证前照
+	});
+});
+//上传身份证前照
+$("#investMemeberList-upload-idcard2-btn").on('click',function(){
+	//判断是否选择
+	if(!isSelectedRow()){
+		return;
+	}
+	indexLayer = layer.open({
+		type: 2,
+		title: '上传身份证后照',
+		shadeClose: true,
+		shade: 0.8,
+		area: ['450px', '30%'],
+		content: "investmember!touUpload.do?id="+selectedRow.id+"type=2" //2代表上传身份证前照
+	});
+});
 function isSelectedRow(){
 	selectedRow = tableObj.datagrid("getSelected");
 	if(selectedRow==null){

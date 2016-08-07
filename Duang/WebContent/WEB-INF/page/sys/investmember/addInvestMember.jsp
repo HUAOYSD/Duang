@@ -1,11 +1,13 @@
 <%@page import="org.duang.entity.InvestMember"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% String path = request.getContextPath();%>
+<% 
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+%>
 <%@ include file="/page/inc/inc.jsp"%>
 <body style="background-color:#fff;" class="bodyContent">
 	<div class="content">
 	  	<form id="investMemberSaveForm" method="post"> 
-	  		<input type="hidden" name="id"/> 
 	  		<h1>基本信息</h1>
 		    <div>   
 		        <label for="memberInfo.name" class="from_label">登录名：</label>   
@@ -140,11 +142,7 @@
 		        <label for="managerName" class="from_label">客户经理姓名：</label>   
 		       	<input  type="text" name="managerName"/>
 		    </div>
-		    <div>   
-		        <label for="idcardImg1" class="from_label">身份证前照：</label>
-				<input  type="text" id="addInvestMember_idcardImg1" name="idcardImg1" />   
-		    </div>
-		</form>  
+		</form>
 	</div>
 	<div align="center" class="footer-oper">
    	    <div class="content-oper">
@@ -155,12 +153,6 @@
 	</div>  
 	<script type="text/javascript">
 		$(function(){
-			
-			$('#addInvestMember_idcardImg1').filebox({    
-			    buttonText: '选择文件', 
-			    buttonAlign: 'left' 
-			});
-			
 			$('#investMemberSaveForm').form({    
 			    url:"investmember!saveInvestMember.do",    
 			    onSubmit: function(){    

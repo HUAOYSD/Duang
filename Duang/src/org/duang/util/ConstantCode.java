@@ -40,4 +40,5 @@ public interface ConstantCode {
 	 * select标签没有选择
 	 */
 	String NOSELECTED = "noSelected";
+	
 }

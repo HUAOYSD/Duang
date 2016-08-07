@@ -16,6 +16,7 @@ input {
 	border-bottom: 1px solid #B2B2B2;
 	border-right: 1px solid #B2B2B2;
 }
+
 textarea {
 	padding: 0px;
 	overflow-y: auto;

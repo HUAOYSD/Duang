@@ -1,5 +1,7 @@
 package org.duang.entity;
 
+import java.io.File;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -94,7 +96,6 @@ public class InvestMember implements java.io.Serializable {
 	 * 是否允许上线
 	 */
 	private String allowOnline;
-
 	// Constructors
 
 	/** default constructor */

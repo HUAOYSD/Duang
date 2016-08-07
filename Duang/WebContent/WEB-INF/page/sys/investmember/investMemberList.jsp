@@ -65,6 +65,9 @@
 	      <a id="investMemeberList-add-btn" class="easyui-linkbutton" iconCls="icon-add" plain="true">新增</a>
 	      <a id="investMemeberList-update-btn" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
 	      <a id="investMemeberList-delete-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+	      <a id="investMemeberList-upload-idcard1-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">上传身份证前照</a>
+	      <a id="investMemeberList-upload-idcard2-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">上传身份证后照</a>
+	      <a id="investMemeberList-unselected-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">取消选择</a>
   	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path%>/ui/sys/investmember/investMemberList.js"></script>
