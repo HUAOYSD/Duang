@@ -1,6 +1,4 @@
 package org.duang.entity;
-
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,9 +35,6 @@ public class InvestMember implements java.io.Serializable {
 	private double totalIncome;
 	private double totalMoney;
 	private int useableScore;
-	/**
-	 * 是否允许上线
-	 */
 	private int registerStyle;
 	private Set<Stock> stocks = new HashSet<Stock>(0);
 	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);

@@ -19,10 +19,10 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * LoanList entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "loan_list", catalog = "duang")
 @DynamicInsert(true)
-@SuppressWarnings("serial")
 public class LoanList implements java.io.Serializable {
 
 	// Fields
@@ -40,6 +40,7 @@ public class LoanList implements java.io.Serializable {
 	private double getMoney;
 	private double yetMoney;
 	private double returnMoney;
+	private double agoMoney;
 	private double yetReturnMoney;
 	private int returnStatus;
 	private int loanState;
@@ -52,8 +53,10 @@ public class LoanList implements java.io.Serializable {
 	private Date endReturnDate;
 	private Date doneReturnDate;
 	private int loanStyle;
-	private Set<ApplyLoanResult> applyLoanResults = new HashSet<ApplyLoanResult>(
-			0);
+	private int backStyle;
+	private Set<Stock> stocks = new HashSet<Stock>(0);
+	private Set<ApplyLoanResult> applyLoanResults = new HashSet<ApplyLoanResult>(0);
+	private Set<ScaleLoanList> scaleLoanLists = new HashSet<ScaleLoanList>(0);
 	private Set<BillLoan> billLoans = new HashSet<BillLoan>(0);
 	private Set<ApplyLoanInfo> applyLoanInfos = new HashSet<ApplyLoanInfo>(0);
 	private Set<ApplyLoanHouse> applyLoanHouses = new HashSet<ApplyLoanHouse>(0);
@@ -72,18 +75,7 @@ public class LoanList implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public LoanList(String id, LoanMember loanMember, LoanType loanType,
-			String pactNumber, int isSell, int poundageState,
-			double money, double realMoney, double manageCost, double poundage,
-			double getMoney, double yetMoney, double returnMoney,
-			double yetReturnMoney, int returnStatus, int loanState,
-			int applyState, String loanUse, double loanInterest,
-			Date createTime, Date signDate,
-			Date beginReturnDate, Date endReturnDate,
-			Date doneReturnDate, int loanStyle,
-			Set<ApplyLoanResult> applyLoanResults, Set<BillLoan> billLoans,
-			Set<ApplyLoanInfo> applyLoanInfos,
-			Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {
+	public LoanList(String id, LoanMember loanMember, LoanType loanType, String pactNumber, int isSell, int poundageState, double money, double realMoney, double manageCost, double poundage, double getMoney, double yetMoney, double returnMoney, double agoMoney, double yetReturnMoney, int returnStatus, int loanState, int applyState, String loanUse, double loanInterest, Date createTime, Date signDate, Date beginReturnDate, Date endReturnDate, Date doneReturnDate, int loanStyle, int backStyle, Set<Stock> stocks, Set<ApplyLoanResult> applyLoanResults, Set<ScaleLoanList> scaleLoanLists, Set<BillLoan> billLoans, Set<ApplyLoanInfo> applyLoanInfos, Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {
 		this.id = id;
 		this.loanMember = loanMember;
 		this.loanType = loanType;
@@ -97,6 +89,7 @@ public class LoanList implements java.io.Serializable {
 		this.getMoney = getMoney;
 		this.yetMoney = yetMoney;
 		this.returnMoney = returnMoney;
+		this.agoMoney = agoMoney;
 		this.yetReturnMoney = yetReturnMoney;
 		this.returnStatus = returnStatus;
 		this.loanState = loanState;
@@ -109,7 +102,10 @@ public class LoanList implements java.io.Serializable {
 		this.endReturnDate = endReturnDate;
 		this.doneReturnDate = doneReturnDate;
 		this.loanStyle = loanStyle;
+		this.backStyle = backStyle;
+		this.stocks = stocks;
 		this.applyLoanResults = applyLoanResults;
+		this.scaleLoanLists = scaleLoanLists;
 		this.billLoans = billLoans;
 		this.applyLoanInfos = applyLoanInfos;
 		this.applyLoanHouses = applyLoanHouses;
@@ -237,6 +233,15 @@ public class LoanList implements java.io.Serializable {
 		this.returnMoney = returnMoney;
 	}
 
+	@Column(name = "ago_money", precision = 22, scale = 0)
+	public double getAgoMoney() {
+		return this.agoMoney;
+	}
+
+	public void setAgoMoney(double agoMoney) {
+		this.agoMoney = agoMoney;
+	}
+
 	@Column(name = "yet_return_money", precision = 22, scale = 0)
 	public double getYetReturnMoney() {
 		return this.yetReturnMoney;
@@ -345,6 +350,24 @@ public class LoanList implements java.io.Serializable {
 		this.loanStyle = loanStyle;
 	}
 
+	@Column(name = "back_style")
+	public int getBackStyle() {
+		return this.backStyle;
+	}
+
+	public void setBackStyle(int backStyle) {
+		this.backStyle = backStyle;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")
+	public Set<Stock> getStocks() {
+		return this.stocks;
+	}
+
+	public void setStocks(Set<Stock> stocks) {
+		this.stocks = stocks;
+	}
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")
 	public Set<ApplyLoanResult> getApplyLoanResults() {
 		return this.applyLoanResults;
@@ -352,6 +375,15 @@ public class LoanList implements java.io.Serializable {
 
 	public void setApplyLoanResults(Set<ApplyLoanResult> applyLoanResults) {
 		this.applyLoanResults = applyLoanResults;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")
+	public Set<ScaleLoanList> getScaleLoanLists() {
+		return this.scaleLoanLists;
+	}
+
+	public void setScaleLoanLists(Set<ScaleLoanList> scaleLoanLists) {
+		this.scaleLoanLists = scaleLoanLists;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")

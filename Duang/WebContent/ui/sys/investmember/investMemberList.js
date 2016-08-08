@@ -24,7 +24,7 @@ $(function(){
 		toolbar:'#invest_memeber_table_toolbar',
 		frozenColumns:[[  
 						{field:'id',checkbox:true,halign:"center", align:"center"},
-						{field:'name',title:'登录名',width:150,halign:"center", align:"center"},
+						{field:'loginName',title:'登录名',width:150,halign:"center", align:"center"},
 						{field:'realName',title:'真实姓名',width:100,halign:"center", align:"center",editor:'center'},
 		            ]],
 		columns:[[
@@ -38,12 +38,12 @@ $(function(){
 					}
 				}
 			},
-			{field:'investMoney',title:'投资金额',width:100,halign:"center", align:"center" },
-			{field:'investingMoney',title:'投资中金额',width:100,halign:"center", align:"center"},
-			{field:'useableMoney',title:'可用余额',width:100,halign:"center", align:"center" },
-			{field:'accountTotalMoney',title:'账面总金额',width:100,halign:"center", align:"center" },
-			{field:'freezeMoney',title:'冻结余额',width:150,halign:"center", align:"center" },
-			{field:'unfreezeMoney',title:'未冻结余额',width:100,halign:"center", align:"center" },
+			{field:'price',title:'财力值',width:100,halign:"center", align:"center" },
+			{field:'level',title:'等级',width:100,halign:"center", align:"center" },
+			{field:'balance',title:'余额',width:100,halign:"center", align:"center" },
+			{field:'investing',title:'投资中金额',width:100,halign:"center", align:"center"},
+			{field:'totalIncome',title:'总收益',width:100,halign:"center", align:"center" },
+			{field:'totalMoney',title:'总资产',width:100,halign:"center", align:"center" },
 			{field:'useableScore',title:'可用积分',width:100,halign:"center", align:"center" },
 			{field:'isEliteAccount',title:'是否为金账户',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
@@ -81,19 +81,22 @@ $(function(){
 				   }
 				}
 			},
-			{field:'allowOnline',title:'允许上线',width:100,halign:"center", align:"center",
+			{field:'registerStyle',title:'注册方式',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
-						return "允许";
+						return "线下";
+					}else if(value==2){
+						return "Android";
+					}else if(value==3){
+						return "IOS";
 					}else{
-						return "不允许";
+						return "平台系统";
 					}
 				}
 			},
-			{field:'idcard',title:'身份证号',width:200,halign:"center", align:"center"},
+			{field:'idCard',title:'身份证号',width:200,halign:"center", align:"center"},
 			{field:'phone',title:'手机号',width:150,halign:"center", align:"center" },
-			{field:'bankCard',title:'银行卡号',width:200,halign:"center", align:"center" },
-			{field:'bank',title:'所属银行',width:100,halign:"center", align:"center" },
+			{field:'miDescribe',title:'描述',width:200,halign:"center", align:"center" },
 			{field:'sex',title:'性别',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
@@ -106,10 +109,9 @@ $(function(){
 				}
 			},
 			{field:'age',title:'年龄',width:100,halign:"center", align:"center" },
-			{field:'userImage',title:'头像',width:200,halign:"center", align:"center" },
-			{field:'idcardImg1',title:'身份证前照',width:200,halign:"center", align:"center" },
-			{field:'idcardImg2',title:'身份证后照',width:200,halign:"center", align:"center" },
-			{field:'custManagerId',title:'客户经理ID',width:100,halign:"center", align:"center" },
+			{field:'userImg',title:'头像',width:200,halign:"center", align:"center" },
+			{field:'idCardImg1',title:'身份证前照',width:200,halign:"center", align:"center" },
+			{field:'idCardImg2',title:'身份证后照',width:200,halign:"center", align:"center" },
 			{field:'managerName',title:'客户经理姓名',width:100,halign:"center", align:"center" },
 			{field:'email',title:'邮箱',width:150,halign:"center", align:"center" },
 			{field:'memberInfoId',title:'用户id',hidden:true}

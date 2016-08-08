@@ -49,19 +49,6 @@ $(function(){
 			},
 			{field:'title1',title:'标题1',width:100,halign:"center", align:"center" },
 			{field:'title2',title:'标题2',width:150,halign:"center", align:"center" },
-			{field:'minDeadline',title:'起投期限',width:100,halign:"center", align:"center" },
-			{field:'minMoney',title:'起投金额',width:100,halign:"center", align:"center" },
-			{field:'refundType',title:'还款方式',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==1){
-						return "等额本息";
-					}else if(value==2){
-						return "一次性还款";
-					}else if(value==3){
-						return "先息后本";
-					}
-				}
-			},
 			{field:'isSell',title:'是否起售',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){

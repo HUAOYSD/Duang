@@ -1,10 +1,5 @@
 package org.duang.action.sys;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,19 +10,12 @@ import javax.annotation.Resource;
 
 import net.sf.json.JSONArray;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
-import org.aspectj.apache.bcel.classfile.Constant;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
@@ -157,9 +145,9 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 		try {
 			condsUtils.addProperties(true, "memberInfo");
 			condsUtils.concatValue(new String[] { "infoAlias", "as" });
-			if (DataUtils.notEmpty(entity.getMemberInfo().getName())) {
+			if (DataUtils.notEmpty(entity.getMemberInfo().getLoginName())) {
 				condsUtils.addProperties(false, "infoAlias.name");
-				condsUtils.concatValue(new String[] { entity.getMemberInfo().getName(), "like" });
+				condsUtils.concatValue(new String[] { entity.getMemberInfo().getLoginName(), "like" });
 			}
 			if (DataUtils.notEmpty(entity.getMemberInfo().getRealName())) {
 				condsUtils.addProperties(false, "infoAlias.realName");
@@ -169,19 +157,15 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				condsUtils.addProperties(false, "infoAlias.phone");
 				condsUtils.concatValue(new String[] { entity.getMemberInfo().getPhone(), "like" });
 			}
-			if (DataUtils.notEmpty(entity.getMemberInfo().getType()) && !ConstantCode.NOSELECTED.equals(entity.getMemberInfo().getType())) {
+			if (DataUtils.notEmpty(entity.getMemberInfo().getType()) && !ConstantCode.NOSELECTED1.equals(entity.getMemberInfo().getType())) {
 				condsUtils.addProperties(false, "infoAlias.type");
 				condsUtils.addValues(false, entity.getMemberInfo().getType());
-			}
-			if (DataUtils.notEmpty(entity.getCustManagerId())) {
-				condsUtils.addProperties(false, "custManagerId");
-				condsUtils.addValues(false, entity.getCustManagerId());
 			}
 			if (DataUtils.notEmpty(entity.getManagerName())) {
 				condsUtils.addProperties(false, "managerName");
 				condsUtils.concatValue(new String[] { entity.getManagerName(), "like" });
 			}
-			if (DataUtils.notEmpty(entity.getIsContract()) && !ConstantCode.NOSELECTED.equals(entity.getIsContract())) {
+			if (ConstantCode.NOSELECTED!=entity.getIsContract()) {
 				condsUtils.addProperties(false, "isContract");
 				condsUtils.addValues(false, entity.getIsContract());
 			}
@@ -228,33 +212,24 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				Object[] array = (Object[]) list.get(i);
 				InvestMember im = (InvestMember) array[1];
 				map.put("id", im.getId());
-				map.put("idcard", im.getIdcard());
-				map.put("bankCard", im.getBankCard());
-				map.put("bank", im.getBank());
-				map.put("userImage", im.getUserImage());
-				map.put("idcardImg1", im.getIdcardImg1());
-				map.put("idcardImg2", im.getIdcardImg2());
-				map.put("custManagerId", im.getCustManagerId());
 				map.put("managerName", im.getManagerName());
 				map.put("isContract", im.getIsContract());
-				map.put("investMoney", im.getInvestMoney());
-				map.put("investingMoney", im.getInvestingMoney());
-				map.put("useableMoney", im.getUseableMoney());
-				map.put("accountTotalMoney", im.getAccountTotalMoney());
-				map.put("freezeMoney", im.getFreezeMoney());
-				map.put("unfreezeMoney", im.getUnfreezeMoney());
+				map.put("balance", im.getBalance());
+				map.put("investing", im.getInvesting());
+				map.put("totalIncome", im.getInvesting());
+				map.put("totalMoney", im.getTotalMoney());
 				map.put("useableScore", im.getUseableScore());
-				map.put("allowOnline", im.getAllowOnline());
+				map.put("registerStyle", im.getRegisterStyle());
+				
 				MemberInfo memberInfo = (MemberInfo) array[0];
 				map.put("memberInfoId", memberInfo.getId());
-				map.put("name", memberInfo.getName());
+				map.put("loginName", memberInfo.getLoginName());
 				map.put("realName", memberInfo.getRealName());
 				map.put("nickname", memberInfo.getNickname());
 				map.put("email", memberInfo.getEmail());
 				map.put("age", memberInfo.getAge());
 				map.put("sex", memberInfo.getSex());
 				map.put("phone", memberInfo.getPhone());
-				map.put("describe", memberInfo.getDescribe());
 				map.put("isDelete", memberInfo.getIsdelete());
 				map.put("createTime", DateUtils.getTimeStamp(memberInfo.getCreateTime()));
 				map.put("modifyTime", DateUtils.getTimeStamp(memberInfo.getModifyTime()));
@@ -266,8 +241,14 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				map.put("level", memberInfo.getLevel());
 				map.put("price", memberInfo.getPrice());
 				map.put("password", memberInfo.getPassword());
+				map.put("payPassword", memberInfo.getPayPassword());
 				map.put("handPassword", memberInfo.getHandPassword());
 				map.put("isFreeze", memberInfo.getIsFreeze());
+				map.put("idCard", memberInfo.getIdCard());
+				map.put("miDescribe", memberInfo.getMiDescribe());
+				map.put("idCardImg1", memberInfo.getIdCardImg1());
+				map.put("idCardImg2", memberInfo.getIdCardImg2());
+				map.put("myQr", memberInfo.getMyQr());
 				listMap.add(map);
 			}
 		} catch (Exception e) {
@@ -315,46 +296,43 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				InvestMember im = investMemberService.findById(entity.getId());
 				if (im != null) {
 					jsonObject.put("id", im.getId());
-					jsonObject.put("idcard", im.getIdcard());
-					jsonObject.put("bankCard", im.getBankCard());
-					jsonObject.put("bank", im.getBank());
-					jsonObject.put("userImage", im.getUserImage());
-					jsonObject.put("idcardImg1", im.getIdcardImg1());
-					jsonObject.put("idcardImg2", im.getIdcardImg2());
-					jsonObject.put("custManagerId", im.getCustManagerId());
 					jsonObject.put("managerName", im.getManagerName());
 					jsonObject.put("isContract", im.getIsContract());
-					jsonObject.put("investMoney", im.getInvestMoney());
-					jsonObject.put("investingMoney", im.getInvestingMoney());
-					jsonObject.put("useableMoney", im.getUseableMoney());
-					jsonObject.put("accountTotalMoney", im.getAccountTotalMoney());
-					jsonObject.put("freezeMoney", im.getFreezeMoney());
-					jsonObject.put("unfreezeMoney", im.getUnfreezeMoney());
+					jsonObject.put("balance", im.getBalance());
+					jsonObject.put("investing", im.getInvesting());
+					jsonObject.put("totalIncome", im.getInvesting());
+					jsonObject.put("totalMoney", im.getTotalMoney());
 					jsonObject.put("useableScore", im.getUseableScore());
-					jsonObject.put("allowOnline", im.getAllowOnline());
+					jsonObject.put("registerStyle", im.getRegisterStyle());
+					
 					MemberInfo memberInfo = im.getMemberInfo();
-					jsonObject.put("memberInfo.id", memberInfo.getId());
-					jsonObject.put("memberInfo.name", memberInfo.getName());
+					jsonObject.put("memberInfo.memberInfoId", memberInfo.getId());
+					jsonObject.put("memberInfo.loginName", memberInfo.getLoginName());
 					jsonObject.put("memberInfo.realName", memberInfo.getRealName());
 					jsonObject.put("memberInfo.nickname", memberInfo.getNickname());
 					jsonObject.put("memberInfo.email", memberInfo.getEmail());
 					jsonObject.put("memberInfo.age", memberInfo.getAge());
 					jsonObject.put("memberInfo.sex", memberInfo.getSex());
 					jsonObject.put("memberInfo.phone", memberInfo.getPhone());
-					jsonObject.put("memberInfo.describe", memberInfo.getDescribe());
-					jsonObject.put("memberInfo.userImg", memberInfo.getUserImg());
+					jsonObject.put("memberInfo.isDelete", memberInfo.getIsdelete());
+					jsonObject.put("memberInfo.createTime", DateUtils.getTimeStamp(memberInfo.getCreateTime()));
+					jsonObject.put("memberInfo.modifyTime", DateUtils.getTimeStamp(memberInfo.getModifyTime()));
+					jsonObject.put("memberInfo.createuser", memberInfo.getCreateuser());
+					jsonObject.put("memberInfo.modifyuser", memberInfo.getModifyuser());
+					jsonObject.put("userImg", memberInfo.getUserImg());
 					jsonObject.put("memberInfo.isEliteAccount", memberInfo.getIsEliteAccount());
 					jsonObject.put("memberInfo.type", memberInfo.getType());
 					jsonObject.put("memberInfo.level", memberInfo.getLevel());
 					jsonObject.put("memberInfo.price", memberInfo.getPrice());
 					jsonObject.put("memberInfo.password", memberInfo.getPassword());
-					jsonObject.put("memberInfo.isdelete", memberInfo.getIsdelete());
-					jsonObject.put("memberInfo.createTime", DateUtils.date2Str(memberInfo.getCreateTime()));
-					jsonObject.put("memberInfo.modifyTime", DateUtils.date2Str(memberInfo.getModifyTime()));
-					jsonObject.put("memberInfo.createuser", memberInfo.getCreateuser());
-					jsonObject.put("memberInfo.modifyuser", memberInfo.getModifyuser());
+					jsonObject.put("memberInfo.payPassword", memberInfo.getPayPassword());
 					jsonObject.put("memberInfo.handPassword", memberInfo.getHandPassword());
 					jsonObject.put("memberInfo.isFreeze", memberInfo.getIsFreeze());
+					jsonObject.put("memberInfo.idCard", memberInfo.getIdCard());
+					jsonObject.put("memberInfo.miDescribe", memberInfo.getMiDescribe());
+					jsonObject.put("memberInfo.idCardImg1", memberInfo.getIdCardImg1());
+					jsonObject.put("memberInfo.idCardImg2", memberInfo.getIdCardImg2());
+					jsonObject.put("memberInfo.myQr", memberInfo.getMyQr());
 				}
 			}
 		} catch (Exception e) {
@@ -381,7 +359,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 		if (entity != null) {
 			try {
 				// 判断是否存在相同总名称的数据，如果存在则取消添加
-				if (investMemberService.count("memberInfo.name", entity.getMemberInfo().getName()) > 0) {
+				if (investMemberService.count("memberInfo.name", entity.getMemberInfo().getLoginName()) > 0) {
 					jsonObject.put("result", false);
 					jsonObject.put("msg", "添加失败，已经存在相同名称的用户！");
 					printJsonResult();
@@ -393,7 +371,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					entity.getMemberInfo().setCreateuser(SessionTools.getSessionSysUser().getId());
 					entity.getMemberInfo().setModifyuser(SessionTools.getSessionSysUser().getId());
 					entity.getMemberInfo().setIsdelete(ConstantCode.UNDELETE);
-					entity.getMemberInfo().setIsFreeze(ConstantCode.UNFREEZE);
 					entity.getMemberInfo().setHandPassword(ConstantCode.DEFAULT);
 					boolean issuccess = investMemberService.saveEntity(entity);
 					if (issuccess) {

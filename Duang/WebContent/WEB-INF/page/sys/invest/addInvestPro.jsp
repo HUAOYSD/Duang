@@ -1,4 +1,4 @@
-<%@page import="org.duang.entity.old.Product"%>
+<%@page import="org.duang.entity.Product"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% String path = request.getContextPath();%>
 <%@ include file="/page/inc/inc.jsp"%>
@@ -41,24 +41,6 @@
 		        <label for="title2" class="investPro_add_from_label">标题2：</label>   
 		        <input class="easyui-validatebox" type="text" name="title2"/>   
 		    </div> 
-		    
-		    <div>   
-		        <label for="minDeadline" class="investPro_add_from_label">起投期限：</label>   
-		        <input class="easyui-validatebox" type="text"  name="minDeadline" data-options="required:true" />   
-		    </div> 
-		     <div>   
-		        <label for="minMoney" class="investPro_add_from_label">起投金额：</label>   
-		        <input class="easyui-validatebox" type="text" name="minMoney" data-options="required:true" />   
-		    </div> 
-		    <div>   
-		        <label for="refundType" class="investPro_add_from_label">还款方式：</label>   
-		       	<select  class="easyui-combobox" name="refundType">   
-				    <option value="1" selected="selected">等额本息</option>   
-				    <option value="2">一次性还款</option>   
-				    <option value="3">先息后本</option>   
-				</select>   
-		    </div> 
-		    
 		    <div>   
 		        <label for="isSell" class="investPro_add_from_label">是否起售：</label>   
 		       	<select class="easyui-combobox" name="isSell">   

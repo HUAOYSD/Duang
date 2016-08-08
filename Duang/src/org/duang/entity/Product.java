@@ -17,10 +17,10 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * Product entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "product", catalog = "duang")
 @DynamicInsert(true)
-@SuppressWarnings("serial")
 public class Product implements java.io.Serializable {
 
 	// Fields
@@ -32,6 +32,7 @@ public class Product implements java.io.Serializable {
 	private String nameDescribe;
 	private String yieldDescribe;
 	private double yield;
+	private String timeLimit;
 	private String title1;
 	private String title2;
 	private int isSell;
@@ -61,13 +62,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Product(String id, int category, String nameZh, String name,
-			String nameDescribe, String yieldDescribe, double yield,
-			String title1, String title2, int isSell, int isNewProduct,
-			int isRecommend, String productDescribe, String riskControl,
-			String details, int isdelete, Date createtime,
-			Date modifytime, String createuser, String modifyuser,
-			Set<Scale> scales) {
+	public Product(String id, int category, String nameZh, String name, String nameDescribe, String yieldDescribe, double yield, String timeLimit, String title1, String title2, int isSell, int isNewProduct, int isRecommend, String productDescribe, String riskControl, String details, int isdelete, Date createtime, Date modifytime, String createuser, String modifyuser, Set<Scale> scales) {
 		this.id = id;
 		this.category = category;
 		this.nameZh = nameZh;
@@ -75,6 +70,7 @@ public class Product implements java.io.Serializable {
 		this.nameDescribe = nameDescribe;
 		this.yieldDescribe = yieldDescribe;
 		this.yield = yield;
+		this.timeLimit = timeLimit;
 		this.title1 = title1;
 		this.title2 = title2;
 		this.isSell = isSell;
@@ -154,6 +150,15 @@ public class Product implements java.io.Serializable {
 
 	public void setYield(double yield) {
 		this.yield = yield;
+	}
+
+	@Column(name = "time_limit", length = 60)
+	public String getTimeLimit() {
+		return this.timeLimit;
+	}
+
+	public void setTimeLimit(String timeLimit) {
+		this.timeLimit = timeLimit;
 	}
 
 	@Column(name = "title1", length = 500)

@@ -52,8 +52,7 @@ public class MemberInfo implements java.io.Serializable {
 	private String handPassword;
 	private int isFreeze;
 	private String myQr;
-	private Set<MemberExtraInfo> memberExtraInfos = new HashSet<MemberExtraInfo>(
-			0);
+	private Set<MemberExtraInfo> memberExtraInfos = new HashSet<MemberExtraInfo>(0);
 	private Set<Friends> friendsesForTarget = new HashSet<Friends>(0);
 	private Set<Friends> friendsesForSelf = new HashSet<Friends>(0);
 	private Set<LoanMember> loanMembers = new HashSet<LoanMember>(0);
