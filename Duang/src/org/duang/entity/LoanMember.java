@@ -1,24 +1,40 @@
 package org.duang.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
 
 /**
  * LoanMember entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "loan_member", catalog = "duang")
+@DynamicInsert(true)
+@SuppressWarnings("serial")
 public class LoanMember implements java.io.Serializable {
 
 	// Fields
 
 	private String id;
-	private String userId;
-	private String idcard;
-	private String bankCard;
-	private String bank;
+	private CustomerManager customerManager;
+	private MemberInfo memberInfo;
+	private double lendMoney;
+	private double backMoney;
+	private double residueMoney;
+	private double expectMoney;
+	private Set<Stock> stocks = new HashSet<Stock>(0);
+	private Set<LoanList> loanLists = new HashSet<LoanList>(0);
 
 	// Constructors
 
@@ -27,18 +43,25 @@ public class LoanMember implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public LoanMember(String id, String userId) {
+	public LoanMember(String id, MemberInfo memberInfo) {
 		this.id = id;
-		this.userId = userId;
+		this.memberInfo = memberInfo;
 	}
 
 	/** full constructor */
-	public LoanMember(String id, String userId, String idcard, String bankCard, String bank) {
+	public LoanMember(String id, CustomerManager customerManager,
+			MemberInfo memberInfo, double lendMoney, double backMoney,
+			double residueMoney, double expectMoney, Set<Stock> stocks,
+			Set<LoanList> loanLists) {
 		this.id = id;
-		this.userId = userId;
-		this.idcard = idcard;
-		this.bankCard = bankCard;
-		this.bank = bank;
+		this.customerManager = customerManager;
+		this.memberInfo = memberInfo;
+		this.lendMoney = lendMoney;
+		this.backMoney = backMoney;
+		this.residueMoney = residueMoney;
+		this.expectMoney = expectMoney;
+		this.stocks = stocks;
+		this.loanLists = loanLists;
 	}
 
 	// Property accessors
@@ -52,40 +75,78 @@ public class LoanMember implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "user_id", nullable = false, length = 36)
-	public String getUserId() {
-		return this.userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "customer_id")
+	public CustomerManager getCustomerManager() {
+		return this.customerManager;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setCustomerManager(CustomerManager customerManager) {
+		this.customerManager = customerManager;
 	}
 
-	@Column(name = "idcard")
-	public String getIdcard() {
-		return this.idcard;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "member_info_id", nullable = false)
+	public MemberInfo getMemberInfo() {
+		return this.memberInfo;
 	}
 
-	public void setIdcard(String idcard) {
-		this.idcard = idcard;
+	public void setMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
 	}
 
-	@Column(name = "bank_card")
-	public String getBankCard() {
-		return this.bankCard;
+	@Column(name = "lend_money", precision = 22, scale = 0)
+	public double getLendMoney() {
+		return this.lendMoney;
 	}
 
-	public void setBankCard(String bankCard) {
-		this.bankCard = bankCard;
+	public void setLendMoney(double lendMoney) {
+		this.lendMoney = lendMoney;
 	}
 
-	@Column(name = "bank")
-	public String getBank() {
-		return this.bank;
+	@Column(name = "back_money", precision = 22, scale = 0)
+	public double getBackMoney() {
+		return this.backMoney;
 	}
 
-	public void setBank(String bank) {
-		this.bank = bank;
+	public void setBackMoney(double backMoney) {
+		this.backMoney = backMoney;
+	}
+
+	@Column(name = "residue_money", precision = 22, scale = 0)
+	public double getResidueMoney() {
+		return this.residueMoney;
+	}
+
+	public void setResidueMoney(double residueMoney) {
+		this.residueMoney = residueMoney;
+	}
+
+	@Column(name = "expect_money", precision = 22, scale = 0)
+	public double getExpectMoney() {
+		return this.expectMoney;
+	}
+
+	public void setExpectMoney(double expectMoney) {
+		this.expectMoney = expectMoney;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanMember")
+	public Set<Stock> getStocks() {
+		return this.stocks;
+	}
+
+	public void setStocks(Set<Stock> stocks) {
+		this.stocks = stocks;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanMember")
+	public Set<LoanList> getLoanLists() {
+		return this.loanLists;
+	}
+
+	public void setLoanLists(Set<LoanList> loanLists) {
+		this.loanLists = loanLists;
 	}
 
 }

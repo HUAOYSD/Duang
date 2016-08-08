@@ -2,23 +2,30 @@ package org.duang.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
 
 /**
  * MemberExtraInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "member_extra_info", catalog = "duang")
+@DynamicInsert(true)
+@SuppressWarnings("serial")
 public class MemberExtraInfo implements java.io.Serializable {
 
 	// Fields
 
 	private String id;
-	private String userId;
+	private MemberInfo memberInfo;
 	private String address;
-	private Integer degree;
-	private Integer jobType;
+	private String degree;
+	private String jobType;
 	private String school;
 	private String salaryYear;
 	private String hobby;
@@ -30,15 +37,17 @@ public class MemberExtraInfo implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public MemberExtraInfo(String id, String userId) {
+	public MemberExtraInfo(String id, MemberInfo memberInfo) {
 		this.id = id;
-		this.userId = userId;
+		this.memberInfo = memberInfo;
 	}
 
 	/** full constructor */
-	public MemberExtraInfo(String id, String userId, String address, Integer degree, Integer jobType, String school, String salaryYear, String hobby) {
+	public MemberExtraInfo(String id, MemberInfo memberInfo, String address,
+			String degree, String jobType, String school, String salaryYear,
+			String hobby) {
 		this.id = id;
-		this.userId = userId;
+		this.memberInfo = memberInfo;
 		this.address = address;
 		this.degree = degree;
 		this.jobType = jobType;
@@ -58,13 +67,14 @@ public class MemberExtraInfo implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "user_id", nullable = false, length = 36)
-	public String getUserId() {
-		return this.userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_info_id", nullable = false)
+	public MemberInfo getMemberInfo() {
+		return this.memberInfo;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
 	}
 
 	@Column(name = "address", length = 500)
@@ -76,21 +86,21 @@ public class MemberExtraInfo implements java.io.Serializable {
 		this.address = address;
 	}
 
-	@Column(name = "degree")
-	public Integer getDegree() {
+	@Column(name = "degree", length = 20)
+	public String getDegree() {
 		return this.degree;
 	}
 
-	public void setDegree(Integer degree) {
+	public void setDegree(String degree) {
 		this.degree = degree;
 	}
 
-	@Column(name = "job_type")
-	public Integer getJobType() {
+	@Column(name = "job_type", length = 50)
+	public String getJobType() {
 		return this.jobType;
 	}
 
-	public void setJobType(Integer jobType) {
+	public void setJobType(String jobType) {
 		this.jobType = jobType;
 	}
 
@@ -112,7 +122,7 @@ public class MemberExtraInfo implements java.io.Serializable {
 		this.salaryYear = salaryYear;
 	}
 
-	@Column(name = "hobby")
+	@Column(name = "hobby", length = 500)
 	public String getHobby() {
 		return this.hobby;
 	}

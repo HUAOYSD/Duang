@@ -1,6 +1,7 @@
 package org.duang.entity;
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,12 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+
 /**
  * SysUser entity. @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "sys_user", catalog = "duang")
+@DynamicInsert(true)
+@SuppressWarnings("serial")
 public class SysUser implements java.io.Serializable {
 
 	// Fields

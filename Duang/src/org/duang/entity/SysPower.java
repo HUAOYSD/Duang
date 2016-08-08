@@ -17,10 +17,10 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * SysPower entity. @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "sys_power", catalog = "duang")
 @DynamicInsert(true)
+@SuppressWarnings("serial")
 public class SysPower implements java.io.Serializable {
 
 	// Fields
@@ -50,8 +50,8 @@ public class SysPower implements java.io.Serializable {
 
 	/** full constructor */
 	public SysPower(String id, String name, String url, String parentId,
-			int sortIndex, Date optionTime, String icon, String remark,
-			Set<SysRolePower> sysRolePowers) {
+			int sortIndex, Date optionTime, String icon,
+			String remark, Set<SysRolePower> sysRolePowers) {
 		this.id = id;
 		this.name = name;
 		this.url = url;
@@ -121,9 +121,6 @@ public class SysPower implements java.io.Serializable {
 
 	@Column(name = "icon", length = 200)
 	public String getIcon() {
-		if (this.icon==null) {
-			this.icon = "icon-server_chart";
-		}
 		return this.icon;
 	}
 
@@ -131,7 +128,7 @@ public class SysPower implements java.io.Serializable {
 		this.icon = icon;
 	}
 
-	@Column(name = "remark", length = 1000)
+	@Column(name = "remark", length = 16777215)
 	public String getRemark() {
 		return this.remark;
 	}

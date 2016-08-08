@@ -530,8 +530,20 @@ public class BaseDao<M> {
 	 * @date 2014-3-25 上午8:59:15
 	 */
 	@SuppressWarnings("unchecked")
-	public List<M> queryBySQL(String sql) throws Exception{
+	public List<M> queryBySQL(String sql, PageUtil<M> page) throws Exception{
 		Query q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
+		if (page != null) {
+			int countRecords = countBySql(sql);
+			//设置总条数
+			page.setCountRecords(countRecords);
+			//设置总页数（加判断是by zero）
+			if(page.getPageRecords()!= 0){
+				page.setCountPages(true,(countRecords%page.getPageRecords()==0)?countRecords/page.getPageRecords():countRecords/page.getPageRecords()+1);
+			}
+			int maxResult = page.getPageRecords();
+			int firstResult = (page.getCurrentPageNum() - 1) * maxResult;
+			q.setFirstResult(firstResult).setMaxResults(maxResult);
+		}
 		return q.list();
 	}
 
@@ -548,7 +560,7 @@ public class BaseDao<M> {
 	 * @see com.dao.BaseDao#queryBySQL(java.lang.String, java.lang.Object[]) 
 	 */ 
 	@SuppressWarnings("unchecked")
-	public List<M> queryBySQL(String sql, Object... params) throws Exception{
+	public List<M> queryBySQL(String sql, PageUtil<M> page, Object... params) throws Exception{
 		Query q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
 		int index = 0;
 		for(int i = 0 ; i < params.length ; i++){
@@ -562,6 +574,18 @@ public class BaseDao<M> {
 				q.setParameter(i, params[i]);
 				index = index + 1;
 			}
+		}
+		if (page != null) {
+			int countRecords = countBySql(sql, params);
+			//设置总条数
+			page.setCountRecords(countRecords);
+			//设置总页数（加判断是by zero）
+			if(page.getPageRecords()!= 0){
+				page.setCountPages(true,(countRecords%page.getPageRecords()==0)?countRecords/page.getPageRecords():countRecords/page.getPageRecords()+1);
+			}
+			int maxResult = page.getPageRecords();
+			int firstResult = (page.getCurrentPageNum() - 1) * maxResult;
+			q.setFirstResult(firstResult).setMaxResults(maxResult);
 		}
 		return q.list();
 	}
@@ -578,8 +602,20 @@ public class BaseDao<M> {
 	 * @date 2014-3-25 上午8:59:25
 	 */
 	@SuppressWarnings("unchecked")
-	public List<M> queryByHQL(String hql) throws Exception{
+	public List<M> queryByHQL(String hql, PageUtil<M> page) throws Exception{
 		Query q = this.getSession().createQuery(hql);
+		if (page != null) {
+			int countRecords = countByHql(hql);
+			//设置总条数
+			page.setCountRecords(countRecords);
+			//设置总页数（加判断是by zero）
+			if(page.getPageRecords()!= 0){
+				page.setCountPages(true,(countRecords%page.getPageRecords()==0)?countRecords/page.getPageRecords():countRecords/page.getPageRecords()+1);
+			}
+			int maxResult = page.getPageRecords();
+			int firstResult = (page.getCurrentPageNum() - 1) * maxResult;
+			q.setFirstResult(firstResult).setMaxResults(maxResult);
+		}
 		return q.list();
 	}
 
@@ -595,13 +631,26 @@ public class BaseDao<M> {
 	 * @see com.dao.BaseDao#queryByHQL(java.lang.String, java.lang.Object[]) 
 	 */ 
 	@SuppressWarnings("unchecked")
-	public List<M> queryByHQL(String hql, Object... params) throws Exception{
+	public List<M> queryByHQL(String hql, PageUtil<M> page, Object... params) throws Exception{
 		Query q = this.getSession().createQuery(hql);
 		for(int i = 0 ; i < params.length ; i++){
 			q.setParameter(i, params[i]);
 		}
+		if (page != null) {
+			int countRecords = countByHql(hql, params);
+			//设置总条数
+			page.setCountRecords(countRecords);
+			//设置总页数（加判断是by zero）
+			if(page.getPageRecords()!= 0){
+				page.setCountPages(true,(countRecords%page.getPageRecords()==0)?countRecords/page.getPageRecords():countRecords/page.getPageRecords()+1);
+			}
+			int maxResult = page.getPageRecords();
+			int firstResult = (page.getCurrentPageNum() - 1) * maxResult;
+			q.setFirstResult(firstResult).setMaxResults(maxResult);
+		}
 		return q.list();
 	}
+	
 
 	/** 
 	 * 根据criteria查询数据集合

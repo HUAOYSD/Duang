@@ -1,33 +1,57 @@
 package org.duang.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
 
 /**
  * InvestList entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "invest_list", catalog = "duang")
+@DynamicInsert(true)
+@SuppressWarnings("serial")
 public class InvestList implements java.io.Serializable {
 
 	// Fields
 
 	private String id;
-	private String userId;
-	private Float investSumMoney;
-	private Float investDoingMoney;
-	private Float investUsableBalance;
-	private Float accountSumBalance;
-	private Float freezeBalance;
-	private Float notTransferBalance;
-	private Integer usableIntegral;
-	private Date lastDate;
-	private Integer isContractUser;
+	private Scale scale;
+	private InvestTicket investTicket;
+	private InvestMember investMember;
+	private double money;
+	private double yetMoney;
+	private double spaceMoney;
+	private double backIncome;
+	private double backMoney;
+	private int useTicket;
+	private double expectIncome;
+	private double totalMoney;
+	private double income;
+	private double ticketBonus;
+	private int status;
 	private Date openDate;
-	private Integer isOnline;
+	private Date backDate;
+	private String pactNumber;
+	private int investStyle;
+	private Date endPayTime;
+	private Set<TurnList> turnLists = new HashSet<TurnList>(0);
+	private Set<MemberTicketRecord> memberTicketRecords = new HashSet<MemberTicketRecord>(
+			0);
+	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
+	private Set<Scale> scales = new HashSet<Scale>(0);
 
 	// Constructors
 
@@ -36,26 +60,44 @@ public class InvestList implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public InvestList(String id, String userId) {
+	public InvestList(String id) {
 		this.id = id;
-		this.userId = userId;
 	}
 
 	/** full constructor */
-	public InvestList(String id, String userId, Float investSumMoney, Float investDoingMoney, Float investUsableBalance, Float accountSumBalance, Float freezeBalance, Float notTransferBalance, Integer usableIntegral, Date lastDate, Integer isContractUser, Date openDate, Integer isOnline) {
+	public InvestList(String id, Scale scale, InvestTicket investTicket,
+			InvestMember investMember, double money, double yetMoney,
+			double spaceMoney, double backIncome, double backMoney,
+			int useTicket, double expectIncome, double totalMoney,
+			double income, double ticketBonus, int status,
+			Date openDate, Date backDate, String pactNumber,
+			int investStyle, Date endPayTime, Set<TurnList> turnLists,
+			Set<MemberTicketRecord> memberTicketRecords,
+			Set<BillInvest> billInvests, Set<Scale> scales) {
 		this.id = id;
-		this.userId = userId;
-		this.investSumMoney = investSumMoney;
-		this.investDoingMoney = investDoingMoney;
-		this.investUsableBalance = investUsableBalance;
-		this.accountSumBalance = accountSumBalance;
-		this.freezeBalance = freezeBalance;
-		this.notTransferBalance = notTransferBalance;
-		this.usableIntegral = usableIntegral;
-		this.lastDate = lastDate;
-		this.isContractUser = isContractUser;
+		this.scale = scale;
+		this.investTicket = investTicket;
+		this.investMember = investMember;
+		this.money = money;
+		this.yetMoney = yetMoney;
+		this.spaceMoney = spaceMoney;
+		this.backIncome = backIncome;
+		this.backMoney = backMoney;
+		this.useTicket = useTicket;
+		this.expectIncome = expectIncome;
+		this.totalMoney = totalMoney;
+		this.income = income;
+		this.ticketBonus = ticketBonus;
+		this.status = status;
 		this.openDate = openDate;
-		this.isOnline = isOnline;
+		this.backDate = backDate;
+		this.pactNumber = pactNumber;
+		this.investStyle = investStyle;
+		this.endPayTime = endPayTime;
+		this.turnLists = turnLists;
+		this.memberTicketRecords = memberTicketRecords;
+		this.billInvests = billInvests;
+		this.scales = scales;
 	}
 
 	// Property accessors
@@ -69,94 +111,133 @@ public class InvestList implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "user_id", nullable = false, length = 36)
-	public String getUserId() {
-		return this.userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "scale_id")
+	public Scale getScale() {
+		return this.scale;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setScale(Scale scale) {
+		this.scale = scale;
 	}
 
-	@Column(name = "invest_sum_money", precision = 50, scale = 6)
-	public Float getInvestSumMoney() {
-		return this.investSumMoney;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "invest_ticket_id")
+	public InvestTicket getInvestTicket() {
+		return this.investTicket;
 	}
 
-	public void setInvestSumMoney(Float investSumMoney) {
-		this.investSumMoney = investSumMoney;
+	public void setInvestTicket(InvestTicket investTicket) {
+		this.investTicket = investTicket;
 	}
 
-	@Column(name = "invest_doing_money", precision = 50, scale = 6)
-	public Float getInvestDoingMoney() {
-		return this.investDoingMoney;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "invest_member_id")
+	public InvestMember getInvestMember() {
+		return this.investMember;
 	}
 
-	public void setInvestDoingMoney(Float investDoingMoney) {
-		this.investDoingMoney = investDoingMoney;
+	public void setInvestMember(InvestMember investMember) {
+		this.investMember = investMember;
 	}
 
-	@Column(name = "invest_usable_balance", precision = 50, scale = 6)
-	public Float getInvestUsableBalance() {
-		return this.investUsableBalance;
+	@Column(name = "money", precision = 22, scale = 0)
+	public double getMoney() {
+		return this.money;
 	}
 
-	public void setInvestUsableBalance(Float investUsableBalance) {
-		this.investUsableBalance = investUsableBalance;
+	public void setMoney(double money) {
+		this.money = money;
 	}
 
-	@Column(name = "account_sum_balance", precision = 50, scale = 6)
-	public Float getAccountSumBalance() {
-		return this.accountSumBalance;
+	@Column(name = "yet_money", precision = 22, scale = 0)
+	public double getYetMoney() {
+		return this.yetMoney;
 	}
 
-	public void setAccountSumBalance(Float accountSumBalance) {
-		this.accountSumBalance = accountSumBalance;
+	public void setYetMoney(double yetMoney) {
+		this.yetMoney = yetMoney;
 	}
 
-	@Column(name = "freeze_balance", precision = 50, scale = 6)
-	public Float getFreezeBalance() {
-		return this.freezeBalance;
+	@Column(name = "space_money", precision = 22, scale = 0)
+	public double getSpaceMoney() {
+		return this.spaceMoney;
 	}
 
-	public void setFreezeBalance(Float freezeBalance) {
-		this.freezeBalance = freezeBalance;
+	public void setSpaceMoney(double spaceMoney) {
+		this.spaceMoney = spaceMoney;
 	}
 
-	@Column(name = "not_transfer_balance", precision = 50, scale = 6)
-	public Float getNotTransferBalance() {
-		return this.notTransferBalance;
+	@Column(name = "back_income", precision = 22, scale = 0)
+	public double getBackIncome() {
+		return this.backIncome;
 	}
 
-	public void setNotTransferBalance(Float notTransferBalance) {
-		this.notTransferBalance = notTransferBalance;
+	public void setBackIncome(double backIncome) {
+		this.backIncome = backIncome;
 	}
 
-	@Column(name = "usable_integral")
-	public Integer getUsableIntegral() {
-		return this.usableIntegral;
+	@Column(name = "back_money", precision = 22, scale = 0)
+	public double getBackMoney() {
+		return this.backMoney;
 	}
 
-	public void setUsableIntegral(Integer usableIntegral) {
-		this.usableIntegral = usableIntegral;
+	public void setBackMoney(double backMoney) {
+		this.backMoney = backMoney;
 	}
 
-	@Column(name = "last_date", length = 19)
-	public Date getLastDate() {
-		return this.lastDate;
+	@Column(name = "use_ticket")
+	public int getUseTicket() {
+		return this.useTicket;
 	}
 
-	public void setLastDate(Date lastDate) {
-		this.lastDate = lastDate;
+	public void setUseTicket(int useTicket) {
+		this.useTicket = useTicket;
 	}
 
-	@Column(name = "is_contract_user")
-	public Integer getIsContractUser() {
-		return this.isContractUser;
+	@Column(name = "expect_income", precision = 22, scale = 0)
+	public double getExpectIncome() {
+		return this.expectIncome;
 	}
 
-	public void setIsContractUser(Integer isContractUser) {
-		this.isContractUser = isContractUser;
+	public void setExpectIncome(double expectIncome) {
+		this.expectIncome = expectIncome;
+	}
+
+	@Column(name = "total_money", precision = 22, scale = 0)
+	public double getTotalMoney() {
+		return this.totalMoney;
+	}
+
+	public void setTotalMoney(double totalMoney) {
+		this.totalMoney = totalMoney;
+	}
+
+	@Column(name = "income", precision = 22, scale = 0)
+	public double getIncome() {
+		return this.income;
+	}
+
+	public void setIncome(double income) {
+		this.income = income;
+	}
+
+	@Column(name = "ticket_bonus", precision = 22, scale = 0)
+	public double getTicketBonus() {
+		return this.ticketBonus;
+	}
+
+	public void setTicketBonus(double ticketBonus) {
+		this.ticketBonus = ticketBonus;
+	}
+
+	@Column(name = "status")
+	public int getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	@Column(name = "open_date", length = 19)
@@ -168,13 +249,77 @@ public class InvestList implements java.io.Serializable {
 		this.openDate = openDate;
 	}
 
-	@Column(name = "is_online")
-	public Integer getIsOnline() {
-		return this.isOnline;
+	@Column(name = "back_date", length = 19)
+	public Date getBackDate() {
+		return this.backDate;
 	}
 
-	public void setIsOnline(Integer isOnline) {
-		this.isOnline = isOnline;
+	public void setBackDate(Date backDate) {
+		this.backDate = backDate;
+	}
+
+	@Column(name = "pact_number", length = 50)
+	public String getPactNumber() {
+		return this.pactNumber;
+	}
+
+	public void setPactNumber(String pactNumber) {
+		this.pactNumber = pactNumber;
+	}
+
+	@Column(name = "invest_style")
+	public int getInvestStyle() {
+		return this.investStyle;
+	}
+
+	public void setInvestStyle(int investStyle) {
+		this.investStyle = investStyle;
+	}
+
+	@Column(name = "end_pay_time", length = 19)
+	public Date getEndPayTime() {
+		return this.endPayTime;
+	}
+
+	public void setEndPayTime(Date endPayTime) {
+		this.endPayTime = endPayTime;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investList")
+	public Set<TurnList> getTurnLists() {
+		return this.turnLists;
+	}
+
+	public void setTurnLists(Set<TurnList> turnLists) {
+		this.turnLists = turnLists;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investList")
+	public Set<MemberTicketRecord> getMemberTicketRecords() {
+		return this.memberTicketRecords;
+	}
+
+	public void setMemberTicketRecords(
+			Set<MemberTicketRecord> memberTicketRecords) {
+		this.memberTicketRecords = memberTicketRecords;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investList")
+	public Set<BillInvest> getBillInvests() {
+		return this.billInvests;
+	}
+
+	public void setBillInvests(Set<BillInvest> billInvests) {
+		this.billInvests = billInvests;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investList")
+	public Set<Scale> getScales() {
+		return this.scales;
+	}
+
+	public void setScales(Set<Scale> scales) {
+		this.scales = scales;
 	}
 
 }

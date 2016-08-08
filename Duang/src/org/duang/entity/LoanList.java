@@ -1,41 +1,63 @@
 package org.duang.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
 
 /**
  * LoanList entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "loan_list", catalog = "duang")
+@DynamicInsert(true)
+@SuppressWarnings("serial")
 public class LoanList implements java.io.Serializable {
 
 	// Fields
 
 	private String id;
-	private String userId;
-	private String contractId;
-	private String isSell;
-	private String state;
-	private Float loanMoney;
-	private Float handlingCharge;
-	private Float shouldLoanMoney;
-	private Float lastStorage;
-	private Integer lastIntMoney;
-	private Integer yetLoanIntMoney;
-	private Integer notLoanIntMoney;
-	private Integer notLoanIntStorage;
-	private Float lastDecMoney;
-	private Float yetLoanDecMoney;
-	private Float notLoanDecMoney;
-	private String loanType;
-	private String loanPurpose;
-	private Float loanInterest;
-	private Timestamp createTime;
-	private Timestamp contractDate;
+	private LoanMember loanMember;
+	private LoanType loanType;
+	private String pactNumber;
+	private int isSell;
+	private int poundageState;
+	private double money;
+	private double realMoney;
+	private double manageCost;
+	private double poundage;
+	private double getMoney;
+	private double yetMoney;
+	private double returnMoney;
+	private double yetReturnMoney;
+	private int returnStatus;
+	private int loanState;
+	private int applyState;
+	private String loanUse;
+	private double loanInterest;
+	private Date createTime;
+	private Date signDate;
+	private Date beginReturnDate;
+	private Date endReturnDate;
+	private Date doneReturnDate;
+	private int loanStyle;
+	private Set<ApplyLoanResult> applyLoanResults = new HashSet<ApplyLoanResult>(
+			0);
+	private Set<BillLoan> billLoans = new HashSet<BillLoan>(0);
+	private Set<ApplyLoanInfo> applyLoanInfos = new HashSet<ApplyLoanInfo>(0);
+	private Set<ApplyLoanHouse> applyLoanHouses = new HashSet<ApplyLoanHouse>(0);
+	private Set<ApplyLoanCar> applyLoanCars = new HashSet<ApplyLoanCar>(0);
 
 	// Constructors
 
@@ -44,35 +66,54 @@ public class LoanList implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public LoanList(String id, String userId, String contractId) {
+	public LoanList(String id, LoanMember loanMember) {
 		this.id = id;
-		this.userId = userId;
-		this.contractId = contractId;
+		this.loanMember = loanMember;
 	}
 
 	/** full constructor */
-	public LoanList(String id, String userId, String contractId, String isSell, String state, Float loanMoney, Float handlingCharge, Float shouldLoanMoney, Float lastStorage, Integer lastIntMoney, Integer yetLoanIntMoney, Integer notLoanIntMoney, Integer notLoanIntStorage, Float lastDecMoney, Float yetLoanDecMoney, Float notLoanDecMoney, String loanType, String loanPurpose, Float loanInterest, Timestamp createTime, Timestamp contractDate) {
+	public LoanList(String id, LoanMember loanMember, LoanType loanType,
+			String pactNumber, int isSell, int poundageState,
+			double money, double realMoney, double manageCost, double poundage,
+			double getMoney, double yetMoney, double returnMoney,
+			double yetReturnMoney, int returnStatus, int loanState,
+			int applyState, String loanUse, double loanInterest,
+			Date createTime, Date signDate,
+			Date beginReturnDate, Date endReturnDate,
+			Date doneReturnDate, int loanStyle,
+			Set<ApplyLoanResult> applyLoanResults, Set<BillLoan> billLoans,
+			Set<ApplyLoanInfo> applyLoanInfos,
+			Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {
 		this.id = id;
-		this.userId = userId;
-		this.contractId = contractId;
-		this.isSell = isSell;
-		this.state = state;
-		this.loanMoney = loanMoney;
-		this.handlingCharge = handlingCharge;
-		this.shouldLoanMoney = shouldLoanMoney;
-		this.lastStorage = lastStorage;
-		this.lastIntMoney = lastIntMoney;
-		this.yetLoanIntMoney = yetLoanIntMoney;
-		this.notLoanIntMoney = notLoanIntMoney;
-		this.notLoanIntStorage = notLoanIntStorage;
-		this.lastDecMoney = lastDecMoney;
-		this.yetLoanDecMoney = yetLoanDecMoney;
-		this.notLoanDecMoney = notLoanDecMoney;
+		this.loanMember = loanMember;
 		this.loanType = loanType;
-		this.loanPurpose = loanPurpose;
+		this.pactNumber = pactNumber;
+		this.isSell = isSell;
+		this.poundageState = poundageState;
+		this.money = money;
+		this.realMoney = realMoney;
+		this.manageCost = manageCost;
+		this.poundage = poundage;
+		this.getMoney = getMoney;
+		this.yetMoney = yetMoney;
+		this.returnMoney = returnMoney;
+		this.yetReturnMoney = yetReturnMoney;
+		this.returnStatus = returnStatus;
+		this.loanState = loanState;
+		this.applyState = applyState;
+		this.loanUse = loanUse;
 		this.loanInterest = loanInterest;
 		this.createTime = createTime;
-		this.contractDate = contractDate;
+		this.signDate = signDate;
+		this.beginReturnDate = beginReturnDate;
+		this.endReturnDate = endReturnDate;
+		this.doneReturnDate = doneReturnDate;
+		this.loanStyle = loanStyle;
+		this.applyLoanResults = applyLoanResults;
+		this.billLoans = billLoans;
+		this.applyLoanInfos = applyLoanInfos;
+		this.applyLoanHouses = applyLoanHouses;
+		this.applyLoanCars = applyLoanCars;
 	}
 
 	// Property accessors
@@ -86,184 +127,267 @@ public class LoanList implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "user_id", nullable = false, length = 36)
-	public String getUserId() {
-		return this.userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "loan_member_id", nullable = false)
+	public LoanMember getLoanMember() {
+		return this.loanMember;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setLoanMember(LoanMember loanMember) {
+		this.loanMember = loanMember;
 	}
 
-	@Column(name = "contract_id", nullable = false)
-	public String getContractId() {
-		return this.contractId;
-	}
-
-	public void setContractId(String contractId) {
-		this.contractId = contractId;
-	}
-
-	@Column(name = "is_sell")
-	public String getIsSell() {
-		return this.isSell;
-	}
-
-	public void setIsSell(String isSell) {
-		this.isSell = isSell;
-	}
-
-	@Column(name = "state")
-	public String getState() {
-		return this.state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	@Column(name = "loan_money", precision = 50, scale = 6)
-	public Float getLoanMoney() {
-		return this.loanMoney;
-	}
-
-	public void setLoanMoney(Float loanMoney) {
-		this.loanMoney = loanMoney;
-	}
-
-	@Column(name = "handling_charge", precision = 50, scale = 6)
-	public Float getHandlingCharge() {
-		return this.handlingCharge;
-	}
-
-	public void setHandlingCharge(Float handlingCharge) {
-		this.handlingCharge = handlingCharge;
-	}
-
-	@Column(name = "should_loan_money", precision = 50, scale = 6)
-	public Float getShouldLoanMoney() {
-		return this.shouldLoanMoney;
-	}
-
-	public void setShouldLoanMoney(Float shouldLoanMoney) {
-		this.shouldLoanMoney = shouldLoanMoney;
-	}
-
-	@Column(name = "last_storage", precision = 50, scale = 6)
-	public Float getLastStorage() {
-		return this.lastStorage;
-	}
-
-	public void setLastStorage(Float lastStorage) {
-		this.lastStorage = lastStorage;
-	}
-
-	@Column(name = "last_int_money")
-	public Integer getLastIntMoney() {
-		return this.lastIntMoney;
-	}
-
-	public void setLastIntMoney(Integer lastIntMoney) {
-		this.lastIntMoney = lastIntMoney;
-	}
-
-	@Column(name = "yet_loan_int_money")
-	public Integer getYetLoanIntMoney() {
-		return this.yetLoanIntMoney;
-	}
-
-	public void setYetLoanIntMoney(Integer yetLoanIntMoney) {
-		this.yetLoanIntMoney = yetLoanIntMoney;
-	}
-
-	@Column(name = "not_loan_int_money")
-	public Integer getNotLoanIntMoney() {
-		return this.notLoanIntMoney;
-	}
-
-	public void setNotLoanIntMoney(Integer notLoanIntMoney) {
-		this.notLoanIntMoney = notLoanIntMoney;
-	}
-
-	@Column(name = "not_loan_int_storage")
-	public Integer getNotLoanIntStorage() {
-		return this.notLoanIntStorage;
-	}
-
-	public void setNotLoanIntStorage(Integer notLoanIntStorage) {
-		this.notLoanIntStorage = notLoanIntStorage;
-	}
-
-	@Column(name = "last_dec_money", precision = 255, scale = 0)
-	public Float getLastDecMoney() {
-		return this.lastDecMoney;
-	}
-
-	public void setLastDecMoney(Float lastDecMoney) {
-		this.lastDecMoney = lastDecMoney;
-	}
-
-	@Column(name = "yet_loan_dec_money", precision = 255, scale = 0)
-	public Float getYetLoanDecMoney() {
-		return this.yetLoanDecMoney;
-	}
-
-	public void setYetLoanDecMoney(Float yetLoanDecMoney) {
-		this.yetLoanDecMoney = yetLoanDecMoney;
-	}
-
-	@Column(name = "not_loan_dec_money", precision = 255, scale = 0)
-	public Float getNotLoanDecMoney() {
-		return this.notLoanDecMoney;
-	}
-
-	public void setNotLoanDecMoney(Float notLoanDecMoney) {
-		this.notLoanDecMoney = notLoanDecMoney;
-	}
-
-	@Column(name = "loan_type", length = 20)
-	public String getLoanType() {
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "loan_type")
+	public LoanType getLoanType() {
 		return this.loanType;
 	}
 
-	public void setLoanType(String loanType) {
+	public void setLoanType(LoanType loanType) {
 		this.loanType = loanType;
 	}
 
-	@Column(name = "loan_purpose")
-	public String getLoanPurpose() {
-		return this.loanPurpose;
+	@Column(name = "pact_number", length = 50)
+	public String getPactNumber() {
+		return this.pactNumber;
 	}
 
-	public void setLoanPurpose(String loanPurpose) {
-		this.loanPurpose = loanPurpose;
+	public void setPactNumber(String pactNumber) {
+		this.pactNumber = pactNumber;
 	}
 
-	@Column(name = "loan_interest", precision = 255, scale = 0)
-	public Float getLoanInterest() {
+	@Column(name = "is_sell")
+	public int getIsSell() {
+		return this.isSell;
+	}
+
+	public void setIsSell(int isSell) {
+		this.isSell = isSell;
+	}
+
+	@Column(name = "poundage_state")
+	public int getPoundageState() {
+		return this.poundageState;
+	}
+
+	public void setPoundageState(int poundageState) {
+		this.poundageState = poundageState;
+	}
+
+	@Column(name = "money", precision = 22, scale = 0)
+	public double getMoney() {
+		return this.money;
+	}
+
+	public void setMoney(double money) {
+		this.money = money;
+	}
+
+	@Column(name = "real_money", precision = 22, scale = 0)
+	public double getRealMoney() {
+		return this.realMoney;
+	}
+
+	public void setRealMoney(double realMoney) {
+		this.realMoney = realMoney;
+	}
+
+	@Column(name = "manage_cost", precision = 22, scale = 0)
+	public double getManageCost() {
+		return this.manageCost;
+	}
+
+	public void setManageCost(double manageCost) {
+		this.manageCost = manageCost;
+	}
+
+	@Column(name = "poundage", precision = 22, scale = 0)
+	public double getPoundage() {
+		return this.poundage;
+	}
+
+	public void setPoundage(double poundage) {
+		this.poundage = poundage;
+	}
+
+	@Column(name = "get_money", precision = 22, scale = 0)
+	public double getGetMoney() {
+		return this.getMoney;
+	}
+
+	public void setGetMoney(double getMoney) {
+		this.getMoney = getMoney;
+	}
+
+	@Column(name = "yet_money", precision = 22, scale = 0)
+	public double getYetMoney() {
+		return this.yetMoney;
+	}
+
+	public void setYetMoney(double yetMoney) {
+		this.yetMoney = yetMoney;
+	}
+
+	@Column(name = "return_money", precision = 22, scale = 0)
+	public double getReturnMoney() {
+		return this.returnMoney;
+	}
+
+	public void setReturnMoney(double returnMoney) {
+		this.returnMoney = returnMoney;
+	}
+
+	@Column(name = "yet_return_money", precision = 22, scale = 0)
+	public double getYetReturnMoney() {
+		return this.yetReturnMoney;
+	}
+
+	public void setYetReturnMoney(double yetReturnMoney) {
+		this.yetReturnMoney = yetReturnMoney;
+	}
+
+	@Column(name = "return_status")
+	public int getReturnStatus() {
+		return this.returnStatus;
+	}
+
+	public void setReturnStatus(int returnStatus) {
+		this.returnStatus = returnStatus;
+	}
+
+	@Column(name = "loan_state")
+	public int getLoanState() {
+		return this.loanState;
+	}
+
+	public void setLoanState(int loanState) {
+		this.loanState = loanState;
+	}
+
+	@Column(name = "apply_state")
+	public int getApplyState() {
+		return this.applyState;
+	}
+
+	public void setApplyState(int applyState) {
+		this.applyState = applyState;
+	}
+
+	@Column(name = "loan_use")
+	public String getLoanUse() {
+		return this.loanUse;
+	}
+
+	public void setLoanUse(String loanUse) {
+		this.loanUse = loanUse;
+	}
+
+	@Column(name = "loan_interest", precision = 22, scale = 0)
+	public double getLoanInterest() {
 		return this.loanInterest;
 	}
 
-	public void setLoanInterest(Float loanInterest) {
+	public void setLoanInterest(double loanInterest) {
 		this.loanInterest = loanInterest;
 	}
 
 	@Column(name = "createTime", length = 19)
-	public Timestamp getCreateTime() {
+	public Date getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
-	@Column(name = "contract_date", length = 19)
-	public Timestamp getContractDate() {
-		return this.contractDate;
+	@Column(name = "sign_date", length = 19)
+	public Date getSignDate() {
+		return this.signDate;
 	}
 
-	public void setContractDate(Timestamp contractDate) {
-		this.contractDate = contractDate;
+	public void setSignDate(Date signDate) {
+		this.signDate = signDate;
+	}
+
+	@Column(name = "begin_return_date", length = 19)
+	public Date getBeginReturnDate() {
+		return this.beginReturnDate;
+	}
+
+	public void setBeginReturnDate(Date beginReturnDate) {
+		this.beginReturnDate = beginReturnDate;
+	}
+
+	@Column(name = "end_return_date", length = 19)
+	public Date getEndReturnDate() {
+		return this.endReturnDate;
+	}
+
+	public void setEndReturnDate(Date endReturnDate) {
+		this.endReturnDate = endReturnDate;
+	}
+
+	@Column(name = "done_return_date", length = 19)
+	public Date getDoneReturnDate() {
+		return this.doneReturnDate;
+	}
+
+	public void setDoneReturnDate(Date doneReturnDate) {
+		this.doneReturnDate = doneReturnDate;
+	}
+
+	@Column(name = "loan_style")
+	public int getLoanStyle() {
+		return this.loanStyle;
+	}
+
+	public void setLoanStyle(int loanStyle) {
+		this.loanStyle = loanStyle;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")
+	public Set<ApplyLoanResult> getApplyLoanResults() {
+		return this.applyLoanResults;
+	}
+
+	public void setApplyLoanResults(Set<ApplyLoanResult> applyLoanResults) {
+		this.applyLoanResults = applyLoanResults;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")
+	public Set<BillLoan> getBillLoans() {
+		return this.billLoans;
+	}
+
+	public void setBillLoans(Set<BillLoan> billLoans) {
+		this.billLoans = billLoans;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")
+	public Set<ApplyLoanInfo> getApplyLoanInfos() {
+		return this.applyLoanInfos;
+	}
+
+	public void setApplyLoanInfos(Set<ApplyLoanInfo> applyLoanInfos) {
+		this.applyLoanInfos = applyLoanInfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")
+	public Set<ApplyLoanHouse> getApplyLoanHouses() {
+		return this.applyLoanHouses;
+	}
+
+	public void setApplyLoanHouses(Set<ApplyLoanHouse> applyLoanHouses) {
+		this.applyLoanHouses = applyLoanHouses;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")
+	public Set<ApplyLoanCar> getApplyLoanCars() {
+		return this.applyLoanCars;
+	}
+
+	public void setApplyLoanCars(Set<ApplyLoanCar> applyLoanCars) {
+		this.applyLoanCars = applyLoanCars;
 	}
 
 }

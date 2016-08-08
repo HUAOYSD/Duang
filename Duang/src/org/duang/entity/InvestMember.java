@@ -1,6 +1,8 @@
 package org.duang.entity;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,93 +11,42 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
 
 /**
  * InvestMember entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "invest_member", catalog = "duang")
+@DynamicInsert(true)
+@SuppressWarnings("serial")
 public class InvestMember implements java.io.Serializable {
 
-	/**   
-	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
-	 */   
-	private static final long serialVersionUID = 1L;
-	
+	// Fields
+
 	private String id;
-	/**
-	 * 用户基本类对象
-	 */
 	private MemberInfo memberInfo;
-	/**
-	 * 身份证id
-	 */
-	private String idcard;
-	/**
-	 * 银行卡号
-	 */
-	private String bankCard;
-	/**
-	 * 所有银行名称
-	 */
-	private String bank;
-	/**
-	 * 用户头像
-	 */
-	private String userImage;
-	/**
-	 * 身份证前照
-	 */
-	private String idcardImg1;
-	/**
-	 * 身份证后照
-	 */
-	private String idcardImg2;
-	/**
-	 * 客户经理Id
-	 */
-	private String custManagerId;
-	/**
-	 * 客户经理姓名
-	 */
+	private CustomerManager customerManager;
 	private String managerName;
-	/**
-	 * 是否是契约用户
-	 */
-	private String isContract;
-	/**
-	 * 投资金额
-	 */
-	private double investMoney;
-	/**
-	 * 投资中金额
-	 */
-	private double investingMoney;
-	/**
-	 * 可用余额
-	 */
-	private double useableMoney;
-	/**
-	 * 账户总余额
-	 */
-	private double accountTotalMoney;
-	/**
-	 * 冻结金额
-	 */
-	private double freezeMoney;
-	/**
-	 * 未冻结金额
-	 */
-	private double unfreezeMoney;
-	/**
-	 * 可用积分
-	 */
+	private int isContract;
+	private double balance;
+	private double investing;
+	private double totalIncome;
+	private double totalMoney;
 	private int useableScore;
 	/**
 	 * 是否允许上线
 	 */
-	private String allowOnline;
+	private int registerStyle;
+	private Set<Stock> stocks = new HashSet<Stock>(0);
+	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
+	private Set<MemberInvestTicket> memberInvestTickets = new HashSet<MemberInvestTicket>(
+			0);
+	private Set<InvestList> investLists = new HashSet<InvestList>(0);
+
 	// Constructors
 
 	/** default constructor */
@@ -109,26 +60,29 @@ public class InvestMember implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public InvestMember(String id, MemberInfo memberInfo, String idcard, String bankCard, String bank, String userImage, String idcardImg1, String idcardImg2, String custManagerId, String managerName, String isContract, double investMoney, double investingMoney, double useableMoney, double accountTotalMoney, double freezeMoney, double unfreezeMoney, int useableScore, String allowOnline) {
+	public InvestMember(String id, MemberInfo memberInfo,
+			CustomerManager customerManager, String managerName,
+			int isContract, double balance, double investing,
+			double totalIncome, double totalMoney, int useableScore,
+			int registerStyle, Set<Stock> stocks,
+			Set<BillInvest> billInvests,
+			Set<MemberInvestTicket> memberInvestTickets,
+			Set<InvestList> investLists) {
 		this.id = id;
 		this.memberInfo = memberInfo;
-		this.idcard = idcard;
-		this.bankCard = bankCard;
-		this.bank = bank;
-		this.userImage = userImage;
-		this.idcardImg1 = idcardImg1;
-		this.idcardImg2 = idcardImg2;
-		this.custManagerId = custManagerId;
+		this.customerManager = customerManager;
 		this.managerName = managerName;
 		this.isContract = isContract;
-		this.investMoney = investMoney;
-		this.investingMoney = investingMoney;
-		this.useableMoney = useableMoney;
-		this.accountTotalMoney = accountTotalMoney;
-		this.freezeMoney = freezeMoney;
-		this.unfreezeMoney = unfreezeMoney;
+		this.balance = balance;
+		this.investing = investing;
+		this.totalIncome = totalIncome;
+		this.totalMoney = totalMoney;
 		this.useableScore = useableScore;
-		this.allowOnline = allowOnline;
+		this.registerStyle = registerStyle;
+		this.stocks = stocks;
+		this.billInvests = billInvests;
+		this.memberInvestTickets = memberInvestTickets;
+		this.investLists = investLists;
 	}
 
 	// Property accessors
@@ -142,7 +96,7 @@ public class InvestMember implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "memberinfo_id", nullable = false)
 	public MemberInfo getMemberInfo() {
 		return this.memberInfo;
@@ -152,67 +106,14 @@ public class InvestMember implements java.io.Serializable {
 		this.memberInfo = memberInfo;
 	}
 
-	@Column(name = "idcard")
-	public String getIdcard() {
-		return this.idcard;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cust_manager_id")
+	public CustomerManager getCustomerManager() {
+		return this.customerManager;
 	}
 
-	public void setIdcard(String idcard) {
-		this.idcard = idcard;
-	}
-
-	@Column(name = "bank_card")
-	public String getBankCard() {
-		return this.bankCard;
-	}
-
-	public void setBankCard(String bankCard) {
-		this.bankCard = bankCard;
-	}
-
-	@Column(name = "bank")
-	public String getBank() {
-		return this.bank;
-	}
-
-	public void setBank(String bank) {
-		this.bank = bank;
-	}
-
-	@Column(name = "user_image")
-	public String getUserImage() {
-		return this.userImage;
-	}
-
-	public void setUserImage(String userImage) {
-		this.userImage = userImage;
-	}
-
-	@Column(name = "idcard_img1")
-	public String getIdcardImg1() {
-		return this.idcardImg1;
-	}
-
-	public void setIdcardImg1(String idcardImg1) {
-		this.idcardImg1 = idcardImg1;
-	}
-
-	@Column(name = "idcard_img2")
-	public String getIdcardImg2() {
-		return this.idcardImg2;
-	}
-
-	public void setIdcardImg2(String idcardImg2) {
-		this.idcardImg2 = idcardImg2;
-	}
-
-	@Column(name = "cust_manager_id")
-	public String getCustManagerId() {
-		return this.custManagerId;
-	}
-
-	public void setCustManagerId(String custManagerId) {
-		this.custManagerId = custManagerId;
+	public void setCustomerManager(CustomerManager customerManager) {
+		this.customerManager = customerManager;
 	}
 
 	@Column(name = "manager_name")
@@ -225,66 +126,48 @@ public class InvestMember implements java.io.Serializable {
 	}
 
 	@Column(name = "is_contract")
-	public String getIsContract() {
+	public int getIsContract() {
 		return this.isContract;
 	}
 
-	public void setIsContract(String isContract) {
+	public void setIsContract(int isContract) {
 		this.isContract = isContract;
 	}
 
-	@Column(name = "invest_money", precision = 25, scale = 6)
-	public double getInvestMoney() {
-		return this.investMoney;
+	@Column(name = "balance", precision = 22, scale = 0)
+	public double getBalance() {
+		return this.balance;
 	}
 
-	public void setInvestMoney(double investMoney) {
-		this.investMoney = investMoney;
+	public void setBalance(double balance) {
+		this.balance = balance;
 	}
 
-	@Column(name = "investing_money", precision = 25, scale = 6)
-	public double getInvestingMoney() {
-		return this.investingMoney;
+	@Column(name = "investing", precision = 22, scale = 0)
+	public double getInvesting() {
+		return this.investing;
 	}
 
-	public void setInvestingMoney(double investingMoney) {
-		this.investingMoney = investingMoney;
+	public void setInvesting(double investing) {
+		this.investing = investing;
 	}
 
-	@Column(name = "useable_money", precision = 25, scale = 6)
-	public double getUseableMoney() {
-		return this.useableMoney;
+	@Column(name = "total_income", precision = 22, scale = 0)
+	public double getTotalIncome() {
+		return this.totalIncome;
 	}
 
-	public void setUseableMoney(double useableMoney) {
-		this.useableMoney = useableMoney;
+	public void setTotalIncome(double totalIncome) {
+		this.totalIncome = totalIncome;
 	}
 
-	@Column(name = "account_total_money", precision = 25, scale = 6)
-	public double getAccountTotalMoney() {
-		return this.accountTotalMoney;
+	@Column(name = "total_money", precision = 22, scale = 0)
+	public double getTotalMoney() {
+		return this.totalMoney;
 	}
 
-	public void setAccountTotalMoney(double accountTotalMoney) {
-		this.accountTotalMoney = accountTotalMoney;
-	}
-
-	@Column(name = "freeze_money", precision = 25, scale = 6)
-	public double getFreezeMoney() {
-		return this.freezeMoney;
-	}
-
-	public void setFreezeMoney(double freezeMoney) {
-		this.freezeMoney = freezeMoney;
-	}
-
-	@Column(name = "unfreeze_money", precision = 25, scale = 6)
-	public double getUnfreezeMoney() {
-		return this.unfreezeMoney;
-	}
-
-	public void setUnfreezeMoney(double unfreezeMoney) {
-		this.unfreezeMoney = unfreezeMoney;
+	public void setTotalMoney(double totalMoney) {
+		this.totalMoney = totalMoney;
 	}
 
 	@Column(name = "useable_score")
@@ -296,13 +179,50 @@ public class InvestMember implements java.io.Serializable {
 		this.useableScore = useableScore;
 	}
 
-	@Column(name = "allow_online", length = 3)
-	public String getAllowOnline() {
-		return this.allowOnline;
+	@Column(name = "register_style")
+	public int getRegisterStyle() {
+		return this.registerStyle;
 	}
 
-	public void setAllowOnline(String allowOnline) {
-		this.allowOnline = allowOnline;
+	public void setRegisterStyle(int registerStyle) {
+		this.registerStyle = registerStyle;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
+	public Set<Stock> getStocks() {
+		return this.stocks;
+	}
+
+	public void setStocks(Set<Stock> stocks) {
+		this.stocks = stocks;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
+	public Set<BillInvest> getBillInvests() {
+		return this.billInvests;
+	}
+
+	public void setBillInvests(Set<BillInvest> billInvests) {
+		this.billInvests = billInvests;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
+	public Set<MemberInvestTicket> getMemberInvestTickets() {
+		return this.memberInvestTickets;
+	}
+
+	public void setMemberInvestTickets(
+			Set<MemberInvestTicket> memberInvestTickets) {
+		this.memberInvestTickets = memberInvestTickets;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
+	public Set<InvestList> getInvestLists() {
+		return this.investLists;
+	}
+
+	public void setInvestLists(Set<InvestList> investLists) {
+		this.investLists = investLists;
 	}
 
 }

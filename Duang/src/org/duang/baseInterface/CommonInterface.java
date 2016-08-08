@@ -72,7 +72,29 @@ public interface CommonInterface<T> {
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public abstract List<T> queryEntity(List<String> properties,List<Object> values,PageUtil<T> page) throws Exception;
+	public abstract List<T> queryEntity(List<String> properties, List<Object> values, PageUtil<T> page) throws Exception;
+	
+	
+	/**
+	 * 根据Hql语句查询
+	 * @param hql hql语句
+	 * @param page 是否分页          null表示不分页
+	 * @param params 写法只有一种: "张三，男，24岁"
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract List<T> queryByHQL(String hql, PageUtil<T> page, Object... params) throws Exception;
+	
+	
+	/**
+	 * 根据Sql语句查询
+	 * @param sql   sql语句
+	 * @param page  是否分页          null表示不分页
+	 * @param params 写法有俩；A:"张三，男，24岁"、   B:"Object[]{'name','张三'}，Object[]{'sex','男'}"
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract List<T> queryBySQL(String sql, PageUtil<T> page, Object... params) throws Exception;
 
 
 	/**
@@ -81,6 +103,25 @@ public interface CommonInterface<T> {
 	 * @return   返回的类对象
 	 */
 	public abstract T findById(Serializable id) throws Exception;
+	
+	
+	/**
+	 * 通过属性与值获取操作实体类
+	 * @param property 属性
+	 * @param value 值
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract T findEntity(String property, Object value) throws Exception;
+	
+	
+	/**
+	 * 通过属性与值的集合获取操作实体类
+	 * @param params 属性与值的集合
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract T findEntity(Map<String, Object> params) throws Exception;
 
 
 	/**
@@ -97,6 +138,27 @@ public interface CommonInterface<T> {
 	 * @return   是否修改成功
 	 */
 	public abstract boolean updateEntity(T t) throws Exception;
+	
+	
+	/**
+	 * 根据datas数据集和条件属性与值来修改实体数据
+	 * @param datas 数据集
+	 * @param property 条件
+	 * @param value 值
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract boolean updateEntity(Map<String, Object> datas, String property, Object value) throws Exception;
+
+	
+	/**
+	 * 根据datas数据集和conds条件集来修改实体数据
+	 * @param datas  数据集
+	 * @param conds  条件集
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract boolean updateEntity(Map<String, Object> datas, Map<String, Object> conds) throws Exception;
 
 
 	/**
@@ -113,6 +175,14 @@ public interface CommonInterface<T> {
 	 * @return   是否删除成功
 	 */
 	public abstract boolean deleteEntity(Serializable id) throws Exception;
+	
+	
+	/**
+	 * 通过属性与条件值删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
+	public abstract boolean deleteEntity(String property, Object val) throws Exception;
 	
 	
 	/**
