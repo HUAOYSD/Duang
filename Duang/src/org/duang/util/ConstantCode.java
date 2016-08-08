@@ -39,6 +39,10 @@ public interface ConstantCode {
 	/**
 	 * select标签没有选择
 	 */
-	String NOSELECTED = "noSelected";
+	int NOSELECTED = -1;
+	/**
+	 * select标签没有选择
+	 */
+	String NOSELECTED1 = "-1";
 	
 }

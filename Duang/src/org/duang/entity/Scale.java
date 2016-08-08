@@ -21,10 +21,10 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * Scale entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "scale", catalog = "duang")
 @DynamicInsert(true)
-@SuppressWarnings("serial")
 public class Scale implements java.io.Serializable {
 
 	// Fields
@@ -44,6 +44,7 @@ public class Scale implements java.io.Serializable {
 	private String tags;
 	private int useTicket;
 	private int transfer;
+	private Date turnDate;
 	private double totalMoney;
 	private double residueMoney;
 	private double yetMoney;
@@ -52,6 +53,7 @@ public class Scale implements java.io.Serializable {
 	private int status;
 	private int isTurn;
 	private Set<Stock> stocks = new HashSet<Stock>(0);
+	private Set<ScaleLoanList> scaleLoanLists = new HashSet<ScaleLoanList>(0);
 	private Set<InvestList> investLists = new HashSet<InvestList>(0);
 
 	// Constructors
@@ -66,14 +68,7 @@ public class Scale implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Scale(String id, InvestList investList, Product product,
-			Date beginTime, Date endTime, String timeLimit, Date calcBeginTime,
-			Date calcEndTime, double revenue, double revenueAdd,
-			double maxLimit, int returnStyle, String tags,
-			int useTicket, int transfer, double totalMoney,
-			double residueMoney, double yetMoney, int scoreBonus,
-			int onesScore, int status, int isTurn,
-			Set<Stock> stocks, Set<InvestList> investLists) {
+	public Scale(String id, InvestList investList, Product product, Date beginTime, Date endTime, String timeLimit, Date calcBeginTime, Date calcEndTime, double revenue, double revenueAdd, double maxLimit, int returnStyle, String tags, int useTicket, int transfer, Date turnDate, double totalMoney, double residueMoney, double yetMoney, int scoreBonus, int onesScore, int status, int isTurn, Set<Stock> stocks, Set<ScaleLoanList> scaleLoanLists, Set<InvestList> investLists) {
 		this.id = id;
 		this.investList = investList;
 		this.product = product;
@@ -89,6 +84,7 @@ public class Scale implements java.io.Serializable {
 		this.tags = tags;
 		this.useTicket = useTicket;
 		this.transfer = transfer;
+		this.turnDate = turnDate;
 		this.totalMoney = totalMoney;
 		this.residueMoney = residueMoney;
 		this.yetMoney = yetMoney;
@@ -97,6 +93,7 @@ public class Scale implements java.io.Serializable {
 		this.status = status;
 		this.isTurn = isTurn;
 		this.stocks = stocks;
+		this.scaleLoanLists = scaleLoanLists;
 		this.investLists = investLists;
 	}
 
@@ -243,6 +240,15 @@ public class Scale implements java.io.Serializable {
 		this.transfer = transfer;
 	}
 
+	@Column(name = "turn_date", length = 19)
+	public Date getTurnDate() {
+		return this.turnDate;
+	}
+
+	public void setTurnDate(Date turnDate) {
+		this.turnDate = turnDate;
+	}
+
 	@Column(name = "total_money", precision = 22, scale = 0)
 	public double getTotalMoney() {
 		return this.totalMoney;
@@ -313,6 +319,15 @@ public class Scale implements java.io.Serializable {
 
 	public void setStocks(Set<Stock> stocks) {
 		this.stocks = stocks;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "scale")
+	public Set<ScaleLoanList> getScaleLoanLists() {
+		return this.scaleLoanLists;
+	}
+
+	public void setScaleLoanLists(Set<ScaleLoanList> scaleLoanLists) {
+		this.scaleLoanLists = scaleLoanLists;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "scale")

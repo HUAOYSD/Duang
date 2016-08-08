@@ -322,13 +322,10 @@ public class InvestProAction extends BaseAction<Product>{
 			
 			map.put("isSell", pro.getIsSell());
 			map.put("isdelete", pro.getIsdelete());
-			map.put("minDeadline", pro.getMinDeadline());
-			map.put("minMoney", pro.getMinMoney());
 			map.put("modifytime", pro.getModifytime());
 			map.put("modifyuser", pro.getModifyuser());
 			
 			map.put("productDescribe", pro.getProductDescribe());
-			map.put("refundType", pro.getRefundType());
 			map.put("riskControl", pro.getRiskControl());
 			map.put("title1", pro.getTitle1());
 			map.put("title2", pro.getTitle2());
@@ -366,13 +363,10 @@ public class InvestProAction extends BaseAction<Product>{
 					jsonObject.put("isRecommend", entity.getIsRecommend());
 					jsonObject.put("isSell", entity.getIsSell());
 					jsonObject.put("isdelete", entity.getIsdelete());
-					jsonObject.put("minDeadline", entity.getMinDeadline());
-					jsonObject.put("minMoney", entity.getMinMoney());
 					jsonObject.put("modifytime", entity.getModifytime());
 					jsonObject.put("modifyuser", entity.getModifyuser());
 					
 					jsonObject.put("productDescribe", entity.getProductDescribe());
-					jsonObject.put("refundType", entity.getRefundType());
 					jsonObject.put("riskControl", entity.getRiskControl());
 					jsonObject.put("title1", entity.getTitle1());
 					jsonObject.put("title2", entity.getTitle2());

@@ -1,13 +1,17 @@
 package org.duang.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -33,6 +37,7 @@ public class SysUser implements java.io.Serializable {
 	private String phone;
 	private String email;
 	private String idcard;
+	private Set<CustomerManager> customerManagers = new HashSet<CustomerManager>(0);
 
 	// Constructors
 
@@ -46,8 +51,7 @@ public class SysUser implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public SysUser(String id, SysRole sysRole, String name, String password,
-			Date createTime, Date updateTime, String remark, String phone, String email, String idcard) {
+	public SysUser(String id, SysRole sysRole, String name, String password, Date createTime, Date updateTime, String remark, String phone, String email, String idcard, Set<CustomerManager> customerManagers) {
 		this.id = id;
 		this.sysRole = sysRole;
 		this.name = name;
@@ -58,6 +62,7 @@ public class SysUser implements java.io.Serializable {
 		this.phone = phone;
 		this.email = email;
 		this.idcard = idcard;
+		this.customerManagers = customerManagers;
 	}
 
 	// Property accessors
@@ -105,10 +110,9 @@ public class SysUser implements java.io.Serializable {
 	}
 
 	public void setCreateTime(Date createTime) {
-		this.createTime	= createTime;
+		this.createTime = createTime;
 	}
 
-	
 	@Column(name = "update_time", length = 19)
 	public Date getUpdateTime() {
 		return this.updateTime;
@@ -118,7 +122,7 @@ public class SysUser implements java.io.Serializable {
 		this.updateTime = updateTime;
 	}
 
-	@Column(name = "remark", length = 1000)
+	@Column(name = "remark", length = 16777215)
 	public String getRemark() {
 		return this.remark;
 	}
@@ -129,7 +133,7 @@ public class SysUser implements java.io.Serializable {
 
 	@Column(name = "phone", length = 15)
 	public String getPhone() {
-		return phone;
+		return this.phone;
 	}
 
 	public void setPhone(String phone) {
@@ -138,7 +142,7 @@ public class SysUser implements java.io.Serializable {
 
 	@Column(name = "email", length = 100)
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	public void setEmail(String email) {
@@ -147,11 +151,20 @@ public class SysUser implements java.io.Serializable {
 
 	@Column(name = "idcard", length = 18)
 	public String getIdcard() {
-		return idcard;
+		return this.idcard;
 	}
 
 	public void setIdcard(String idcard) {
 		this.idcard = idcard;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sysUser")
+	public Set<CustomerManager> getCustomerManagers() {
+		return this.customerManagers;
+	}
+
+	public void setCustomerManagers(Set<CustomerManager> customerManagers) {
+		this.customerManagers = customerManagers;
 	}
 
 }

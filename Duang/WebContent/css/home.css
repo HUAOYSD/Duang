@@ -228,6 +228,13 @@ a:hover {
 	width:200px;
 	height:30px;
 }
+#investPro_add_contans #investProEditForm div{
+	margin-top:10px;
+}
+#investPro_add_contans #investProEditForm div input,#investPro_add_contans #investProEditForm div select{
+	width:200px;
+	height:30px;
+}
 #body_add_investpro .combo-p .combo-panel{
 	height:40px;
 }
@@ -268,4 +275,21 @@ a:hover {
 	padding-top:10px;
 }
 #investProManage-update-btn,#investProManage-delete-btn{
+}
+
+.contans .form div{
+	margin-top:10px;
+}
+.contans .form div input, .contans .form div select{
+	width:200px;
+	height:30px;
+}
+.contans .form div label{
+	width:100px;
+	height:30px;
+}
+.contans{
+	padding:10px;
+	font-family:"Microsoft YaHei";
+	font-size:13px;
 }

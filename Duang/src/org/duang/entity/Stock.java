@@ -15,24 +15,26 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * Stock entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "stock", catalog = "duang")
 @DynamicInsert(true)
-@SuppressWarnings("serial")
 public class Stock implements java.io.Serializable {
 
 	// Fields
 
 	private String id;
-	private LoanMember loanMember;
 	private Scale scale;
-	private InvestMember investMember;
+	private LoanList loanList;
+	private InvestList investListByTurnInvestListId;
+	private InvestList investListByInvestListId;
 	private double money;
 	private double fetch;
 	private Date createTime;
 	private Date fetchTime;
 	private double difference;
 	private int status;
+	private int isTurn;
 
 	// Constructors
 
@@ -46,20 +48,19 @@ public class Stock implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Stock(String id, LoanMember loanMember, Scale scale,
-			InvestMember investMember, double money, double fetch,
-			Date createTime, Date fetchTime, double difference,
-			int status) {
+	public Stock(String id, Scale scale, LoanList loanList, InvestList investListByTurnInvestListId, InvestList investListByInvestListId, double money, double fetch, Date createTime, Date fetchTime, double difference, int status, int isTurn) {
 		this.id = id;
-		this.loanMember = loanMember;
 		this.scale = scale;
-		this.investMember = investMember;
+		this.loanList = loanList;
+		this.investListByTurnInvestListId = investListByTurnInvestListId;
+		this.investListByInvestListId = investListByInvestListId;
 		this.money = money;
 		this.fetch = fetch;
 		this.createTime = createTime;
 		this.fetchTime = fetchTime;
 		this.difference = difference;
 		this.status = status;
+		this.isTurn = isTurn;
 	}
 
 	// Property accessors
@@ -74,16 +75,6 @@ public class Stock implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "loan_member_id")
-	public LoanMember getLoanMember() {
-		return this.loanMember;
-	}
-
-	public void setLoanMember(LoanMember loanMember) {
-		this.loanMember = loanMember;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "scale_id")
 	public Scale getScale() {
 		return this.scale;
@@ -94,13 +85,33 @@ public class Stock implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fetch_member")
-	public InvestMember getInvestMember() {
-		return this.investMember;
+	@JoinColumn(name = "loan_list_id")
+	public LoanList getLoanList() {
+		return this.loanList;
 	}
 
-	public void setInvestMember(InvestMember investMember) {
-		this.investMember = investMember;
+	public void setLoanList(LoanList loanList) {
+		this.loanList = loanList;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "turn_invest_list_id")
+	public InvestList getInvestListByTurnInvestListId() {
+		return this.investListByTurnInvestListId;
+	}
+
+	public void setInvestListByTurnInvestListId(InvestList investListByTurnInvestListId) {
+		this.investListByTurnInvestListId = investListByTurnInvestListId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "invest_list_id")
+	public InvestList getInvestListByInvestListId() {
+		return this.investListByInvestListId;
+	}
+
+	public void setInvestListByInvestListId(InvestList investListByInvestListId) {
+		this.investListByInvestListId = investListByInvestListId;
 	}
 
 	@Column(name = "money", precision = 22, scale = 0)
@@ -155,6 +166,15 @@ public class Stock implements java.io.Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	@Column(name = "is_turn")
+	public int getIsTurn() {
+		return this.isTurn;
+	}
+
+	public void setIsTurn(int isTurn) {
+		this.isTurn = isTurn;
 	}
 
 }

@@ -19,10 +19,10 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * InvestList entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "invest_list", catalog = "duang")
 @DynamicInsert(true)
-@SuppressWarnings("serial")
 public class InvestList implements java.io.Serializable {
 
 	// Fields
@@ -47,10 +47,12 @@ public class InvestList implements java.io.Serializable {
 	private String pactNumber;
 	private int investStyle;
 	private Date endPayTime;
-	private Set<TurnList> turnLists = new HashSet<TurnList>(0);
-	private Set<MemberTicketRecord> memberTicketRecords = new HashSet<MemberTicketRecord>(
-			0);
+	private double poundageTurn;
+	private double poundagePrivilege;
+	private Set<Stock> stocksForInvestListId = new HashSet<Stock>(0);
+	private Set<MemberTicketRecord> memberTicketRecords = new HashSet<MemberTicketRecord>(0);
 	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
+	private Set<Stock> stocksForTurnInvestListId = new HashSet<Stock>(0);
 	private Set<Scale> scales = new HashSet<Scale>(0);
 
 	// Constructors
@@ -65,15 +67,7 @@ public class InvestList implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public InvestList(String id, Scale scale, InvestTicket investTicket,
-			InvestMember investMember, double money, double yetMoney,
-			double spaceMoney, double backIncome, double backMoney,
-			int useTicket, double expectIncome, double totalMoney,
-			double income, double ticketBonus, int status,
-			Date openDate, Date backDate, String pactNumber,
-			int investStyle, Date endPayTime, Set<TurnList> turnLists,
-			Set<MemberTicketRecord> memberTicketRecords,
-			Set<BillInvest> billInvests, Set<Scale> scales) {
+	public InvestList(String id, Scale scale, InvestTicket investTicket, InvestMember investMember, double money, double yetMoney, double spaceMoney, double backIncome, double backMoney, int useTicket, double expectIncome, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, String pactNumber, int investStyle, Date endPayTime, double poundageTurn, double poundagePrivilege, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales) {
 		this.id = id;
 		this.scale = scale;
 		this.investTicket = investTicket;
@@ -94,9 +88,12 @@ public class InvestList implements java.io.Serializable {
 		this.pactNumber = pactNumber;
 		this.investStyle = investStyle;
 		this.endPayTime = endPayTime;
-		this.turnLists = turnLists;
+		this.poundageTurn = poundageTurn;
+		this.poundagePrivilege = poundagePrivilege;
+		this.stocksForInvestListId = stocksForInvestListId;
 		this.memberTicketRecords = memberTicketRecords;
 		this.billInvests = billInvests;
+		this.stocksForTurnInvestListId = stocksForTurnInvestListId;
 		this.scales = scales;
 	}
 
@@ -285,13 +282,31 @@ public class InvestList implements java.io.Serializable {
 		this.endPayTime = endPayTime;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investList")
-	public Set<TurnList> getTurnLists() {
-		return this.turnLists;
+	@Column(name = "poundage_turn", precision = 22, scale = 0)
+	public double getPoundageTurn() {
+		return this.poundageTurn;
 	}
 
-	public void setTurnLists(Set<TurnList> turnLists) {
-		this.turnLists = turnLists;
+	public void setPoundageTurn(double poundageTurn) {
+		this.poundageTurn = poundageTurn;
+	}
+
+	@Column(name = "poundage_privilege", precision = 22, scale = 0)
+	public double getPoundagePrivilege() {
+		return this.poundagePrivilege;
+	}
+
+	public void setPoundagePrivilege(double poundagePrivilege) {
+		this.poundagePrivilege = poundagePrivilege;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investListByInvestListId")
+	public Set<Stock> getStocksForInvestListId() {
+		return this.stocksForInvestListId;
+	}
+
+	public void setStocksForInvestListId(Set<Stock> stocksForInvestListId) {
+		this.stocksForInvestListId = stocksForInvestListId;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investList")
@@ -299,8 +314,7 @@ public class InvestList implements java.io.Serializable {
 		return this.memberTicketRecords;
 	}
 
-	public void setMemberTicketRecords(
-			Set<MemberTicketRecord> memberTicketRecords) {
+	public void setMemberTicketRecords(Set<MemberTicketRecord> memberTicketRecords) {
 		this.memberTicketRecords = memberTicketRecords;
 	}
 
@@ -311,6 +325,15 @@ public class InvestList implements java.io.Serializable {
 
 	public void setBillInvests(Set<BillInvest> billInvests) {
 		this.billInvests = billInvests;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investListByTurnInvestListId")
+	public Set<Stock> getStocksForTurnInvestListId() {
+		return this.stocksForTurnInvestListId;
+	}
+
+	public void setStocksForTurnInvestListId(Set<Stock> stocksForTurnInvestListId) {
+		this.stocksForTurnInvestListId = stocksForTurnInvestListId;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investList")
