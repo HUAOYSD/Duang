@@ -110,7 +110,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public  InvestMember findById(Serializable id) throws Exception{
+	public InvestMember findById(Serializable id) throws Exception{
 		return super.find(id);
 	}
 
@@ -176,8 +176,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql) throws Exception{
-		super.executeBySql(sql);
-		return true;
+		return super.executeBySql(sql) >= 1;
 	}
 
 
@@ -187,8 +186,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql,Object... params) throws Exception{
-		super.executeBySql(sql,params);
-		return true;
+		return super.executeBySql(sql,params) >= 1;
 	}
 
 
@@ -207,6 +205,88 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	}
 
 
+	/**
+	 * 通过属性与条件值删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
+	public boolean deleteEntity(String property, Object val) throws Exception{
+		return super.delete(property, val) >= 1;
+	}
+
+
+	/**
+	 * 根据datas数据集和条件属性与值来修改实体数据
+	 * @param datas
+	 * @param property
+	 * @param value
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean updateEntity(Map<String, Object> datas, String property, Object value) throws Exception{
+		return super.update(datas, property, value) >= 1;
+	}
+
+
+	/**
+	 * 根据datas数据集和conds条件集来修改实体数据
+	 * @param datas
+	 * @param conds
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean updateEntity(Map<String, Object> datas, Map<String, Object> conds) throws Exception{
+		return super.update(datas, conds) >= 1;
+	}
+
+
+	/**
+	 * 通过属性与值获取操作实体类
+	 * @param property 属性
+	 * @param value 值
+	 * @return
+	 * @throws Exception
+	 */
+	public InvestMember findEntity(String property, Object value) throws Exception{
+		return super.find(property, value);
+	}
+
+
+	/**
+	 * 通过属性与值的集合获取操作实体类
+	 * @param params 属性与值的集合
+	 * @return
+	 * @throws Exception
+	 */
+	public InvestMember findEntity(Map<String, Object> params) throws Exception{
+		return super.find(params);
+	}
+
+	
+	/**
+	 * 根据Hql语句查询
+	 * @param hql hql语句
+	 * @param page 是否分页          null表示不分页
+	 * @param params 写法只有一种: "张三，男，24岁"
+	 * @return
+	 * @throws Exception
+	 */
+	public List<InvestMember> queryByHQL(String hql, PageUtil<InvestMember> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, page, params);
+	}
+
+
+	/**
+	 * 根据Sql语句查询
+	 * @param sql   sql语句
+	 * @param page  是否分页          null表示不分页
+	 * @param params 写法有俩；A:"张三，男，24岁"、   B:"Object[]{'name','张三'}，Object[]{'sex','男'}"
+	 * @return
+	 * @throws Exception
+	 */
+	public List<InvestMember> queryBySQL(String sql, PageUtil<InvestMember> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, page, params);
+	}
 
 }
 
