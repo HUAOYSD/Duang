@@ -41,15 +41,16 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 	 */   
 	private static final long serialVersionUID = 1L;
 
-	public void upload() {  
-        System.out.println("文件名：" + entity.getFileFileName());  
-        System.out.println("文件类型：" + entity.getFileContentType());  
-          
+	public void uploadUserImage() {  
+		String userId = getRequest().getParameter("id");
+		if(DataUtils.notEmpty(userId)){
+			String path = getRequest().getSession().getServletContext().getRealPath("/")+"WEB-INF\\file\\"+userId;
+			System.out.println("文件的保存路径：" + path);
+		}
+    }
+
+	private boolean  upload(String path) {  
         if (entity.getFile() != null) {  
-            //文件的保存路径是WebContent/file目录下  
-            String realpath ="D:\\img\\user\\idcard";
-            System.out.println("文件的保存路径：" + realpath);  
-              
             //文件的后缀  
             String suffix = entity.getFileFileName().substring(entity.getFileFileName()  
                     .lastIndexOf("."));  
@@ -57,12 +58,10 @@ public class FileUploadAction extends BaseAction<FileUpload> {
             	jsonObject.put("result", false);
 				jsonObject.put("msg", "上传失败");
             }  
-              
             //上传以后,会重命名文件的名称,将其命名为全部是数字的文件名,防止可能出现的乱码.  
             //当然, 只是为了防止出现乱码,一般不会出现乱码  
             entity.setNewFileName(DataUtils.randomUUID()+suffix);   
-              
-            File savefile = new File(new File(realpath), entity.getNewFileName());  
+            File savefile = new File(new File(path), entity.getNewFileName());  
             //如果保存的路径不存在,则新建  
             if (!savefile.getParentFile().exists())  
                 savefile.getParentFile().mkdirs();  
@@ -79,5 +78,6 @@ public class FileUploadAction extends BaseAction<FileUpload> {
     			printJsonResult();
     		}   
         } 
-    }  
+    }
+	
 }

@@ -8,15 +8,15 @@
 <body style="background-color:#fff;" class="bodyContent">
 	<div class="content">
 		<div>   
-			<form action="fileUpload!upload.do?type=${type}&id=${entity.id}" enctype="multipart/form-data" method="post">
+			<form action="fileUpload!uploadUserImage.do?type=${type}&id=${entity.id}" enctype="multipart/form-data" method="post">
 				   <c:if test="${type eq 0}">
-				   		<label for="idcardImg1" class="from_label">头像：</label>
+				   		<label for="userImg" class="from_label">头像：</label>
 				   </c:if>
 				   <c:if test="${type eq 1}">
 				   		<label for="idcardImg1" class="from_label">身份证前照：</label>
 				   </c:if>  
 				   <c:if test="${type eq 2}">
-				   		<label for="idcardImg1" class="from_label">身份证后照：</label>
+				   		<label for="idcardImg2" class="from_label">身份证后照：</label>
 				   </c:if>
 	               <input type="file" name="file"> 
 	               <input style="width:45px;" type="submit" value="提交"/>  
