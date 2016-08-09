@@ -12,18 +12,18 @@
 		        <label for="name" class="add_edit_form_label">用户名：</label>  
 				<input name="name" id="sysUserName" class="easyui-validatebox " data-options="required:true,missingMessage:'请填写用户名！'"/>
 		    </div> 
-		    <div>   
-		        <label for="phone" class="add_edit_form_label">手机号码：</label>  
-				<input name="phone" id="phone" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
-		    </div> 
-		    <div>   
-		        <label for="email" class="add_edit_form_label">邮箱：</label>  
-				<input name="email" id="email" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
-		    </div> 
-		    <div>   
-		        <label for="idcard" class="add_edit_form_label">身份证号：</label>  
-				<input name="idcard" id="idcard" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
-		    </div> 
+			<!-- 		    <div>    -->
+			<!-- 		        <label for="phone" class="add_edit_form_label">手机号码：</label>   -->
+			<!-- 				<input name="phone" id="phone" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/> -->
+			<!-- 		    </div>  -->
+			<!-- 		    <div>    -->
+			<!-- 		        <label for="email" class="add_edit_form_label">邮箱：</label>   -->
+			<!-- 				<input name="email" id="email" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/> -->
+			<!-- 		    </div>  -->
+			<!-- 		    <div>    -->
+			<!-- 		        <label for="idcard" class="add_edit_form_label">身份证号：</label>   -->
+			<!-- 				<input name="idcard" id="idcard" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/> -->
+			<!-- 		    </div>  -->
 		    <div>   
 		        <label for="password" class="add_edit_form_label">登录密码：</label>  
 				<input name="password" id="password" type="password" class="easyui-validatebox" data-options="required:true,missingMessage:'请填写密码！'" />
@@ -52,7 +52,6 @@
 			}
 			var txtNewPass = $('#password').val().trim();
 			var txtRePass = $('#sysUserPassRes').val().trim();
-			var name = $('#sysUserName').val().trim();
 			if(txtNewPass != txtRePass){
 				$.messager.alert('警告','两次密码输入不一致！','warning');
 				return false;
@@ -61,24 +60,24 @@
 				$.messager.alert('警告','密码过于简单，请输入不低于6位的密码！','warning');
 				return false;
 			}
-			if($('#phone').val().isNotNull()){
-				if(!$('#phone').val().isPhone()){
-					$.messager.alert('警告','手机号码不合法！','warning');
-					return false;
-				}
-			}
-			if($('#email').val().isNotNull()){
-				if(!$('#email').val().isEmail()){
-					$.messager.alert('警告','邮箱地址不合法！','warning');
-					return false;
-				}
-			}
-			if($('#idcard').val().isNotNull()){
-				if(!$('#idcard').val().isIDCard()){
-					$.messager.alert('警告','身份证号码不合法！','warning');
-					return false;
-				}
-			}
+			// 			if($('#phone').val().isNotNull()){
+			// 				if(!$('#phone').val().isPhone()){
+			// 					$.messager.alert('警告','手机号码不合法！','warning');
+			// 					return false;
+			// 				}
+			// 			}
+			// 			if($('#email').val().isNotNull()){
+			// 				if(!$('#email').val().isEmail()){
+			// 					$.messager.alert('警告','邮箱地址不合法！','warning');
+			// 					return false;
+			// 				}
+			// 			}
+			// 			if($('#idcard').val().isNotNull()){
+			// 				if(!$('#idcard').val().isIDCard()){
+			// 					$.messager.alert('警告','身份证号码不合法！','warning');
+			// 					return false;
+			// 				}
+			// 			}
 			$("#user_add_form").form("submit",{    
 			    url:"sysuser!saveSysUser.do",
 			    onSubmit: function(){    

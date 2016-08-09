@@ -115,8 +115,8 @@ public class SysUserAction extends BaseAction<SysUser>{
 			for(SysUser user : list) {
 				Map<String,Object> resultMap = new HashMap<String,Object>();
 				resultMap.put("sysUserName", user.getName());
-				resultMap.put("phone", user.getPhone());
-				resultMap.put("email", user.getEmail());
+				//resultMap.put("phone", user.getPhone());
+				//resultMap.put("email", user.getEmail());
 				SysRole role = user.getSysRole();
 				resultMap.put("roleName", role==null?"未分配":role.getRoleName());
 				resultMap.put("updateDate", DateUtils.getTimeStamp(user.getUpdateTime()));
@@ -160,9 +160,9 @@ public class SysUserAction extends BaseAction<SysUser>{
 					jsonObject.put("passwordRes", entity.getPassword());
 					jsonObject.put("createTime", entity.getCreateTime());
 					jsonObject.put("remark", entity.getRemark());
-					jsonObject.put("phone", entity.getPhone());
-					jsonObject.put("email", entity.getEmail());
-					jsonObject.put("idcard", entity.getIdcard());
+					//jsonObject.put("phone", entity.getPhone());
+					//jsonObject.put("email", entity.getEmail());
+					//jsonObject.put("idcard", entity.getIdcard());
 					jsonObject.put("id", entity.getId());
 				}
 			}

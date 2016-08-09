@@ -1,5 +1,6 @@
 package org.duang.entity;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,6 +38,8 @@ public class CustomerManager implements java.io.Serializable {
 	private String photo;
 	private String qr;
 	private String remark;
+	private Date createtime;
+	private int isDelete;
 	private Set<LoanMember> loanMembers = new HashSet<LoanMember>(0);
 	private Set<InvestMember> investMembers = new HashSet<InvestMember>(0);
 
@@ -54,7 +57,7 @@ public class CustomerManager implements java.io.Serializable {
 	/** full constructor */
 	public CustomerManager(String id, SysUser sysUser, String name,
 			String workNumber, String sex, String idcard, String email,
-			String phone, String photo, String qr, String remark,
+			String phone, String photo, String qr, String remark,Date createtime,int isDelete,
 			Set<LoanMember> loanMembers, Set<InvestMember> investMembers) {
 		this.id = id;
 		this.sysUser = sysUser;
@@ -64,12 +67,15 @@ public class CustomerManager implements java.io.Serializable {
 		this.idcard = idcard;
 		this.email = email;
 		this.phone = phone;
+		this.createtime = createtime;
 		this.photo = photo;
 		this.qr = qr;
 		this.remark = remark;
+		this.isDelete = isDelete;
 		this.loanMembers = loanMembers;
 		this.investMembers = investMembers;
 	}
+	
 
 	// Property accessors
 	@Id
@@ -171,6 +177,24 @@ public class CustomerManager implements java.io.Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	
+	@Column(name = "createtime", length = 19)
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	@Column(name = "is_delete")
+	public int getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(int isDelete) {
+		this.isDelete = isDelete;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customerManager")

@@ -14,18 +14,18 @@
 		        <label for="name" class="add_edit_form_label">用户名：</label>  
 				<input name="name" id="sysUserName" class="easyui-validatebox " data-options="required:true,missingMessage:'请填写用户名！'"/>
 		    </div> 
-		    <div>   
-		        <label for="phone" class="add_edit_form_label">手机号码：</label>  
-				<input name="phone" id="phone" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
-		    </div> 
-		    <div>   
-		        <label for="email" class="add_edit_form_label">邮箱：</label>  
-				<input name="email" id="email" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
-		    </div> 
-		    <div>   
-		        <label for="idcard" class="add_edit_form_label">身份证号：</label>  
-				<input name="idcard" id="idcard" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/>
-		    </div> 
+			<!-- 		    <div>    -->
+			<!-- 		        <label for="phone" class="add_edit_form_label">手机号码：</label>   -->
+			<!-- 				<input name="phone" id="phone" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/> -->
+			<!-- 		    </div>  -->
+			<!-- 		    <div>    -->
+			<!-- 		        <label for="email" class="add_edit_form_label">邮箱：</label>   -->
+			<!-- 				<input name="email" id="email" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/> -->
+			<!-- 		    </div>  -->
+			<!-- 		    <div>    -->
+			<!-- 		        <label for="idcard" class="add_edit_form_label">身份证号：</label>   -->
+			<!-- 				<input name="idcard" id="idcard" class="easyui-validatebox " data-options="required:false,missingMessage:'！'"/> -->
+			<!-- 		    </div>  -->
 		    <div>   
 		        <label for="remark" class="add_edit_form_label">描述：</label>   
 		       	<textarea rows="5" cols="20" id="remark" name="remark"></textarea>  
@@ -52,30 +52,28 @@
 			});
 		});
 		
-		
 		$("#user_edit_form_submitbtn").on("click", function(){
 			if(!$("#user_edit_form").form('validate')){
 				return false;
 			}
-			var name = $('#sysUserName').val().trim();
-			if($('#phone').val().isNotNull()){
-				if(!$('#phone').val().isPhone()){
-					$.messager.alert('警告','手机号码不合法！','warning');
-					return false;
-				}
-			}
-			if($('#email').val().isNotNull()){
-				if(!$('#email').val().isEmail()){
-					$.messager.alert('警告','邮箱地址不合法！','warning');
-					return false;
-				}
-			}
-			if($('#idcard').val().isNotNull()){
-				if(!$('#idcard').val().isIDCard()){
-					$.messager.alert('警告','身份证号码不合法！','warning');
-					return false;
-				}
-			}
+			// 			if($('#phone').val().isNotNull()){
+			// 				if(!$('#phone').val().isPhone()){
+			// 					$.messager.alert('警告','手机号码不合法！','warning');
+			// 					return false;
+			// 				}
+			// 			}
+			// 			if($('#email').val().isNotNull()){
+			// 				if(!$('#email').val().isEmail()){
+			// 					$.messager.alert('警告','邮箱地址不合法！','warning');
+			// 					return false;
+			// 				}
+			// 			}
+			// 			if($('#idcard').val().isNotNull()){
+			// 				if(!$('#idcard').val().isIDCard()){
+			// 					$.messager.alert('警告','身份证号码不合法！','warning');
+			// 					return false;
+			// 				}
+			// 			}
 			$("#user_edit_form").form("submit",{    
 			    url:"sysuser!updateSysUser.do",
 			    onSubmit: function(){    

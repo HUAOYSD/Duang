@@ -51,7 +51,7 @@ public class LoanMember implements java.io.Serializable {
 	/** full constructor */
 	public LoanMember(String id, CustomerManager customerManager,
 			MemberInfo memberInfo, double lendMoney, double backMoney,
-			double residueMoney, double expectMoney, Set<Stock> stocks,
+			double residueMoney, double expectMoney,
 			Set<LoanList> loanLists) {
 		this.id = id;
 		this.customerManager = customerManager;

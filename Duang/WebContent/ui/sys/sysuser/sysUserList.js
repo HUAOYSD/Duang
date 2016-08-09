@@ -55,18 +55,18 @@ function loadUserList(url){
 						width : $(this).width() * 0.1,
 						align : "center"
 					},
-					{
-						field : "phone",
-						title : "手机号码",
-						width : $(this).width() * 0.1,
-						align : "center"
-					},
-					{
-						field : "email",
-						title : "邮箱",
-						width : $(this).width() * 0.1,
-						align : "center"
-					},
+					//					{
+					//						field : "phone",
+					//						title : "手机号码",
+					//						width : $(this).width() * 0.1,
+					//						align : "center"
+					//					},
+					//					{
+					//						field : "email",
+					//						title : "邮箱",
+					//						width : $(this).width() * 0.1,
+					//						align : "center"
+					//					},
 					{
 						field : "updateDate",
 						title : "更新时间",

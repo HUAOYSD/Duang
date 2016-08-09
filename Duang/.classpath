@@ -100,5 +100,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mchange-commons-java-0.2.3.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/hibernate-c3p0-4.1.2.Final.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/junit-4.11.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

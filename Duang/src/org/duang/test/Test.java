@@ -1,6 +1,8 @@
 package org.duang.test;
 
 import org.apache.log4j.Logger;
+import org.duang.enums.If;
+import org.junit.Before;
 
 public class Test {
 
@@ -13,5 +15,18 @@ public class Test {
 		logger.error(" This is error!!!");
 		logger.fatal(" This is fatal!!!");
 	}
+	
+	@Before
+	public void sfds(){
+		If.TRUE.setDesc("hehe");
+	}
+	
+	@org.junit.Test
+	public void fds(){
+		System.out.println(If.TRUE.getDesc());
+		System.out.println(If.TRUE.getDesc());
+	}
+	
+	
 
 }

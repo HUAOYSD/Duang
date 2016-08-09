@@ -58,7 +58,7 @@ public class InvestMember implements java.io.Serializable {
 			CustomerManager customerManager, String managerName,
 			int isContract, double balance, double investing,
 			double totalIncome, double totalMoney, int useableScore,
-			int registerStyle, Set<Stock> stocks,
+			int registerStyle,
 			Set<BillInvest> billInvests,
 			Set<MemberInvestTicket> memberInvestTickets,
 			Set<InvestList> investLists) {

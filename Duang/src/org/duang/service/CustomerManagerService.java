@@ -4,7 +4,7 @@ import org.duang.baseInterface.CommonInterface;
 import org.duang.entity.CustomerManager;
 
 /**   
- * 理财客户业务接口
+ * 客户经理业务接口
  * @ClassName:  SysInvestMemberService   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
