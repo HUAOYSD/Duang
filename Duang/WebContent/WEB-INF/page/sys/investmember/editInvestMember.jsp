@@ -1,4 +1,4 @@
-<%@page import="org.duang.entity.old.InvestMember"%>
+<%@page import="org.duang.entity.InvestMember"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% String path = request.getContextPath();%>
 <%@ include file="/page/inc/inc.jsp"%>
@@ -133,13 +133,19 @@
 				</select> 
 		    </div>
 		    <div>   
-		        <label for="custManagerId" class="from_label">客户经理ID：</label>   
-		       	<input  type="text" name="custManagerId"/>
+		        <label for="customerManager.id" class="from_label">客户经理姓名：</label>   
+		       	<input class="easyui-combobox" name="customerManager.id" data-options="    
+				        valueField: 'id',    
+				        textField: 'name',
+				        editable:false,
+				        panelHeight:'auto',
+				        missingMessage:'请选择角色！',   
+				        url: 'customermanager!queryAllCusManagerIdAndName.do',
+				        onSelect: function(rec){    
+				             $('#addInvestMember_customerManager_name').val(rec.name);
+				        }"  />   
 		    </div>
-		    <div>   
-		        <label for="managerName" class="from_label">客户经理姓名：</label>   
-		       	<input  type="text" name="managerName"/>
-		    </div>
+		    <input type="hidden" id="addInvestMember_customerManager_name"  name="customerManager.name" value="">
 		</form>  
 	</div>
 	<div align="center" class="footer-oper">

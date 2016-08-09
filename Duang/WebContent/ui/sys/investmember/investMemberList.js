@@ -259,7 +259,7 @@ $("#investMemeberList-upload-idcard1-btn").on('click',function(){
 		shadeClose: true,
 		shade: 0.8,
 		area: ['450px', '30%'],
-		content: "investmember!touUpload.do?id="+selectedRow.id+"type=1" //1代表上传身份证前照
+		content: "investmember!touUpload.do?id="+selectedRow.id+"&type=1" //1代表上传身份证前照
 	});
 });
 //上传身份证前照

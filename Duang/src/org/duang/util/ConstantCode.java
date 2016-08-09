@@ -45,4 +45,17 @@ public interface ConstantCode {
 	 */
 	String NOSELECTED1 = "-1";
 	
+	/**
+	 * 上传头像
+	 */
+	String upload_user_head = "0";
+	/**
+	 * 上传身份证前照
+	 */
+	String upload_user_idcard_1 = "1";
+	/**
+	 * 上传身份证后照
+	 */
+	String upload_user_idcard_2 = "2";
+	
 }

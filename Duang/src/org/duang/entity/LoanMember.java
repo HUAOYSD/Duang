@@ -33,7 +33,7 @@ public class LoanMember implements java.io.Serializable {
 	private double backMoney;
 	private double residueMoney;
 	private double expectMoney;
-	private Set<Stock> stocks = new HashSet<Stock>(0);
+	//private Set<Stock> stocks = new HashSet<Stock>(0);
 	private Set<LoanList> loanLists = new HashSet<LoanList>(0);
 
 	// Constructors
@@ -60,7 +60,7 @@ public class LoanMember implements java.io.Serializable {
 		this.backMoney = backMoney;
 		this.residueMoney = residueMoney;
 		this.expectMoney = expectMoney;
-		this.stocks = stocks;
+		//this.stocks = stocks;
 		this.loanLists = loanLists;
 	}
 
@@ -131,14 +131,14 @@ public class LoanMember implements java.io.Serializable {
 		this.expectMoney = expectMoney;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanMember")
+	/*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanMember")
 	public Set<Stock> getStocks() {
 		return this.stocks;
 	}
 
 	public void setStocks(Set<Stock> stocks) {
 		this.stocks = stocks;
-	}
+	}*/
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanMember")
 	public Set<LoanList> getLoanLists() {

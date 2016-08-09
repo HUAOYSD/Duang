@@ -36,10 +36,9 @@ public class InvestMember implements java.io.Serializable {
 	private double totalMoney;
 	private int useableScore;
 	private int registerStyle;
-	private Set<Stock> stocks = new HashSet<Stock>(0);
+	//private Set<Stock> stocks = new HashSet<Stock>(0);
 	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
-	private Set<MemberInvestTicket> memberInvestTickets = new HashSet<MemberInvestTicket>(
-			0);
+	private Set<MemberInvestTicket> memberInvestTickets = new HashSet<MemberInvestTicket>(0);
 	private Set<InvestList> investLists = new HashSet<InvestList>(0);
 
 	// Constructors
@@ -74,7 +73,7 @@ public class InvestMember implements java.io.Serializable {
 		this.totalMoney = totalMoney;
 		this.useableScore = useableScore;
 		this.registerStyle = registerStyle;
-		this.stocks = stocks;
+		//this.stocks = stocks;
 		this.billInvests = billInvests;
 		this.memberInvestTickets = memberInvestTickets;
 		this.investLists = investLists;
@@ -183,14 +182,14 @@ public class InvestMember implements java.io.Serializable {
 		this.registerStyle = registerStyle;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
+	/*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
 	public Set<Stock> getStocks() {
 		return this.stocks;
 	}
 
 	public void setStocks(Set<Stock> stocks) {
 		this.stocks = stocks;
-	}
+	}*/
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
 	public Set<BillInvest> getBillInvests() {
