@@ -258,8 +258,8 @@ $("#investMemeberList-upload-idcard1-btn").on('click',function(){
 		title: '上传身份证前照',
 		shadeClose: true,
 		shade: 0.8,
-		area: ['450px', '30%'],
-		content: "investmember!touUpload.do?id="+selectedRow.id+"&type=1" //1代表上传身份证前照
+		area: ['80%', '80%'],
+		content: "investmember!touUpload.do?id="+selectedRow.memberInfoId+"&type=1" //1代表上传身份证前照
 	});
 });
 //上传身份证前照
@@ -273,10 +273,11 @@ $("#investMemeberList-upload-idcard2-btn").on('click',function(){
 		title: '上传身份证后照',
 		shadeClose: true,
 		shade: 0.8,
-		area: ['450px', '30%'],
-		content: "investmember!touUpload.do?id="+selectedRow.id+"type=2" //2代表上传身份证前照
+		area: ['80%', '80%'],
+		content: "investmember!touUpload.do?id="+selectedRow.memberInfoId+"&type=2" //2代表上传身份证前照
 	});
 });
+
 function isSelectedRow(){
 	selectedRow = tableObj.datagrid("getSelected");
 	if(selectedRow==null){
@@ -296,5 +297,14 @@ function domresize(){
 		height:$("#invest_member_body").height()-$('#invest_member_search_area').height()-5,
 		width:$("#invest_member_body").width()
 	});
+}
+
+/**
+ * 弹窗提示
+ * @param msg 信息
+ * @param time 时间
+ */
+function layerMsg(msg,time){
+	 layer.msg(msg, {time: time});
 }
 	

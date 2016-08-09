@@ -22,7 +22,9 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.SessionTools;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.If;
 import org.duang.service.InvestMemberService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -62,6 +64,12 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 		this.investMemberService = investMemberService;
 	}
 
+	private MemberInfoService sysMemberInfoService;
+	@Resource(name="sysmemberinfoserviceimpl")
+	public void setService(MemberInfoService sysMemberInfoService) {
+		this.sysMemberInfoService = sysMemberInfoService;
+	}
+	
 	/**
 	 * 跳转到理财客户页面
 	 * 
@@ -88,7 +96,24 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 	 * @throws
 	 */
 	public String touUpload() {
-		getRequest().setAttribute("type", getRequest().getParameter("type"));
+		try{
+			String type =  getRequest().getParameter("type");
+			getRequest().setAttribute("type", getRequest().getParameter("type"));
+			MemberInfo memberInfo = sysMemberInfoService.findById(entity.getId());
+			getRequest().setAttribute("memberInfo", memberInfo);
+			//返回身份证前照和后照的具体路径
+			if(If.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
+			}else if(If.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
+			}else {
+				getRequest().setAttribute("path", "");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("跳转到上传文件页面错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("跳转到上传文件页面错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
 		return "uploadInvestMemberImg";
 	}
 	

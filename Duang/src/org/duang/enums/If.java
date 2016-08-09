@@ -46,6 +46,76 @@ public enum If {
 		}
 
 	},
+	IDCARD1 {
+		private String desc = "身份证前照";
+		
+		@Override
+		public int getVal() {
+			return 1;
+		}
+
+		@Override
+		public String getDesc() {
+			return desc;
+		}
+
+		@Override
+		public int getIndex() {
+			return 1;
+		}
+
+		@Override
+		public Object setDesc(String desc) {
+			if (DataUtils.notEmpty(desc)) {
+				this.desc = desc;
+				return this;
+			}else {
+				return setDefaultDesc();
+			}
+		}
+
+		@Override
+		public Object setDefaultDesc() {
+			this.desc = "身份证前照";
+			return this;
+		}
+
+	},
+	IDCARD2 {
+		private String desc = "身份证后照";
+		
+		@Override
+		public int getVal() {
+			return 2;
+		}
+
+		@Override
+		public String getDesc() {
+			return desc;
+		}
+
+		@Override
+		public int getIndex() {
+			return 2;
+		}
+
+		@Override
+		public Object setDesc(String desc) {
+			if (DataUtils.notEmpty(desc)) {
+				this.desc = desc;
+				return this;
+			}else {
+				return setDefaultDesc();
+			}
+		}
+
+		@Override
+		public Object setDefaultDesc() {
+			this.desc = "身份证后照";
+			return this;
+		}
+
+	},
 	FALSE {
 		private String desc = "否";
 		
