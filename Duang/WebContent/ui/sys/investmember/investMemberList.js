@@ -110,12 +110,42 @@ $(function(){
 			},
 			{field:'age',title:'年龄',width:100,halign:"center", align:"center" },
 			{field:'userImg',title:'头像',width:200,halign:"center", align:"center" },
-			{field:'idCardImg1',title:'身份证前照',width:200,halign:"center", align:"center" },
+			{field:'idCardImg1',title:'身份证前照',width:200,halign:"center", align:"center"},
 			{field:'idCardImg2',title:'身份证后照',width:200,halign:"center", align:"center" },
 			{field:'managerName',title:'客户经理姓名',width:100,halign:"center", align:"center" },
 			{field:'email',title:'邮箱',width:150,halign:"center", align:"center" },
 			{field:'memberInfoId',title:'用户id',hidden:true}
-		]]
+		]],
+		onClickCell: function(index,field,value){
+			tableObj.datagrid("selectRow",index);
+			var selectRowt = tableObj.datagrid("getSelected");
+			if(value==null){
+				layer.msg("还没有上传图片",{time:2000});
+				return;
+			}
+			if(field=='idCardImg1'){
+				indexLayer = layer.open({
+					type: 2,
+					title: '身份证前照',
+					shadeClose: true,
+					shade: 0.8,
+					area: ['80%', '80%'],
+					maxmin:true,
+					content: "investmember!showUserImage.do?id="+selectRowt.memberInfoId+"&type=1" //1代表上传身份证前照
+				});  
+			}else if(field=='idCardImg2'){
+				indexLayer = layer.open({
+					type: 2,
+					title: '身份证后照',
+					shadeClose: true,
+					shade: 0.8,
+					area: ['80%', '80%'],
+					maxmin:true,
+					content: "investmember!showUserImage.do?id="+selectRowt.memberInfoId+"&type=1" //1代表上传身份证前照
+				});  
+			}
+		}
+
 	});
 	$('#queryInvestMemberListForm').form({    
 	    url:"investmember!queryInvestMemberByParameter.do",    
@@ -259,6 +289,7 @@ $("#investMemeberList-upload-idcard1-btn").on('click',function(){
 		shadeClose: true,
 		shade: 0.8,
 		area: ['80%', '80%'],
+		maxmin:true,
 		content: "investmember!touUpload.do?id="+selectedRow.memberInfoId+"&type=1" //1代表上传身份证前照
 	});
 });
@@ -273,9 +304,15 @@ $("#investMemeberList-upload-idcard2-btn").on('click',function(){
 		title: '上传身份证后照',
 		shadeClose: true,
 		shade: 0.8,
+		maxmin:true,
 		area: ['80%', '80%'],
 		content: "investmember!touUpload.do?id="+selectedRow.memberInfoId+"&type=2" //2代表上传身份证前照
 	});
+});
+
+//取消选择
+$("#investMemeberList-unselected-btn").on('click',function(){
+	tableObj.datagrid("unselectAll");
 });
 
 function isSelectedRow(){

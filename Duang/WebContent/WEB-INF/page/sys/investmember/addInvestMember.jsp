@@ -133,7 +133,7 @@
 				             $('#addInvestMember_customerManager_name').val(rec.name);
 				        }"  />   
 		    </div>
-		    <input type="hidden" id="addInvestMember_customerManager_name"  name="customerManager.name" value="">
+		    <input type="hidden" id="addInvestMember_customerManager_name"  name="managerName" value="">
 		</form>
 	</div>
 	<div align="center" class="footer-oper">

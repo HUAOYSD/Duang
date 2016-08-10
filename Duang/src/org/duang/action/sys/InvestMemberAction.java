@@ -20,6 +20,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.SessionTools;
+import org.duang.entity.CustomerManager;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.If;
@@ -85,9 +86,9 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 		return ResultPath.LIST;
 	}
 	/**
-	 * 跳转到理财客户页面
+	 * 跳转到上传理财客户图片的页面
 	 * 
-	 * @Title: investMemberList
+	 * @Title: touUpload
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param: @return
 	 * @author LiYonghui
@@ -99,6 +100,39 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 		try{
 			String type =  getRequest().getParameter("type");
 			getRequest().setAttribute("type", getRequest().getParameter("type"));
+			MemberInfo memberInfo = sysMemberInfoService.findById(entity.getId());
+			getRequest().setAttribute("memberInfo", memberInfo);
+			//返回身份证前照和后照的具体路径
+			if(If.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
+			}else if(If.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
+			}else {
+				getRequest().setAttribute("path", "");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("跳转到上传文件页面错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("跳转到上传文件页面错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
+		return "uploadInvestMemberImg";
+	}
+	
+	/**
+	 * 仅仅展示上传的图片，不能上传图片
+	 * @Title: showUserImage
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param: @return
+	 * @author LiYonghui
+	 * @date 2016年7月30日 下午11:18:08
+	 * @return: String
+	 * @throws
+	 */
+	public String showUserImage() {
+		try{
+			String type =  getRequest().getParameter("type");
+			getRequest().setAttribute("type", getRequest().getParameter("type"));
+			getRequest().setAttribute("only_show",If.TRUE.getVal());
 			MemberInfo memberInfo = sysMemberInfoService.findById(entity.getId());
 			getRequest().setAttribute("memberInfo", memberInfo);
 			//返回身份证前照和后照的具体路径
@@ -321,7 +355,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				InvestMember im = investMemberService.findById(entity.getId());
 				if (im != null) {
 					jsonObject.put("id", im.getId());
-					jsonObject.put("managerName", im.getManagerName());
 					jsonObject.put("isContract", im.getIsContract());
 					jsonObject.put("balance", im.getBalance());
 					jsonObject.put("investing", im.getInvesting());
@@ -329,8 +362,13 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					jsonObject.put("totalMoney", im.getTotalMoney());
 					jsonObject.put("useableScore", im.getUseableScore());
 					jsonObject.put("registerStyle", im.getRegisterStyle());
+					CustomerManager customerManager = im.getCustomerManager();
+					jsonObject.put("customerManager.id", customerManager.getId());
+					jsonObject.put("customerManagerId", customerManager.getId());
+					jsonObject.put("managerName", customerManager.getName());
 					
 					MemberInfo memberInfo = im.getMemberInfo();
+					jsonObject.put("memberInfoId", memberInfo.getId());
 					jsonObject.put("memberInfo.memberInfoId", memberInfo.getId());
 					jsonObject.put("memberInfo.loginName", memberInfo.getLoginName());
 					jsonObject.put("memberInfo.realName", memberInfo.getRealName());
@@ -344,7 +382,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					jsonObject.put("memberInfo.modifyTime", DateUtils.getTimeStamp(memberInfo.getModifyTime()));
 					jsonObject.put("memberInfo.createuser", memberInfo.getCreateuser());
 					jsonObject.put("memberInfo.modifyuser", memberInfo.getModifyuser());
-					jsonObject.put("userImg", memberInfo.getUserImg());
+					jsonObject.put("memberInfo.userImg", memberInfo.getUserImg());
 					jsonObject.put("memberInfo.isEliteAccount", memberInfo.getIsEliteAccount());
 					jsonObject.put("memberInfo.type", memberInfo.getType());
 					jsonObject.put("memberInfo.level", memberInfo.getLevel());
@@ -384,7 +422,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 		if (entity != null) {
 			try {
 				// 判断是否存在相同总名称的数据，如果存在则取消添加
-				if (investMemberService.count("memberInfo.name", entity.getMemberInfo().getLoginName()) > 0) {
+				if (investMemberService.count("memberInfo.loginName", entity.getMemberInfo().getLoginName()) > 0) {
 					jsonObject.put("result", false);
 					jsonObject.put("msg", "添加失败，已经存在相同名称的用户！");
 					printJsonResult();

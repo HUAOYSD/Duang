@@ -72,6 +72,7 @@
 	</div>
 	<script type="text/javascript" src="<%=path%>/ui/sys/investmember/investMemberList.js"></script>
 	<script type="text/javascript">
+		var APP_PATH = "<%=path%>";
 		$("#submit_invest_memeber_list_btn").on("click", function(){
 			$('#queryInvestMemberListForm').submit(); 
 		});

@@ -6,11 +6,11 @@
 	<div class="content">
 	  	<form id="investMemberEidtForm" method="post"> 
 	  		<input type="hidden" name="id" value="${entity.id}"/> 
-	  		<input type="hidden" name="memberInfo.id" value="${entity.memberInfo.id}"/> 
+	  		<input type="hidden" id="editInvestMember_memberInfoId" name="memberInfo.id" value=""/> 
 	  		<h1>基本信息</h1>
 		    <div>   
-		        <label for="memberInfo.name" class="from_label">登录名：</label>   
-		        <input class="easyui-validatebox" type="text" name="memberInfo.name" data-options="required:true" />   
+		        <label for="memberInfo.loginName" class="from_label">登录名：</label>   
+		        <input class="easyui-validatebox" type="text" name="memberInfo.loginName" data-options="required:true" />   
 		    </div>   
 		    <div>   
 		        <label for="memberInfo.realName" class="from_label">真实姓名：</label>   
@@ -74,78 +74,63 @@
 		       	<input type="text" name="memberInfo.price" class="easyui-numberbox" value="0" data-options="min:0"/>万元
 		    </div> 
 		    <div>   
-		        <label for="memberInfo.describe" class="from_label">介绍：</label>   
-		       	<textarea rows="5" cols="30" name="memberInfo.describe"></textarea>  
+		        <label for="memberInfo.idCard" class="from_label">身份证号：</label>   
+		       	<input type="text" name="memberInfo.idCard" class="easyui-validatebox" data-options="validType:'idcard'"/>
+		    </div>
+		    <div>   
+		        <label for="memberInfo.miDescribe" class="from_label">介绍：</label>   
+		       	<textarea rows="5" cols="30" name="memberInfo.miDescribe"></textarea>  
 		    </div> 
 		   <h1>理财信息</h1>
 		    <div>   
-		        <label for="idcard" class="from_label">身份证号：</label>   
-		       	<input type="text" name="idcard" class="easyui-validatebox" data-options="validType:'idcard'"/>
+		        <label for="balance" class="from_label">余额：</label>   
+		       	<input type="text" name="balance" class="easyui-validatebox" data-options="validType:'currency'"/>
+		    </div>
+		     <div>   
+		        <label for="investing" class="from_label">投资中金额：</label>   
+		       	<input  type="text" name="investing" class="easyui-validatebox" data-options="validType:'currency'"/>
+		    </div>
+		     <div>   
+		        <label for="totalIncome" class="from_label">总收益：</label>   
+		       	<input  type="text" name="totalIncome" class="easyui-validatebox" data-options="validType:'currency'"/>
 		    </div>
 		    <div>   
-		        <label for="bankCard" class="from_label">绑定银行卡号：</label>   
-		       	<input type="text" name="bankCard" class="easyui-validatebox"/>
+		        <label for="totalMoney" class="from_label">总资产：</label>   
+		       	<input  type="text" name="totalMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
 		    </div>
 		    <div>   
-		        <label for="bank" class="from_label">所属银行：</label>   
-		       	<input type="text" name="bank" class="easyui-validatebox" data-options="validType:'chinese'"/>
-		    </div> 
-		     <div>   
-		        <label for="investMoney" class="from_label">投资金额：</label>   
-		       	<input type="text" name="investMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
-		    </div>
-		     <div>   
-		        <label for="investingMoney" class="from_label">投资中金额：</label>   
-		       	<input  type="text" name="investingMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
-		    </div>
-		     <div>   
-		        <label for="useableMoney" class="from_label">可用余额：</label>   
-		       	<input  type="text" name="useableMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
-		    </div>
-		    <div>   
-		        <label for="accountTotalMoney" class="from_label">账面总余额：</label>   
-		       	<input  type="text" name="accountTotalMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
-		    </div>
-		     <div>   
-		        <label for="freezeMoney" class="from_label">冻结余额：</label>   
-		       	<input  type="text" name="freezeMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
-		    </div>
-		     <div>   
-		        <label for="unfreezeMoney" class="from_label">未冻结余额：</label>   
-		       	<input  type="text" name="unfreezeMoney" class="easyui-validatebox" data-options="validType:'currency'"/>
-		    </div>
-		     <div>   
 		        <label for="useableScore" class="from_label">可用积分：</label>   
 		       	<input  type="text" name="useableScore" class="easyui-validatebox" data-options="validType:'integer'"/>
 		    </div>
 		    <div>   
-		        <label for="allowOnline" class="from_label">允许上线：</label>   
-		       	<select  class="easyui-combobox" name="allowOnline">   
-				    <option value="1" selected="selected">允许</option>   
-				    <option value="0">不允许</option>
+		        <label for="registerStyle" class="from_label">注册方式：</label>   
+		       	<select  class="easyui-combobox" name="registerStyle">   
+				    <option value="1">线下</option>   
+				    <option value="2">Android</option>
+				    <option value="3">IOS</option>
+				    <option value="4">平台系统</option>
 				</select> 
 		    </div>
 		    <div>   
 		        <label for="isContract" class="from_label">契约用户：</label>   
 		       	<select  class="easyui-combobox" name="isContract">   
-				    <option value="0" selected="selected">否</option>   
+				    <option value="0">否</option>   
 				    <option value="1">是</option>
 				</select> 
 		    </div>
 		    <div>   
 		        <label for="customerManager.id" class="from_label">客户经理姓名：</label>   
-		       	<input class="easyui-combobox" name="customerManager.id" data-options="    
+		       	<input class="easyui-combobox" name="customerManager.id" id="editInvestMember_customerManagerId" data-options="    
 				        valueField: 'id',    
 				        textField: 'name',
 				        editable:false,
 				        panelHeight:'auto',
-				        missingMessage:'请选择角色！',   
 				        url: 'customermanager!queryAllCusManagerIdAndName.do',
 				        onSelect: function(rec){    
 				             $('#addInvestMember_customerManager_name').val(rec.name);
 				        }"  />   
 		    </div>
-		    <input type="hidden" id="addInvestMember_customerManager_name"  name="customerManager.name" value="">
+		    <input type="hidden" id="addInvestMember_customerManager_name"  name="managerName" value="">
 		</form>  
 	</div>
 	<div align="center" class="footer-oper">
@@ -162,6 +147,10 @@
 				dataType:'json',
 				success:function(msg) {
 					$("#investMemberEidtForm").form('load',msg);
+					//设置客户经理
+					console.info(msg);
+					$('#editInvestMember_customerManagerId').combobox('select',msg.customerManagerId);  
+					$('#editInvestMember_memberInfoId').val(msg.memberInfoId);
 				}
 			});
 		});

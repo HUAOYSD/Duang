@@ -90,7 +90,7 @@ public class InvestMember implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
 	@JoinColumn(name = "memberinfo_id", nullable = false)
 	public MemberInfo getMemberInfo() {
 		return this.memberInfo;
@@ -100,7 +100,7 @@ public class InvestMember implements java.io.Serializable {
 		this.memberInfo = memberInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cust_manager_id")
 	public CustomerManager getCustomerManager() {
 		return this.customerManager;
