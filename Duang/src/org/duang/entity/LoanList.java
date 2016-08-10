@@ -29,7 +29,7 @@ public class LoanList implements java.io.Serializable {
 
 	private String id;
 	private LoanMember loanMember;
-	private LoanType loanType;
+	private int loanType;
 	private String pactNumber;
 	private int isSell;
 	private int poundageState;
@@ -75,7 +75,7 @@ public class LoanList implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public LoanList(String id, LoanMember loanMember, LoanType loanType, String pactNumber, int isSell, int poundageState, double money, double realMoney, double manageCost, double poundage, double getMoney, double yetMoney, double returnMoney, double agoMoney, double yetReturnMoney, int returnStatus, int loanState, int applyState, String loanUse, double loanInterest, Date createTime, Date signDate, Date beginReturnDate, Date endReturnDate, Date doneReturnDate, int loanStyle, int backStyle, Set<Stock> stocks, Set<ApplyLoanResult> applyLoanResults, Set<ScaleLoanList> scaleLoanLists, Set<BillLoan> billLoans, Set<ApplyLoanInfo> applyLoanInfos, Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {
+	public LoanList(String id, LoanMember loanMember, int loanType, String pactNumber, int isSell, int poundageState, double money, double realMoney, double manageCost, double poundage, double getMoney, double yetMoney, double returnMoney, double agoMoney, double yetReturnMoney, int returnStatus, int loanState, int applyState, String loanUse, double loanInterest, Date createTime, Date signDate, Date beginReturnDate, Date endReturnDate, Date doneReturnDate, int loanStyle, int backStyle, Set<Stock> stocks, Set<ApplyLoanResult> applyLoanResults, Set<ScaleLoanList> scaleLoanLists, Set<BillLoan> billLoans, Set<ApplyLoanInfo> applyLoanInfos, Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {
 		this.id = id;
 		this.loanMember = loanMember;
 		this.loanType = loanType;
@@ -133,13 +133,12 @@ public class LoanList implements java.io.Serializable {
 		this.loanMember = loanMember;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "loan_type")
-	public LoanType getLoanType() {
+	@Column(name = "loan_type")
+	public int getLoanType() {
 		return this.loanType;
 	}
 
-	public void setLoanType(LoanType loanType) {
+	public void setLoanType(int loanType) {
 		this.loanType = loanType;
 	}
 

@@ -5,27 +5,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.InvestMemberDao;
+import org.duang.dao.LoanMemberDao;
 import org.duang.dao.base.BaseDao;
-import org.duang.entity.InvestMember;
+import org.duang.entity.LoanMember;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
 /**   
- * 理财客户dao实现类
- * @ClassName:  SysInvestMemberDaoImpl   
+ * 借贷用户dao实现类
+ * @ClassName:  LoanMemberDaoImpl
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
- * @date 2016年7月26日 下午3:23:04      
+ * @date 2016年8月10日 下午3:23:04      
  */  
-@Repository("sysinvestmemberdao")
-public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements InvestMemberDao{
+@Repository("loanmemberdaoimpl")
+public class LoanMemberDaoImpl extends BaseDao<LoanMember> implements LoanMemberDao{
 
 
-	public InvestMemberDaoImpl(){
-		LoggerUtils.info("注入InvestMemberDaoImpl层", this.getClass());
+	public LoanMemberDaoImpl(){
+		LoggerUtils.info("注入LoanMemberDaoImpl层", this.getClass());
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestMember> queryAllEntity(Order order) throws Exception {
+	public List<LoanMember> queryAllEntity(Order order) throws Exception {
 		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
@@ -75,7 +75,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestMember> queryAllEntity(PageUtil<InvestMember> page, Order order) throws Exception{
+	public List<LoanMember> queryAllEntity(PageUtil<LoanMember> page, Order order) throws Exception{
 		return super.queryAll(page, order);
 	}
 
@@ -87,7 +87,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestMember> queryEntity(String field, Object value, PageUtil<InvestMember> page, Order order) throws Exception{
+	public List<LoanMember> queryEntity(String field, Object value, PageUtil<LoanMember> page, Order order) throws Exception{
 		return super.query(field, value, page, order);
 	}
 
@@ -99,7 +99,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<InvestMember> queryEntity(List<String> properties, List<Object> values, PageUtil<InvestMember> page) throws Exception{
+	public List<LoanMember> queryEntity(List<String> properties, List<Object> values, PageUtil<LoanMember> page) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
 		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
@@ -110,7 +110,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public InvestMember findById(Serializable id) throws Exception{
+	public LoanMember findById(Serializable id) throws Exception{
 		return super.find(id);
 	}
 
@@ -120,7 +120,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(InvestMember t) throws Exception{
+	public boolean saveEntity(LoanMember t) throws Exception{
 		super.save(t);
 		return true;
 	}
@@ -131,7 +131,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(InvestMember t) throws Exception{
+	public boolean updateEntity(LoanMember t) throws Exception{
 		super.update(t);
 		return true;
 	}
@@ -142,7 +142,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
+	public boolean deleteEntity(LoanMember t) throws Exception{
 		super.delete(t);
 		return true;
 	}
@@ -247,7 +247,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @return
 	 * @throws Exception
 	 */
-	public InvestMember findEntity(String property, Object value) throws Exception{
+	public LoanMember findEntity(String property, Object value) throws Exception{
 		return super.find(property, value);
 	}
 
@@ -258,7 +258,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @return
 	 * @throws Exception
 	 */
-	public InvestMember findEntity(Map<String, Object> params) throws Exception{
+	public LoanMember findEntity(Map<String, Object> params) throws Exception{
 		return super.find(params);
 	}
 
@@ -271,7 +271,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestMember> queryByHQL(String hql, PageUtil<InvestMember> page, Object... params) throws Exception{
+	public List<LoanMember> queryByHQL(String hql, PageUtil<LoanMember> page, Object... params) throws Exception{
 		return super.queryByHQL(hql, page, params);
 	}
 
@@ -284,7 +284,7 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestMember> queryBySQL(String sql, PageUtil<InvestMember> page, Object... params) throws Exception{
+	public List<LoanMember> queryBySQL(String sql, PageUtil<LoanMember> page, Object... params) throws Exception{
 		return super.queryBySQL(sql, page, params);
 	}
 
