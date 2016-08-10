@@ -207,7 +207,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 			condsUtils.addProperties(true, "memberInfo");
 			condsUtils.concatValue(new String[] { "infoAlias", "as" });
 			if (DataUtils.notEmpty(entity.getMemberInfo().getLoginName())) {
-				condsUtils.addProperties(false, "infoAlias.name");
+				condsUtils.addProperties(false, "infoAlias.loginName");
 				condsUtils.concatValue(new String[] { entity.getMemberInfo().getLoginName(), "like" });
 			}
 			if (DataUtils.notEmpty(entity.getMemberInfo().getRealName())) {

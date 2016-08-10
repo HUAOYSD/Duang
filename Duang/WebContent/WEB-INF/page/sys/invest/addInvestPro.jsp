@@ -43,14 +43,14 @@
 		    </div> 
 		    <div>   
 		        <label for="isSell" class="investPro_add_from_label">是否起售：</label>   
-		       	<select class="easyui-combobox" name="isSell">   
+		       	<select class="easyui-combobox" name="isSell" data-options="panelHeight:'auto'">   
 				    <option value="1" selected="selected">起售</option>   
 				    <option value="0">停售</option>   
 				</select>   
 		    </div> 
 		    <div>   
 		        <label for="isNewProduct" class="investPro_add_from_label">是否新品：</label>   
-		       	<select class="easyui-combobox" name="isNewProduct">   
+		       	<select class="easyui-combobox" name="isNewProduct" data-options="panelHeight:'auto'">   
 				    <option value="1" selected="selected">是</option>   
 				    <option value="0">否</option>   
 				</select>   
@@ -58,7 +58,7 @@
 		    
 		    <div>   
 		        <label for="isRecommend" class="investPro_add_from_label">是否推荐：</label>   
-		       	<select class="easyui-combobox" name="isRecommend">   
+		       	<select class="easyui-combobox" name="isRecommend" data-options="panelHeight:'auto'">   
 				    <option value="1" selected="selected">是</option>   
 				    <option value="0">否</option>   
 				</select>   

@@ -154,7 +154,6 @@ $(function(){
 	    },    
 	    success:function(data){ 
 	    	data = JSON.parse(data);
-	    	console.info(data);
 	    	if(data.result==false){
 	    		layer.msg(data.msg,{time:2000});
 	    	}
@@ -318,7 +317,7 @@ $("#investMemeberList-unselected-btn").on('click',function(){
 function isSelectedRow(){
 	selectedRow = tableObj.datagrid("getSelected");
 	if(selectedRow==null){
-		layer.msg("请选择一个产品！",{time:1000});
+		layer.msg("请选择用户！",{time:1000});
 		return false;
 	}
 	return true;

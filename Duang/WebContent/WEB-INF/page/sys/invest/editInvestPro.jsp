@@ -17,7 +17,7 @@
 		    </div>
 		    <div>   
 		        <label for="category" class="investPro_add_from_label">产品类型：</label>   
-		       	<select class="easyui-combobox" name="category">   
+		       	<select class="easyui-combobox" name="category" data-options="panelHeight:'auto'">   
 				    <option value="0">信贷产品</option>   
 				    <option value="1">标类产品</option>   
 				</select>   
@@ -46,14 +46,14 @@
 		    
 		    <div>   
 		        <label for="isSell" class="investPro_add_from_label">是否起售：</label>   
-		       	<select id="isSell" class="easyui-combobox" name="isSell">   
+		       	<select id="isSell" class="easyui-combobox" name="isSell" data-options="panelHeight:'auto'">   
 				    <option value="1">起售</option>   
 				    <option value="0">停售</option>   
 				</select>   
 		    </div> 
 		    <div>   
 		        <label for="isNewProduct" class="investPro_add_from_label">是否新品：</label>   
-		       	<select class="easyui-combobox" name="isNewProduct">   
+		       	<select class="easyui-combobox" name="isNewProduct" data-options="panelHeight:'auto'">   
 				    <option value="1">是</option>   
 				    <option value="0">否</option>   
 				</select>   
@@ -61,7 +61,7 @@
 		    
 		    <div>   
 		        <label for="isRecommend" class="investPro_add_from_label">是否推荐：</label>   
-		       	<select class="easyui-combobox" name="isRecommend">   
+		       	<select class="easyui-combobox" name="isRecommend" data-options="panelHeight:'auto'">   
 				    <option value="1">是</option>   
 				    <option value="0">否</option>   
 				</select>   
