@@ -14,6 +14,9 @@ public class ResultPath {
 	public static final String NOSESSION = "nosession";
 	public static final String INFO = "info";
 	public static final String LIST = "list";
+	public static final String ADD = "add";
+	public static final String EDIT = "edit";
+	public static final String DEL = "del";
 	
 	/**
 	 * 跳转到主页面

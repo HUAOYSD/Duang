@@ -1,0 +1,242 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link href=resources/images/theme-blue/css/acfstyle_blue.css rel="stylesheet" type="text/css">
+<link href=resources/style/application.css rel="stylesheet" type="text/css">
+<style type="text/css">
+</style>
+<script type ="text/javascript" src ="resources/scripts/prototype.js"></script>
+<script type ="text/javascript" src ="resources/scripts/mammothajax.js"></script>
+<script type ="text/javascript" src ="resources/scripts/jquery.js"></script>
+<script type ="text/javascript" src ="resources/scripts/verify.js"></script>
+
+<title>无标题文档</title>
+
+<script language="javascript">
+</script>
+
+</head>
+
+
+<body>
+<form  method="post" name="form1">
+<table border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	 <td align="left">
+	  	<img name="ELE_OUTCLASS" ursacode="536743935015302" width="200" height="25">
+	 </td>
+	</tr>
+</table>
+
+	
+<table class="D_FORM_TB">
+
+<tr>
+  <td width="20%">部    门:</td>
+  <td width="30%"><img name="署部门名称域" ursacode="536744235216202" width="200" height="25"></td>
+  <td width="20%">调休人:</td>
+  <td width="30%"><img name="签名域" ursacode="536744235316402" width="200" height="25"></td>
+</tr>
+
+
+<tr>
+  <td width="20%">开始时间:</td>
+  <td width="30%"><img name="时间域" ursacode="536744335416602" width="200" height="25" onblur="javascript:doSet();"></td>
+  <td width="20%">结束时间:</td>
+  <td width="30%"><img name="时间域" ursacode="536744335516802" width="200" height="25" onblur="javascript:doSet();"></td>
+</tr>
+
+
+<tr>
+  <td width="20%">调休原由:</td>
+  <td colspan="3"><textarea name="536744435617002" ursacode="536744435617002" style="width: 98%;"></textarea></td>
+</tr>
+
+
+<tr>
+  <td width="20%">可调休时长(小时):</td>
+  <td width="30%"><img name="ELE_OUTCLASS" ursacode="536767770247402" width="200" height="25"></td>
+  <td width="20%">申请人填写时长(小时):</td>
+  <td width="30%"><img name="ELE_OUTCLASS" ursacode="536767970348002" width="200" height="25"></td>
+</tr>
+
+
+<!-- <tr> -->
+<!--   <td width="20%"></td> -->
+<!--   <td colspan="3"></td> -->
+<!-- </tr> -->
+
+
+<tr>
+  <td width="20%">调休时间段:</td>
+  <td width="30%"><select name="536752361231402" ursacode="536752361231402" onselect="validateDate()"></select></td>
+  <td width="20%">部门经理批示:</td>
+  <td width="30%"><img name="签署意见元素,mammoth版" ursacode="536744535817402" width="200" height="25"></td>
+</tr>
+
+
+<tr>
+  <td width="20%">人力资源复核:</td>
+  <td width="30%"><img name="签署意见元素,mammoth版" ursacode="536744635917702" width="200" height="25"></td>
+  <td width="20%">副总裁签批:</td>
+  <td width="30%"><img name="签署意见元素,mammoth版" ursacode="536744636018002" width="200" height="25"></td>
+</tr>
+
+
+<tr>
+  <td width="20%">备注:</td>
+  <td colspan="3"><textarea name="536744736118302" ursacode="536744736118302" style="width: 98%;"></textarea></td>
+</tr>
+
+
+</table>
+
+
+<span style="display:none">
+	<input name="536744135116002" ursacode="536744135116002"><!-- 流程id -->
+	<input name="536743634914902" ursacode="536743634914902" style="border: 0px;display:none;">
+</span>
+
+
+<script language="javascript">
+$(function() {
+	alert($("input[name='u536744335416602']").length);
+	$("input[name='u536744335416602']").unbind();
+	$("input[name='u536744335516802']").unbind();
+	$("[name='sel_u536744335416602']").unbind();
+	$("[name='sel_u536744335516802']").unbind();
+});
+
+
+var con = true;
+function doSet(){
+	validateDate();
+}
+
+function validateDate(){
+    if(con){
+    	var date1 = $("input[name='u536744335416602']").val();
+    	var date2 = $("input[name='u536744335516802']").val();
+    	if(date1==null || date1=="" || date2==null || date2==""){
+    		return;
+    	}
+    	
+    	var time1 = new Date();
+    	var arg = date1.split('-');
+    	time1.setFullYear(arg[0]);
+    	time1.setMonth(parseInt(arg[1])-1);
+    	time1.setDate(arg[2].split(' ')[0]);
+    	time1.setHours(arg[2].split(' ')[1].split(':')[0]);
+    	time1.setMinutes(arg[2].split(' ')[1].split(':')[1]);
+    	//alert(time1.toLocaleDateString());
+    	
+    	var time2 = new Date();
+    	arg = date2.split('-');
+    	time2.setFullYear(arg[0]);
+    	time2.setMonth(parseInt(arg[1])-1);
+    	time2.setDate(arg[2].split(' ')[0]);
+    	time2.setHours(arg[2].split(' ')[1].split(':')[0]);
+    	time2.setMinutes(arg[2].split(' ')[1].split(':')[1]);
+    	//alert(time2.toLocaleDateString());
+    	
+    	
+    	var duan = $("[name='u536752361231402']").val();
+    	alert(duan);
+    	if("上午"==duan){
+    		var temp = new Date();
+    		temp.setHours(9);
+    		temp.setMinutes(0);
+    		$("input[name='u536744335416602']").val(temp.toLocaleDateString())
+    		
+    		temp = new Date();
+    		temp.setHours(12);
+    		temp.setMinutes(0);
+    		$("input[name='u536744335516802']").val(temp.toLocaleDateString())
+    	}else if("下午"==duan){
+    		var temp = new Date();
+    		temp.setHours(13);
+    		temp.setMinutes(0);
+    		alert(temp.toLocaleDateString());
+    		$("input[name='u536744335416602']").val(temp.toLocaleDateString())
+    		
+    		temp = new Date();
+    		temp.setHours(18);
+    		temp.setMinutes(0);
+    		$("input[name='u536744335516802']").val(temp.toLocaleDateString())
+    	}else if("全天"==duan){
+    		var temp = new Date();
+    		temp.setHours(8);
+    		temp.setMinutes(3);
+    		$("input[name='u536744335416602']").val(temp.toLocaleDateString())
+    		
+    		temp = new Date();
+    		temp.setHours(17);
+    		temp.setMinutes(30);
+    		$("input[name='u536744335516802']").val(temp.toLocaleDateString())
+    	}else{
+    		alert("选择调休时间段");
+    		return;
+    	}
+    	
+    	var cha = time2.getTime() - time1.getTime();
+    	//alert(typeof(cha));
+    	if(cha<=0){
+    		$("input[name='u536744335416602']").val("")
+    		$("input[name='u536744335516802']").val("")
+    		$("input[name='u536767970348002']").val("");
+    		alert("时间输入有误");
+    		return;
+    	}else{
+    		var kejiaban = document.getElementsByName('u536767770247402')[0].value;
+    		if(kejiaban==null || kejiaban=='' || kejiaban=='0' || kejiaban=='null'){
+    			$("input[name='u536744335416602']").val("")
+    			$("input[name='u536744335516802']").val("")
+    			$("input[name='u536767970348002']").val("");
+    			alert("无加班时长！");
+    			return;
+    		}
+    		kejiaban = parseFloat(kejiaban); 
+    		yaojiaban = parseFloat($("input[name='u536767970348002']").val()); 
+    		if(yaojiaban>kejiaban){
+    			$("input[name='u536744335416602']").val("")
+    			$("input[name='u536744335516802']").val("")
+    			$("input[name='u536767970348002']").val("");
+    			alert('调休时长超限，请重新填写！');
+    			return;
+    		}
+    	}
+    	
+    	
+    	
+    	
+    	//var hour = cha / 1000 / 3600;
+    	//alert(typeof(hour));
+    	//hour = hour.toFixed(2);
+    	//$("input[name='u536767970348002']").val(hour);
+         
+        $.ajax({
+            url:"huaoshow.do?ac=orgjson&mymethod=getWorkTakeHour",
+            type:"POST",
+            dataType:"json",
+            data:{"time1":time1.getTime(),"time2":time2.getTime()},
+            success:function(data){
+                if(data[0].success){
+                	$("input[name='u536767970348002']").val(data[0].hour);
+                }else{
+                	$("input[name='u536767970348002']").val("0");
+                }
+            },
+            error:function(one,two,three){
+            	$("input[name='u536767970348002']").val("0");
+            }
+        });
+    }
+}
+
+
+//setInterval(validateDate, 500);
+</script>
+</form>
+</body>
+</html>

@@ -140,6 +140,7 @@
 			<tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
 			<tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
 			<tx:method name="del*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="re*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
 			<tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
 			<tx:method name="cancel*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
 			<tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>

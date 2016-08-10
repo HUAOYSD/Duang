@@ -133,7 +133,7 @@ $("#add_btn_userlist").on("click",function(){
 		title: '添加用户',
 		shadeClose: true,
 		shade: 0.8,
-		area: ['470px', '485px'],
+		area: ['470px', '388px'],
 		content: 'sysuser!openDialog.do?path=addSysUserView'
 	});  
 });
@@ -154,7 +154,7 @@ $("#edit_btn_userlist").on("click",function(){
 		title: '编辑用户信息',
 		shadeClose: true,
 		shade: 0.8,
-		area: ['470px', '422px'],
+		area: ['470px', '325px'],
 		content: 'sysuser!openDialog.do?sysUserId='+selectedRow.sysUserId+'&path=editSysUserView'
 	}); 
 });

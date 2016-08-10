@@ -76,6 +76,41 @@ public class CondsUtils {
 		return values;
 	}
 
+
+	/**   
+	 * 直接追加值给propertys
+	 * @Title: concatProperty   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param arg
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年7月18日 下午9:54:43
+	 * @return: List<Object>      
+	 * @throws   
+	 */  
+	public List<String> concatProperty(String arg){
+		propertys.add(arg);
+		return propertys;
+	}
+
+
+	/**   
+	 * 添加一对值键
+	 * @Title: concat   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param property
+	 * @param: @param val  
+	 * @author 白攀    
+	 * @date 2016年8月10日 下午2:18:06
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void concat(String property, Object val){
+		propertys.add(property);
+		values.add(val);
+	}
+
+
 	/**
 	 * 获取条件名字
 	 * @return

@@ -1,7 +1,7 @@
 .body {
-	border: 0;
 	padding: 3px;
 	overflow: hidden;
+	border:0px;
 }
 
 .add_edit_form_label{
@@ -38,4 +38,8 @@
 
 .footer-oper .content-oper{
 	padding-top:8px;
+}
+
+.query_conds_area{
+	margin:2px;
 }

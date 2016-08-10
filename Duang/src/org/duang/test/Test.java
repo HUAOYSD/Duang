@@ -15,18 +15,18 @@ public class Test {
 		logger.error(" This is error!!!");
 		logger.fatal(" This is fatal!!!");
 	}
-	
+
 	@Before
 	public void sfds(){
-		If.TRUE.setDesc("hehe");
 	}
-	
+
 	@org.junit.Test
 	public void fds(){
-		System.out.println(If.TRUE.getDesc());
-		System.out.println(If.TRUE.getDesc());
+		If if1 = If.valueOf("E1");
+		System.out.println(if1.getDesc());
+		System.out.println(if1);
 	}
-	
-	
+
+
 
 }

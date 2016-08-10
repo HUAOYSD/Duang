@@ -1,6 +1,7 @@
 package org.duang.action.sys;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +20,13 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.CustomerManager;
+import org.duang.entity.SysUser;
 import org.duang.enums.If;
 import org.duang.service.CustomerManagerService;
+import org.duang.service.SysUserService;
 import org.duang.util.DataUtils;
+import org.duang.util.DateUtils;
+import org.duang.util.MD5Utils;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -38,10 +43,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value = "customermanager")
 @ParentPackage("sys")
 @Results(value = { 
-		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/investmember/investMemberList.jsp"),
-		@Result(name = "addInvestMember", type = "dispatcher", location = "WEB-INF/page/sys/investmember/addInvestMember.jsp"),
-		@Result(name = "editInvestMember", type = "dispatcher", location = "WEB-INF/page/sys/investmember/editInvestMember.jsp"),
-		@Result(name = "uploadInvestMemberImg", type = "dispatcher", location = "WEB-INF/page/sys/investmember/uploadInvestMemberImg.jsp"),
+		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/customerManager/customerManagerList.jsp"),
+		@Result(name = ResultPath.ADD, type = "dispatcher", location = "WEB-INF/page/sys/customerManager/addCustomerManager.jsp"),
+		@Result(name = ResultPath.EDIT, type = "dispatcher", location = "WEB-INF/page/sys/customerManager/editCustomerManager.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 })
 public class CustomerManagerAction extends BaseAction<CustomerManager> {
@@ -52,10 +56,15 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	private static final long serialVersionUID = 1L;
 
 	private CustomerManagerService service;
+	private SysUserService sysUserService;
 
 	@Resource(name = "customermanagerserviceimpl")
 	public void setService(CustomerManagerService service) {
 		this.service = service;
+	}
+	@Resource
+	public void setSysUserService(SysUserService sysUserService) {
+		this.sysUserService = sysUserService;
 	}
 
 
@@ -72,7 +81,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	public void queryAllCusManagerIdAndName() {
 		String json = "";
 		try {
-			List<CustomerManager> list = service.queryEntity("isDelete", If.FALSE.getVal(), null, Order.desc("createtime"));
+			List<CustomerManager> list = service.queryEntity("isDelete", If.If0.getVal(), null, Order.desc("createtime"));
 			listMap = fillIdName(list);
 			json = JSONArray.fromObject(listMap).toString();
 		} catch (Exception e) {
@@ -125,9 +134,34 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @throws   
 	 */  
 	public void queryCustomerManagerByPage() {
-		List<CustomerManager> list;
 		try {
-			list = service.queryEntity("isDelete", If.FALSE.getVal(), getPageUtil(), Order.desc("createtime"));
+			condsUtils.addProperties(true, "sysUser", "order", "isDelete");
+			condsUtils.addValues(true, new Object[]{"myAlias","as"}, Order.desc("createtime"), entity.getIsDelete());
+
+			if (DataUtils.notEmpty(entity.getName())) {
+				condsUtils.concat("name", new Object[]{entity.getName(),"like"});
+			}
+			if (DataUtils.notEmpty(getRequest().getParameter("sysUserName"))) {
+				condsUtils.concat("myAlias.name", getRequest().getParameter("sysUserName"));
+			}
+			if (DataUtils.notEmpty(entity.getWorkNumber())) {
+				condsUtils.concat("workNumber", new Object[]{entity.getWorkNumber(),"like"});
+			}
+			if (DataUtils.notEmpty(entity.getPhone())) {
+				condsUtils.concat("phone", entity.getPhone());
+			}
+			if (DataUtils.notEmpty(entity.getEmail())) {
+				condsUtils.concat("email", new Object[]{entity.getEmail(),"like"});
+			}
+			if (DataUtils.notEmpty(entity.getIdcard())) {
+				condsUtils.concat("idcard", new Object[]{entity.getIdcard(),"like"});
+			}
+			if (DataUtils.notEmpty(entity.getSex())) {
+				condsUtils.concat("sex", entity.getSex());
+			}
+
+			@SuppressWarnings("rawtypes")
+			List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			fillDatagridCons(list);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,18 +187,29 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @return: void      
 	 * @throws   
 	 */  
-	private void fillDatagridCons(List<CustomerManager> list) throws Exception {
+	private void fillDatagridCons(@SuppressWarnings("rawtypes") List list) throws Exception {
 		if (list !=null && list.size() > 0) {
-			for(CustomerManager temp : list) {
-				Map<String,Object> resultMap = new HashMap<String,Object>();
-				resultMap.put("name", temp.getName());
-				resultMap.put("workNumber", temp.getWorkNumber());
-				resultMap.put("sex", temp.getSex());
-				resultMap.put("idcard", temp.getIdcard());
-				resultMap.put("email", temp.getEmail());
-				resultMap.put("phone", temp.getPhone());
-				resultMap.put("remark", temp.getRemark());
-				listMap.add(resultMap);
+			for(Object temp : list) {
+				if (temp instanceof Object[]) {
+					Map<String,Object> resultMap = new HashMap<String,Object>();
+					CustomerManager cm = (CustomerManager)((Object[])temp)[1];
+					SysUser user = (SysUser)((Object[])temp)[0];
+					if (cm != null) {
+						resultMap.put("name", cm.getName());
+						resultMap.put("workNumber", cm.getWorkNumber());
+						resultMap.put("sex", cm.getSex());
+						resultMap.put("idcard", cm.getIdcard());
+						resultMap.put("email", cm.getEmail());
+						resultMap.put("phone", cm.getPhone());
+						resultMap.put("remark", cm.getRemark());
+						resultMap.put("createtime", DateUtils.getTimeStamp(cm.getCreatetime()));
+						resultMap.put("id", cm.getId());
+					}
+					if (user != null) {
+						resultMap.put("sysUserName", user.getName());
+					}
+					listMap.add(resultMap);
+				}
 			}
 			jsonObject.put("total", getPageUtil().getCountRecords());
 			jsonObject.put("currPage", getPageUtil().getCurrentPageNum());
@@ -193,9 +238,6 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 		try {
 			if (entity != null && DataUtils.notEmpty(entity.getId())) {
 				entity = service.findById(entity.getId());
-				//				if(entity != null) {
-				//					jsonObject.put("id", entity.getId());
-				//				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,8 +247,8 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 			super.printJsonResult();
 		}
 	}
-	
-	
+
+
 	/**   
 	 * 新增客户经理
 	 * @Title: saveCustomerManager   
@@ -219,8 +261,18 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 */  
 	public void saveCustomerManager() {
 		try {
-			if (entity != null && service.saveEntity(entity)) {
-				jsonObject.put("success", true);
+			if (entity != null) {
+				entity.setId(DataUtils.randomUUID());
+				entity.setCreatetime(new Date());
+				entity.getSysUser().setId(DataUtils.randomUUID());
+				entity.getSysUser().setCreateTime(new Date());
+				entity.getSysUser().setPassword(MD5Utils.md5(entity.getSysUser().getName()+"12345"));
+				entity.getSysUser().setRemark("客户经理账号");
+				if (service.saveEntity(entity)) {
+					jsonObject.put("success", true);
+				}else{
+					jsonObject.put("success", false);
+				}
 			}else {
 				jsonObject.put("success", false);
 			}
@@ -233,8 +285,8 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 			printJsonResult();
 		}
 	}
-	
-	
+
+
 	/**   
 	 * 更新客户经理
 	 * @Title: updateCustomerManager   
@@ -247,9 +299,11 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 */  
 	public void updateCustomerManager() {
 		try {
-			if (entity != null && service.updateEntity(entity)) {
+			SysUser sysUser = sysUserService.findById(entity.getSysUser().getId());
+			entity.setSysUser(sysUser);
+			if (sysUser != null && service.updateEntity(entity)) {
 				jsonObject.put("success", true);
-			}else {
+			}else{
 				jsonObject.put("success", false);
 			}
 		} catch (Exception e) {
@@ -261,8 +315,8 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 			printJsonResult();
 		}
 	}
-	
-	
+
+
 	/**   
 	 * 删除客户经理
 	 * @Title: deleteCustomerManager   
@@ -277,7 +331,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 		try {
 			if (entity != null && DataUtils.notEmpty(entity.getId())) {
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("isDelete", If.TRUE.getVal());
+				map.put("isDelete", If.If1.getVal());
 				if (service.updateEntity(map, "id", entity.getId())) {
 					jsonObject.put("success", true);
 				}else {
@@ -294,6 +348,70 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 		} finally {
 			printJsonResult();
 		}
+	}
+	
+	
+	/**   
+	 * 删除还原
+	 * @Title: restoreCustomerManager   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年8月10日 下午3:12:27
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void restoreCustomerManager(){
+		try {
+			if (entity != null && DataUtils.notEmpty(entity.getId())) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("isDelete", If.If0.getVal());
+				if (service.updateEntity(map, "id", entity.getId())) {
+					jsonObject.put("success", true);
+				}else {
+					jsonObject.put("success", false);
+				}
+			}else {
+				jsonObject.put("success", false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("客户经理ACTION方法restoreCustomerManager错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("客户经理ACTION方法restoreCustomerManager错误："+e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("success", false);
+		} finally {
+			printJsonResult();
+		}
+	}
+
+
+	/**   
+	 * 页面跳转
+	 * @Title: openDialog   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年8月9日 下午2:49:25
+	 * @return: String      
+	 * @throws   
+	 */  
+	public String openDialog() {
+		try {
+			String path = getRequest().getParameter("path");
+			if(ResultPath.ADD.equals(path)) {
+				return ResultPath.ADD;
+			} else if(ResultPath.EDIT.equals(path)) {
+				if (entity != null && DataUtils.notEmpty(entity.getId())) {
+					entity = service.findById(entity.getId());
+				}
+				return ResultPath.EDIT;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("客户经理ACTION方法getCustomerManagerInfo错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("客户经理ACTION方法getCustomerManagerInfo错误："+e.getLocalizedMessage(), this.getClass());
+		}
+		return ResultPath.LIST;
 	}
 
 }

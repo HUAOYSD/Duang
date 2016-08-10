@@ -23,6 +23,7 @@ import org.duang.common.system.SessionTools;
 import org.duang.entity.CustomerManager;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.IDCard;
 import org.duang.enums.If;
 import org.duang.service.InvestMemberService;
 import org.duang.service.MemberInfoService;
@@ -103,9 +104,9 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 			MemberInfo memberInfo = sysMemberInfoService.findById(entity.getId());
 			getRequest().setAttribute("memberInfo", memberInfo);
 			//返回身份证前照和后照的具体路径
-			if(If.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+			if(IDCard.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
 				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
-			}else if(If.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+			}else if(IDCard.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
 				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
 			}else {
 				getRequest().setAttribute("path", "");
@@ -132,13 +133,13 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 		try{
 			String type =  getRequest().getParameter("type");
 			getRequest().setAttribute("type", getRequest().getParameter("type"));
-			getRequest().setAttribute("only_show",If.TRUE.getVal());
+			getRequest().setAttribute("only_show",If.If1.getVal());
 			MemberInfo memberInfo = sysMemberInfoService.findById(entity.getId());
 			getRequest().setAttribute("memberInfo", memberInfo);
 			//返回身份证前照和后照的具体路径
-			if(If.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+			if(IDCard.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
 				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
-			}else if(If.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+			}else if(IDCard.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
 				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
 			}else {
 				getRequest().setAttribute("path", "");
@@ -168,6 +169,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 			condsUtils.concatValue(new String[] { "infoAlias", "as" });
 			condsUtils.addProperties(false, "infoAlias.isdelete");
 			condsUtils.addValues(false, "0");
+			@SuppressWarnings("rawtypes")
 			List list = investMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			int count = investMemberService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if (list != null && list.size() > 0) {
@@ -263,7 +265,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 	 * @return: List<Map<String,Object>>
 	 * @throws
 	 */
-	private List<Map<String, Object>> fillDataObjectArray(List list) {
+	private List<Map<String, Object>> fillDataObjectArray(@SuppressWarnings("rawtypes") List list) {
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		try {
 			for (int i = 0; i < list.size(); i++) {
