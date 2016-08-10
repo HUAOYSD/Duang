@@ -716,9 +716,10 @@ Array.prototype.filter = function(func) {
  *  var arr2 = arr.notNull(); // arr2 为: ['a', 'b', 'c', 'd', 'c']
  */
 Array.prototype.notNull = function() {
-	return this.filter(function (value) {
+	/*return this.filter(function (value) {
 		return value != null;
-	});
+	});*/
+	return this != null;
 };
 
 /**

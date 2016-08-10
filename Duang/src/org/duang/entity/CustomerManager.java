@@ -14,7 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * CustomerManager entity. @author MyEclipse Persistence Tools
@@ -22,6 +24,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "customer_manager", catalog = "duang")
 @DynamicInsert(true)
+@DynamicUpdate(true)
 @SuppressWarnings("serial")
 public class CustomerManager implements java.io.Serializable {
 
@@ -32,9 +35,9 @@ public class CustomerManager implements java.io.Serializable {
 	private String name;
 	private String workNumber;
 	private String sex;
-	private String idcard;
-	private String email;
 	private String phone;
+	private String email;
+	private String idcard;
 	private String photo;
 	private String qr;
 	private String remark;
@@ -89,6 +92,7 @@ public class CustomerManager implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "user_id")
 	public SysUser getSysUser() {
 		return this.sysUser;

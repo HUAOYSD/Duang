@@ -11,7 +11,7 @@ import org.duang.util.DataUtils;
  */  
 public enum If {
 
-	TRUE {
+	If1 {
 		private String desc = "是";
 		
 		@Override
@@ -22,11 +22,6 @@ public enum If {
 		@Override
 		public String getDesc() {
 			return desc;
-		}
-
-		@Override
-		public int getIndex() {
-			return 1;
 		}
 
 		@Override
@@ -44,9 +39,14 @@ public enum If {
 			this.desc = "是";
 			return this;
 		}
+		
+		@Override
+		public String toString() {
+			return "是";
+		}
 
 	},
-	FALSE {
+	If0 {
 		private String desc = "否";
 		
 		@Override
@@ -57,11 +57,6 @@ public enum If {
 		@Override
 		public String getDesc() {
 			return desc;
-		}
-
-		@Override
-		public int getIndex() {
-			return 2;
 		}
 
 		@Override
@@ -78,6 +73,11 @@ public enum If {
 		public Object setDefaultDesc() {
 			this.desc = "否";
 			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "否";
 		}
 		
 	};
@@ -109,19 +109,6 @@ public enum If {
 	
 	
 	/**   
-	 * 获取枚举序号
-	 * @Title: getIndex   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @return  
-	 * @author 白攀    
-	 * @date 2016年8月9日 上午11:24:34
-	 * @return: int      
-	 * @throws   
-	 */  
-	public abstract int getIndex();
-	
-	
-	/**   
 	 * 设置描述文字，null代表默认值
 	 * @Title: setDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -145,4 +132,6 @@ public enum If {
 	 * @throws   
 	 */  
 	public abstract Object setDefaultDesc();
+	
+	
 }
