@@ -1,6 +1,5 @@
 package org.duang.action.sys;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -67,8 +66,8 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 		this.sysUserService = sysUserService;
 	}
 
-
-	/**
+	/*
+	 *//**
 	 * 查询所有的客户经理的id和name
 	 * @Title: queryAllCusManagerIdAndName
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
@@ -77,7 +76,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @date 2016年8月8日 下午3:27:37
 	 * @return: void
 	 * @throws
-	 */
+	 *//*
 	public void queryAllCusManagerIdAndName() {
 		String json = "";
 		try {
@@ -94,17 +93,17 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	}
 
 
-	/**
-	 * 在用条件查询的时候，查询出来为List<Object[]>，所以需要进行封装
-	 * @Title: fillDataObjectArray
-	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @param: @param list
-	 * @param: @return
-	 * @author LiYonghui
-	 * @date 2016年8月3日 下午3:29:33
-	 * @return: List<Map<String,Object>>
-	 * @throws
-	 */
+	  *//**
+	  * 在用条件查询的时候，查询出来为List<Object[]>，所以需要进行封装
+	  * @Title: fillDataObjectArray
+	  * @Description: TODO(这里用一句话描述这个方法的作用)
+	  * @param: @param list
+	  * @param: @return
+	  * @author LiYonghui
+	  * @date 2016年8月3日 下午3:29:33
+	  * @return: List<Map<String,Object>>
+	  * @throws
+	  *//*
 	private List<Map<String, Object>> fillIdName(List<CustomerManager> list) {
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		try {
@@ -120,7 +119,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 			LoggerUtils.error("封装客户经理错误：" + e.getLocalizedMessage(), this.getClass());
 		}
 		return listMap;
-	}
+	}*/
 
 
 	/**   
@@ -349,8 +348,8 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 			printJsonResult();
 		}
 	}
-	
-	
+
+
 	/**   
 	 * 删除还原
 	 * @Title: restoreCustomerManager   

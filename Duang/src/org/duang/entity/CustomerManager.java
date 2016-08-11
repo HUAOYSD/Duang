@@ -43,8 +43,7 @@ public class CustomerManager implements java.io.Serializable {
 	private String remark;
 	private Date createtime;
 	private int isDelete;
-	private Set<LoanMember> loanMembers = new HashSet<LoanMember>(0);
-	private Set<InvestMember> investMembers = new HashSet<InvestMember>(0);
+	private Set<LoanList> loanLists = new HashSet<LoanList>(0);
 
 	// Constructors
 
@@ -61,7 +60,7 @@ public class CustomerManager implements java.io.Serializable {
 	public CustomerManager(String id, SysUser sysUser, String name,
 			String workNumber, String sex, String idcard, String email,
 			String phone, String photo, String qr, String remark,Date createtime,int isDelete,
-			Set<LoanMember> loanMembers, Set<InvestMember> investMembers) {
+			Set<LoanList> loanLists) {
 		this.id = id;
 		this.sysUser = sysUser;
 		this.name = name;
@@ -75,8 +74,7 @@ public class CustomerManager implements java.io.Serializable {
 		this.qr = qr;
 		this.remark = remark;
 		this.isDelete = isDelete;
-		this.loanMembers = loanMembers;
-		this.investMembers = investMembers;
+		this.loanLists = loanLists;
 	}
 	
 
@@ -201,22 +199,15 @@ public class CustomerManager implements java.io.Serializable {
 		this.isDelete = isDelete;
 	}
 
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customerManager")
-	public Set<LoanMember> getLoanMembers() {
-		return this.loanMembers;
+	public Set<LoanList> getLoanLists() {
+		return loanLists;
 	}
 
-	public void setLoanMembers(Set<LoanMember> loanMembers) {
-		this.loanMembers = loanMembers;
+	public void setLoanLists(Set<LoanList> loanLists) {
+		this.loanLists = loanLists;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customerManager")
-	public Set<InvestMember> getInvestMembers() {
-		return this.investMembers;
-	}
-
-	public void setInvestMembers(Set<InvestMember> investMembers) {
-		this.investMembers = investMembers;
-	}
-
+	
 }

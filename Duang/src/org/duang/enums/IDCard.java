@@ -8,6 +8,18 @@ package org.duang.enums;
  * @date 2016年8月10日 下午4:11:39      
  */  
 public enum IDCard {
+	IDCARD0 {
+		@Override
+		public int getVal() {
+			return 1;
+		}
+
+		@Override
+		public String toString() {
+			return "未知";
+		}
+
+	},
 	IDCARD1 {
 		@Override
 		public int getVal() {
