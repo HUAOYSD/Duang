@@ -9,17 +9,17 @@
 			<form id="queryloanMemberListForm" method="post">
 				  <table border="0">
 					<tr height="35px">
-					  	<td>&nbsp;&nbsp;<span class="invesstPro-search">登录名：</span></td>
+					  	<td>&nbsp;&nbsp;<span class="investPro-search">登录名：</span></td>
 					  	<td ><input  name="memberInfo.loginName"/></td>
-					 	<td>&nbsp;<span class="invesstPro-search">真实姓名：</span></td>
+					 	<td>&nbsp;<span class="investPro-search">真实姓名：</span></td>
 					  	<td><input  name="memberInfo.realName"/></td>
-					  	<td>&nbsp;<span class="invesstPro-search">手机号码：</span></td>
+					  	<td>&nbsp;<span class="investPro-search">手机号码：</span></td>
 					  	<td><input  name="memberInfo.phone"/></td>
 					</tr>
 					<tr height="35px">
-						<td>&nbsp;&nbsp;<span class="invesstPro-search">客户经理姓名：</span></td>
+						<td>&nbsp;&nbsp;<span class="investPro-search">客户经理姓名：</span></td>
 					  	<td><input  name="managerName"/></td>
-					  	<td>&nbsp;<span class="invesstPro-search">客户类型：</span></td>
+					  	<td>&nbsp;<span class="investPro-search">客户类型：</span></td>
 					  	<td>
 					  		<select  class="easyui-combobox" name="memberInfo.type" data-options="panelHeight:'auto'">   
 							    <option value="-1" selected="selected">--请选择--</option>   
@@ -27,7 +27,7 @@
 				    			<option value="1">企业用户</option>
 							</select> 
 					  	</td>
-					  	<td>&nbsp;<span class="loanPro-search">契约用户：</span></td>
+					  	<td>&nbsp;<span class="investPro-search">契约用户：</span></td>
 					  	<td>
 						       	<select  class="easyui-combobox" name="isContract" data-options="panelHeight:'auto'">
 						       		<option value="-1" selected="selected">--请选择--</option>    

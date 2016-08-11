@@ -118,7 +118,7 @@
 				    <option value="1">是</option>
 				</select> 
 		    </div>
-		    <div>   
+		    <div style="">   
 		        <label for="customerManager.id" class="from_label">客户经理姓名：</label>   
 		       	<input class="easyui-combobox" name="customerManager.id" id="editInvestMember_customerManagerId" data-options="    
 				        valueField: 'id',    

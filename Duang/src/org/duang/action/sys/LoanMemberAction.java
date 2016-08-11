@@ -30,6 +30,7 @@ import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.duang.util.MD5Utils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -428,8 +429,11 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 					entity.getMemberInfo().setModifyTime(new Date());
 					entity.getMemberInfo().setCreateuser(SessionTools.getSessionSysUser().getId());
 					entity.getMemberInfo().setModifyuser(SessionTools.getSessionSysUser().getId());
-					entity.getMemberInfo().setIsdelete(ConstantCode.UNDELETE);
-					entity.getMemberInfo().setHandPassword(ConstantCode.DEFAULT);
+					if(DataUtils.notEmpty(entity.getMemberInfo().getPassword())){
+						entity.getMemberInfo().setPassword(MD5Utils.md5(entity.getMemberInfo().getLoginName()));
+					}else{
+						entity.getMemberInfo().setPassword(MD5Utils.md5(entity.getMemberInfo().getPassword()));
+					}
 					boolean issuccess = loanMemberService.saveEntity(entity);
 					if (issuccess) {
 						jsonObject.put("result", true);
