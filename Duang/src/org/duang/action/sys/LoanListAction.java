@@ -49,7 +49,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("sys")
 @Results(value = { 
 		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/loanlist/loanlist.jsp"),
-		@Result(name = ResultPath.EDIT, type = "dispatcher", location = "WEB-INF/page/sys/loanlist/editLoanlist.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 })
 public class LoanListAction extends BaseAction<LoanList> {
@@ -118,7 +117,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 				condsUtils.concat("loanStyle", entity.getLoanStyle());
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("signDate_begin")) && DataUtils.notEmpty(getRequest().getParameter("signDate_end"))) {
-				condsUtils.concat("signDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("signDate_begin")), DateUtils.str2Date(getRequest().getParameter("signDate_end")), "between"});
+				condsUtils.concat("signDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("signDate_begin"), "yyyy-MM-dd"), DateUtils.str2Date(getRequest().getParameter("signDate_end"), "yyyy-MM-dd"), "between"});
 			}
 			@SuppressWarnings("rawtypes")
 			List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
@@ -187,6 +186,8 @@ public class LoanListAction extends BaseAction<LoanList> {
 					if (fk != null) {
 						resultMap.put("loanMemberName", fk.getRealName());
 						resultMap.put("loanMemberNickName", fk.getNickname());
+						resultMap.put("loanMemberPhone", fk.getPhone());
+						resultMap.put("loanMemberIdcard", fk.getIdCard());
 					}
 					if (fk2 != null) {
 						resultMap.put("customerManagerName", fk2.getName());
@@ -234,5 +235,36 @@ public class LoanListAction extends BaseAction<LoanList> {
 	}
 
 
-
+	/**   
+	 * 分配客户经理
+	 * @Title: updateCustomerManager   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年8月12日 下午3:37:24
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void updateCustomerManager(){
+		try {
+			if (entity!=null && entity.getCustomerManager()!=null && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(entity.getCustomerManager().getId())) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("customerManager.id", entity.getCustomerManager().getId());
+				if (service.updateEntity(map, "id", entity.getId())) {
+					jsonObject.put("success", true);
+				}else {
+					jsonObject.put("success", false);
+				}
+			} else {
+				jsonObject.put("success", false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("借贷记录ACTION方法updateCustomerManager错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("借贷记录ACTION方法updateCustomerManager错误："+e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("success", false);
+		} finally {
+			printJsonResult();
+		}
+	}
 }

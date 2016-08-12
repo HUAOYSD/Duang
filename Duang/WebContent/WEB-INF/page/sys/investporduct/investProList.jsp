@@ -27,7 +27,7 @@
 	  <table id="investProListTable" style="table-layout:fixed;" ></table>
 	  <!-- 表格顶部工具按钮 -->
 	</div>
-	<script type="text/javascript" src="<%=path%>/ui/sys/investpro/investPro.js"></script>
+	<script type="text/javascript" src="<%=path%>/ui/sys/investproduct/investPro.js"></script>
 	<script type="text/javascript">
 		$("#submitInvest_btn").on("click", function(){
 			$('#queryInvestProListForm').submit(); 

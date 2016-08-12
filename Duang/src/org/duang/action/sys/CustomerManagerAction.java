@@ -44,6 +44,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("sys")
 @Results(value = { 
 		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/customerManager/customerManagerList.jsp"),
+		@Result(name = "chose", type = "dispatcher", location = "WEB-INF/page/sys/customerManager/choseCustomerManagerList.jsp"),
 		@Result(name = ResultPath.ADD, type = "dispatcher", location = "WEB-INF/page/sys/customerManager/addCustomerManager.jsp"),
 		@Result(name = ResultPath.EDIT, type = "dispatcher", location = "WEB-INF/page/sys/customerManager/editCustomerManager.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
@@ -405,6 +406,8 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 					entity = service.findById(entity.getId());
 				}
 				return ResultPath.EDIT;
+			} else if ("chose".equals(path)) {
+				return "chose";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -413,5 +416,4 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 		}
 		return ResultPath.LIST;
 	}
-
 }

@@ -42,13 +42,13 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value="investpro")
 @ParentPackage("sys")
 @Results(value={
-		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/invest/investProList.jsp"),
-		@Result(name="investPromanage", type="dispatcher", location="WEB-INF/page/sys/invest/investProManage.jsp"),
-		@Result(name="addInvestPro", type="dispatcher", location="WEB-INF/page/sys/invest/addInvestPro.jsp"),
-		@Result(name="editInvestPro", type="dispatcher", location="WEB-INF/page/sys/invest/editInvestPro.jsp"),
+		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/investporduct/investProList.jsp"),
+		@Result(name="investPromanage", type="dispatcher", location="WEB-INF/page/sys/investporduct/investProManage.jsp"),
+		@Result(name="addInvestPro", type="dispatcher", location="WEB-INF/page/sys/investporduct/addInvestPro.jsp"),
+		@Result(name="editInvestPro", type="dispatcher", location="WEB-INF/page/sys/investporduct/editInvestPro.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
-public class InvestProAction extends BaseAction<Product>{
+public class InvestProductAction extends BaseAction<Product>{
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   

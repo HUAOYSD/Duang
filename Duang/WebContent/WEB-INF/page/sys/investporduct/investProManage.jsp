@@ -32,7 +32,7 @@
 	      <a id="investProManage-delete-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
   	  </div>
 	</div>
-	<script type="text/javascript" src="<%=path%>/ui/sys/investpro/investProManage.js"></script>
+	<script type="text/javascript" src="<%=path%>/ui/sys/investproduct/investProManage.js"></script>
 	<script type="text/javascript">
 		$("#submit_queryInvestProManageForm_btn").on("click", function(){
 			$('#queryInvestProManageForm').submit(); 

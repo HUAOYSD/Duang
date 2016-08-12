@@ -34,6 +34,7 @@ public class Scale implements java.io.Serializable {
 	private Product product;
 	private Date beginTime;
 	private Date endTime;
+	private String name;
 	private String timeLimit;
 	private Date calcBeginTime;
 	private Date calcEndTime;
@@ -68,7 +69,7 @@ public class Scale implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Scale(String id, InvestList investList, Product product, Date beginTime, Date endTime, String timeLimit, Date calcBeginTime, Date calcEndTime, double revenue, double revenueAdd, double maxLimit, int returnStyle, String tags, int useTicket, int transfer, Date turnDate, double totalMoney, double residueMoney, double yetMoney, int scoreBonus, int onesScore, int status, int isTurn, Set<Stock> stocks, Set<ScaleLoanList> scaleLoanLists, Set<InvestList> investLists) {
+	public Scale(String id, InvestList investList, Product product,String name, Date beginTime, Date endTime, String timeLimit, Date calcBeginTime, Date calcEndTime, double revenue, double revenueAdd, double maxLimit, int returnStyle, String tags, int useTicket, int transfer, Date turnDate, double totalMoney, double residueMoney, double yetMoney, int scoreBonus, int onesScore, int status, int isTurn, Set<Stock> stocks, Set<ScaleLoanList> scaleLoanLists, Set<InvestList> investLists) {
 		this.id = id;
 		this.investList = investList;
 		this.product = product;
@@ -77,6 +78,7 @@ public class Scale implements java.io.Serializable {
 		this.timeLimit = timeLimit;
 		this.calcBeginTime = calcBeginTime;
 		this.calcEndTime = calcEndTime;
+		this.name = name;
 		this.revenue = revenue;
 		this.revenueAdd = revenueAdd;
 		this.maxLimit = maxLimit;
@@ -95,6 +97,15 @@ public class Scale implements java.io.Serializable {
 		this.stocks = stocks;
 		this.scaleLoanLists = scaleLoanLists;
 		this.investLists = investLists;
+	}
+
+	@Column(name = "name", length = 300)
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	// Property accessors

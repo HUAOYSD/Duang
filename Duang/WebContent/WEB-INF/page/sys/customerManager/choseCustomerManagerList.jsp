@@ -51,13 +51,11 @@
 		  </div>
 		  <!-- 数据表格区域 -->
 		  <table id="customerManager" style="table-layout:fixed;" ></table>
-	 	  <!-- 表格顶部工具按钮 -->
-		  <div id="tt_toolbar_customerManager">
-		      <a id="add_btn_customerManager" class="easyui-linkbutton" iconCls="icon-add" plain="true">新增</a>
-		      <a id="edit_btn_customerManager" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
-	          <a id="del_btn_customerManager" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
-	          <a id="res_btn_customerManager" class="easyui-linkbutton" iconCls="icon-2012080412301" plain="true">还原</a>
-	  	  </div>
+		  <!-- 表格底部工具按钮 -->
+		  <div id="tt_toolbar_customerManager_footer" style="margin:15px 0px;text-align:center;">
+		  	 <hr/>
+		  	 <a id="chose_customerManager" class="easyui-linkbutton" iconCls="icon-2012080404391" plain="true"><b>分配客户经理</b></a>
+		  </div>
 	</div>
-	<script type="text/javascript" src="<%=path %>/ui/sys/customerManager/customerManager.js"></script>
+	<script type="text/javascript" src="<%=path %>/ui/sys/customerManager/choseCustomerManager.js"></script>
 </body>
