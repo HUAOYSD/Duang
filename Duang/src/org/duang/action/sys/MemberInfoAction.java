@@ -46,6 +46,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Results(value={
 		@Result(name="memberInfoList", type="dispatcher", location="WEB-INF/page/sys/memberinfo/memberInfoList.jsp"),
 		@Result(name="uploadMemberInfoImg", type="dispatcher", location="WEB-INF/page/sys/memberinfo/uploadMemberInfoImg.jsp"),
+		@Result(name="showMemberInfoInvestOrLoan", type="dispatcher", location="WEB-INF/page/sys/memberinfo/investOrLoanInfo.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
 public class MemberInfoAction extends BaseAction<MemberInfo>{
@@ -343,5 +344,4 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 			printJsonResult();
 		}
 	}
-	
 }	

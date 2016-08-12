@@ -5,12 +5,13 @@ $(function(){
 	$('#memberInfoList_open_close').on("click",function(){
 		$('#memberInfoList_conditon').toggle(80);
 		setTimeout(domresize,100);//条件隐藏，改变表格高度
-	});	
+	});
+	//初始化toolbar
+	hideButton();
 	//表格初始化
 	tableObj = $("#memberInfoList_table").datagrid({
 		height:$("#memberInfoList_body").height()-$('#memberInfoList_search_area').height()-5,
 		width:$("#memberInfoList_body").width(),
-		idField:'id',
 		loadMsg : "正在加载，请稍后...",
 		url:"memberinfo!queryAllMember.do",  
 		singleSelect:true,  
@@ -160,6 +161,15 @@ $(function(){
 					content: "memberinfo!showMemberInfoImage.do?id="+selectRowt.id+"&type=2" //1代表上传身份证前照
 				});  
 			}
+		},
+		onSelect:function(rowIndex, rowData){
+			showButton();
+		},
+		onUnselect:function(rowIndex, rowData){
+			hideButton();
+		},
+		onLoadSuccess: function(data){
+			hideButton();
 		}
 
 	});
@@ -181,6 +191,29 @@ $(function(){
 	});
 });
 
+/**
+ * 设置按钮不可用状态
+ */
+function hideButton(){
+	//初始化状态，更新和删除按钮时不能点击的
+	$('#memberInfoList-sereach-investMember-btn').linkbutton('disable');
+	$('#memberInfoList-sereach-loanMember-btn').linkbutton('disable');
+	$('#memberInfoList-upload-idcard1-btn').linkbutton('disable');
+	$('#memberInfoList-upload-idcard2-btn').linkbutton('disable');
+	$('#memberInfoList-unselected-btn').linkbutton('disable');
+	
+}
+/**
+ * 设置按钮可用状态
+ */
+function showButton(){
+	//初始化状态，更新和删除按钮时不能点击的
+	$('#memberInfoList-sereach-investMember-btn').linkbutton('enable');
+	$('#memberInfoList-sereach-loanMember-btn').linkbutton('enable');
+	$('#memberInfoList-upload-idcard1-btn').linkbutton('enable');
+	$('#memberInfoList-upload-idcard2-btn').linkbutton('enable');
+	$('#memberInfoList-unselected-btn').linkbutton('enable');
+}
 
 //上传身份证前照
 $("#memberInfoList-upload-idcard1-btn").on('click',function(){
@@ -218,119 +251,72 @@ $("#memberInfoList-upload-idcard2-btn").on('click',function(){
 //取消选择
 $("#memberInfoList-unselected-btn").on('click',function(){
 	tableObj.datagrid("unselectAll");
+	hideButton();
 });
 
 //查询理财用户
 $("#memberInfoList-sereach-investMember-btn").on('click',function(){
-	$.ajax({
-		   type: "POST",
-		   url: "investmember!queryAllInvestMember.do",
-		   data: "",
-		   success: function(data){
-			 data = JSON.parse(data);
-		     if(data.result==true){
-		    	 //隐藏借贷用户信息
-		    	 hideLoanMemberColume();
-		    	 showInvestMemberColume();
-		    	 tableObj.datagrid('loadData', {
-			    		"rows":data.rows,
-			    		"total":data.total,
-			      });
-		     }else{
-		    	 layer.msg(data.msg, {time: 1000});
-		     }
-		   }
-	});
+	//判断是否选择
+	if(!isSelectedRow()){
+		return;
+	}
+	//ajax 判断是否为理财用户
+	 $.ajax({
+         type: "POST",
+         url: "investmember!findInvestMemberInfoById.do?id="+selectedRow.investMember_id ,
+         success: function(data){
+           data = JSON.parse(data);
+           if(data.result==true){
+        	   indexLayer = layer.open({
+        			type: 2,
+        			title: '理财信息',
+        			shadeClose: true,
+        			shade: 0.8,
+        			maxmin:true,
+        			area: ['350px', '60%'],
+        			content: "investmember!showInvestMemberInfoById.do?id="+selectedRow.investMember_id 
+        		});
+           }else{
+            layer.msg(data.msg, {time: 2000});
+           }
+         }
+	 });
 });
 
 //查询借贷用户
 $("#memberInfoList-sereach-loanMember-btn").on('click',function(){
+	//判断是否选择
+	if(!isSelectedRow()){
+		return;
+	}
+	//判断是否为借贷用户
 	$.ajax({
-		   type: "POST",
-		   url: "loanmember!queryAllLoanMember.do",
-		   data: "",
-		   success: function(data){
-			 data = JSON.parse(data);
-		     if(data.result==true){
-		    	 //隐藏理财用户信息
-		    	 hideInvestMemberColume();
-		    	 showLoanMemberColume();
-		    	 tableObj.datagrid('loadData', {
-			    		"rows":data.rows,
-			    		"total":data.total,
-			      });
-		     }else{
-		    	 layer.msg(data.msg, {time: 1000});
-		     }
-		   }
-	});
+        type: "POST",
+        url: "loanmember!findLoanMemberInfoById.do?id="+selectedRow.loanMember_id,
+        success: function(data){
+          data = JSON.parse(data);
+          if(data.result==true){
+        	  indexLayer = layer.open({
+        			type: 2,
+        			title: '理财信息',
+        			shadeClose: true,
+        			shade: 0.8,
+        			maxmin:true,
+        			area: ['350px', '50%'],
+        			content: "loanmember!showLoanMemberInfoById.do?id="+selectedRow.loanMember_id 
+        		});
+          }else{
+           layer.msg(data.msg, {time: 2000});
+          }
+        }
+	 });
 });
 
-//查询全部用户
-$("#memberInfoList-sereach-memberInfo-btn").on('click',function(){
-	$.ajax({
-		   type: "POST",
-		   url: "memberinfo!queryAllMember.do",
-		   data: "",
-		   success: function(data){
-			 data = JSON.parse(data);
-		     if(data.result==true){
-		    	 //隐藏理财用户信息
-		    	 showInvestMemberColume();
-		    	 showLoanMemberColume();
-		    	 tableObj.datagrid('loadData', {
-			    		"rows":data.rows,
-			    		"total":data.total,
-			      });
-		     }else{
-		    	 layer.msg(data.msg, {time: 1000});
-		     }
-		   }
-	});
-});
-
-function hideInvestMemberColume(){
-	 hideColumn('#memberInfoList_table','balance');
-	 hideColumn('#memberInfoList_table','investing');
-	 hideColumn('#memberInfoList_table','totalIncome');
-	 hideColumn('#memberInfoList_table','totalMoney');
-	 hideColumn('#memberInfoList_table','useableScore');
-	 hideColumn('#memberInfoList_table','isContract');
-	 hideColumn('#memberInfoList_table','registerStyle');
-	 $(".datagrid-header-row td[colspan='7']").hide();
-}
-
-function showInvestMemberColume(){
-	showColumn('#memberInfoList_table','balance');
-	showColumn('#memberInfoList_table','investing');
-	showColumn('#memberInfoList_table','totalIncome');
-	showColumn('#memberInfoList_table','totalMoney');
-	showColumn('#memberInfoList_table','useableScore');
-	showColumn('#memberInfoList_table','isContract');
-	showColumn('#memberInfoList_table','registerStyle');
-	$(".datagrid-header-row td[colspan='7']").show();
-}
-
-function hideLoanMemberColume(){
-	 hideColumn('#memberInfoList_table','lendMoney');
-	 hideColumn('#memberInfoList_table','backMoney');
-	 hideColumn('#memberInfoList_table','residueMoney');
-	 hideColumn('#memberInfoList_table','expectMoney');
-	 $(".datagrid-header-row td[colspan='4']").hide();
-}
-
-function showLoanMemberColume(){
-	showColumn('#memberInfoList_table','lendMoney');
-	showColumn('#memberInfoList_table','backMoney');
-	showColumn('#memberInfoList_table','residueMoney');
-	showColumn('#memberInfoList_table','expectMoney');
-	$(".datagrid-header-row td[colspan='4']").show();
-}
-
+var selectedRow = null;
 function isSelectedRow(){
 	selectedRow = tableObj.datagrid("getSelected");
 	if(selectedRow==null){
-		layer.msg("请选择用户！",{time:1000});
+		//layer.msg("请选择用户！",{time:1000});
 		return false;
 	}
 	return true;
@@ -352,113 +338,6 @@ function reloadDataGrid(){
     $("#invest_member_table").datagrid('reload');  
 }
 
-var selectedRow = null;
-//冻结操作
-$("#memberInfoList-freeze-btn").on('click',function(){
-	//判断是否选择
-	if(!isSelectedRow()){
-		return;
-	}
-	$.ajax({
-	   type: "POST",
-	   url: "memberinfo!freezeMemberInfo.do",
-	   data: "isFreeze=1&id="+selectedRow.memberInfoId,
-	   success: function(data){
-		   data = JSON.parse(data);
-		   layer.msg(data.msg,{time:1000});
-		   var selectRowIndex = $('#invest_member_table').datagrid('getRowIndex',selectedRow);
-		   $('#invest_member_table').datagrid('updateRow',{
-				index: selectRowIndex,
-				row: {
-					isFreeze: 1 //冻结
-				}
-			});
-	   }
-	});
-});
-
-//解冻操作
-$("#memberInfoList-unfreeze-btn").on('click',function(){
-	//判断是否选择
-	if(!isSelectedRow()){
-		return;
-	}
-	$.ajax({
-		   type: "POST",
-		   url: "memberinfo!freezeMemberInfo.do",
-		   data: "isFreeze=0&id="+selectedRow.memberInfoId,
-		   success: function(data){
-			   data = JSON.parse(data);
-			   layer.msg(data.msg,{time:1000});
-			   var selectRowIndex = $('#invest_member_table').datagrid('getRowIndex',selectedRow);
-			   $('#invest_member_table').datagrid('updateRow',{
-					index: selectRowIndex,
-					row: {
-						isFreeze: 0 //解冻
-					}
-				});
-		   }
-		});
-});
-
-//添加操作
-$("#memberInfoList-add-btn").on('click',function(){
-	indexLayer = layer.open({
-		type: 2,
-		title: '添加理财用户',
-		shadeClose: true,
-		shade: 0.8,
-		area: ['450px', '97%'],
-		content: 'investmember!addInvestMember.do'
-	});  
-});
-//修改
-$("#memberInfoList-update-btn").on('click',function(){
-	//判断是否选择
-	if(!isSelectedRow()){
-		return;
-	}
-	indexLayer = layer.open({
-		type: 2,
-		title: '修改产品',
-		shadeClose: true,
-		shade: 0.8,
-		area: ['450px', '97%'],
-		content: "investmember!eidtInvestMember.do?id="+selectedRow.id
-	}); 
-});
-
-//删除
-$("#memberInfoList-delete-btn").on('click',function(){
-	//判断是否选择
-	if(!isSelectedRow()){
-		return;
-	}
-    layer.confirm('您确定要删除 '+selectedRow.realName+' 吗？', {
-    	  title :'警告',
-		  icon: 7,
-		  btn: ['确定','取消'] //按钮
-		}, function(){ //确定
-			$.messager.progress('close');	// 如果提交成功则隐藏进度条
-			$.ajax({
-				   type: "POST",
-				   url: "memberinfo!deleteMemberInfo.do",
-				   data: "id="+selectedRow.memberInfoId,
-				   success: function(data){
-					 data = JSON.parse(data);
-				     if(data.result==true){
-				    	 var selectedRowIndex = $("#invest_member_table").datagrid('getRowIndex',selectedRow);
-				    	 $("#invest_member_table").datagrid('deleteRow',selectedRowIndex);
-				    	 layer.closeAll();
-				     }
-				    layer.msg(data.msg, {time: 1000});
-				   }
-				});
-		}, function(){//取消
-		  return;
-	});
-});
-
 /**
  * 弹窗提示
  * @param msg 信息
@@ -467,112 +346,3 @@ $("#memberInfoList-delete-btn").on('click',function(){
 function layerMsg(msg,time){
 	 layer.msg(msg, {time: time});
 }
-	
-
-/**
- * 扩展---隐藏列，解决隐藏复合表格中隐藏时发生错位问题
- */
-var hideColumn = function(target,field){
-	var t =  $(target);
-	var opts = t.datagrid("options");
-	var frozenColumns = opts.frozenColumns||(opts.frozenColumns = [[]]),columns = opts.columns||(opts.columns = [[]]);
-	//var multiRowHeader=(columns.length>1&&columns[1].length>0)||(frozenColumns.length>1&&frozenColumns[1].length>0);
-	var multiRowHeader = opts.multiRowHeader;
-	if(!opts.hiddenColumns || !opts.hiddenColumns.length){
-		opts.hiddenColumns = [];
-	}
-	if(!multiRowHeader){
-		var dataGridPanel = t.datagrid("getPanel");
-		dataGridPanel.find("td[field=\"" + field + "\"]").hide();
-		t.datagrid("getColumnOption", field).hidden = true;
-		t.datagrid("fitColumns");
-	}else{
-		var parentColumnInfo = getParentColumns(target,field);
-		var frozen = parentColumnInfo.frozen;
-		var columnOption = parentColumnInfo.columnOption;
-		var parentColumnOptions = parentColumnInfo.parentColumnOptions;
-		var cols = !!frozen?frozenColumns:columns;
-		arrayUtil.each(parentColumnOptions,function(i,v){
-			var colspan = parseInt(objUtil.getVal(cols[v.currentCoordinate.level][v.currentCoordinate.index],'colspan'));
-			if(!isNaN(colspan) && colspan > 1){
-				cols[v.currentCoordinate.level][v.currentCoordinate.index].colspan --;
-			}else{
-				arrayUtil.removeAt(cols[v.currentCoordinate.level],v.currentCoordinate.index,1);
-			}
-		});
-		//arrayUtil.removeAt(cols[columnOption.coordinate.level],columnOption.coordinate.index,1);
-		arrayUtil.removeAt(cols[columnOption.currentCoordinate.level],columnOption.currentCoordinate.index,1);
-		t.datagrid('refactorView',opts,false);
-		t.datagrid("fitColumns");
-		
-		opts.hiddenColumns.push(parentColumnInfo);
-	}//if end
-};
-
-/**
- * 扩展---显示列，解决显示复合表格中隐藏时发生错位问题
- */
-var showColumn = function(target,field){
-	var t =  $(target);
-	var opts = t.datagrid("options");
-	var frozenColumns = opts.frozenColumns||(opts.frozenColumns = [[]]),columns = opts.columns||(opts.columns = [[]]);
-	//var multiRowHeader=(columns.length>1&&columns[1].length>0)||(frozenColumns.length>1&&frozenColumns[1].length>0);
-	var multiRowHeader = opts.multiRowHeader;
-	if(!multiRowHeader){
-		var dataGridPanel = t.datagrid("getPanel");
-		dataGridPanel.find("td[field=\"" + field + "\"]").show();
-		t.datagrid("getColumnOption", field).hidden = false;
-		t.datagrid("fitColumns");
-	}else{
-		if(!opts.hiddenColumns || !opts.hiddenColumns.length){
-			opts.hiddenColumns = [];
-		}
-		var index=-1,columnInfo = {};
-		index = arrayUtil.indexOf(opts.hiddenColumns,field,function(info,field){
-			return info.field == field;
-		});
-		if(index !== -1){
-			var info = opts.hiddenColumns[index];
-			var frozen = info.frozen,field = info.field;
-			var columnOption = info.columnOption,parentColumnOptions = info.parentColumnOptions;
-			
-			//opts = insertColumns(columnOption,parentColumnOptions,opts,frozen);
-			var arr = [columnOption].concat(parentColumnOptions);
-			var colIndex = 0,length = arr.length,targetColumns = !!frozen?opts.frozenColumns:opts.columns;
-			for(;colIndex < length;colIndex++){
-				var columnOption = arr[colIndex];
-				var insertCoordinate = getInsertCoordinate(targetColumns,columnOption);
-				var insertLevel = insertCoordinate.insertLevel;
-				var insertIndex = insertCoordinate.insertIndex;
-				
-				var tempColumnOption = targetColumns[insertLevel][insertIndex];
-				var tempCoordinate = !!tempColumnOption&&tempColumnOption.coordinate || {
-					level:0,
-					index:0,
-					preIndex:-1
-				};
-				
-				if(!tempColumnOption){
-					if(colIndex > 0){
-						columnOption.colspan = 1;// isNaN(columnOption.colspan)?1:columnOption.colspan+1;
-					}
-					arrayUtil.insert(targetColumns[insertLevel],insertIndex,columnOption);
-				}else if(tempCoordinate.index != columnOption.coordinate.index){
-					if(colIndex > 0){
-						columnOption.colspan = 1;//isNaN(columnOption.colspan)?1:columnOption.colspan+1;
-					}
-					arrayUtil.insert(targetColumns[insertLevel],insertIndex,columnOption);
-				}else{
-					if(colIndex > 0){
-						tempColumnOption.colspan = isNaN(tempColumnOption.colspan)?1:tempColumnOption.colspan+1;
-					}
-				}
-			}
-			t.datagrid('refactorView',opts,false);
-			t.datagrid("fitColumns");
-			arrayUtil.removeAt(opts.hiddenColumns,index,1);
-		}
-		
-	}// if end
-	
-};

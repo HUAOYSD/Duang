@@ -237,7 +237,7 @@ a:hover {
 	padding: 10px;
 	font-family: "Microsoft YaHei";
 	font-size: 13px;
-	margin-bottom:50px;
+	margin-bottom: 50px;
 }
 
 .content form div {
@@ -289,12 +289,13 @@ a:hover {
 	text-align: right;
 }
 
-#footer-oper{
-	background-color:#f2f2f2;
-	width:100%;
-	height:50px;
-    clear:both;    
-} 
+#footer-oper {
+	background-color: #f2f2f2;
+	width: 100%;
+	height: 50px;
+	clear: both;
+}
+
 .footer-oper {
 	z-index: 999;
 	position: fixed;
@@ -302,8 +303,8 @@ a:hover {
 	left: 0;
 	width: 100%;
 	_position: absolute;
-	_top: expression_r(documentElement.scrollTop +  
-		documentElement.clientHeight-this.offsetHeight);
+	_top: expression_r(documentElement.scrollTop +   
+		 documentElement.clientHeight-this.offsetHeight);
 	overflow: visible;
 }
 
@@ -343,4 +344,23 @@ a:hover {
 	padding: 10px;
 	font-family: "Microsoft YaHei";
 	font-size: 13px;
+}
+/********************************************investOrLanInfo.jsp***********************************************************/
+.row1 {
+	background-color:#f7f7f7;
+	height:45px;
+}
+.row0 {
+	background-color:#fff;
+	height:45px;
+}
+.label_member {
+	padding-top:10px;
+	font-family: "微软雅黑", "黑体", "宋体";
+	font-size: 16px;
+}
+
+.span_member {
+	font-family: "微软雅黑", "黑体", "宋体";
+	font-size: 14px;
 }

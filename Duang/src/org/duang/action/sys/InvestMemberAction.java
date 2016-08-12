@@ -25,6 +25,7 @@ import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.IDCard;
 import org.duang.enums.If;
+import org.duang.enums.InvestOrLoan;
 import org.duang.service.InvestMemberService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
@@ -51,6 +52,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name = "addInvestMember", type = "dispatcher", location = "WEB-INF/page/sys/investmember/addInvestMember.jsp"),
 		@Result(name = "editInvestMember", type = "dispatcher", location = "WEB-INF/page/sys/investmember/editInvestMember.jsp"),
 		@Result(name = "uploadInvestMemberImg", type = "dispatcher", location = "WEB-INF/page/sys/investmember/uploadInvestMemberImg.jsp"),
+		@Result(name = "showMemberInfoInvest", type="dispatcher", location="WEB-INF/page/sys/memberinfo/investOrLoanInfo.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 		})
 public class InvestMemberAction extends BaseAction<InvestMember> {
@@ -492,4 +494,56 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 		}
 	}
 
+	
+	/**
+	 * 跳转到理财信息页面上
+	 * @Title: showInvestMemberInfoById
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param:
+	 * @author LiYonghui
+	 * @date 2016年8月12日 下午2:27:37
+	 * @return: void
+	 * @throws
+	 */
+	public String showInvestMemberInfoById() {
+		try {
+			entity = investMemberService.findEntity("id", entity.getId());
+			getRequest().setAttribute("selectInvest", InvestOrLoan.Invest.getVal());
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("客户ACTION查询错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("客户ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
+		return "showMemberInfoInvest";
+	}
+	
+	/**
+	 * 根据id查询理财用户
+	 * @Title: findInvestMemberInfoById
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param:
+	 * @author LiYonghui
+	 * @date 2016年8月12日 下午2:27:37
+	 * @return: void
+	 * @throws
+	 */
+	public void findInvestMemberInfoById() {
+		try {
+			entity = investMemberService.findEntity("id", entity.getId());
+			if (entity!=null) {
+				jsonObject.put("result", true);
+				jsonObject.put("msg", "此用户为理财用户");
+				printJsonResult();
+			} else {
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "此用户不是理财用户");
+				printJsonResult();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("理财客户ACTION查询错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("理财客户ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
+	}
+	
 }

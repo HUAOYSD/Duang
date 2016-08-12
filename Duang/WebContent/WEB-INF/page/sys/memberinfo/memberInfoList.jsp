@@ -43,9 +43,8 @@
 	      <a id="memberInfoList-add-btn" class="easyui-linkbutton" iconCls="icon-add" plain="true">新增</a>
 	      <a id="memberInfoList-update-btn" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
 	      <a id="memberInfoList-delete-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a> -->
-	      <a id="memberInfoList-sereach-investMember-btn" class="easyui-linkbutton" iconCls="icon-user_green" plain="true">理财用户</a>
-	      <a id="memberInfoList-sereach-loanMember-btn" class="easyui-linkbutton" iconCls="icon-user_red" plain="true">借贷用户</a>
-	      <a id="memberInfoList-sereach-memberInfo-btn" class="easyui-linkbutton" iconCls="icon-group" plain="true">全部用户</a>
+	      <a id="memberInfoList-sereach-investMember-btn" class="easyui-linkbutton" iconCls="icon-user_green" plain="true">理财信息</a>
+	      <a id="memberInfoList-sereach-loanMember-btn" class="easyui-linkbutton" iconCls="icon-user_red" plain="true">借贷信息</a>
 	      <a id="memberInfoList-upload-idcard1-btn" class="easyui-linkbutton" iconCls="icon-vcard" plain="true">上传身份证前照</a>
 	      <a id="memberInfoList-upload-idcard2-btn" class="easyui-linkbutton" iconCls="icon-vcard_edit" plain="true">上传身份证后照</a>
 	      <a id="memberInfoList-unselected-btn" class="easyui-linkbutton" iconCls="icon-2012080412301" plain="true">取消选择</a>

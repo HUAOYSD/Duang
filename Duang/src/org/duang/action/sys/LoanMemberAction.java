@@ -25,6 +25,7 @@ import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.IDCard;
 import org.duang.enums.If;
+import org.duang.enums.InvestOrLoan;
 import org.duang.service.LoanMemberService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
@@ -52,6 +53,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name = "addLoanMember", type = "dispatcher", location = "WEB-INF/page/sys/loanmember/addLoanMember.jsp"),
 		@Result(name = "editLoanMember", type = "dispatcher", location = "WEB-INF/page/sys/loanmember/editLoanMember.jsp"),
 		@Result(name = "uploadLoanMemberImg", type = "dispatcher", location = "WEB-INF/page/sys/loanmember/uploadLoanMemberImg.jsp"),
+		@Result(name="showMemberInfoLoan", type="dispatcher", location="WEB-INF/page/sys/memberinfo/investOrLoanInfo.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 		})
 public class LoanMemberAction extends BaseAction<LoanMember> {
@@ -489,6 +491,56 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 				printJsonResult();
 			}
 		}
+	}
+	/**
+	 * 跳转到理财信息页面上
+	 * @Title: showInvestMemberInfoById
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param:
+	 * @author LiYonghui
+	 * @date 2016年8月12日 下午2:27:37
+	 * @return: void
+	 * @throws
+	 */
+	public String showLoanMemberInfoById() {
+		try {
+			entity = loanMemberService.findEntity("id", entity.getId());
+			getRequest().setAttribute("selectLoan", InvestOrLoan.Loan.getVal());
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("客户ACTION查询错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("客户ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
+		return "showMemberInfoLoan";
+	}
+	
+	/**
+	 * 根据id查询借贷用户
+	 * @Title: findLoanMemberInfoById
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param:
+	 * @author LiYonghui
+	 * @date 2016年8月12日 下午2:27:37
+	 * @return: void
+	 * @throws
+	 */
+	public void  findLoanMemberInfoById() {
+		try {
+			entity = loanMemberService.findEntity("id", entity.getId());
+			if (entity!=null) {
+				jsonObject.put("result", true);
+				jsonObject.put("msg", "此用户为借贷用户");
+				printJsonResult();
+			} else {
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "此用户不是借贷用户");
+				printJsonResult();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("借贷客户ACTION查询错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("借贷客户ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
 	}
 
 }
