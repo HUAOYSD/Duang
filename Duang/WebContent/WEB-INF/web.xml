@@ -26,7 +26,6 @@
 		 <listener-class>org.duang.common.system.SessionListener</listener-class>
 	</listener>
 	
-	
 	<filter>
 		<description>懒加载过滤器</description>
 		<filter-name>osiv</filter-name>

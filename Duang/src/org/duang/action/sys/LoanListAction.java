@@ -1,7 +1,6 @@
 package org.duang.action.sys;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +20,7 @@ import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.CustomerManager;
 import org.duang.entity.LoanList;
-import org.duang.entity.LoanMember;
-import org.duang.entity.SysUser;
-import org.duang.enums.If;
+import org.duang.entity.MemberInfo;
 import org.duang.enums.Platform;
 import org.duang.enums.loan.Apply;
 import org.duang.enums.loan.BackMoney;
@@ -32,12 +29,9 @@ import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Poundage;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
-import org.duang.service.CustomerManagerService;
 import org.duang.service.LoanListService;
-import org.duang.service.SysUserService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
-import org.duang.util.MD5Utils;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -85,38 +79,54 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 */  
 	public void queryByPage() {
 		try {
-			condsUtils.addProperties(true, "loanMember", "order", "isDelete");
-			condsUtils.addValues(true, new Object[]{"myAlias","as"}, Order.desc("createtime"), entity.getIsDelete());
-
-			if (DataUtils.notEmpty(entity.getName())) {
-				condsUtils.concat("name", new Object[]{entity.getName(),"like"});
+			condsUtils.addProperties(true, "loanMember", "customerManager", "myAlias.memberInfo", "order");
+			condsUtils.addValues(true, new Object[]{"myAlias","as"}, new Object[]{"customerAlias","as"}, new Object[]{"memberAlias","as"}, Order.desc("createTime"));
+			if (DataUtils.notEmpty(getRequest().getParameter("loanMemberName"))) {
+				condsUtils.concat("memberAlias.realName", URLDecoder.decode(getRequest().getParameter("loanMemberName"),"UTF-8"));
 			}
-			if (DataUtils.notEmpty(getRequest().getParameter("sysUserName"))) {
-				condsUtils.concat("myAlias.name", getRequest().getParameter("sysUserName"));
+			if (DataUtils.notEmpty(getRequest().getParameter("loanMemberPhone"))) {
+				condsUtils.concat("memberAlias.phone", URLDecoder.decode(getRequest().getParameter("loanMemberPhone"),"UTF-8"));
 			}
-			if (DataUtils.notEmpty(entity.getWorkNumber())) {
-				condsUtils.concat("workNumber", new Object[]{entity.getWorkNumber(),"like"});
+			if (DataUtils.notEmpty(getRequest().getParameter("loanMemberIdcard"))) {
+				condsUtils.concat("memberAlias.idCard", URLDecoder.decode(getRequest().getParameter("loanMemberIdcard"),"UTF-8"));
 			}
-			if (DataUtils.notEmpty(entity.getPhone())) {
-				condsUtils.concat("phone", entity.getPhone());
+			if (DataUtils.notEmpty(getRequest().getParameter("customerManagerName"))) {
+				condsUtils.concat("customerAlias.name", URLDecoder.decode(getRequest().getParameter("customerManagerName"),"UTF-8"));
 			}
-			if (DataUtils.notEmpty(entity.getEmail())) {
-				condsUtils.concat("email", new Object[]{entity.getEmail(),"like"});
+			if (entity.getLoanType() != 0) {
+				condsUtils.concat("loanType", entity.getLoanType());
 			}
-			if (DataUtils.notEmpty(entity.getIdcard())) {
-				condsUtils.concat("idcard", new Object[]{entity.getIdcard(),"like"});
+			if (entity.getApplyState() != 0) {
+				condsUtils.concat("applyState", entity.getApplyState());
 			}
-			if (DataUtils.notEmpty(entity.getSex())) {
-				condsUtils.concat("sex", entity.getSex());
+			if (entity.getPoundageState() != 0) {
+				condsUtils.concat("poundageState", entity.getPoundageState());
 			}
-
+			if (entity.getBackStyle() != 0) {
+				condsUtils.concat("backStyle", entity.getBackStyle());
+			}
+			if (entity.getLoanState() != 0) {
+				condsUtils.concat("loanState", entity.getLoanState());
+			}
+			if (entity.getIsSell() != 0) {
+				condsUtils.concat("isSell", entity.getIsSell());
+			}
+			if (entity.getReturnStatus() != 0) {
+				condsUtils.concat("returnStatus", entity.getReturnStatus());
+			}
+			if (entity.getLoanStyle() != 0) {
+				condsUtils.concat("loanStyle", entity.getLoanStyle());
+			}
+			if (DataUtils.notEmpty(getRequest().getParameter("signDate_begin")) && DataUtils.notEmpty(getRequest().getParameter("signDate_end"))) {
+				condsUtils.concat("signDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("signDate_begin")), DateUtils.str2Date(getRequest().getParameter("signDate_end")), "between"});
+			}
 			@SuppressWarnings("rawtypes")
 			List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			fillDatagridCons(list);
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("客户经理ACTION方法queryCustomerManagerByPage错误："+e.getMessage(), this.getClass());
-			LoggerUtils.error("客户经理ACTION方法queryCustomerManagerByPage错误："+e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("借贷记录ACTION方法queryByPage错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("借贷记录ACTION方法queryByPage错误："+e.getLocalizedMessage(), this.getClass());
 			jsonObject.put("total", 0);
 			jsonObject.put("currPage", 0);
 			jsonObject.put("pageSize", 0);
@@ -142,14 +152,16 @@ public class LoanListAction extends BaseAction<LoanList> {
 			for(Object temp : list) {
 				if (temp instanceof Object[]) {
 					Map<String,Object> resultMap = new HashMap<String,Object>();
-					LoanList pk = (LoanList)((Object[])temp)[1];
-					LoanMember fk = (LoanMember)((Object[])temp)[0];
+					LoanList pk = (LoanList)((Object[])temp)[3];
+					MemberInfo fk = (MemberInfo)((Object[])temp)[2];
+					//LoanMember fk1 = (LoanMember)((Object[])temp)[1];
+					CustomerManager fk2 = (CustomerManager)((Object[])temp)[0];
 					if (pk != null) {
 						resultMap.put("id", pk.getId());
-						resultMap.put("loanType", LoanMode.valueOf("M"+pk.getLoanType()));
+						resultMap.put("loanType", LoanMode.valueOf("M"+pk.getLoanType()).toString());
 						resultMap.put("pactNumber", pk.getPactNumber());
-						resultMap.put("isSell", Scale.valueOf("S"+pk.getIsSell()));
-						resultMap.put("poundageState", Poundage.valueOf("P"+pk.getPoundageState()));
+						resultMap.put("isSell", Scale.valueOf("S"+pk.getIsSell()).toString());
+						resultMap.put("poundageState", Poundage.valueOf("P"+pk.getPoundageState()).toString());
 						resultMap.put("money", pk.getMoney());
 						resultMap.put("realMoney", pk.getRealMoney());
 						resultMap.put("manageCost", pk.getManageCost());
@@ -159,9 +171,9 @@ public class LoanListAction extends BaseAction<LoanList> {
 						resultMap.put("returnMoney", pk.getReturnMoney());
 						resultMap.put("agoMoney", pk.getAgoMoney());
 						resultMap.put("yetReturnMoney", pk.getYetReturnMoney());
-						resultMap.put("returnStatus", BackMoney.valueOf("B"+pk.getReturnStatus()));
-						resultMap.put("loanState", TakeMoney.valueOf("T"+pk.getLoanState()));
-						resultMap.put("applyState", Apply.valueOf("A"+pk.getApplyState()));
+						resultMap.put("returnStatus", BackMoney.valueOf("B"+pk.getReturnStatus()).toString());
+						resultMap.put("loanState", TakeMoney.valueOf("T"+pk.getLoanState()).toString());
+						resultMap.put("applyState", Apply.valueOf("A"+pk.getApplyState()).toString());
 						resultMap.put("loanUse", pk.getLoanUse());
 						resultMap.put("loanInterest", pk.getLoanInterest());
 						resultMap.put("createTime", DateUtils.getTimeStamp(pk.getCreateTime()));
@@ -169,11 +181,15 @@ public class LoanListAction extends BaseAction<LoanList> {
 						resultMap.put("beginReturnDate", DateUtils.getTimeStamp(pk.getBeginReturnDate()));
 						resultMap.put("endReturnDate", DateUtils.getTimeStamp(pk.getEndReturnDate()));
 						resultMap.put("doneReturnDate", DateUtils.getTimeStamp(pk.getDoneReturnDate()));
-						resultMap.put("loanStyle", Platform.valueOf("P"+pk.getLoanStyle()));
-						resultMap.put("backStyle", BackStyle.valueOf("B"+pk.getBackStyle()));
+						resultMap.put("loanStyle", Platform.valueOf("P"+pk.getLoanStyle()).toString());
+						resultMap.put("backStyle", BackStyle.valueOf("B"+pk.getBackStyle()).toString());
 					}
 					if (fk != null) {
-						resultMap.put("loanMemberName", fk.getMemberInfo().getRealName());
+						resultMap.put("loanMemberName", fk.getRealName());
+						resultMap.put("loanMemberNickName", fk.getNickname());
+					}
+					if (fk2 != null) {
+						resultMap.put("customerManagerName", fk2.getName());
 					}
 					listMap.add(resultMap);
 				}
@@ -191,6 +207,32 @@ public class LoanListAction extends BaseAction<LoanList> {
 	}
 
 
-	
+	/**   
+	 * 页面跳转
+	 * @Title: openDialog   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年8月11日 下午5:30:38
+	 * @return: String      
+	 * @throws   
+	 */  
+	public String openDialog() {
+		try {
+			//			String path = getRequest().getParameter("path");
+			//			if(ResultPath.ADD.equals(path)) {
+			//				return ResultPath.ADD;
+			//			} else if(ResultPath.EDIT.equals(path)) {
+			//				return ResultPath.EDIT;
+			//			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("借贷记录ACTION方法openDialog错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("借贷记录ACTION方法openDialog错误："+e.getLocalizedMessage(), this.getClass());
+		}
+		return ResultPath.LIST;
+	}
+
+
 
 }

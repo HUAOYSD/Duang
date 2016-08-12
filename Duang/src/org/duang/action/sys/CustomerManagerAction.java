@@ -1,5 +1,6 @@
 package org.duang.action.sys;
 
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -141,7 +142,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 				condsUtils.concat("name", new Object[]{entity.getName(),"like"});
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("sysUserName"))) {
-				condsUtils.concat("myAlias.name", getRequest().getParameter("sysUserName"));
+				condsUtils.concat("myAlias.name", URLDecoder.decode(getRequest().getParameter("sysUserName"),"UTF-8"));
 			}
 			if (DataUtils.notEmpty(entity.getWorkNumber())) {
 				condsUtils.concat("workNumber", new Object[]{entity.getWorkNumber(),"like"});

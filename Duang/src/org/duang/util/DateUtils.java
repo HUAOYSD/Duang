@@ -343,7 +343,7 @@ public class DateUtils {
 	}
 
 	/**
-	 * 把字符串转换为日期，日期的格式为yyyy-MM-dd HH:ss
+	 * 把字符串转换为日期，日期的格式为yyyy-MM-dd HH:mm:ss
 	 * @param dateStr	日期字符串
 	 * @return Date
 	 */
@@ -358,7 +358,7 @@ public class DateUtils {
 				System.out.println(dateStr + " 格式不正确");
 				return null;
 			}
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:ss");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			try {
 				date = df.parse(dateStr);
 			} catch (ParseException e) {

@@ -9,33 +9,90 @@
 				<form id="loanlistQueryForm" method="post">
 					  <table border="0">
 						<tr height="35px">
-						  	<td>&nbsp;&nbsp;<span class="investPro-search">姓名：</span></td>
-						  	<td ><input name="name" id="loanlistSearch_name"/></td>
-						 	<td>&nbsp;<span class="investPro-search">登录ID：</span></td>
-						  	<td><input name="sysUser.name" id="loanlistSearch_sysUserId"/></td>
-						  	<td>&nbsp;<span class="investPro-search">工号：</span></td>
-						  	<td><input name="workNumber" id="loanlistSearch_workNumber"/></td>
-						  	<td>&nbsp;<span class="investPro-search">手机号码：</span></td>
-						  	<td colspan="3"><input name="phone" id="loanlistSearch_phone"/></td>
+						  	<td>&nbsp;&nbsp;<span class="investPro-search">借款人：</span></td>
+						  	<td ><input name="loanMemberName" id="loanlistSearch_name"/></td>
+						 	<td>&nbsp;<span class="investPro-search">手机号码：</span></td>
+						  	<td><input name="loanMemberPhone" id="loanlistSearch_phone"/></td>
+						  	<td>&nbsp;<span class="investPro-search">身份证号：</span></td>
+						  	<td><input name="loanMemberIdcard" id="loanlistSearch_idCard"/></td>
+						  	<td>&nbsp;<span class="investPro-search">借款模式：</span></td>
+						  	<td><select style="width: 140px;" class="easyui-combobox" name="loanType" id="loanlistSearch_loanType" data-options="panelHeight:'auto'">   
+								    <option value="0" selected="selected">--请选择--</option>   
+								    <option value="1">普通模式</option>   
+					    			<option value="2">产权模式</option>
+					    			<option value="3">信用模式</option>
+					    			<option value="4">急速模式</option>
+								</select> 
+							</td>
 						</tr>
 						<tr height="35px">
-							<td>&nbsp;&nbsp;<span class="investPro-search">邮箱：</span></td>
-						  	<td><input name="email" id="loanlistSearch_email"/></td>
-						  	<td>&nbsp;&nbsp;<span class="investPro-search">身份证：</span></td>
-						  	<td><input name="idcard" id="loanlistSearch_idcard"/></td>
-						  	<td>&nbsp;<span class="investPro-search">性别：</span></td>
-						  	<td><select style="width: 140px;" class="easyui-combobox" name="sex" id="loanlistSearch_sex" data-options="panelHeight:'auto'">   
-								    <option value="null" selected="selected">--请选择--</option>   
-								    <option value="男">男</option>   
-					    			<option value="女">女</option>
-					    			<option value="保密">保密</option>
+							<td>&nbsp;&nbsp;<span class="investPro-search">客户经理：</span></td>
+						  	<td><input name="customerManagerName" id="loanlistSearch_customer"/></td>
+						  	<td>&nbsp;&nbsp;<span class="investPro-search">申请状态：</span></td>
+						  	<td><select style="width: 140px;" class="easyui-combobox" name="applyState" id="loanlistSearch_applyState" data-options="panelHeight:'auto'">   
+								    <option value="0" selected="selected">--请选择--</option>   
+								    <option value="1">待审核</option>   
+					    			<option value="2">审核通过</option>
+					    			<option value="3">审核驳回</option>
+					    			<option value="4">已取消</option>
 								</select> 
 						  	</td>
-						  	<td>&nbsp;<span class="investPro-search">是否删除：</span></td>
-						  	<td><select style="width: 140px;" class="easyui-combobox" name="isDelete" id="loanlistSearch_isDelete" data-options="panelHeight:'auto'">
-									    <option value="0" selected="selected">否</option>   
-									    <option value="1">是</option>
+						  	<td>&nbsp;<span class="investPro-search">手续费状态：</span></td>
+						  	<td><select style="width: 140px;" class="easyui-combobox" name="poundageState" id="loanlistSearch_poundageState" data-options="panelHeight:'auto'">
+								    <option value="0" selected="selected">--请选择--</option>   
+								    <option value="1">未扣手续费</option>   
+								    <option value="2">已扣手续费</option>
 								</select> 
+						  	</td>
+						  	<td>&nbsp;<span class="investPro-search">还款方式：</span></td>
+						  	<td><select style="width: 140px;" class="easyui-combobox" name="backStyle" id="loanlistSearch_backStyle" data-options="panelHeight:'auto'">
+								    <option value="0" selected="selected">--请选择--</option>   
+								    <option value="1">等额本息</option>   
+								    <option value="2">到期一次性还款</option>
+								</select> 
+						  	</td>
+						</tr>
+						<tr height="35px">
+							<td>&nbsp;&nbsp;<span class="investPro-search">放款状态：</span></td>
+						  	<td><select style="width: 140px;" class="easyui-combobox" name="loanState" id="loanlistSearch_loanState" data-options="panelHeight:'auto'">   
+								    <option value="" selected="selected">--请选择--</option>   
+								    <option value="1">未放款</option>   
+					    			<option value="2">放款中</option>
+					    			<option value="3">放款完成</option>
+								</select> 
+						  	</td>
+						  	<td>&nbsp;&nbsp;<span class="investPro-search">起售状态：</span></td>
+						  	<td><select style="width: 140px;" class="easyui-combobox" name="isSell" id="loanlistSearch_isSell" data-options="panelHeight:'auto'">   
+								    <option value="" selected="selected">--请选择--</option>   
+								    <option value="1">未起标</option>   
+					    			<option value="2">起标</option>
+					    			<option value="3">标满</option>
+								</select> 
+						  	</td>
+						  	<td>&nbsp;<span class="investPro-search">还款状态：</span></td>
+						  	<td><select style="width: 140px;" class="easyui-combobox" name="returnStatus" id="loanlistSearch_returnStatus" data-options="panelHeight:'auto'">
+								    <option value="" selected="selected">--请选择--</option>   
+								    <option value="1">未还款</option>   
+								    <option value="2">未还尽</option>
+								    <option value="3">产生逾期</option>
+								    <option value="4">完成还款</option>
+								</select> 
+						  	</td>
+						  	<td>&nbsp;<span class="investPro-search">平台：</span></td>
+						  	<td><select style="width: 140px;" class="easyui-combobox" name="loanStyle" id="loanlistSearch_loanStyle" data-options="panelHeight:'auto'">
+								    <option value="" selected="selected">--请选择--</option>   
+								    <option value="1">线下</option>   
+								    <option value="2">Android</option>
+								    <option value="3">IOS</option>
+								    <option value="4">平台系统</option>
+								</select> 
+						  	</td>
+						</tr>
+						<tr height="35px">
+							<td>&nbsp;&nbsp;<span class="investPro-search">签约日期：</span></td>
+						  	<td colspan="3">
+						  		<input name="signDate_begin" id="signDate_begin" type="text" class="easyui-datebox"></input>&nbsp;&nbsp;——&nbsp;&nbsp;
+						  		<input name="signDate_end" id="signDate_end" type="text" class="easyui-datebox"></input>
 						  	</td>
 						  	<td>&nbsp;&nbsp;
 								<a id="loanlistQueryForm_Btn" class="easyui-linkbutton my-search-button" iconCls="icon-2012092109942" plain="true">查询</a>
@@ -43,6 +100,7 @@
 							<td>&nbsp;&nbsp;
 								<a onclick="javascript:$('#loanlistQueryForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true">重置</a>
 							</td>
+							<td colspan="2">&nbsp;&nbsp;</td>
 						</tr>
 					  </table>
 				</form>
@@ -53,7 +111,7 @@
 		  <table id="loanlist" style="table-layout:fixed;" ></table>
 	 	  <!-- 表格顶部工具按钮 -->
 		  <div id="tt_toolbar_loanlist">
-	          <a id="res_btn_loanlist" class="easyui-linkbutton" iconCls="icon-2012080412301" plain="true">还原</a>
+	          <a id="allot_btn_loanlist" class="easyui-linkbutton" iconCls="icon-2012080412301" plain="true">分配客户经理</a>
 	  	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path %>/ui/sys/loanlist/loanlist.js"></script>
