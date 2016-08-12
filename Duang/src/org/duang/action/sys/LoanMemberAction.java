@@ -270,6 +270,7 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 				map.put("expectMoney", lm.getExpectMoney());
 				map.put("lendMoney", lm.getLendMoney());
 				map.put("residueMoney", lm.getResidueMoney());
+				
 				MemberInfo memberInfo = (MemberInfo) array[0];
 				map.put("memberInfoId", memberInfo.getId());
 				map.put("loginName", memberInfo.getLoginName());
@@ -359,10 +360,6 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 					jsonObject.put("expectMoney", lm.getExpectMoney());
 					jsonObject.put("lendMoney", lm.getLendMoney());
 					jsonObject.put("residueMoney", lm.getResidueMoney());
-					CustomerManager customerManager = lm.getCustomerManager();
-					jsonObject.put("customerManager.id", customerManager.getId());
-					jsonObject.put("customerManagerId", customerManager.getId());
-					jsonObject.put("managerName", customerManager.getName());
 					
 					MemberInfo memberInfo = lm.getMemberInfo();
 					jsonObject.put("memberInfoId", memberInfo.getId());

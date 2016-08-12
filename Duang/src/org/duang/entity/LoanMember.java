@@ -28,7 +28,6 @@ public class LoanMember implements java.io.Serializable {
 	// Fields
 
 	private String id;
-	private CustomerManager customerManager;
 	private MemberInfo memberInfo;
 	
 	/**
@@ -63,12 +62,11 @@ public class LoanMember implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public LoanMember(String id, CustomerManager customerManager,
+	public LoanMember(String id, 
 			MemberInfo memberInfo, double lendMoney, double backMoney,
 			double residueMoney, double expectMoney,
 			Set<LoanList> loanLists) {
 		this.id = id;
-		this.customerManager = customerManager;
 		this.memberInfo = memberInfo;
 		this.lendMoney = lendMoney;
 		this.backMoney = backMoney;
@@ -89,15 +87,6 @@ public class LoanMember implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "customer_id")
-	public CustomerManager getCustomerManager() {
-		return this.customerManager;
-	}
-
-	public void setCustomerManager(CustomerManager customerManager) {
-		this.customerManager = customerManager;
-	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})

@@ -273,7 +273,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				Object[] array = (Object[]) list.get(i);
 				InvestMember im = (InvestMember) array[1];
 				map.put("id", im.getId());
-				map.put("managerName", im.getManagerName());
 				map.put("isContract", im.getIsContract());
 				map.put("balance", im.getBalance());
 				map.put("investing", im.getInvesting());
@@ -364,11 +363,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					jsonObject.put("totalMoney", im.getTotalMoney());
 					jsonObject.put("useableScore", im.getUseableScore());
 					jsonObject.put("registerStyle", im.getRegisterStyle());
-					CustomerManager customerManager = im.getCustomerManager();
-					jsonObject.put("customerManager.id", customerManager.getId());
-					jsonObject.put("customerManagerId", customerManager.getId());
-					jsonObject.put("managerName", customerManager.getName());
-					
 					MemberInfo memberInfo = im.getMemberInfo();
 					jsonObject.put("memberInfoId", memberInfo.getId());
 					jsonObject.put("memberInfo.memberInfoId", memberInfo.getId());

@@ -27,7 +27,6 @@ public class InvestMember implements java.io.Serializable {
 
 	private String id;
 	private MemberInfo memberInfo;
-	private CustomerManager customerManager;
 	private String managerName;
 	private int isContract;
 	private double balance;
@@ -55,7 +54,7 @@ public class InvestMember implements java.io.Serializable {
 
 	/** full constructor */
 	public InvestMember(String id, MemberInfo memberInfo,
-			CustomerManager customerManager, String managerName,
+			 String managerName,
 			int isContract, double balance, double investing,
 			double totalIncome, double totalMoney, int useableScore,
 			int registerStyle,
@@ -64,7 +63,6 @@ public class InvestMember implements java.io.Serializable {
 			Set<InvestList> investLists) {
 		this.id = id;
 		this.memberInfo = memberInfo;
-		this.customerManager = customerManager;
 		this.managerName = managerName;
 		this.isContract = isContract;
 		this.balance = balance;
@@ -100,15 +98,6 @@ public class InvestMember implements java.io.Serializable {
 		this.memberInfo = memberInfo;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "cust_manager_id")
-	public CustomerManager getCustomerManager() {
-		return this.customerManager;
-	}
-
-	public void setCustomerManager(CustomerManager customerManager) {
-		this.customerManager = customerManager;
-	}
 
 	@Column(name = "manager_name")
 	public String getManagerName() {

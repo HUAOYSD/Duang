@@ -14,6 +14,9 @@ public class Test {
 		logger.warn(" This is warn!!!");
 		logger.error(" This is error!!!");
 		logger.fatal(" This is fatal!!!");
+		
+		If if1 = If.valueOf("E1");
+		System.out.println(if1);
 	}
 
 	@Before
@@ -23,7 +26,6 @@ public class Test {
 	@org.junit.Test
 	public void fds(){
 		If if1 = If.valueOf("E1");
-		System.out.println(if1.getDesc());
 		System.out.println(if1);
 	}
 
