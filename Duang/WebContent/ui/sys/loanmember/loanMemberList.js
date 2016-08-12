@@ -2,17 +2,17 @@ var tableObj;
 var editRow = undefined; //定义全局变量：当前编辑的行
 $(function(){
 	//隐藏显示查询条件区域
-	$('#invest_member_open_close').on("click",function(){
-		$('#invest_memeber_conditon').toggle(80);
+	$('#loan_member_open_close').on("click",function(){
+		$('#loan_memeber_conditon').toggle(80);
 		setTimeout(domresize,100);//条件隐藏，改变表格高度
 	});	
 	//表格初始化
-	tableObj = $("#invest_memeber_table").datagrid({
-		height:$("#invest_member_body").height()-$('#invest_member_search_area').height()-5,
-		width:$("#invest_member_body").width(),
+	tableObj = $("#loan_memeber_table").datagrid({
+		height:$("#loan_member_body").height()-$('#loan_member_search_area').height()-5,
+		width:$("#loan_member_body").width(),
 		idField:'id',
 		loadMsg : "正在加载，请稍后...",
-		url:"investmember!queryAllInvestMember.do",  
+		url:"loanmember!queryAllLoanMember.do",  
 		singleSelect:true,  
 		nowrap:true,
 		rownumbers:true,
@@ -21,7 +21,7 @@ $(function(){
 		pageSize:50,
 		pageList:[50,80,100,150,200],
 		sortOrder:'desc',
-		toolbar:'#invest_memeber_table_toolbar',
+		toolbar:'#loan_memeber_table_toolbar',
 		frozenColumns:[[  
 						{field:'id',checkbox:true,halign:"center", align:"center"},
 						{field:'loginName',title:'登录名',width:150,halign:"center", align:"center"},
@@ -40,11 +40,10 @@ $(function(){
 			},
 			{field:'price',title:'财力值',width:100,halign:"center", align:"center" },
 			{field:'level',title:'等级',width:100,halign:"center", align:"center" },
-			{field:'balance',title:'余额',width:100,halign:"center", align:"center" },
-			{field:'investing',title:'投资中金额',width:100,halign:"center", align:"center"},
-			{field:'totalIncome',title:'总收益',width:100,halign:"center", align:"center" },
-			{field:'totalMoney',title:'总资产',width:100,halign:"center", align:"center" },
-			{field:'useableScore',title:'可用积分',width:100,halign:"center", align:"center" },
+			{field:'lendMoney',title:'总借款',width:100,halign:"center", align:"center" },
+			{field:'backMoney',title:'总还款',width:100,halign:"center", align:"center"},
+			{field:'residueMoney',title:'剩余应还',width:100,halign:"center", align:"center" },
+			{field:'expectMoney',title:'总逾期',width:100,halign:"center", align:"center" },
 			{field:'isEliteAccount',title:'是否为金账户',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
@@ -63,15 +62,6 @@ $(function(){
 					}
 				}
 			},
-			{field:'isContract',title:'契约用户',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==1){
-						return "是";
-					}else{
-						return "否";
-					}
-				}
-			},
 			{field:'createTime',title:'开户日期',width:200,halign:"center", align:"center",
 				formatter: function(value,row,index){
 				   if(value==0){
@@ -79,19 +69,6 @@ $(function(){
 				   }else{ 
 					   return new Date(value).format("yyyy-MM-dd hh:mm:ss");
 				   }
-				}
-			},
-			{field:'registerStyle',title:'注册方式',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==1){
-						return "线下";
-					}else if(value==2){
-						return "Android";
-					}else if(value==3){
-						return "IOS";
-					}else{
-						return "平台系统";
-					}
 				}
 			},
 			{field:'idCard',title:'身份证号',width:200,halign:"center", align:"center"},
@@ -131,7 +108,7 @@ $(function(){
 					shade: 0.8,
 					area: ['80%', '80%'],
 					maxmin:true,
-					content: "investmember!showUserImage.do?id="+selectRowt.memberInfoId+"&type=1" //1代表上传身份证前照
+					content: "loanmember!showUserImage.do?id="+selectRowt.memberInfoId+"&type=1" //1代表上传身份证前照
 				});  
 			}else if(field=='idCardImg2'){
 				indexLayer = layer.open({
@@ -141,14 +118,14 @@ $(function(){
 					shade: 0.8,
 					area: ['80%', '80%'],
 					maxmin:true,
-					content: "investmember!showUserImage.do?id="+selectRowt.memberInfoId+"&type=1" //1代表上传身份证前照
+					content: "loanmember!showUserImage.do?id="+selectRowt.memberInfoId+"&type=1" //1代表上传身份证前照
 				});  
 			}
 		}
 
 	});
-	$('#queryInvestMemberListForm').form({    
-	    url:"investmember!queryInvestMemberByParameter.do",    
+	$('#queryLoanMemberListForm').form({    
+	    url:"loanmember!queryLoanMemberByParameter.do",    
 	    onSubmit: function(){    
 	        
 	    },    
@@ -157,7 +134,7 @@ $(function(){
 	    	if(data.result==false){
 	    		layer.msg(data.msg,{time:2000});
 	    	}
-	    	$('#invest_memeber_table').datagrid('loadData', {
+	    	$('#loan_memeber_table').datagrid('loadData', {
 	    		"rows":data.rows,
 	    		"total":data.total,
 	    	}); 
@@ -166,12 +143,12 @@ $(function(){
 });
 
 function reloadDataGrid(){
-    $("#invest_memeber_table").datagrid('reload');  
+    $("#loan_memeber_table").datagrid('reload');  
 }
 
 var selectedRow = null;
 //冻结操作
-$("#investMemeberList-freeze-btn").on('click',function(){
+$("#loanMemeberList-freeze-btn").on('click',function(){
 	//判断是否选择
 	if(!isSelectedRow()){
 		return;
@@ -183,8 +160,8 @@ $("#investMemeberList-freeze-btn").on('click',function(){
 	   success: function(data){
 		   data = JSON.parse(data);
 		   layer.msg(data.msg,{time:1000});
-		   var selectRowIndex = $('#invest_memeber_table').datagrid('getRowIndex',selectedRow);
-		   $('#invest_memeber_table').datagrid('updateRow',{
+		   var selectRowIndex = $('#loan_memeber_table').datagrid('getRowIndex',selectedRow);
+		   $('#loan_memeber_table').datagrid('updateRow',{
 				index: selectRowIndex,
 				row: {
 					isFreeze: 1 //冻结
@@ -195,7 +172,7 @@ $("#investMemeberList-freeze-btn").on('click',function(){
 });
 
 //解冻操作
-$("#investMemeberList-unfreeze-btn").on('click',function(){
+$("#loanMemeberList-unfreeze-btn").on('click',function(){
 	//判断是否选择
 	if(!isSelectedRow()){
 		return;
@@ -207,8 +184,8 @@ $("#investMemeberList-unfreeze-btn").on('click',function(){
 		   success: function(data){
 			   data = JSON.parse(data);
 			   layer.msg(data.msg,{time:1000});
-			   var selectRowIndex = $('#invest_memeber_table').datagrid('getRowIndex',selectedRow);
-			   $('#invest_memeber_table').datagrid('updateRow',{
+			   var selectRowIndex = $('#loan_memeber_table').datagrid('getRowIndex',selectedRow);
+			   $('#loan_memeber_table').datagrid('updateRow',{
 					index: selectRowIndex,
 					row: {
 						isFreeze: 0 //解冻
@@ -219,18 +196,18 @@ $("#investMemeberList-unfreeze-btn").on('click',function(){
 });
 
 //添加操作
-$("#investMemeberList-add-btn").on('click',function(){
+$("#loanMemeberList-add-btn").on('click',function(){
 	indexLayer = layer.open({
 		type: 2,
-		title: '添加理财用户',
+		title: '添加借贷用户',
 		shadeClose: true,
 		shade: 0.8,
 		area: ['450px', '97%'],
-		content: 'investmember!addInvestMember.do'
+		content: 'loanmember!addLoanMember.do'
 	});  
 });
 //修改
-$("#investMemeberList-update-btn").on('click',function(){
+$("#loanMemeberList-update-btn").on('click',function(){
 	//判断是否选择
 	if(!isSelectedRow()){
 		return;
@@ -241,12 +218,12 @@ $("#investMemeberList-update-btn").on('click',function(){
 		shadeClose: true,
 		shade: 0.8,
 		area: ['450px', '97%'],
-		content: "investmember!eidtInvestMember.do?id="+selectedRow.id
+		content: "loanmember!eidtLoanMember.do?id="+selectedRow.id
 	}); 
 });
 
 //删除
-$("#investMemeberList-delete-btn").on('click',function(){
+$("#loanMemeberList-delete-btn").on('click',function(){
 	//判断是否选择
 	if(!isSelectedRow()){
 		return;
@@ -264,8 +241,8 @@ $("#investMemeberList-delete-btn").on('click',function(){
 				   success: function(data){
 					 data = JSON.parse(data);
 				     if(data.result==true){
-				    	 var selectedRowIndex = $("#invest_memeber_table").datagrid('getRowIndex',selectedRow);
-				    	 $("#invest_memeber_table").datagrid('deleteRow',selectedRowIndex);
+				    	 var selectedRowIndex = $("#loan_memeber_table").datagrid('getRowIndex',selectedRow);
+				    	 $("#loan_memeber_table").datagrid('deleteRow',selectedRowIndex);
 				    	 layer.closeAll();
 				     }
 				    layer.msg(data.msg, {time: 1000});
@@ -277,7 +254,7 @@ $("#investMemeberList-delete-btn").on('click',function(){
 });
 
 //上传身份证前照
-$("#investMemeberList-upload-idcard1-btn").on('click',function(){
+$("#loanMemeberList-upload-idcard1-btn").on('click',function(){
 	//判断是否选择
 	if(!isSelectedRow()){
 		return;
@@ -289,11 +266,11 @@ $("#investMemeberList-upload-idcard1-btn").on('click',function(){
 		shade: 0.8,
 		area: ['80%', '80%'],
 		maxmin:true,
-		content: "investmember!touUpload.do?id="+selectedRow.memberInfoId+"&type=1" //1代表上传身份证前照
+		content: "loanmember!touUpload.do?id="+selectedRow.memberInfoId+"&type=1" //1代表上传身份证前照
 	});
 });
 //上传身份证前照
-$("#investMemeberList-upload-idcard2-btn").on('click',function(){
+$("#loanMemeberList-upload-idcard2-btn").on('click',function(){
 	//判断是否选择
 	if(!isSelectedRow()){
 		return;
@@ -305,12 +282,12 @@ $("#investMemeberList-upload-idcard2-btn").on('click',function(){
 		shade: 0.8,
 		maxmin:true,
 		area: ['80%', '80%'],
-		content: "investmember!touUpload.do?id="+selectedRow.memberInfoId+"&type=2" //2代表上传身份证前照
+		content: "loanmember!touUpload.do?id="+selectedRow.memberInfoId+"&type=2" //2代表上传身份证前照
 	});
 });
 
 //取消选择
-$("#investMemeberList-unselected-btn").on('click',function(){
+$("#loanMemeberList-unselected-btn").on('click',function(){
 	tableObj.datagrid("unselectAll");
 });
 
@@ -329,9 +306,9 @@ window.onresize = function(){
 };
 //改变表格宽高
 function domresize(){
-	$('#invest_memeber_table').datagrid('resize',{  
-		height:$("#invest_member_body").height()-$('#invest_member_search_area').height()-5,
-		width:$("#invest_member_body").width()
+	$('#loan_memeber_table').datagrid('resize',{  
+		height:$("#loan_member_body").height()-$('#loan_member_search_area').height()-5,
+		width:$("#loan_member_body").width()
 	});
 }
 

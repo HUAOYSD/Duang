@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicInsert;
 
 /**
@@ -28,9 +29,22 @@ public class LoanMember implements java.io.Serializable {
 
 	private String id;
 	private MemberInfo memberInfo;
+	
+	/**
+	 * 总借款
+	 */
 	private double lendMoney;
+	/**
+	 * 总还款
+	 */
 	private double backMoney;
+	/**
+	 * 剩余应还
+	 */
 	private double residueMoney;
+	/**
+	 * 总逾期
+	 */
 	private double expectMoney;
 	//private Set<Stock> stocks = new HashSet<Stock>(0);
 	private Set<LoanList> loanLists = new HashSet<LoanList>(0);
@@ -75,6 +89,7 @@ public class LoanMember implements java.io.Serializable {
 
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
 	@JoinColumn(name = "member_info_id", nullable = false)
 	public MemberInfo getMemberInfo() {
 		return this.memberInfo;

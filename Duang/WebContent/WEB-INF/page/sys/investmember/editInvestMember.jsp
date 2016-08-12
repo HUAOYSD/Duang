@@ -39,7 +39,7 @@
 		    
 		    <div>   
 		        <label for="memberInfo.sex" class="from_label">性别：</label>  
-		        <select  class="easyui-combobox" name="memberInfo.sex">   
+		        <select  class="easyui-combobox" name="memberInfo.sex" data-options="panelHeight:'auto'">   
 				    <option value="1" selected="selected">男</option>   
 				    <option value="0">女</option>
 				    <option value="2">保密</option>   
@@ -47,21 +47,21 @@
 		    </div> 
 		    <div>   
 		        <label for="memberInfo.isEliteAccount" class="from_label">是否为金账户：</label>   
-		        <select  class="easyui-combobox" name="memberInfo.isEliteAccount">   
+		        <select  class="easyui-combobox" name="memberInfo.isEliteAccount" data-options="panelHeight:'auto'">   
 				    <option value="0" selected="selected">否</option>   
 				    <option value="1">是</option>
 				</select>   
 		    </div> 
 		    <div>   
 		        <label for="memberInfo.type" class="from_label">用户类型：</label>   
-		        <select  class="easyui-combobox" name="memberInfo.type">   
+		        <select  class="easyui-combobox" name="memberInfo.type" data-options="panelHeight:'auto'">   
 				    <option value="0" selected="selected">个体用户</option>   
 				    <option value="1">企业用户</option>
 				</select>    
 		    </div> 
 		     <div>   
 		        <label for="memberInfo.level" class="from_label">级别：</label>   
-		        <select  class="easyui-combobox" name="memberInfo.level">   
+		        <select  class="easyui-combobox" name="memberInfo.level" data-options="panelHeight:'auto'">   
 				    <option value="1" selected="selected">1</option>   
 				    <option value="2">2</option>
 				    <option value="3">3</option>
@@ -104,7 +104,7 @@
 		    </div>
 		    <div>   
 		        <label for="registerStyle" class="from_label">注册方式：</label>   
-		       	<select  class="easyui-combobox" name="registerStyle">   
+		       	<select  class="easyui-combobox" name="registerStyle" data-options="panelHeight:'auto'">   
 				    <option value="1">线下</option>   
 				    <option value="2">Android</option>
 				    <option value="3">IOS</option>
@@ -113,16 +113,17 @@
 		    </div>
 		    <div>   
 		        <label for="isContract" class="from_label">契约用户：</label>   
-		       	<select  class="easyui-combobox" name="isContract">   
+		       	<select  class="easyui-combobox" name="isContract" data-options="panelHeight:'auto'">   
 				    <option value="0">否</option>   
 				    <option value="1">是</option>
 				</select> 
 		    </div>
-		    <div>   
+		    <div style="">   
 		        <label for="customerManager.id" class="from_label">客户经理姓名：</label>   
 		       	<input class="easyui-combobox" name="customerManager.id" id="editInvestMember_customerManagerId" data-options="    
 				        valueField: 'id',    
 				        textField: 'name',
+				        panelHeight:'auto',
 				        editable:false,
 				        panelHeight:'auto',
 				        url: 'customermanager!queryAllCusManagerIdAndName.do',

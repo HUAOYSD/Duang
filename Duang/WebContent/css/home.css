@@ -1,7 +1,6 @@
 ﻿/*
 	@eric
 */
- 
 body {
 	background: #D2E0F2;
 }
@@ -26,6 +25,7 @@ textarea {
 input[readonly] {
 	background-color: #EBEBE4;
 }
+
 .radio {
 	margin: 0;
 	padding: 0;
@@ -33,10 +33,12 @@ input[readonly] {
 	height: 14px;
 	border: 0px;
 }
+
 a {
 	color: Black;
 	text-decoration: none;
 }
+
 a:hover {
 	color: Red;
 	text-decoration: underline;
@@ -47,26 +49,31 @@ a:hover {
 	padding: 3px;
 	overflow: hidden;
 }
+
 .body {
 	border: 0;
 	padding: 3px;
 	overflow: hidden;
 }
+
 #invest_member_body {
 	border: 0;
 	padding: 3px;
 	overflow: hidden;
 }
+
 #search_area {
 	margin-bottom: 3px;
 	border: 1px solid #99BBE8;
 	background-color: #EFEFEF;
 }
+
 .search_area {
 	margin-bottom: 3px;
 	border: 1px solid #99BBE8;
 	background-color: #EFEFEF;
 }
+
 .openOrClose {
 	display: block;
 	cursor: pointer;
@@ -78,6 +85,7 @@ a:hover {
 	overflow: hidden;
 	text-indent: -999px;
 }
+
 #openOrClose {
 	display: block;
 	cursor: pointer;
@@ -89,6 +97,7 @@ a:hover {
 	overflow: hidden;
 	text-indent: -999px;
 }
+
 .footer {
 	text-align: center;
 	color: #15428B;
@@ -98,17 +107,17 @@ a:hover {
 	font-weight: bold;
 }
 
-
 .windowButton {
 	text-align: right;
 	position: absolute;
 	bottom: 10px;
 	right: 7px;
 }
+
 .showWindowButton {
-	display:block;
-	width:100%;
-	border:0px solid red;
+	display: block;
+	width: 100%;
+	border: 0px solid red;
 	text-align: center;
 	height: auto;
 	line-height: 30px;
@@ -117,10 +126,12 @@ a:hover {
 	/*right: 7px;*/
 	margin: 0 auto;
 }
+
 .showDetail {
 	color: blue;
 	text-decoration: underline;
 }
+
 .clearable {
 	background-color: #EBEBE4;
 }
@@ -130,128 +141,152 @@ a:hover {
 	border: 1px solid #ccc !important;
 	padding: 0 5px 0 0 !important;
 }
+
 .my-search-button {
 	margin-right: 3px;
 	border: 1px solid #ccc !important;
 	padding: 0 5px 0 0 !important;
-	background: url('../images/button_plain_hover.png') repeat-x !important; 
+	background: url('../images/button_plain_hover.png') repeat-x !important;
 }
 
 .x {
 	color: #FF0000;
 }
+
 #parent_win {
-	display:block;
-	overflow:hidden;
+	display: block;
+	overflow: hidden;
 }
+
 .northTitle {
-	font-family:'微软雅黑';
-	font-size:24px;
-	font-weight:bold;
-	height:60px;
-	line-height:40px;
+	font-family: '微软雅黑';
+	font-size: 24px;
+	font-weight: bold;
+	height: 60px;
+	line-height: 40px;
 }
+
 .loginInfo {
-	border:0px solid red;
-	display:block;
-	position:absolute;
-	bottom:5px;
-	right:10px;
+	border: 0px solid red;
+	display: block;
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
 }
-#sysVersion{
-	border:0px solid red;
-	height:25px;
-	overflow:hidden;
-	position:absolute;
-	left:10px;
-	text-align:center;
-	align:center;
+
+#sysVersion {
+	border: 0px solid red;
+	height: 25px;
+	overflow: hidden;
+	position: absolute;
+	left: 10px;
+	text-align: center;
+	align: center;
 }
-#nowTime{
-	border:0px solid red;
-	height:25px;
-	width:200px;
-	text-align:left;
-	overflow:hidden;
-	position:absolute;
-	right:10px;
+
+#nowTime {
+	border: 0px solid red;
+	height: 25px;
+	width: 200px;
+	text-align: left;
+	overflow: hidden;
+	position: absolute;
+	right: 10px;
 }
-#conditon{
-	overflow:hidden;
+
+#conditon {
+	overflow: hidden;
 }
-.conditon{
-	overflow:hidden;
+
+.conditon {
+	overflow: hidden;
 }
+
 .icon {
-    padding-left: 18px;
-    display: inline-block;
-    line-height: 18px;
+	padding-left: 18px;
+	display: inline-block;
+	line-height: 18px;
 }
-#dataCharts{
-	margin-top:80px;
+
+#dataCharts {
+	margin-top: 80px;
 }
-.investPro-search{
-	font-family:"Microsoft YaHei";
+
+.investPro-search {
+	font-family: "Microsoft YaHei";
 	font-size: 13px;
 }
-#conditon{
-	margin-top:10px;
-	margin-left:20px;
-}
-.conditon{
-	margin-top:10px;
-	margin-left:20px;
-}
-#investPro_add_contans{
-	padding:10px;
-	font-family:"Microsoft YaHei";
-	font-size:13px;
-}
-.content{
-	padding:10px;
-	font-family:"Microsoft YaHei";
-	font-size:13px;
+
+#conditon {
+	margin-top: 10px;
+	margin-left: 20px;
 }
 
-.content form div{
-	margin-top:10px;
-}
-.content form div input,.content form div select{
-	width:150px;
-	height:30px;
+.conditon {
+	margin-top: 10px;
+	margin-left: 20px;
 }
 
-#investPro_add_contans #investProSaveForm div{
-	margin-top:10px;
-}
-#investPro_add_contans #investProSaveForm div input,#investPro_add_contans #investProSaveForm div select{
-	width:200px;
-	height:30px;
-}
-#investPro_add_contans #investProEditForm div{
-	margin-top:10px;
-}
-#investPro_add_contans #investProEditForm div input,#investPro_add_contans #investProEditForm div select{
-	width:200px;
-	height:30px;
-}
-#body_add_investpro .combo-p .combo-panel{
-	height:40px;
-}
-.bodyContent .combo-p .combo-panel{
-	height:40px;
+#investPro_add_contans {
+	padding: 10px;
+	font-family: "Microsoft YaHei";
+	font-size: 13px;
 }
 
-.investPro_add_from_label{
-	display:inline-block;
-	width:100px;
-	text-align:right;
+.content {
+	padding: 10px;
+	font-family: "Microsoft YaHei";
+	font-size: 13px;
+	margin-bottom:50px;
 }
 
-.from_label{
-	display:inline-block;
-	width:100px;
-	text-align:right;
+.content form div {
+	margin-top: 10px;
+}
+
+.content form div input,.content form div select {
+	width: 150px;
+	height: 30px;
+}
+
+#investPro_add_contans #investProSaveForm div {
+	margin-top: 10px;
+}
+
+#investPro_add_contans #investProSaveForm div input,#investPro_add_contans #investProSaveForm div select
+	{
+	width: 200px;
+	height: 30px;
+}
+
+#investPro_add_contans #investProEditForm div {
+	margin-top: 10px;
+}
+
+#investPro_add_contans #investProEditForm div input,#investPro_add_contans #investProEditForm div select
+	{
+	width: 200px;
+	height: 30px;
+}
+
+#body_add_investpro .combo-p .combo-panel {
+	height: 40px;
+}
+
+.bodyContent .combo-p .combo-panel {
+	height: 40px;
+}
+
+.investPro_add_from_label {
+	display: inline-block;
+	width: 100px;
+	text-align: right;
+}
+
+.from_label {
+	display: inline-block;
+	width: 100px;
+	text-align: right;
 }
 
 #footer-oper{
@@ -259,37 +294,53 @@ a:hover {
 	width:100%;
 	height:50px;
     clear:both;    
+} 
+.footer-oper {
+	z-index: 999;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	_position: absolute;
+	_top: expression_r(documentElement.scrollTop +  
+		documentElement.clientHeight-this.offsetHeight);
+	overflow: visible;
 }
 
-#footer-oper #content-oper{
-	padding-top:10px;
+#footer-oper #content-oper {
+	padding-top: 10px;
 }
-
+/* 
 .footer-oper{
 	background-color:#f2f2f2;
 	width:100%;
 	height:50px;
     clear:both;    
-}
-.footer-oper .content-oper{
-	padding-top:10px;
-}
-#investProManage-update-btn,#investProManage-delete-btn{
+} */
+.footer-oper .content-oper {
+	padding-top: 10px;
 }
 
-.contans .form div{
-	margin-top:10px;
+#investProManage-update-btn,#investProManage-delete-btn {
+	
 }
-.contans .form div input, .contans .form div select{
-	width:200px;
-	height:30px;
+
+.contans .form div {
+	margin-top: 10px;
 }
-.contans .form div label{
-	width:100px;
-	height:30px;
+
+.contans .form div input,.contans .form div select {
+	width: 200px;
+	height: 30px;
 }
-.contans{
-	padding:10px;
-	font-family:"Microsoft YaHei";
-	font-size:13px;
+
+.contans .form div label {
+	width: 100px;
+	height: 30px;
+}
+
+.contans {
+	padding: 10px;
+	font-family: "Microsoft YaHei";
+	font-size: 13px;
 }

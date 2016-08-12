@@ -33,7 +33,7 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	}
 
 	public InvestMemberServiceImpl(){
-		LoggerUtils.info("注入SysInvestMemberServiceImpl服务层", this.getClass());
+		LoggerUtils.info("注入InvestMemberServiceImpl服务层", this.getClass());
 	}
 	
 	/**

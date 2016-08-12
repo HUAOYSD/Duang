@@ -1,7 +1,15 @@
 package org.duang.action.sys;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.annotation.Resource;
+
+import net.sf.json.JSONArray;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -10,12 +18,16 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
-import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.entity.InvestMember;
+import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.IDCard;
+import org.duang.enums.If;
 import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
+import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -32,7 +44,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value="memberinfo")
 @ParentPackage("sys")
 @Results(value={
-		@Result(name=ResultPath.LIST, type="dispatcher", location="WEB-INF/page/sys/investmember/investMemberList.jsp"),
+		@Result(name="memberInfoList", type="dispatcher", location="WEB-INF/page/sys/memberinfo/memberInfoList.jsp"),
+		@Result(name="uploadMemberInfoImg", type="dispatcher", location="WEB-INF/page/sys/memberinfo/uploadMemberInfoImg.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
 })
 public class MemberInfoAction extends BaseAction<MemberInfo>{
@@ -45,6 +58,120 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 	@Resource(name="sysmemberinfoserviceimpl")
 	public void setService(MemberInfoService sysMemberInfoService) {
 		this.sysMemberInfoService = sysMemberInfoService;
+	}
+	
+	/**
+	 * 页面跳转 ---客户管理页面
+	 * @Title: gotoMemberInfoList   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年8月11日 下午3:37:56
+	 * @return: String      
+	 * @throws
+	 */
+	public String gotoMemberInfoList(){
+		return "memberInfoList";
+	}
+	
+	public void queryAllMember() {
+		try {
+			condsUtils.addProperties(false, "isdelete");
+			condsUtils.addValues(false, "0");
+			List<MemberInfo> list = sysMemberInfoService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+			int count = sysMemberInfoService.count(condsUtils.getPropertys(), condsUtils.getValues());
+			if (list != null && list.size() > 0) {
+				jsonObject.put("result", true);
+				jsonObject.put("rows", fillDataObjectArray(list));
+				jsonObject.put("total", count);
+			} else {
+				jsonObject.put("rows", new JSONArray());
+				jsonObject.put("total", 0);
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "没有符合条件的数据！");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("客户管理ACTION查询错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("客户管理ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
+		} finally {
+			printJsonResult();
+		}
+	}
+	
+	/**
+	 * 封装客户信息（理财客户、借贷客户）
+	 * @Title: fillDataObjectArray   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param list
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年8月11日 下午3:54:10
+	 * @return: List<Map<String,Object>>      
+	 * @throws
+	 */
+	private List<Map<String, Object>> fillDataObjectArray(List<MemberInfo> list) {
+		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+		try {
+			for (MemberInfo memberInfo : list) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				//客户的基本信息
+				map.put("id", memberInfo.getId());
+				map.put("loginName", memberInfo.getLoginName());
+				map.put("realName", memberInfo.getRealName());
+				map.put("nickname", memberInfo.getNickname());
+				map.put("email", memberInfo.getEmail());
+				map.put("age", memberInfo.getAge());
+				map.put("sex", memberInfo.getSex());
+				map.put("phone", memberInfo.getPhone());
+				map.put("isDelete", memberInfo.getIsdelete());
+				map.put("createTime", DateUtils.getTimeStamp(memberInfo.getCreateTime()));
+				map.put("modifyTime", DateUtils.getTimeStamp(memberInfo.getModifyTime()));
+				map.put("createuser", memberInfo.getCreateuser());
+				map.put("modifyuser", memberInfo.getModifyuser());
+				map.put("userImg", memberInfo.getUserImg());
+				map.put("isEliteAccount", memberInfo.getIsEliteAccount());
+				map.put("type", memberInfo.getType());
+				map.put("level", memberInfo.getLevel());
+				map.put("price", memberInfo.getPrice());
+				map.put("password", memberInfo.getPassword());
+				map.put("payPassword", memberInfo.getPayPassword());
+				map.put("handPassword", memberInfo.getHandPassword());
+				map.put("isFreeze", memberInfo.getIsFreeze());
+				map.put("idCard", memberInfo.getIdCard());
+				map.put("miDescribe", memberInfo.getMiDescribe());
+				map.put("idCardImg1", memberInfo.getIdCardImg1());
+				map.put("idCardImg2", memberInfo.getIdCardImg2());
+				map.put("myQr", memberInfo.getMyQr());
+				//封装理财用户信息
+				Set<InvestMember> investMembers =  memberInfo.getInvestMembers();
+				for(InvestMember investMember : investMembers){
+					map.put("investMember_id", investMember.getId());
+					map.put("isContract", investMember.getIsContract());
+					map.put("balance", investMember.getBalance());
+					map.put("investing", investMember.getInvesting());
+					map.put("totalIncome", investMember.getInvesting());
+					map.put("totalMoney", investMember.getTotalMoney());
+					map.put("useableScore", investMember.getUseableScore());
+					map.put("registerStyle", investMember.getRegisterStyle());
+				}
+				//封装借贷客户信息
+				Set<LoanMember> loanMembers =  memberInfo.getLoanMembers();
+				for(LoanMember loanMember : loanMembers){
+					map.put("loanMember_id", loanMember.getId());
+					map.put("backMoney", loanMember.getBackMoney());
+					map.put("expectMoney", loanMember.getExpectMoney());
+					map.put("lendMoney", loanMember.getLendMoney());
+					map.put("residueMoney", loanMember.getResidueMoney());
+				}
+				listMap.add(map);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("封装理财用户错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("封装理财用户错误：" + e.getLocalizedMessage(), this.getClass());
+		}
+		return listMap;
 	}
 	
 	/**
@@ -104,4 +231,117 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 			}
 		}
 	}
+	
+	/**
+	 * 跳转到客户图片的页面
+	 * 
+	 * @Title: touUpload
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param: @return
+	 * @author LiYonghui
+	 * @date 2016年8月11日 下午16:18:08
+	 * @return: String
+	 * @throws
+	 */
+	public String gotoUploadImg() {
+		try{
+			String type =  getRequest().getParameter("type");
+			getRequest().setAttribute("type", getRequest().getParameter("type"));
+			MemberInfo memberInfo = sysMemberInfoService.findById(entity.getId());
+			getRequest().setAttribute("memberInfo", memberInfo);
+			//返回身份证前照和后照的具体路径
+			if(IDCard.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
+			}else if(IDCard.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
+			}else {
+				getRequest().setAttribute("path", "");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("跳转到上传文件页面错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("跳转到上传文件页面错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
+		return "uploadMemberInfoImg";
+	}
+	
+	/**
+	 * 仅仅展示上传的图片，不能上传图片
+	 * @Title: showUserImage
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param: @return
+	 * @author LiYonghui
+	 * @date 2016年8月11日 下午16:18:08
+	 * @return: String
+	 * @throws
+	 */
+	public String showMemberInfoImage() {
+		try{
+			String type =  getRequest().getParameter("type");
+			getRequest().setAttribute("type", getRequest().getParameter("type"));
+			getRequest().setAttribute("only_show",If.If1.getVal());
+			MemberInfo memberInfo = sysMemberInfoService.findById(entity.getId());
+			getRequest().setAttribute("memberInfo", memberInfo);
+			//返回身份证前照和后照的具体路径
+			if(IDCard.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
+			}else if(IDCard.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
+				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
+			}else {
+				getRequest().setAttribute("path", "");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("跳转到上传文件页面错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("跳转到上传文件页面错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
+		return "uploadMemberInfoImg";
+	}
+	
+	
+	/**
+	 * 根据条件查询客户
+	 * @Title: queryInvestMember
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param:
+	 * @author LiYonghui
+	 * @date 2016年8月11日 下午2:27:37
+	 * @return: void
+	 * @throws
+	 */
+	public void queryMemberInfoByParameter() {
+		try {
+			if (DataUtils.notEmpty(entity.getLoginName())) {
+				condsUtils.addProperties(false, "loginName");
+				condsUtils.concatValue(new String[] { entity.getLoginName(), "like" });
+			}
+			if (DataUtils.notEmpty(entity.getRealName())) {
+				condsUtils.addProperties(false, "realName");
+				condsUtils.concatValue(new String[] { entity.getRealName(), "like" });
+			}
+			if (DataUtils.notEmpty(entity.getPhone())) {
+				condsUtils.addProperties(false, "phone");
+				condsUtils.concatValue(new String[] { entity.getPhone(), "like" });
+			}
+			List<MemberInfo> list = sysMemberInfoService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+			int count = sysMemberInfoService.count(condsUtils.getPropertys(), condsUtils.getValues());
+			if (list != null && list.size() > 0) {
+				jsonObject.put("result", true);
+				jsonObject.put("rows", fillDataObjectArray(list));
+				jsonObject.put("total", count);
+			} else {
+				jsonObject.put("rows", new JSONArray());
+				jsonObject.put("total", 0);
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "没有符合条件的数据！");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("客户ACTION查询错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("客户ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
+		} finally {
+			printJsonResult();
+		}
+	}
+	
 }	

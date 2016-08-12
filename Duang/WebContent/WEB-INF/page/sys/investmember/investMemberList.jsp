@@ -10,29 +10,27 @@
 				  <table border="0">
 					<tr height="35px">
 					  	<td>&nbsp;&nbsp;<span class="investPro-search">登录名：</span></td>
-					  	<td ><input  name="memberInfo.name"/></td>
+					  	<td ><input  name="memberInfo.loginName"/></td>
 					 	<td>&nbsp;<span class="investPro-search">真实姓名：</span></td>
 					  	<td><input  name="memberInfo.realName"/></td>
 					  	<td>&nbsp;<span class="investPro-search">手机号码：</span></td>
 					  	<td><input  name="memberInfo.phone"/></td>
-					  	<td>&nbsp;<span class="investPro-search">客户经理ID：</span></td>
-					  	<td><input  name="custManagerId"/></td>
 					</tr>
 					<tr height="35px">
 						<td>&nbsp;&nbsp;<span class="investPro-search">客户经理姓名：</span></td>
 					  	<td><input  name="managerName"/></td>
 					  	<td>&nbsp;<span class="investPro-search">客户类型：</span></td>
 					  	<td>
-					  		<select  class="easyui-combobox" name="memberInfo.type">   
-							    <option value="noSelected" selected="selected">--请选择--</option>   
+					  		<select  class="easyui-combobox" name="memberInfo.type" data-options="panelHeight:'auto'">   
+							    <option value="-1" selected="selected">--请选择--</option>   
 							    <option value="0">个体用户</option>   
 				    			<option value="1">企业用户</option>
 							</select> 
 					  	</td>
 					  	<td>&nbsp;<span class="investPro-search">契约用户：</span></td>
 					  	<td>
-						       	<select  class="easyui-combobox" name="isContract">
-						       		<option value="noSelected" selected="selected">--请选择--</option>    
+						       	<select  class="easyui-combobox" name="isContract" data-options="panelHeight:'auto'">
+						       		<option value="-1" selected="selected">--请选择--</option>    
 								    <option value="0">否</option>   
 								    <option value="1">是</option>
 								</select> 
