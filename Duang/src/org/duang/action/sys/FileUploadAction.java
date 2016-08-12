@@ -20,7 +20,6 @@ import org.duang.entity.MemberInfo;
 import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
-import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -180,7 +179,7 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 	 * @date 2016年8月9日 上午10:11:16
 	 * @return: boolean
 	 * @throws
-	 */
+	 *//*
 	private boolean reSetFilePathByTime() {
 		boolean result = false;
 		try {
@@ -196,7 +195,7 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 		}
 		return result;
 	}
-
+	  */
 	/**
 	 * 上传文件
 	 * 

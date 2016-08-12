@@ -20,7 +20,6 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.SessionTools;
-import org.duang.entity.CustomerManager;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.IDCard;
