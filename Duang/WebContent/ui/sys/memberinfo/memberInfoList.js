@@ -298,7 +298,7 @@ $("#memberInfoList-sereach-loanMember-btn").on('click',function(){
           if(data.result==true){
         	  indexLayer = layer.open({
         			type: 2,
-        			title: '理财信息',
+        			title: '借贷信息',
         			shadeClose: true,
         			shade: 0.8,
         			maxmin:true,
