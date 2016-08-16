@@ -15,8 +15,10 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.entity.BindCard;
 import org.duang.entity.FileUpload;
 import org.duang.entity.MemberInfo;
+import org.duang.service.BindCardService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
@@ -49,6 +51,15 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 		this.sysMemberInfoService = sysMemberInfoService;
 	}
 
+	/**
+	 * 绑定银行卡
+	 */
+	private BindCardService bindCardService;
+	@Resource(name = "bindcardserviceimpl")
+	public void setService(BindCardService bindCardService) {
+		this.bindCardService = bindCardService;
+	}
+	
 	/**
 	 * 上传用户图像或者身份证照片
 	 * 
@@ -107,6 +118,61 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 		}
 	}
 
+	/**
+	 * 上传绑定银行卡号前后照
+	 * 
+	 * @Title: uploadBindCardImg
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param:
+	 * @author LiYonghui
+	 * @date 2016年8月15日 上午8:43:24
+	 * @return: void
+	 * @throws
+	 */
+	public void uploadBindCardImg() {
+		try {
+			String userId = getRequest().getParameter("id");
+			String deleteFilePath = null;
+			if (DataUtils.notEmpty(userId)) {
+				String type = getRequest().getParameter("type");
+				// 1.获取文件名称
+				reSetFileName();
+				// 2.获取路径
+				String exPath = null;
+				BindCard bindCard = bindCardService.findById(userId);
+				if (ConstantCode.upload_user_idcard_1.equals(type)) {
+					exPath = userId+"\\bindcard";
+					deleteFilePath = bindCard.getPhotoImg1();
+					bindCard.setPhotoImg1(entity.getNewFileName());
+				} else if (ConstantCode.upload_user_idcard_2.equals(type)) {
+					exPath = userId+"\\bindcard";
+					deleteFilePath = bindCard.getPhotoImg2();
+					bindCard.setPhotoImg2(entity.getNewFileName());
+				}
+				reSetFilePathByUserId(exPath);
+				boolean result = bindCardService.updateEntity(bindCard);
+				if (result) {
+					result = upload();
+					jsonObject.put("result", true);
+					jsonObject.put("msg", "上传成功！");
+					if (DataUtils.notEmpty(deleteFilePath)) {
+						//上传成功，则需要删除源文件
+						deleteFile(deleteFilePath);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("上传绑定银行前后照错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("上传绑定银行前后照错误：" + e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("result", false);
+			jsonObject.put("msg", "上传失败！");
+		} finally {
+			printJsonResult();
+		}
+	}
+	
+	
 	/**
 	 * 重新命名文件名称,防止上传文件重名现象
 	 * 
