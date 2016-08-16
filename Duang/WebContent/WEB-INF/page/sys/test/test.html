@@ -1,242 +1,391 @@
 
+
+
+
+
 <html>
+
+
+
+
 <head>
+
+
+
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+
 <link href=resources/images/theme-blue/css/acfstyle_blue.css rel="stylesheet" type="text/css">
 <link href=resources/style/application.css rel="stylesheet" type="text/css">
-<style type="text/css">
-</style>
+
 <script type ="text/javascript" src ="resources/scripts/prototype.js"></script>
 <script type ="text/javascript" src ="resources/scripts/mammothajax.js"></script>
 <script type ="text/javascript" src ="resources/scripts/jquery.js"></script>
-<script type ="text/javascript" src ="resources/scripts/verify.js"></script>
+<script type="text/javascript">
+function chushiBlur(obj){
+	if(obj.value == null || $.trim(obj.value).length == 0){
+	    return;
+	}else if(isNaN(obj.value) || parseFloat(obj.value).toFixed(2)<0){
+		obj.value = 0;
+		alert("输入分数错误");
+	}else{
+		if(parseFloat(obj.value).toFixed(2)>10){
+			obj.value = 0;
+			alert("输入分数值超出范围");
+		}
+		var chushis = $("[diyTay='chushi']");
+		var total = 0;
+		$.each(chushis,function(i,n){
+			 var temp = n.value;
+			 if(temp != null && $.trim(temp).length>0){
+					total += parseFloat(temp);
+			 }
+		});
+		$($("[diyTay='chushiheji']")[0]).val(total);
+	}
+}
+
+function fushiBlur(obj){
+	if(obj.value == null || $.trim(obj.value).length == 0){
+	    return;
+	}else if(isNaN(obj.value) || parseFloat(obj.value).toFixed(2)<0){
+		obj.value = 0;
+		alert("输入分数错误");
+	}else{
+		if(parseFloat(obj.value).toFixed(2)>10){
+			obj.value = 0;
+			alert("输入分数值超出范围");
+		}
+		var fushis = $("[diyTay='fushi']");
+		var total = 0;
+		$.each(fushis,function(i,n){
+			 var temp = n.value;
+			 if(temp != null && $.trim(temp).length>0){
+					total += parseFloat(temp);
+			 }
+		});
+		$($("[diyTay='fushiheji']")[0]).val(total);
+	}
+}
+
+
+function zhongshiBlur(obj){
+	if(obj.value == null || $.trim(obj.value).length == 0){
+	    return;
+	}else if(isNaN(obj.value) || parseFloat(obj.value).toFixed(2)<0){
+		obj.value = 0;
+		alert("输入分数错误");
+	}else{
+		if(parseFloat(obj.value).toFixed(2)>10){
+			obj.value = 0;
+			alert("输入分数值超出范围");
+		}
+		var zhongshis = $("[diyTay='zhongshi']");
+		var total = 0;
+		$.each(zhongshis,function(i,n){
+			 var temp = n.value;
+			 if(temp != null && $.trim(temp).length>0){
+					total += parseFloat(temp);
+			 }
+		});
+		$($("[diyTay='zhongshiheji']")[0]).val(total);
+	}
+}
+</script>
+
+<STYLE type=text/css>
+BODY {FONT-SIZE: 14px; FONT-FAMILY: "宋体"}
+OL LI { MARGIN: 8px}
+#con { FONT-SIZE: 12px; MARGIN: 0px auto; WIDTH: 1600px}
+#tags { PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px 0px 0px 10px; WIDTH: 400px; PADDING-
+TOP: 0px; HEIGHT: 23px}
+#tags LI {BACKGROUND: url(images/tagleft.gif) no-repeat left bottom; FLOAT: left; MARGIN-RIGHT: 1px; LIST-STYLE-TYPE:
+none; HEIGHT: 23px}
+#tags LI A {PADDING-RIGHT: 10px; PADDING-LEFT: 10px; BACKGROUND: url(images/tagright.gif) no-repeat right bottom;
+FLOAT: left; PADDING-BOTTOM: 0px; COLOR: #999; LINE-HEIGHT: 23px; PADDING-TOP: 0px; HEIGHT: 23px; TEXT-DECORATION:
+none}
+#tags LI.emptyTag {BACKGROUND: none transparent scroll repeat 0% 0%; WIDTH: 4px}
+#tags LI.selectTag {BACKGROUND-POSITION: left top; MARGIN-BOTTOM: -2px; POSITION: relative; HEIGHT: 25px}
+#tags LI.selectTag A {BACKGROUND-POSITION: right top; COLOR: #000; LINE-HEIGHT: 25px; HEIGHT: 25px}
+#tagContent { PADDING-RIGHT: 1px; BORDER: #aecbd4 0px solid; PADDING-LEFT: 1px; PADDING-BOTTOM: 1px;  PADDING-TOP:
+1px;  BACKGROUND-COLOR: #fff}
+.tagContent {PADDING-RIGHT: 10px; DISPLAY: none; PADDING-LEFT: 10px; BACKGROUND: url(resources/images/tabs/tableftF.gif) repeat-x;
+PADDING-BOTTOM: 10px; WIDTH:98%; COLOR: #474747; PADDING-TOP: 10px; HEIGHT: 250px}
+#tagContent DIV.selectTag {DISPLAY: block}
+</STYLE>
 
 <title>无标题文档</title>
 
-<script language="javascript">
-</script>
 
 </head>
 
 
+
+
 <body>
+
+
 <form  method="post" name="form1">
-<table border="0" cellpadding="0" cellspacing="0">
-	<tr>
-	 <td align="left">
-	  	<img name="ELE_OUTCLASS" ursacode="536743935015302" width="200" height="25">
-	 </td>
-	</tr>
+
+<table width="98%" border="0" cellpadding="0" cellspacing="0" >
+<img name="ELE_OUTCLASS" ursacode="539348624923702" width="200" height="25">
 </table>
+<table width="98%" border="0" cellpadding="0" cellspacing="0" >
+			<tr><td>
 
-	
-<table class="D_FORM_TB">
+<DIV id=con>
+<UL id=tags>
+    <LI class=selectTag><A onclick="selectTag('tagContent0',this)" href="javascript:void(0)">面试评价表</A> </LI>
+  <LI><A onclick="selectTag('tagContent1',this)" href="javascript:void(0)">入职审批表</A> </LI>
+  
+ 
+    </ul>
+</div>
 
+			</td></tr>
+		</table>
+
+<DIV id="tagContent">
+<DIV class="tagContent selectTag" id="tagContent0">
+<center><h3>面试评价表</h3></center>
+<table class="D_FORM_TB" id="mspj" width="98%">
 <tr>
-  <td width="20%">部    门:</td>
-  <td width="30%"><img name="署部门名称域" ursacode="536744235216202" width="200" height="25"></td>
-  <td width="20%">调休人:</td>
-  <td width="30%"><img name="签名域" ursacode="536744235316402" width="200" height="25"></td>
+<td width="16%" style="text-align:center">应聘人姓名</td>
+<td width="16%" style="text-align:left">
+<input name="539348524823302" ursacode="539348524823302"></td>
+<td width="16%" style="text-align:center">应聘公司</td>
+<td width="16%" style="text-align:left">
+<input name="539342719056902" ursacode="539342719056902"></td>
+<td width="16%" style="text-align:center">应聘岗位</td>
+<td width="16%" style="text-align:left">
+<input name="539342719158302" ursacode="539342719158302">
+</td>
+</tr>
+<tr>
+<td style="text-align:center" rowspan="2">评价方向</td>
+<td style="text-align:center" colspan="2" rowspan="2">评价要素</td>	
+<td style="text-align:center" colspan="3">评价得分</td>	
+</tr>
+<tr>
+<td style="text-align:center">初试</td>
+<td style="text-align:center">复试</td>	
+<td style="text-align:center">终试</td>	
+</tr>
+<tr>
+<td style="text-align:center" rowspan="10">专业能力及综合素质</td>
+<td style="text-align:left" colspan="2">一、仪容（包括礼貌态度及衣着整洁等印象）（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539342919258802" ursacode="539342919258802" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);"  name="539343419360302" ursacode="539343419360302"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);"  name="539343619460702" ursacode="539343619460702"></td>
+</tr>
+<tr>
+<td style="text-align:left" colspan="2">二、健康及精神（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539343619560902" ursacode="539343619560902" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);"  name="539343619661102" ursacode="539343619661102"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);"   name="539343719761302" ursacode="539343719761302"></td>
+</tr>
+<tr>
+<td style="text-align:left" colspan="2">三、口齿清楚程度（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539343719861602" ursacode="539343719861602" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);"  name="539343819962002" ursacode="539343819962002"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);"  name="539343920062302" ursacode="539343920062302"></td>
+</tr>
+<tr>
+<td style="text-align:left" colspan="2">四、表达能力程度（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539344020162702" ursacode="539344020162702" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);"   name="539344120363102" ursacode="539344120363102"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);" name="539344120463302" ursacode="539344120463302"></td>
+</tr>
+<tr>
+<td style="text-align:left" colspan="2">五、机智敏捷程度（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539344320564202" ursacode="539344320564202" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);"  name="539344420664502" ursacode="539344420664502"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);"  name="539344420764702" ursacode="539344420764702"></td>
+</tr>
+<tr>
+<td style="text-align:left" colspan="2">六、情绪稳定与自信（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539344520965102" ursacode="539344520965102" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);"  name="539344521065502" ursacode="539344521065502"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);"  name="539344821166002" ursacode="539344821166002"></td>
+</tr>
+<tr>
+<td style="text-align:left" colspan="2">七、对本公司了解程度（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539344921368202" ursacode="539344921368202" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);"  name="539344921468602" ursacode="539344921468602"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);"  name="539345021669202" ursacode="539345021669202"></td>
+</tr>
+<tr>
+<td style="text-align:left" colspan="2">八、对专业知识了解程度（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539345121769602" ursacode="539345121769602" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);" name="539345221970002" ursacode="539345221970002"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);"  name="539345322070302" ursacode="539345322070302"></td>
+</tr>
+<tr>
+<td style="text-align:left" colspan="2">九、具有经验与工作中能够配合程度（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539345522270702" ursacode="539345522270702" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);"  name="539345522371002" ursacode="539345522371002"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);"  name="539345622471202" ursacode="539345622471202"></td>
+</tr>
+<tr>
+<td style="text-align:left" colspan="2">十、对公司服务意识（10分）</td>
+<td style="text-align:center"><input diyTay="chushi" onchange="javascript:chushiBlur(this);" name="539345622571402" ursacode="539345622571402" ></td>
+<td style="text-align:center"><input diyTay="fushi" onchange="javascript:fushiBlur(this);"   name="539345622671602" ursacode="539345622671602"></td>	
+<td style="text-align:center"><input diyTay="zhongshi" onchange="javascript:zhongshiBlur(this);"   name="539345722771802" ursacode="539345722771802"></td>
+</tr>
+<tr>
+<td style="text-align:center" colspan="3">合计</td>
+<td style="text-align:center"><input diyTay="chushiheji" name="539345922972402" ursacode="539345922972402" readonly></td>
+<td style="text-align:center"><input diyTay="fushiheji"  name="539346023072702" ursacode="539346023072702" readonly></td>	
+<td style="text-align:center"><input diyTay="zhongshiheji"  name="539346223173102" ursacode="539346223173102" readonly></td>
+</tr>
+<tr>
+<td style="text-align:center">附件</td>
+<td colspan="5"><img name="上传附件" height="40" ursacode="539348424723102"></td>
+</tr>
+<tr>
+<td style="text-align:center">初试意见</td>
+<td colspan="5"><div  hrshow='hrshow' style="display: none;">1.建议合同工资试用期<input name="539346223273302" ursacode="539346223273302">元  转正<input name="539346323373702" ursacode="539346323373702">元；<br/>
+2.建议职位工作报销试用期<input name="539346923474002" ursacode="539346923474002">元  转正<input name="539347023574302" ursacode="539347023574302">元；<br/>
+3.试用提成或浮动绩效<input name="611363088099502" ursacode="611363088099502">元  转正<input name="611363188199702" ursacode="611363188199702">元；（浮动额度按公司薪酬方案执行）<br/>
+4.建议应征者于<img name="时间域" ursacode="539347123674702" width="200" height="25">报到。<br/>
+</div>
+<img name="签署意见元素,mammoth版"  ursacode="539347223775002" width="200" height="25"></td>
 </tr>
 
 
 <tr>
-  <td width="20%">开始时间:</td>
-  <td width="30%"><img name="时间域" ursacode="536744335416602" width="200" height="25" onblur="javascript:doSet();"></td>
-  <td width="20%">结束时间:</td>
-  <td width="30%"><img name="时间域" ursacode="536744335516802" width="200" height="25" onblur="javascript:doSet();"></td>
+<td style="text-align:center">人力资源部意见</td>
+<td colspan="5"><input type="radio" name="539347523975802" ursacode="539347523975802" value="单选框元素"><br/>
+
+<img name="签署意见元素,mammoth版" ursacode="539348124277302" width="200" height="25"></td>
 </tr>
-
-
 <tr>
-  <td width="20%">调休原由:</td>
-  <td colspan="3"><textarea name="536744435617002" ursacode="536744435617002" style="width: 98%;"></textarea></td>
+<td style="text-align:center">副总裁意见</td>
+<td colspan="5"><input type="radio" name="539347924076402" ursacode="539347924076402" value="单选框元素"><br/>
+<img name="签署意见元素,mammoth版" ursacode="539348024176802" width="200" height="25"></td>
 </tr>
-
-
-<tr>
-  <td width="20%">可调休时长(小时):</td>
-  <td width="30%"><img name="ELE_OUTCLASS" ursacode="536767770247402" width="200" height="25"></td>
-  <td width="20%">申请人填写时长(小时):</td>
-  <td width="30%"><img name="ELE_OUTCLASS" ursacode="536767970348002" width="200" height="25"></td>
-</tr>
-
-
-<!-- <tr> -->
-<!--   <td width="20%"></td> -->
-<!--   <td colspan="3"></td> -->
-<!-- </tr> -->
-
-
-<tr>
-  <td width="20%">调休时间段:</td>
-  <td width="30%"><select name="536752361231402" ursacode="536752361231402" onselect="validateDate()"></select></td>
-  <td width="20%">部门经理批示:</td>
-  <td width="30%"><img name="签署意见元素,mammoth版" ursacode="536744535817402" width="200" height="25"></td>
-</tr>
-
-
-<tr>
-  <td width="20%">人力资源复核:</td>
-  <td width="30%"><img name="签署意见元素,mammoth版" ursacode="536744635917702" width="200" height="25"></td>
-  <td width="20%">副总裁签批:</td>
-  <td width="30%"><img name="签署意见元素,mammoth版" ursacode="536744636018002" width="200" height="25"></td>
-</tr>
-
-
-<tr>
-  <td width="20%">备注:</td>
-  <td colspan="3"><textarea name="536744736118302" ursacode="536744736118302" style="width: 98%;"></textarea></td>
-</tr>
-
-
 </table>
+</DIV>
+<DIV class="tagContent" id=tagContent1>
+<center><h3>入职审批表</h3></center>
 
 
+
+<br/>
+<table class="D_FORM_TB" ursacode="539342618856402" width="98%">
+<tr>
+<td width="15%" style="text-align:left" colspan="3">公司名称：<img name="署单位名称域" ursacode="539359526956502" width="200" height="25"></td>
+<td width="15%" style="text-align:right" colspan="3">填写日期：<img name="署时间域" ursacode="539353726709002" width="200" height="25"></td>
+</tr>
+<tr>
+<td width="16%" style="text-align:center">姓名</td>
+<td width="16%" style="text-align:left">
+<input name="539350525001002" ursacode="539350525001002"></td>
+<td width="16%" style="text-align:center">性别</td>
+<td width="16%" style="text-align:left">
+<select name="539350525101202" ursacode="539350525101202">
+</select>
+</td>
+<td width="16%" style="text-align:center">应聘岗位</td>
+<td width="16%" style="text-align:left">
+<input name="539350725201502" ursacode="539350725201502">
+</td>
+</tr>
+<tr>
+<td width="16%" style="text-align:center">出生日期</td>
+<td width="16%" style="text-align:left">
+<img name="时间域" ursacode="539350825301902" width="200" height="25"></td>
+<td width="16%" style="text-align:center">学历</td>
+<td width="16%" style="text-align:left">
+<select name="539351025502702" ursacode="539351025502702">
+</select>
+</td>
+<td width="16%" style="text-align:center">毕业院校</td>
+<td width="16%" style="text-align:left">
+<input name="539352326203502" ursacode="539352326203502">
+</td>
+</tr>
+<tr>
+<td style="text-align:center" colspan="2">最后工作单位</td>
+<td style="text-align:left" colspan="2">
+<input name="539890058703302" ursacode="539890058703302" style="width:98%"></td>
+<td style="text-align:center">最后职务</td>
+<td style="text-align:left">
+<input name="539352126002902" ursacode="539352126002902">
+</td>
+</tr>
+
+<tr>
+  <td colspan="6" style="width:100%">
+     <table class="D_FORM_TB">
+        		<tr>
+			<td style="text-align:center">部门负责人意见：</td>
+			<td  colspan="3"><img name="签署意见元素,mammoth版" ursacode="539352926406102" width="200" height="25"></td>
+		</tr>
+       	<tr hrshow='hrshow' style="display: none;">
+			<td style="text-align:center">人力资源部意见</td>
+			<td colspan="3">薪资：<br/>1.合同工资（税前）试用期<input name="539352226103102" ursacode="539352226103102">元  转正<input name="539352025902302" ursacode="539352025902302">元；<br/>
+					2.职位工作报销试用期<input name="539351825801802" ursacode="539351825801802">元  转正<input name="539350925402202" ursacode="539350925402202">元；<br/>
+						3.试用提成或浮动绩效<input name="611366436275602" ursacode="611366436275602">元  转正<input name="611366436175402" ursacode="611366436175402">元；（浮动额度按公司薪酬方案执行）<br/>
+ 					其它福利情况：<textarea name="539351625701502" ursacode="539351625701502" style="width:88%" rows="2"></textarea><br/>
+						<img name="签署意见元素,mammoth版" ursacode="539361227010402" width="200" height="25">
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:center">业务副总裁意见：</td>
+				<td colspan="3"><img name="签署意见元素,mammoth版" ursacode="539353626608702" width="200" height="25"></td>
+			</tr>
+		
+     </table>
+  </td>
+</tr>
+</table>
+</DIV>
+</DIV>
 <span style="display:none">
-	<input name="536744135116002" ursacode="536744135116002"><!-- 流程id -->
-	<input name="536743634914902" ursacode="536743634914902" style="border: 0px;display:none;">
+<input name="539348324522602" ursacode="539348324522602">
+<input name="539348424622802" ursacode="539348424622802">
+<img name="签名域" ursacode="539348124321902" width="200" height="25">
+<img name="署时间域" ursacode="539348224422302" width="200" height="25">
+
 </span>
+  <SCRIPT type=text/javascript>
+function selectTag(showContent,selfObj){
+ // 操作标签
+ var tag = document.getElementById("tags").getElementsByTagName("li");
+ var taglength = tag.length;
+ for(i=0; i<taglength; i++){
+  tag[i].className = "";
+ }
+ selfObj.parentNode.className = "selectTag";
+ // 操作内容
+ for(i=0; j=document.getElementById("tagContent"+i); i++){
+  j.style.display = "none";
+ }
+ document.getElementById(showContent).style.display = "block";
+
+ 
+}
 
 
-<script language="javascript">
-$(function() {
-	alert($("input[name='u536744335416602']").length);
-	$("input[name='u536744335416602']").unbind();
-	$("input[name='u536744335516802']").unbind();
-	$("[name='sel_u536744335416602']").unbind();
-	$("[name='sel_u536744335516802']").unbind();
+$.ajax({
+	type:'POST',
+	url:'huaoshow.do?ac=loadfyopinaction&module=XZGL_BGGL_RLZY',
+	data:{'operate':'ysdxc'},
+	dataType:'json',
+	success:function(msg){
+		if(msg.success){
+			if(msg.ysdxc=="true"){
+				$("[hrshow='hrshow']").show();
+			}
+		}
+	},
+    failure:function(result) {}
 });
 
-
-var con = true;
-function doSet(){
-	validateDate();
-}
-
-function validateDate(){
-    if(con){
-    	var date1 = $("input[name='u536744335416602']").val();
-    	var date2 = $("input[name='u536744335516802']").val();
-    	if(date1==null || date1=="" || date2==null || date2==""){
-    		return;
-    	}
-    	
-    	var time1 = new Date();
-    	var arg = date1.split('-');
-    	time1.setFullYear(arg[0]);
-    	time1.setMonth(parseInt(arg[1])-1);
-    	time1.setDate(arg[2].split(' ')[0]);
-    	time1.setHours(arg[2].split(' ')[1].split(':')[0]);
-    	time1.setMinutes(arg[2].split(' ')[1].split(':')[1]);
-    	//alert(time1.toLocaleDateString());
-    	
-    	var time2 = new Date();
-    	arg = date2.split('-');
-    	time2.setFullYear(arg[0]);
-    	time2.setMonth(parseInt(arg[1])-1);
-    	time2.setDate(arg[2].split(' ')[0]);
-    	time2.setHours(arg[2].split(' ')[1].split(':')[0]);
-    	time2.setMinutes(arg[2].split(' ')[1].split(':')[1]);
-    	//alert(time2.toLocaleDateString());
-    	
-    	
-    	var duan = $("[name='u536752361231402']").val();
-    	alert(duan);
-    	if("上午"==duan){
-    		var temp = new Date();
-    		temp.setHours(9);
-    		temp.setMinutes(0);
-    		$("input[name='u536744335416602']").val(temp.toLocaleDateString())
-    		
-    		temp = new Date();
-    		temp.setHours(12);
-    		temp.setMinutes(0);
-    		$("input[name='u536744335516802']").val(temp.toLocaleDateString())
-    	}else if("下午"==duan){
-    		var temp = new Date();
-    		temp.setHours(13);
-    		temp.setMinutes(0);
-    		alert(temp.toLocaleDateString());
-    		$("input[name='u536744335416602']").val(temp.toLocaleDateString())
-    		
-    		temp = new Date();
-    		temp.setHours(18);
-    		temp.setMinutes(0);
-    		$("input[name='u536744335516802']").val(temp.toLocaleDateString())
-    	}else if("全天"==duan){
-    		var temp = new Date();
-    		temp.setHours(8);
-    		temp.setMinutes(3);
-    		$("input[name='u536744335416602']").val(temp.toLocaleDateString())
-    		
-    		temp = new Date();
-    		temp.setHours(17);
-    		temp.setMinutes(30);
-    		$("input[name='u536744335516802']").val(temp.toLocaleDateString())
-    	}else{
-    		alert("选择调休时间段");
-    		return;
-    	}
-    	
-    	var cha = time2.getTime() - time1.getTime();
-    	//alert(typeof(cha));
-    	if(cha<=0){
-    		$("input[name='u536744335416602']").val("")
-    		$("input[name='u536744335516802']").val("")
-    		$("input[name='u536767970348002']").val("");
-    		alert("时间输入有误");
-    		return;
-    	}else{
-    		var kejiaban = document.getElementsByName('u536767770247402')[0].value;
-    		if(kejiaban==null || kejiaban=='' || kejiaban=='0' || kejiaban=='null'){
-    			$("input[name='u536744335416602']").val("")
-    			$("input[name='u536744335516802']").val("")
-    			$("input[name='u536767970348002']").val("");
-    			alert("无加班时长！");
-    			return;
-    		}
-    		kejiaban = parseFloat(kejiaban); 
-    		yaojiaban = parseFloat($("input[name='u536767970348002']").val()); 
-    		if(yaojiaban>kejiaban){
-    			$("input[name='u536744335416602']").val("")
-    			$("input[name='u536744335516802']").val("")
-    			$("input[name='u536767970348002']").val("");
-    			alert('调休时长超限，请重新填写！');
-    			return;
-    		}
-    	}
-    	
-    	
-    	
-    	
-    	//var hour = cha / 1000 / 3600;
-    	//alert(typeof(hour));
-    	//hour = hour.toFixed(2);
-    	//$("input[name='u536767970348002']").val(hour);
-         
-        $.ajax({
-            url:"huaoshow.do?ac=orgjson&mymethod=getWorkTakeHour",
-            type:"POST",
-            dataType:"json",
-            data:{"time1":time1.getTime(),"time2":time2.getTime()},
-            success:function(data){
-                if(data[0].success){
-                	$("input[name='u536767970348002']").val(data[0].hour);
-                }else{
-                	$("input[name='u536767970348002']").val("0");
-                }
-            },
-            error:function(one,two,three){
-            	$("input[name='u536767970348002']").val("0");
-            }
-        });
-    }
-}
+</SCRIPT>
 
 
-//setInterval(validateDate, 500);
-</script>
 </form>
+
 </body>
 </html>

@@ -37,6 +37,8 @@ public class InvestList implements java.io.Serializable {
 	private double backIncome;
 	private double backMoney;
 	private int useTicket;
+	private int isTurn;
+	private int turnStatus;
 	private double expectIncome;
 	private double totalMoney;
 	private double income;
@@ -44,9 +46,10 @@ public class InvestList implements java.io.Serializable {
 	private int status;
 	private Date openDate;
 	private Date backDate;
+	private Date calcBeginDate;
+	private Date calcEndDate;
 	private String pactNumber;
 	private int investStyle;
-	private Date endPayTime;
 	private double poundageTurn;
 	private double poundagePrivilege;
 	private Set<Stock> stocksForInvestListId = new HashSet<Stock>(0);
@@ -67,8 +70,12 @@ public class InvestList implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public InvestList(String id, Scale scale, InvestTicket investTicket, InvestMember investMember, double money, double yetMoney, double spaceMoney, double backIncome, double backMoney, int useTicket, double expectIncome, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, String pactNumber, int investStyle, Date endPayTime, double poundageTurn, double poundagePrivilege, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales) {
+	public InvestList(String id,Date calcBeginDate,Date calcEndDate,int isTurn,int turnStatus, Scale scale, InvestTicket investTicket, InvestMember investMember, double money, double yetMoney, double spaceMoney, double backIncome, double backMoney, int useTicket, double expectIncome, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, String pactNumber, int investStyle, double poundageTurn, double poundagePrivilege, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales) {
 		this.id = id;
+		this.calcBeginDate = calcBeginDate;
+		this.calcEndDate = calcEndDate;
+		this.turnStatus = turnStatus;
+		this.isTurn = isTurn;
 		this.scale = scale;
 		this.investTicket = investTicket;
 		this.investMember = investMember;
@@ -87,7 +94,6 @@ public class InvestList implements java.io.Serializable {
 		this.backDate = backDate;
 		this.pactNumber = pactNumber;
 		this.investStyle = investStyle;
-		this.endPayTime = endPayTime;
 		this.poundageTurn = poundageTurn;
 		this.poundagePrivilege = poundagePrivilege;
 		this.stocksForInvestListId = stocksForInvestListId;
@@ -191,6 +197,24 @@ public class InvestList implements java.io.Serializable {
 	public void setUseTicket(int useTicket) {
 		this.useTicket = useTicket;
 	}
+	
+	@Column(name = "turn_status")
+	public int getTurnStatus() {
+		return turnStatus;
+	}
+
+	public void setTurnStatus(int turnStatus) {
+		this.turnStatus = turnStatus;
+	}
+
+	@Column(name = "is_turn")
+	public int getIsTurn() {
+		return isTurn;
+	}
+
+	public void setIsTurn(int isTurn) {
+		this.isTurn = isTurn;
+	}
 
 	@Column(name = "expect_income", precision = 22, scale = 0)
 	public double getExpectIncome() {
@@ -246,6 +270,26 @@ public class InvestList implements java.io.Serializable {
 		this.openDate = openDate;
 	}
 
+	
+	
+	@Column(name = "calc_beginDate", length = 19)
+	public Date getCalcBeginDate() {
+		return calcBeginDate;
+	}
+
+	public void setCalcBeginDate(Date calcBeginDate) {
+		this.calcBeginDate = calcBeginDate;
+	}
+	
+	@Column(name = "calc_endDate", length = 19)
+	public Date getCalcEndDate() {
+		return calcEndDate;
+	}
+
+	public void setCalcEndDate(Date calcEndDate) {
+		this.calcEndDate = calcEndDate;
+	}
+
 	@Column(name = "back_date", length = 19)
 	public Date getBackDate() {
 		return this.backDate;
@@ -273,14 +317,6 @@ public class InvestList implements java.io.Serializable {
 		this.investStyle = investStyle;
 	}
 
-	@Column(name = "end_pay_time", length = 19)
-	public Date getEndPayTime() {
-		return this.endPayTime;
-	}
-
-	public void setEndPayTime(Date endPayTime) {
-		this.endPayTime = endPayTime;
-	}
 
 	@Column(name = "poundage_turn", precision = 22, scale = 0)
 	public double getPoundageTurn() {

@@ -3,7 +3,7 @@ import org.duang.util.DataUtils;
 
  
 /**   
- * 是否使用理财券的
+ * 理财状态的枚举类
  * @ClassName:  useTicket   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 白攀
@@ -138,81 +138,11 @@ public enum Status {
 		
 	},
 	S4 {
-		private String desc = "转让中";
-		
-		@Override
-		public int getVal() {
-			return 4;
-		}
-
-		@Override
-		public String getDesc() {
-			return desc;
-		}
-
-		@Override
-		public Object setDesc(String desc) {
-			if (DataUtils.notEmpty(desc)) {
-				this.desc = desc;
-				return this;
-			}else {
-				return setDefaultDesc();
-			}
-		}
-
-		@Override
-		public Object setDefaultDesc() {
-			this.desc = "转让中";
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return "转让中";
-		}
-		
-	},
-	S5 {
-		private String desc = "转让成功";
-		
-		@Override
-		public int getVal() {
-			return 5;
-		}
-
-		@Override
-		public String getDesc() {
-			return desc;
-		}
-
-		@Override
-		public Object setDesc(String desc) {
-			if (DataUtils.notEmpty(desc)) {
-				this.desc = desc;
-				return this;
-			}else {
-				return setDefaultDesc();
-			}
-		}
-
-		@Override
-		public Object setDefaultDesc() {
-			this.desc = "转让成功";
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return "转让成功";
-		}
-		
-	},
-	S6 {
 		private String desc = "到期回款中";
 		
 		@Override
 		public int getVal() {
-			return 6;
+			return 4;
 		}
 
 		@Override
@@ -242,12 +172,12 @@ public enum Status {
 		}
 		
 	},
-	S7 {
+	S5 {
 		private String desc = "回款成功";
 		
 		@Override
 		public int getVal() {
-			return 7;
+			return 5;
 		}
 
 		@Override
@@ -277,12 +207,12 @@ public enum Status {
 		}
 		
 	},
-	S8 {
+	S6 {
 		private String desc = "回款失败";
 		
 		@Override
 		public int getVal() {
-			return 8;
+			return 6;
 		}
 
 		@Override
@@ -312,12 +242,12 @@ public enum Status {
 		}
 		
 	},
-	S9 {
+	S7 {
 		private String desc = "过期";
 		
 		@Override
 		public int getVal() {
-			return 9;
+			return 7;
 		}
 
 		@Override
