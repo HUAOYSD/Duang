@@ -7,34 +7,34 @@ import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.BindCardDao;
-import org.duang.entity.BindCard;
+import org.duang.dao.MemberTicketRecordDao;
 import org.duang.entity.InvestMember;
-import org.duang.service.BindCardService;
+import org.duang.entity.MemberTicketRecord;
+import org.duang.service.MemberTicketRecordService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 
 /**   
- * 绑定银行卡业务接口实现类
- * @ClassName:  BindCardServiceImpl   
+ * 理财券使用记录接口实现类
+ * @ClassName:  MemberTicketRecordServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
- * @date 2016年8月15日 下午5:19:26      
+ * @date 2016年8月16日 下午5:19:26      
  */  
-@ServiceLog(ModelName="绑定银行卡")
-@Service(value="bindcardserviceimpl")
-public class BindCardServiceImpl implements BindCardService{
+@ServiceLog(ModelName="理财券使用记录")
+@Service(value="memberticketrecordserviceimpl")
+public class MemberTicketRecordServiceImpl implements MemberTicketRecordService{
 
-	private BindCardDao dao;
+	private MemberTicketRecordDao dao;
 
-	@Resource(name="bindcarddaoimpl")
-	public void setDao(BindCardDao dao) {
+	@Resource(name="memberticketrecorddaoimpl")
+	public void setDao(MemberTicketRecordDao dao) {
 		this.dao = dao;
 	}
 
-	public BindCardServiceImpl(){
-		LoggerUtils.info("注入BindCardServiceImpl服务层", this.getClass());
+	public MemberTicketRecordServiceImpl(){
+		LoggerUtils.info("注入MemberTicketRecordServiceImpl服务层", this.getClass());
 	}
 	
 	/**
@@ -72,7 +72,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<BindCard> queryAllEntity(Order order) throws Exception {
+	public List<MemberTicketRecord> queryAllEntity(Order order) throws Exception {
 		return dao.queryAllEntity(order);
 	}
 
@@ -82,7 +82,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<BindCard> queryAllEntity(PageUtil<BindCard> page, Order order) throws Exception{
+	public List<MemberTicketRecord> queryAllEntity(PageUtil<MemberTicketRecord> page, Order order) throws Exception{
 		return dao.queryAllEntity(page, order);
 	}
 
@@ -94,7 +94,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<BindCard> queryEntity(String field, Object value, PageUtil<BindCard> page, Order order) throws Exception{
+	public List<MemberTicketRecord> queryEntity(String field, Object value, PageUtil<MemberTicketRecord> page, Order order) throws Exception{
 		return dao.queryEntity(field, value, page, order);
 	}
 
@@ -106,7 +106,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<BindCard> queryEntity(List<String> properties, List<Object> values, PageUtil<BindCard> page) throws Exception{
+	public List<MemberTicketRecord> queryEntity(List<String> properties, List<Object> values, PageUtil<MemberTicketRecord> page) throws Exception{
 		return dao.queryEntity(properties, values, page);
 	}
 
@@ -116,7 +116,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public BindCard findById(Serializable id) throws Exception{
+	public MemberTicketRecord findById(Serializable id) throws Exception{
 		return dao.findById(id);
 	}
 
@@ -126,7 +126,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(BindCard t) throws Exception{
+	public boolean saveEntity(MemberTicketRecord t) throws Exception{
 		return dao.saveEntity(t);
 	}
 
@@ -136,7 +136,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(BindCard t) throws Exception{
+	public boolean updateEntity(MemberTicketRecord t) throws Exception{
 		return dao.updateEntity(t);
 	}
 
@@ -243,7 +243,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public BindCard findEntity(String property, Object value) throws Exception{
+	public MemberTicketRecord findEntity(String property, Object value) throws Exception{
 		return dao.findEntity(property, value);
 	}
 
@@ -254,7 +254,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public BindCard findEntity(Map<String, Object> params) throws Exception{
+	public MemberTicketRecord findEntity(Map<String, Object> params) throws Exception{
 		return dao.findEntity(params);
 	}
 
@@ -267,7 +267,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BindCard> queryByHQL(String hql, PageUtil<BindCard> page, Object... params) throws Exception{
+	public List<MemberTicketRecord> queryByHQL(String hql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
 		return dao.queryByHQL(hql, page, params);
 	}
 
@@ -280,12 +280,12 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BindCard> queryBySQL(String sql, PageUtil<BindCard> page, Object... params) throws Exception{
+	public List<MemberTicketRecord> queryBySQL(String sql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
 		return dao.queryBySQL(sql, page, params);
 	}
 
 	@Override
-	public boolean deleteEntity(BindCard t) throws Exception {
+	public boolean deleteEntity(MemberTicketRecord t) throws Exception {
 		return dao.deleteEntity(t);
 	}
 }

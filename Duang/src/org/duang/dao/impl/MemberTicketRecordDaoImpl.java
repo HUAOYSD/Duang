@@ -1,49 +1,42 @@
-package org.duang.service.impl;
+package org.duang.dao.impl; 
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.BindCardDao;
-import org.duang.entity.BindCard;
-import org.duang.entity.InvestMember;
-import org.duang.service.BindCardService;
+import org.duang.dao.MemberTicketRecordDao;
+import org.duang.dao.base.BaseDao;
+import org.duang.entity.MemberTicketRecord;
 import org.duang.util.PageUtil;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
+
 
 /**   
- * 绑定银行卡业务接口实现类
- * @ClassName:  BindCardServiceImpl   
+ * 理财券使用记录dao实现类
+ * @ClassName:  MemberTicketRecordDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
- * @date 2016年8月15日 下午5:19:26      
+ * @date 2016年8月16日 上午10:29:05      
  */  
-@ServiceLog(ModelName="绑定银行卡")
-@Service(value="bindcardserviceimpl")
-public class BindCardServiceImpl implements BindCardService{
+@Repository("memberticketrecorddaoimpl")
+public class MemberTicketRecordDaoImpl extends BaseDao<MemberTicketRecord> implements MemberTicketRecordDao{
 
-	private BindCardDao dao;
 
-	@Resource(name="bindcarddaoimpl")
-	public void setDao(BindCardDao dao) {
-		this.dao = dao;
+	public MemberTicketRecordDaoImpl(){
+		LoggerUtils.info("注入memberticketrecorddaoimpl层", this.getClass());
 	}
 
-	public BindCardServiceImpl(){
-		LoggerUtils.info("注入BindCardServiceImpl服务层", this.getClass());
-	}
-	
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
 	 */
 	public int count() throws Exception{
-		return dao.count();
+		return super.count();
 	}
+
 
 	/**
 	 * 计数总数全部
@@ -52,7 +45,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return 			    计数值
 	 */
 	public int count(String properties, Object value) throws Exception{
-		return dao.count(properties, value);
+		return super.count(properties, value);
 	}
 
 
@@ -63,7 +56,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return 			    计数值
 	 */
 	public int count(List<String> properties,List<Object> values) throws Exception{
-		return dao.count(properties, values);
+		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
+		return super.countByDetachedCriteria(detachedCriteria);
 	}
 
 
@@ -72,8 +66,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<BindCard> queryAllEntity(Order order) throws Exception {
-		return dao.queryAllEntity(order);
+	public List<MemberTicketRecord> queryAllEntity(Order order) throws Exception {
+		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
 
@@ -82,8 +76,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<BindCard> queryAllEntity(PageUtil<BindCard> page, Order order) throws Exception{
-		return dao.queryAllEntity(page, order);
+	public List<MemberTicketRecord> queryAllEntity(PageUtil<MemberTicketRecord> page, Order order) throws Exception{
+		return super.queryAll(page, order);
 	}
 
 
@@ -94,8 +88,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<BindCard> queryEntity(String field, Object value, PageUtil<BindCard> page, Order order) throws Exception{
-		return dao.queryEntity(field, value, page, order);
+	public List<MemberTicketRecord> queryEntity(String field, Object value, PageUtil<MemberTicketRecord> page, Order order) throws Exception{
+		return super.query(field, value, page, order);
 	}
 
 
@@ -106,8 +100,9 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<BindCard> queryEntity(List<String> properties, List<Object> values, PageUtil<BindCard> page) throws Exception{
-		return dao.queryEntity(properties, values, page);
+	public List<MemberTicketRecord> queryEntity(List<String> properties, List<Object> values, PageUtil<MemberTicketRecord> page) throws Exception{
+		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
+		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
 
 
@@ -116,8 +111,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public BindCard findById(Serializable id) throws Exception{
-		return dao.findById(id);
+	public MemberTicketRecord findById(Serializable id) throws Exception{
+		return super.find(id);
 	}
 
 
@@ -126,8 +121,9 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(BindCard t) throws Exception{
-		return dao.saveEntity(t);
+	public boolean saveEntity(MemberTicketRecord t) throws Exception{
+		super.save(t);
+		return true;
 	}
 
 
@@ -136,8 +132,9 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(BindCard t) throws Exception{
-		return dao.updateEntity(t);
+	public boolean updateEntity(MemberTicketRecord t) throws Exception{
+		super.update(t);
+		return true;
 	}
 
 
@@ -146,8 +143,9 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
+	public boolean deleteEntity(MemberTicketRecord t) throws Exception{
+		super.delete(t);
+		return true;
 	}
 
 
@@ -157,19 +155,21 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
-		return dao.deleteEntity(id);
+		super.delete(id);
+		return true;
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
-		return dao.deleteEntity(map);
+		super.delete(map);
+		return true;
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -177,7 +177,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql) throws Exception{
-		return dao.executeSql(sql);
+		return super.executeBySql(sql) >= 1;
 	}
 
 
@@ -187,7 +187,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql,Object... params) throws Exception{
-		return dao.executeSql(sql,params);
+		return super.executeBySql(sql,params) >= 1;
 	}
 
 
@@ -197,8 +197,13 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return      是否执行成功
 	 */
 	public boolean executeSql(List<String> sqls) throws Exception{
-		return dao.executeSql(sqls);
-	}	
+		if (sqls!=null && sqls.size()>0) {
+			for (String string : sqls) {
+				super.executeBySql(string);
+			}
+		}
+		return true;
+	}
 
 
 	/**
@@ -207,7 +212,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(String property, Object val) throws Exception{
-		return dao.deleteEntity(property, val);
+		return super.delete(property, val) >= 1;
 	}
 
 
@@ -220,7 +225,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @throws Exception
 	 */
 	public boolean updateEntity(Map<String, Object> datas, String property, Object value) throws Exception{
-		return dao.updateEntity(datas, property, value);
+		return super.update(datas, property, value) >= 1;
 	}
 
 
@@ -232,7 +237,7 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @throws Exception
 	 */
 	public boolean updateEntity(Map<String, Object> datas, Map<String, Object> conds) throws Exception{
-		return dao.updateEntity(datas, conds);
+		return super.update(datas, conds) >= 1;
 	}
 
 
@@ -243,8 +248,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public BindCard findEntity(String property, Object value) throws Exception{
-		return dao.findEntity(property, value);
+	public MemberTicketRecord findEntity(String property, Object value) throws Exception{
+		return super.find(property, value);
 	}
 
 
@@ -254,8 +259,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public BindCard findEntity(Map<String, Object> params) throws Exception{
-		return dao.findEntity(params);
+	public MemberTicketRecord findEntity(Map<String, Object> params) throws Exception{
+		return super.find(params);
 	}
 
 	
@@ -267,8 +272,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BindCard> queryByHQL(String hql, PageUtil<BindCard> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<MemberTicketRecord> queryByHQL(String hql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, page, params);
 	}
 
 
@@ -280,12 +285,9 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BindCard> queryBySQL(String sql, PageUtil<BindCard> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<MemberTicketRecord> queryBySQL(String sql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, page, params);
 	}
 
-	@Override
-	public boolean deleteEntity(BindCard t) throws Exception {
-		return dao.deleteEntity(t);
-	}
 }
+
