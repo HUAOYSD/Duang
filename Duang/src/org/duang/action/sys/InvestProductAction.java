@@ -22,10 +22,12 @@ import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.SessionTools;
 import org.duang.entity.Product;
+import org.duang.enums.product.Category;
 import org.duang.service.ProductService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
+import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -53,16 +55,47 @@ public class InvestProductAction extends BaseAction<Product>{
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   
 	 */   
 	private static final long serialVersionUID = 1L;
-	
+
 	private ProductService service;
 	@Resource(name="productserviceimpl")
 	public void setService(ProductService service) {
 		this.service = service;
 	}
-	
+
+
+	/**   
+	 * 获取可使用的产品给下拉框选择
+	 * @Title: queryProductByCombobox   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年8月16日 下午2:57:54
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void queryProductByCombobox() {
+		String json = "";
+		try {
+			super.condsUtils.addProperties(true, "order", "isdelete", "isSell");
+			super.condsUtils.addValues(true, Order.desc("createtime"), 0, 1);
+			List<Product> list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+			for(Product temp : list){
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("id", temp.getId());
+				map.put("text", temp.getNameZh()+"（"+(Category.valueOf("C"+temp.getCategory()).toString())+"）");
+				listMap.add(map);
+			}
+			json = JSONArray.fromObject(listMap).toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			printJsonResult(json);
+		}
+	}
+
+
 	/**
 	 * 返回产品列表
-	 * 
 	 * @Title: investProList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
@@ -74,11 +107,11 @@ public class InvestProductAction extends BaseAction<Product>{
 	public String  investProList(){
 		return ResultPath.LIST;
 	}
-	
+
 	public String addInvestPro(){
 		return "addInvestPro";
 	}
-	
+
 	/**
 	 * 跳转到编辑页面
 	 * @Title: editInvestPro   
@@ -100,7 +133,7 @@ public class InvestProductAction extends BaseAction<Product>{
 		}
 		return "editInvestPro";
 	}
-	
+
 	/**
 	 * 保存或者更新理财产品
 	 * @Title: saveInvestPro   
@@ -163,7 +196,7 @@ public class InvestProductAction extends BaseAction<Product>{
 			}
 		}
 	}
-	
+
 	/**
 	 * 删除理财产品
 	 * @Title: deleteInvestPro   
@@ -196,7 +229,7 @@ public class InvestProductAction extends BaseAction<Product>{
 			}
 		}
 	}
-	
+
 	/**
 	 * 获取第一页前50条数据
 	 * @Title: getJSONObject   
@@ -231,7 +264,7 @@ public class InvestProductAction extends BaseAction<Product>{
 		}
 		return jsonObject;
 	}
-	
+
 	/**
 	 * 返回产品管理
 	 * @Title: investProManage   
@@ -245,9 +278,9 @@ public class InvestProductAction extends BaseAction<Product>{
 	public String  investProManage(){
 		return "investPromanage";
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 查询所有的产品，并用json方式返回
 	 * @Title: queryInvestPro   
@@ -261,7 +294,7 @@ public class InvestProductAction extends BaseAction<Product>{
 	public void  queryInvestPro(){
 		List<Product> list = null;
 		try {
-			
+
 			String name = super.getRequest().getParameter("name");
 			String nameZh = super.getRequest().getParameter("nameZh");
 			condsUtils.addProperties(true, "isdelete");
@@ -293,7 +326,7 @@ public class InvestProductAction extends BaseAction<Product>{
 			printJsonResult();
 		}
 	}
-	
+
 	/**
 	 * 重新组合产品集合
 	 * @Title: fillDataObject   
@@ -319,12 +352,12 @@ public class InvestProductAction extends BaseAction<Product>{
 			map.put("details", pro.getDetails());
 			map.put("isNewProduct", pro.getIsNewProduct());
 			map.put("isRecommend", pro.getIsRecommend());
-			
+
 			map.put("isSell", pro.getIsSell());
 			map.put("isdelete", pro.getIsdelete());
 			map.put("modifytime", pro.getModifytime());
 			map.put("modifyuser", pro.getModifyuser());
-			
+
 			map.put("productDescribe", pro.getProductDescribe());
 			map.put("riskControl", pro.getRiskControl());
 			map.put("title1", pro.getTitle1());
@@ -335,7 +368,7 @@ public class InvestProductAction extends BaseAction<Product>{
 		}
 		return listMapOj;
 	}
-	
+
 	/**   
 	 * 得到理财产品
 	 * @Title: getInvestProInfo   
@@ -365,7 +398,7 @@ public class InvestProductAction extends BaseAction<Product>{
 					jsonObject.put("isdelete", entity.getIsdelete());
 					jsonObject.put("modifytime", entity.getModifytime());
 					jsonObject.put("modifyuser", entity.getModifyuser());
-					
+
 					jsonObject.put("productDescribe", entity.getProductDescribe());
 					jsonObject.put("riskControl", entity.getRiskControl());
 					jsonObject.put("title1", entity.getTitle1());

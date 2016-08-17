@@ -4,8 +4,11 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import net.sf.json.JSONArray;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
@@ -15,13 +18,14 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.CustomerManager;
 import org.duang.entity.InvestList;
 import org.duang.entity.MemberInfo;
+import org.duang.entity.Scale;
+import org.duang.enums.If;
 import org.duang.enums.Platform;
 import org.duang.enums.invest.Status;
+import org.duang.enums.invest.TurnStatus;
 import org.duang.enums.invest.UseTicket;
-import org.duang.entity.Scale;
 import org.duang.service.InvestListService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -71,28 +75,49 @@ public class InvestListAction extends BaseAction<InvestList> {
 	 */  
 	public void queryByPage() {
 		try {
-			condsUtils.addProperties(true, "investMember", "customerManager", "myAlias.memberInfo", "scale", "order");
-			condsUtils.addValues(true, new Object[]{"myAlias","as"}, new Object[]{"customerAlias","as"}, new Object[]{"memberAlias","as"}, new Object[]{"scaleAlias","as"}, Order.desc("createTime"));
-			if (DataUtils.notEmpty(getRequest().getParameter("loanMemberName"))) {
-				condsUtils.concat("memberAlias.realName", URLDecoder.decode(getRequest().getParameter("loanMemberName"),"UTF-8"));
+			condsUtils.addProperties(true, "investMember", "myAlias.memberInfo", "scale", "order");
+			condsUtils.addValues(true, new Object[]{"myAlias","as"}, new Object[]{"memberAlias","as"}, new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
+			if (DataUtils.notEmpty(getRequest().getParameter("memberName"))) {
+				condsUtils.concat("memberAlias.realName", URLDecoder.decode(getRequest().getParameter("memberName"),"UTF-8"));
 			}
-			if (DataUtils.notEmpty(getRequest().getParameter("loanMemberPhone"))) {
-				condsUtils.concat("memberAlias.phone", URLDecoder.decode(getRequest().getParameter("loanMemberPhone"),"UTF-8"));
+			if (DataUtils.notEmpty(getRequest().getParameter("memberNickName"))) {
+				condsUtils.concat("memberAlias.nickname", URLDecoder.decode(getRequest().getParameter("memberNickName"),"UTF-8"));
 			}
-			if (DataUtils.notEmpty(getRequest().getParameter("loanMemberIdcard"))) {
-				condsUtils.concat("memberAlias.idCard", URLDecoder.decode(getRequest().getParameter("loanMemberIdcard"),"UTF-8"));
+			if (DataUtils.notEmpty(getRequest().getParameter("memberPhone"))) {
+				condsUtils.concat("memberAlias.phone", URLDecoder.decode(getRequest().getParameter("memberPhone"),"UTF-8"));
 			}
-			if (entity.getUseTicket() != 0) {
-				condsUtils.concat("loanType", entity.getUseTicket());
+			if (DataUtils.notEmpty(getRequest().getParameter("memberIdcard"))) {
+				condsUtils.concat("memberAlias.idCard", URLDecoder.decode(getRequest().getParameter("memberIdcard"),"UTF-8"));
 			}
-			if (entity.getInvestStyle() != 0) {
-				condsUtils.concat("applyState", entity.getInvestStyle());
+			if (DataUtils.notEmpty(getRequest().getParameter("scaleName"))) {
+				condsUtils.concat("scaleAlias.name", new Object[]{URLDecoder.decode(getRequest().getParameter("scaleName"),"UTF-8"), "like"});
+			}
+			if (DataUtils.notEmpty(getRequest().getParameter("turnScale"))) {
+				condsUtils.concat("scaleAlias.isTurn", DataUtils.str2int(getRequest().getParameter("turnScale")));
 			}
 			if (entity.getStatus() != 0) {
-				condsUtils.concat("poundageState", entity.getStatus());
+				condsUtils.concat("status", entity.getStatus());
 			}
-			if (DataUtils.notEmpty(getRequest().getParameter("date_begin")) && DataUtils.notEmpty(getRequest().getParameter("date_end"))) {
-				condsUtils.concat("signDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("date_begin"), "yyyy-MM-dd"), DateUtils.str2Date(getRequest().getParameter("date_end"), "yyyy-MM-dd"), "between"});
+			if (DataUtils.notEmpty(entity.getPactNumber())) {
+				condsUtils.concat("pactNumber", entity.getPactNumber());
+			}
+			if (DataUtils.notEmpty(getRequest().getParameter("useTicket"))) {
+				condsUtils.concat("useTicket", entity.getUseTicket());
+			}
+			if (DataUtils.notEmpty(getRequest().getParameter("isTurn"))) {
+				condsUtils.concat("isTurn", entity.getIsTurn());
+			}
+			if (entity.getTurnStatus() != 0) {
+				condsUtils.concat("turnStatus", entity.getTurnStatus());
+			}
+			if (entity.getInvestStyle() != 0) {
+				condsUtils.concat("investStyle", entity.getInvestStyle());
+			}
+			if (DataUtils.notEmpty(getRequest().getParameter("calbegindate1")) && DataUtils.notEmpty(getRequest().getParameter("calbegindate2"))) {
+				condsUtils.concat("calcBeginDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("calbegindate1"), "yyyy-MM-dd"), DateUtils.str2Date(getRequest().getParameter("calbegindate2"), "yyyy-MM-dd"), "between"});
+			}
+			if (DataUtils.notEmpty(getRequest().getParameter("calenddate1")) && DataUtils.notEmpty(getRequest().getParameter("calenddate2"))) {
+				condsUtils.concat("calcEndDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("calenddate1"), "yyyy-MM-dd"), DateUtils.str2Date(getRequest().getParameter("calenddate2"), "yyyy-MM-dd"), "between"});
 			}
 			@SuppressWarnings("rawtypes")
 			List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
@@ -126,11 +151,10 @@ public class InvestListAction extends BaseAction<InvestList> {
 			for(Object temp : list) {
 				if (temp instanceof Object[]) {
 					Map<String,Object> resultMap = new HashMap<String,Object>();
-					InvestList pk = (InvestList)((Object[])temp)[4];
-					MemberInfo fk = (MemberInfo)((Object[])temp)[3];
-					//InvestMember fk1 = (InvestMember)((Object[])temp)[2];
-					CustomerManager fk2 = (CustomerManager)((Object[])temp)[1];
-					Scale fk3 = (Scale)((Object[])temp)[0];
+					InvestList pk = (InvestList)((Object[])temp)[3];
+					MemberInfo fk = (MemberInfo)((Object[])temp)[1];
+					//InvestMember fk1 = (InvestMember)((Object[])temp)[0];
+					Scale fk2 = (Scale)((Object[])temp)[2];
 					if (pk != null) {
 						resultMap.put("id", pk.getId());
 						resultMap.put("money", pk.getMoney());
@@ -146,23 +170,23 @@ public class InvestListAction extends BaseAction<InvestList> {
 						resultMap.put("status", Status.valueOf("S"+pk.getStatus()).toString());
 						resultMap.put("openDate", DateUtils.getTimeStamp(pk.getOpenDate()));
 						resultMap.put("backDate", DateUtils.getTimeStamp(pk.getBackDate()));
+						resultMap.put("calcBeginDate", DateUtils.getTimeStamp(pk.getBackDate()));
+						resultMap.put("calcEndDate", DateUtils.getTimeStamp(pk.getBackDate()));
 						resultMap.put("pactNumber", pk.getPactNumber());
 						resultMap.put("investStyle", Platform.valueOf("P"+pk.getInvestStyle()).toString());
-						resultMap.put("endPayTime", DateUtils.getTimeStamp(pk.getEndPayTime()));
 						resultMap.put("poundageTurn", pk.getPoundageTurn());
 						resultMap.put("poundagePrivilege", pk.getPoundagePrivilege());
+						resultMap.put("isTurn", If.valueOf("If"+pk.getIsTurn()).toString());
+						resultMap.put("turnStatus", TurnStatus.valueOf("TS"+pk.getTurnStatus()).toString());
 					}
 					if (fk != null) {
-						resultMap.put("loanMemberName", fk.getRealName());
-						resultMap.put("loanMemberNickName", fk.getNickname());
-						resultMap.put("loanMemberPhone", fk.getPhone());
-						resultMap.put("loanMemberIdcard", fk.getIdCard());
+						resultMap.put("memberName", fk.getRealName());
+						resultMap.put("memberNickName", fk.getNickname());
+						resultMap.put("memberPhone", fk.getPhone());
+						resultMap.put("memberIdcard", fk.getIdCard());
 					}
 					if (fk2 != null) {
-						resultMap.put("customerManagerName", fk2.getName());
-					}
-					if (fk3 != null) {
-						resultMap.put("scaleName", fk3.getName());
+						resultMap.put("scaleName", fk2.getName());
 					}
 					listMap.add(resultMap);
 				}

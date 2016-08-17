@@ -3,14 +3,14 @@ import org.duang.util.DataUtils;
 
  
 /**   
- * 是否使用理财券的枚举类
- * @ClassName:  useTicket   
+ * 转让状态的枚举类
+ * @ClassName:  TurnStatus   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 白攀
- * @date 2016年8月12日 下午4:18:33      
+ * @date 2016年8月15日 上午10:38:53      
  */  
-public enum UseTicket {
-	UT0 {
+public enum TurnStatus {
+	TS0 {
 		@Override
 		public int getVal() {
 			return 0;
@@ -32,8 +32,8 @@ public enum UseTicket {
 		}
 		
 	},
-	UT1 {
-		private String desc = "未使用";
+	TS1 {
+		private String desc = "转让中";
 		
 		@Override
 		public int getVal() {
@@ -57,18 +57,18 @@ public enum UseTicket {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "未使用";
+			this.desc = "转让中";
 			return this;
 		}
 		
 		@Override
 		public String toString() {
-			return "未使用";
+			return "转让中";
 		}
 
 	},
-	UT2 {
-		private String desc = "使用";
+	TS2 {
+		private String desc = "成功";
 		
 		@Override
 		public int getVal() {
@@ -92,13 +92,83 @@ public enum UseTicket {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "使用";
+			this.desc = "成功";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "使用";
+			return "成功";
+		}
+		
+	},
+	TS3 {
+		private String desc = "过期";
+		
+		@Override
+		public int getVal() {
+			return 3;
+		}
+
+		@Override
+		public String getDesc() {
+			return desc;
+		}
+
+		@Override
+		public Object setDesc(String desc) {
+			if (DataUtils.notEmpty(desc)) {
+				this.desc = desc;
+				return this;
+			}else {
+				return setDefaultDesc();
+			}
+		}
+
+		@Override
+		public Object setDefaultDesc() {
+			this.desc = "过期";
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "过期";
+		}
+		
+	},
+	TS4 {
+		private String desc = "失败";
+		
+		@Override
+		public int getVal() {
+			return 4;
+		}
+
+		@Override
+		public String getDesc() {
+			return desc;
+		}
+
+		@Override
+		public Object setDesc(String desc) {
+			if (DataUtils.notEmpty(desc)) {
+				this.desc = desc;
+				return this;
+			}else {
+				return setDefaultDesc();
+			}
+		}
+
+		@Override
+		public Object setDefaultDesc() {
+			this.desc = "失败";
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "失败";
 		}
 		
 	};

@@ -90,10 +90,9 @@
 						</tr>
 						<tr height="35px">
 							<td class="showRight"><span class="investPro-search">签约日期：</span></td>
-						  	<td colspan="3">
-						  		<input name="signDate_begin" id="signDate_begin" type="text" class="easyui-datebox"></input>&nbsp;&nbsp;——&nbsp;&nbsp;
-						  		<input name="signDate_end" id="signDate_end" type="text" class="easyui-datebox"></input>
-						  	</td>
+						  	<td><input name="signDate_begin" id="signDate_begin" type="text" class="easyui-datebox"></input></td>
+							<td>&nbsp;&nbsp;——&nbsp;&nbsp;</td>
+						  	<td><input name="signDate_end" id="signDate_end" type="text" class="easyui-datebox"></input></td>
 						  	<td>&nbsp;&nbsp;
 								<a id="loanlistQueryForm_Btn" class="easyui-linkbutton my-search-button" iconCls="icon-2012092109942" plain="true">查询</a>
 							</td>

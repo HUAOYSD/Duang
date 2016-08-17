@@ -1,16 +1,16 @@
-package org.duang.enums.invest;
+package org.duang.enums.scale;
 import org.duang.util.DataUtils;
 
  
 /**   
- * 是否使用理财券的枚举类
+ * 理财标状态的枚举类
  * @ClassName:  useTicket   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 白攀
  * @date 2016年8月12日 下午4:18:33      
  */  
-public enum UseTicket {
-	UT0 {
+public enum Status {
+	S0 {
 		@Override
 		public int getVal() {
 			return 0;
@@ -32,8 +32,8 @@ public enum UseTicket {
 		}
 		
 	},
-	UT1 {
-		private String desc = "未使用";
+	S1 {
+		private String desc = "可投入";
 		
 		@Override
 		public int getVal() {
@@ -57,18 +57,18 @@ public enum UseTicket {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "未使用";
+			this.desc = "可投入";
 			return this;
 		}
 		
 		@Override
 		public String toString() {
-			return "未使用";
+			return "可投入";
 		}
 
 	},
-	UT2 {
-		private String desc = "使用";
+	S2 {
+		private String desc = "还有机会";
 		
 		@Override
 		public int getVal() {
@@ -92,13 +92,48 @@ public enum UseTicket {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "使用";
+			this.desc = "还有机会";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "使用";
+			return "还有机会";
+		}
+		
+	},
+	S3 {
+		private String desc = "已完成";
+		
+		@Override
+		public int getVal() {
+			return 3;
+		}
+
+		@Override
+		public String getDesc() {
+			return desc;
+		}
+
+		@Override
+		public Object setDesc(String desc) {
+			if (DataUtils.notEmpty(desc)) {
+				this.desc = desc;
+				return this;
+			}else {
+				return setDefaultDesc();
+			}
+		}
+
+		@Override
+		public Object setDefaultDesc() {
+			this.desc = "已完成";
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "已完成";
 		}
 		
 	};

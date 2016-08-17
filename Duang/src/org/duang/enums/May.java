@@ -1,16 +1,18 @@
-package org.duang.enums.invest;
+package org.duang.enums;
+
 import org.duang.util.DataUtils;
 
- 
 /**   
- * 是否使用理财券的枚举类
- * @ClassName:  useTicket   
+ * 可以和不可以的枚举类
+ * @ClassName:  If   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 白攀
- * @date 2016年8月12日 下午4:18:33      
+ * @date 2016年8月9日 上午11:22:24      
  */  
-public enum UseTicket {
-	UT0 {
+public enum May {
+	May0 {
+		private String desc = "不可以";
+		
 		@Override
 		public int getVal() {
 			return 0;
@@ -18,22 +20,33 @@ public enum UseTicket {
 
 		@Override
 		public String getDesc() {
-			return "未知";
+			return desc;
 		}
 
 		@Override
 		public Object setDesc(String desc) {
-			return this;
+			if (DataUtils.notEmpty(desc)) {
+				this.desc = desc;
+				return this;
+			}else {
+				return setDefaultDesc();
+			}
 		}
 
 		@Override
 		public Object setDefaultDesc() {
+			this.desc = "不可以";
 			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "不可以";
 		}
 		
 	},
-	UT1 {
-		private String desc = "未使用";
+	May1 {
+		private String desc = "可以";
 		
 		@Override
 		public int getVal() {
@@ -57,50 +70,15 @@ public enum UseTicket {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "未使用";
+			this.desc = "可以";
 			return this;
 		}
 		
 		@Override
 		public String toString() {
-			return "未使用";
+			return "可以";
 		}
 
-	},
-	UT2 {
-		private String desc = "使用";
-		
-		@Override
-		public int getVal() {
-			return 2;
-		}
-
-		@Override
-		public String getDesc() {
-			return desc;
-		}
-
-		@Override
-		public Object setDesc(String desc) {
-			if (DataUtils.notEmpty(desc)) {
-				this.desc = desc;
-				return this;
-			}else {
-				return setDefaultDesc();
-			}
-		}
-
-		@Override
-		public Object setDefaultDesc() {
-			this.desc = "使用";
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return "使用";
-		}
-		
 	};
 	
 	/**   

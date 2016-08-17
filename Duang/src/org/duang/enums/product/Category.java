@@ -1,16 +1,16 @@
-package org.duang.enums.invest;
+package org.duang.enums.product;
+
 import org.duang.util.DataUtils;
 
- 
 /**   
- * 是否使用理财券的枚举类
- * @ClassName:  useTicket   
+ * 产品类型的枚举类
+ * @ClassName:  If   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 白攀
- * @date 2016年8月12日 下午4:18:33      
+ * @date 2016年8月9日 上午11:22:24      
  */  
-public enum UseTicket {
-	UT0 {
+public enum Category {
+	C0 {
 		@Override
 		public int getVal() {
 			return 0;
@@ -31,9 +31,13 @@ public enum UseTicket {
 			return this;
 		}
 		
+		@Override
+		public String toString() {
+			return "未知";
+		}
 	},
-	UT1 {
-		private String desc = "未使用";
+	C1 {
+		private String desc = "信贷产品";
 		
 		@Override
 		public int getVal() {
@@ -57,18 +61,18 @@ public enum UseTicket {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "未使用";
+			this.desc = "信贷产品";
 			return this;
 		}
-		
+
 		@Override
 		public String toString() {
-			return "未使用";
+			return "信贷产品";
 		}
-
+		
 	},
-	UT2 {
-		private String desc = "使用";
+	C2 {
+		private String desc = "标类产品";
 		
 		@Override
 		public int getVal() {
@@ -92,15 +96,15 @@ public enum UseTicket {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "使用";
+			this.desc = "标类产品";
 			return this;
 		}
-
+		
 		@Override
 		public String toString() {
-			return "使用";
+			return "标类产品";
 		}
-		
+
 	};
 	
 	/**   

@@ -1595,6 +1595,10 @@ public class BaseDao<M> {
 						dt.add(Restrictions.ne(properties.get(i), arg[0]));
 					}else if("as".equalsIgnoreCase(arg[arg.length-1].toString())){//createAlias
 						dt.createAlias(properties.get(i), (String) arg[0], JoinType.INNER_JOIN);
+					}else if("asleft".equalsIgnoreCase(arg[arg.length-1].toString())){//createAlias
+						dt.createAlias(properties.get(i), (String) arg[0], JoinType.LEFT_OUTER_JOIN);
+					}else if("asright".equalsIgnoreCase(arg[arg.length-1].toString())){//createAlias
+						dt.createAlias(properties.get(i), (String) arg[0], JoinType.RIGHT_OUTER_JOIN);
 					}
 				}else {//默认,order,isnull等
 					//eg:properties.add("order");
