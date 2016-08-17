@@ -17,14 +17,12 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.BindCard;
-import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.IDCard;
 import org.duang.enums.If;
 import org.duang.service.BindCardService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
-import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 

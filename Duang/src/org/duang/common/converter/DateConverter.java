@@ -3,6 +3,7 @@ package org.duang.common.converter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
 import org.apache.struts2.util.StrutsTypeConverter;
 import org.duang.util.DateUtils;
 
@@ -14,9 +15,11 @@ import org.duang.util.DateUtils;
  * @date 2016年8月10日 上午11:06:28      
  */  
 public class DateConverter extends StrutsTypeConverter {
-	private final static String DATE_TIME_FOMART1 = "yyyy-MM-dd HH:mm:ss";  
 
-	private final static String DATE_TIME_FOMART2 = "yy/MM/dd hh:mm:ss";  
+	private final static String[] DATE_FOMARTS = new String[]{"yyyy-MM-dd HH:mm:ss",
+		"yyyy/MM/dd hh:mm:ss",
+		"yyyy-MM-dd",
+	"yyyy/MM/dd"};
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -26,21 +29,15 @@ public class DateConverter extends StrutsTypeConverter {
 		if (values != null && values.length > 0) {  
 			dateString = values[0];  
 			if (dateString != null) {  
-				SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_FOMART1);  
-				try {  
-					date = format.parse(dateString);  
-				} catch (Exception e) {  
-					date = null;  
-				}  
-
-				if (date == null) {  
-					format = new SimpleDateFormat(DATE_TIME_FOMART2);  
+				for (String string : DATE_FOMARTS) {
+					SimpleDateFormat format = new SimpleDateFormat(string);
 					try {  
 						date = format.parse(dateString);  
+						break;
 					} catch (Exception e) {  
-						date = null;  
+						continue;
 					}  
-				}  
+				}
 			}  
 		}  
 		return date; 

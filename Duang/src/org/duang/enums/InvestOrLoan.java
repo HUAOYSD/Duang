@@ -1,6 +1,5 @@
 package org.duang.enums;
 
-import org.duang.util.DataUtils;
 
 /**   
  * 选择的是理财用户还是借贷用户

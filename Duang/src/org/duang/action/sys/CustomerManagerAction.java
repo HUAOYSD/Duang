@@ -68,61 +68,6 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 		this.sysUserService = sysUserService;
 	}
 
-	/*
-	 *//**
-	 * 查询所有的客户经理的id和name
-	 * @Title: queryAllCusManagerIdAndName
-	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @param:
-	 * @author LiYonghui
-	 * @date 2016年8月8日 下午3:27:37
-	 * @return: void
-	 * @throws
-	 *//*
-	public void queryAllCusManagerIdAndName() {
-		String json = "";
-		try {
-			List<CustomerManager> list = service.queryEntity("isDelete", If.If0.getVal(), null, Order.desc("createtime"));
-			listMap = fillIdName(list);
-			json = JSONArray.fromObject(listMap).toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("客户经理ACTION查询错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("客户经理ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
-		} finally {
-			printJsonResult(json);
-		}
-	}
-
-
-	  *//**
-	  * 在用条件查询的时候，查询出来为List<Object[]>，所以需要进行封装
-	  * @Title: fillDataObjectArray
-	  * @Description: TODO(这里用一句话描述这个方法的作用)
-	  * @param: @param list
-	  * @param: @return
-	  * @author LiYonghui
-	  * @date 2016年8月3日 下午3:29:33
-	  * @return: List<Map<String,Object>>
-	  * @throws
-	  *//*
-	private List<Map<String, Object>> fillIdName(List<CustomerManager> list) {
-		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
-		try {
-			for (CustomerManager cm : list) {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("id", cm.getId());
-				map.put("name", cm.getName());
-				listMap.add(map);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("封装客户经理错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("封装客户经理错误：" + e.getLocalizedMessage(), this.getClass());
-		}
-		return listMap;
-	}*/
-
 
 	/**   
 	 * 根据分页查询客户经理
