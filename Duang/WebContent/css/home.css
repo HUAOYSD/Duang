@@ -364,3 +364,48 @@ a:hover {
 	font-family: "微软雅黑", "黑体", "宋体";
 	font-size: 14px;
 }
+
+.footer-btn  .btn-ok{
+	background:#4375A6;
+	border-color:#4898d5;
+	color:#fff;
+	height: 35px;
+	width:50px;
+    line-height: 28px;
+    border: 1px solid #dedede;
+    border-radius: 2px;
+    font-weight: 400;
+    font-size:16px;
+    cursor: pointer;
+    margin: 0 6px;
+    padding: 0 15px;
+    text-decoration: none;
+    text-align:center;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.footer-btn  .btn-cancel{
+	background:#c2bcbc;
+	border-color:#f6f6f6;
+	color:#fff;
+	height: 35px;
+	font-size:16px;
+	width:50px;
+    line-height: 28px;
+    border: 1px solid #dedede;
+    border-radius: 2px;
+    font-weight: 400;
+    cursor: pointer;
+    margin: 0 6px;
+    padding: 0 15px;
+    text-decoration: none;
+    text-align:center;
+    display: inline-block;
+    vertical-align: top;
+}
+.footer-btn {
+    text-align: right;
+    margin: 15px;
+    pointer-events: auto;
+}

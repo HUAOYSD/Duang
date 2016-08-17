@@ -148,8 +148,6 @@
 				dataType:'json',
 				success:function(msg) {
 					$("#investMemberEidtForm").form('load',msg);
-					//设置客户经理
-					console.info(msg);
 					$('#editInvestMember_customerManagerId').combobox('select',msg.customerManagerId);  
 					$('#editInvestMember_memberInfoId').val(msg.memberInfoId);
 				}

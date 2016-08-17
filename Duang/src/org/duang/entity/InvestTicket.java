@@ -28,13 +28,14 @@ public class InvestTicket implements java.io.Serializable {
 	private String id;
 	private String name;
 	private String remark;
-	private String describe;
+	private String describes;
 	private double money;
 	private Date beginTime;
 	private Date endTime;
 	private Date createTime;
 	private double minMoney;
 	private String productIds;
+	private int state;
 	private Set<InvestList> investLists = new HashSet<InvestList>(0);
 	private Set<MemberTicketRecord> memberTicketRecords = new HashSet<MemberTicketRecord>(
 			0);
@@ -53,16 +54,16 @@ public class InvestTicket implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public InvestTicket(String id, String name, String remark, String describe,
+	public InvestTicket(String id, String name, String remark, String describes,
 			double money, Date beginTime, Date endTime,
-			Date createTime, double minMoney, String productIds,
+			Date createTime, double minMoney, String productIds, int state,
 			Set<InvestList> investLists,
 			Set<MemberTicketRecord> memberTicketRecords,
 			Set<MemberInvestTicket> memberInvestTickets) {
 		this.id = id;
 		this.name = name;
 		this.remark = remark;
-		this.describe = describe;
+		this.describes = describes;
 		this.money = money;
 		this.beginTime = beginTime;
 		this.endTime = endTime;
@@ -70,6 +71,7 @@ public class InvestTicket implements java.io.Serializable {
 		this.minMoney = minMoney;
 		this.productIds = productIds;
 		this.investLists = investLists;
+		this.state = state;
 		this.memberTicketRecords = memberTicketRecords;
 		this.memberInvestTickets = memberInvestTickets;
 	}
@@ -103,13 +105,13 @@ public class InvestTicket implements java.io.Serializable {
 		this.remark = remark;
 	}
 
-	@Column(name = "describe", length = 16777215)
-	public String getDescribe() {
-		return this.describe;
+	@Column(name = "describes", length = 16777215)
+	public String getDescribes() {
+		return this.describes;
 	}
 
-	public void setDescribe(String describe) {
-		this.describe = describe;
+	public void setDescribes(String describes) {
+		this.describes = describes;
 	}
 
 	@Column(name = "money", precision = 22, scale = 0)
@@ -164,6 +166,14 @@ public class InvestTicket implements java.io.Serializable {
 
 	public void setProductIds(String productIds) {
 		this.productIds = productIds;
+	}
+	@Column(name = "state", length = 11)
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investTicket")

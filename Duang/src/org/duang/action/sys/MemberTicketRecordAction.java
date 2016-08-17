@@ -125,7 +125,7 @@ public class MemberTicketRecordAction extends BaseAction<MemberTicketRecord> {
 				map.put("investTicketId", investTicket.getId());
 				map.put("name", investTicket.getName());
 				map.put("remark", investTicket.getRemark());
-				map.put("describe", investTicket.getDescribe());
+				map.put("describe", investTicket.getDescribes());
 				map.put("money", investTicket.getMoney());
 				map.put("beginTime", DateUtils.date2Str(investTicket.getBeginTime()));
 				map.put("endTime", DateUtils.date2Str(investTicket.getEndTime()));
@@ -170,7 +170,7 @@ public class MemberTicketRecordAction extends BaseAction<MemberTicketRecord> {
 				map.put("investTicketId", investTicket.getId());
 				map.put("name", investTicket.getName());
 				map.put("remark", investTicket.getRemark());
-				map.put("describe", investTicket.getDescribe());
+				map.put("describe", investTicket.getDescribes());
 				map.put("money", investTicket.getMoney());
 				map.put("beginTime", DateUtils.date2Str(investTicket.getBeginTime()));
 				map.put("endTime", DateUtils.date2Str(investTicket.getEndTime()));

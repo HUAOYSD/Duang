@@ -10,11 +10,7 @@
 				  <table border="0">
 					<tr height="35px">
 					  	<td>&nbsp;&nbsp;<span class="investPro-search">名称：</span></td>
-					  	<td ><input  name="investTicket.name"/></td>
-					 	<td>&nbsp;<span class="investPro-search">使用时间：</span></td>
-					  	<td>
-					  		<input  type="text" class="easyui-datebox"  name="useTime"></input>
-					  	</td>
+					  	<td ><input  name="name"/></td>
 					  	<td>
 							  &nbsp;&nbsp;
 							  <a  id="submit_investTicketList_btn" class="easyui-linkbutton my-search-button" iconCls="icon-2012092109942" plain="true">查询</a>
@@ -35,7 +31,8 @@
 	  <div id="investTicketList_toolbar">
 	      <a id="investTicketList-add-btn" class="easyui-linkbutton" iconCls="icon-add" plain="true">新增</a>
 	      <a id="investTicketList-update-btn" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
-	      <a id="investTicketList-delete-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+	      <a id="investTicketList-delete-btn" class="easyui-linkbutton" iconCls="icon-2012080404218" plain="true">设置为过期</a>
+	      <a id="investTicketList-select-InvestProduct-btn" class="easyui-linkbutton" iconCls="icon-anchor" plain="true">可使用产品</a>
   	  </div>
 	  
 	</div>
