@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.xml.crypto.Data;
 
 import net.sf.json.JSONArray;
 
@@ -17,12 +16,9 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.InvestMember;
 import org.duang.entity.InvestTicket;
-import org.duang.entity.MemberInfo;
 import org.duang.entity.MemberTicketRecord;
 import org.duang.service.MemberTicketRecordService;
-import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
