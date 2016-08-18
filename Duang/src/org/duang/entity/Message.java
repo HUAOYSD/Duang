@@ -66,7 +66,7 @@ public class Message implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "receiver")
 	public MemberInfo getMemberInfoByReceiver() {
 		return this.memberInfoByReceiver;
@@ -76,7 +76,7 @@ public class Message implements java.io.Serializable {
 		this.memberInfoByReceiver = memberInfoByReceiver;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sender")
 	public MemberInfo getMemberInfoBySender() {
 		return this.memberInfoBySender;
