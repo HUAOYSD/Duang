@@ -11,5 +11,7 @@ import org.duang.entity.LoanList;
  */  
 public interface LoanListDao extends CommonInterface<LoanList>  {
 
+	
+	
 }
 

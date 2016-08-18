@@ -1,5 +1,7 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -7,34 +9,98 @@ import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.LoanListDao;
 import org.duang.dao.ScaleDao;
-import org.duang.entity.InvestMember;
+import org.duang.dao.ScaleLoanListDao;
+import org.duang.dao.StockDao;
+import org.duang.entity.LoanList;
 import org.duang.entity.Scale;
-import org.duang.service.ScaleService;
+import org.duang.entity.ScaleLoanList;
+import org.duang.entity.InvestMember;
+import org.duang.entity.Stock;
+import org.duang.service.ScaleLoanListService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 
 /**   
- * 理财标业务接口实现类
- * @ClassName:  SysInvestMemberServiceImpl   
+ * 借贷记录与理财标关联业务接口实现类
+ * @ClassName:  ScaleLoanListServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author LiYonghui
- * @date 2016年7月26日 下午3:25:24      
+ * @author 白攀
+ * @date 2016年8月17日 下午3:37:07      
  */  
-@ServiceLog(ModelName="理财标管理")
-@Service(value="scaleserviceimpl")
-public class ScaleServiceImpl implements ScaleService{
+@ServiceLog(ModelName="借贷记录与理财标关联管理")
+@Service(value="scaleloanlistserviceimpl")
+public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 
-	private ScaleDao dao;
-
-	@Resource
-	public void setDao(ScaleDao dao) {
+	private ScaleLoanListDao dao;
+	private LoanListDao loanListDao;
+	private StockDao stockDao;
+	@Resource()
+	public void setDao(ScaleLoanListDao dao) {
 		this.dao = dao;
 	}
+	@Resource
+	public void setLoanListDao(LoanListDao loanListDao) {
+		this.loanListDao = loanListDao;
+	}
+	@Resource
+	public void setStockDao(StockDao stockDao) {
+		this.stockDao = stockDao;
+	}
+
+	public ScaleLoanListServiceImpl(){
+		LoggerUtils.info("注入ScaleLoanListServiceImpl服务层", this.getClass());
+	}
 	
-	public ScaleServiceImpl(){
-		LoggerUtils.info("注入ScaleServiceImpl服务层", this.getClass());
+	/**   
+	 * 匹配借贷记录到理财标
+	 * @Title: matchScaleLoanRecords   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param scaleId
+	 * @param: @param loanListIds
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年8月17日 下午3:14:19
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public boolean matchScaleLoanRecords(String scaleId, String[] loanListIds) throws Exception{
+		if (loanListIds == null || loanListIds.length == 0) {
+			return false;
+		}
+		//1、获取所有借贷记录
+		String hql = "FROM LoanList";
+		for (int j = 0; j < loanListIds.length; j++) {
+			if (j == 0) {
+				hql += "WHERE id = '" + loanListIds[j] + "'";
+			}else {
+				hql += " OR id = '" + loanListIds[j] + "'";
+			}
+		}
+		List<LoanList> loanLists = loanListDao.queryByHQL(hql, null);
+		
+		//2、放入表scale_loan_list
+		Scale scale = new Scale(scaleId);
+		List<ScaleLoanList> scaleLoanLists = new LinkedList<ScaleLoanList>();
+		for (LoanList loanList : loanLists) {
+			scaleLoanLists.add(new ScaleLoanList(DataUtils.randomUUID(), scale, loanList));
+		}
+		for (ScaleLoanList scaleLoanList : scaleLoanLists) {
+			dao.saveEntity(scaleLoanList);
+		}
+		
+		//3、分配库存
+		List<Stock> stocks = new ArrayList<Stock>();
+		for (LoanList loanList : loanLists) {
+			//stocks.add(new Stock(DataUtils.randomUUID(), scale, loanList, investListByTurnInvestListId, investListByInvestListId, money, fetch, createTime, fetchTime, difference, status, isTurn));
+		}
+		
+		//4、改变借贷记录的状态
+		
+		return true;
 	}
 	
 	/**
@@ -72,7 +138,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Scale> queryAllEntity(Order order) throws Exception {
+	public List<ScaleLoanList> queryAllEntity(Order order) throws Exception {
 		return dao.queryAllEntity(order);
 	}
 
@@ -82,7 +148,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Scale> queryAllEntity(PageUtil<Scale> page, Order order) throws Exception{
+	public List<ScaleLoanList> queryAllEntity(PageUtil<ScaleLoanList> page, Order order) throws Exception{
 		return dao.queryAllEntity(page, order);
 	}
 
@@ -94,7 +160,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Scale> queryEntity(String field, Object value, PageUtil<Scale> page, Order order) throws Exception{
+	public List<ScaleLoanList> queryEntity(String field, Object value, PageUtil<ScaleLoanList> page, Order order) throws Exception{
 		return dao.queryEntity(field, value, page, order);
 	}
 
@@ -106,7 +172,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Scale> queryEntity(List<String> properties, List<Object> values, PageUtil<Scale> page) throws Exception{
+	public List<ScaleLoanList> queryEntity(List<String> properties, List<Object> values, PageUtil<ScaleLoanList> page) throws Exception{
 		return dao.queryEntity(properties, values, page);
 	}
 
@@ -116,7 +182,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public Scale findById(Serializable id) throws Exception{
+	public ScaleLoanList findById(Serializable id) throws Exception{
 		return dao.findById(id);
 	}
 
@@ -126,7 +192,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(Scale t) throws Exception{
+	public boolean saveEntity(ScaleLoanList t) throws Exception{
 		return dao.saveEntity(t);
 	}
 
@@ -136,7 +202,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(Scale t) throws Exception{
+	public boolean updateEntity(ScaleLoanList t) throws Exception{
 		return dao.updateEntity(t);
 	}
 
@@ -243,7 +309,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public Scale findEntity(String property, Object value) throws Exception{
+	public ScaleLoanList findEntity(String property, Object value) throws Exception{
 		return dao.findEntity(property, value);
 	}
 
@@ -254,7 +320,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public Scale findEntity(Map<String, Object> params) throws Exception{
+	public ScaleLoanList findEntity(Map<String, Object> params) throws Exception{
 		return dao.findEntity(params);
 	}
 
@@ -267,7 +333,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Scale> queryByHQL(String hql, PageUtil<Scale> page, Object... params) throws Exception{
+	public List<ScaleLoanList> queryByHQL(String hql, PageUtil<ScaleLoanList> page, Object... params) throws Exception{
 		return dao.queryByHQL(hql, page, params);
 	}
 
@@ -280,12 +346,12 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Scale> queryBySQL(String sql, PageUtil<Scale> page, Object... params) throws Exception{
+	public List<ScaleLoanList> queryBySQL(String sql, PageUtil<ScaleLoanList> page, Object... params) throws Exception{
 		return dao.queryBySQL(sql, page, params);
 	}
 
 	@Override
-	public boolean deleteEntity(Scale t) throws Exception {
+	public boolean deleteEntity(ScaleLoanList t) throws Exception {
 		return dao.deleteEntity(t);
 	}
 }

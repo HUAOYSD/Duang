@@ -2,39 +2,37 @@ package org.duang.service.impl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Resource;
-
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.ScaleDao;
+import org.duang.dao.StockDao;
+import org.duang.entity.Stock;
 import org.duang.entity.InvestMember;
-import org.duang.entity.Scale;
-import org.duang.service.ScaleService;
+import org.duang.service.StockService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 
 /**   
- * 理财标业务接口实现类
- * @ClassName:  SysInvestMemberServiceImpl   
+ * 库存业务接口实现类
+ * @ClassName:  StockServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author LiYonghui
- * @date 2016年7月26日 下午3:25:24      
+ * @author 白攀
+ * @date 2016年8月17日 下午3:37:07      
  */  
-@ServiceLog(ModelName="理财标管理")
-@Service(value="scaleserviceimpl")
-public class ScaleServiceImpl implements ScaleService{
+@ServiceLog(ModelName="理财库存管理")
+@Service(value="stockserviceimpl")
+public class StockServiceImpl implements StockService{
 
-	private ScaleDao dao;
+	private StockDao dao;
 
-	@Resource
-	public void setDao(ScaleDao dao) {
+	@Resource()
+	public void setDao(StockDao dao) {
 		this.dao = dao;
 	}
-	
-	public ScaleServiceImpl(){
-		LoggerUtils.info("注入ScaleServiceImpl服务层", this.getClass());
+
+	public StockServiceImpl(){
+		LoggerUtils.info("注入StockServiceImpl服务层", this.getClass());
 	}
 	
 	/**
@@ -72,7 +70,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Scale> queryAllEntity(Order order) throws Exception {
+	public List<Stock> queryAllEntity(Order order) throws Exception {
 		return dao.queryAllEntity(order);
 	}
 
@@ -82,7 +80,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Scale> queryAllEntity(PageUtil<Scale> page, Order order) throws Exception{
+	public List<Stock> queryAllEntity(PageUtil<Stock> page, Order order) throws Exception{
 		return dao.queryAllEntity(page, order);
 	}
 
@@ -94,7 +92,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Scale> queryEntity(String field, Object value, PageUtil<Scale> page, Order order) throws Exception{
+	public List<Stock> queryEntity(String field, Object value, PageUtil<Stock> page, Order order) throws Exception{
 		return dao.queryEntity(field, value, page, order);
 	}
 
@@ -106,7 +104,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Scale> queryEntity(List<String> properties, List<Object> values, PageUtil<Scale> page) throws Exception{
+	public List<Stock> queryEntity(List<String> properties, List<Object> values, PageUtil<Stock> page) throws Exception{
 		return dao.queryEntity(properties, values, page);
 	}
 
@@ -116,7 +114,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public Scale findById(Serializable id) throws Exception{
+	public Stock findById(Serializable id) throws Exception{
 		return dao.findById(id);
 	}
 
@@ -126,7 +124,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(Scale t) throws Exception{
+	public boolean saveEntity(Stock t) throws Exception{
 		return dao.saveEntity(t);
 	}
 
@@ -136,7 +134,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(Scale t) throws Exception{
+	public boolean updateEntity(Stock t) throws Exception{
 		return dao.updateEntity(t);
 	}
 
@@ -243,7 +241,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public Scale findEntity(String property, Object value) throws Exception{
+	public Stock findEntity(String property, Object value) throws Exception{
 		return dao.findEntity(property, value);
 	}
 
@@ -254,7 +252,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public Scale findEntity(Map<String, Object> params) throws Exception{
+	public Stock findEntity(Map<String, Object> params) throws Exception{
 		return dao.findEntity(params);
 	}
 
@@ -267,7 +265,7 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Scale> queryByHQL(String hql, PageUtil<Scale> page, Object... params) throws Exception{
+	public List<Stock> queryByHQL(String hql, PageUtil<Stock> page, Object... params) throws Exception{
 		return dao.queryByHQL(hql, page, params);
 	}
 
@@ -280,12 +278,12 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Scale> queryBySQL(String sql, PageUtil<Scale> page, Object... params) throws Exception{
+	public List<Stock> queryBySQL(String sql, PageUtil<Stock> page, Object... params) throws Exception{
 		return dao.queryBySQL(sql, page, params);
 	}
 
 	@Override
-	public boolean deleteEntity(Scale t) throws Exception {
+	public boolean deleteEntity(Stock t) throws Exception {
 		return dao.deleteEntity(t);
 	}
 }

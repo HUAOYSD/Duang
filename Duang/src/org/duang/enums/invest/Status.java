@@ -30,7 +30,11 @@ public enum Status {
 		public Object setDefaultDesc() {
 			return this;
 		}
-		
+
+		@Override
+		public String toString() {
+			return "未知";
+		}
 	},
 	S1 {
 		private String desc = "资金匹配中";

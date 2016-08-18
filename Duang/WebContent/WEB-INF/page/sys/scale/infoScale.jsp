@@ -6,91 +6,91 @@
 	  	<form id="scale_info_form" method="post" style="margin-bottom: 45px;"> 
 	  		<div class="row0">   
 		        <label for="name" class="infolabel from_label label_member">名称：</label>  
-		        <label class="label_member">${entity.name}</label>
+		        <label class="label_member">${info.name}</label>
 		    </div> 
-	  		<div class="row0">   
+	  		<div class="row1">   
 		        <label for="status" class="infolabel from_label label_member">名称：</label>  
-		        <label class="label_member">${entity.status}</label>
-		    </div> 
-		    <div class="row1">   
-		        <label for="product.id" class="infolabel from_label label_member">产品：</label>  
-		        <label class="label_member">${entity.product.name}</label>
+		        <label class="label_member">${info.status}</label>
 		    </div> 
 		    <div class="row0">   
-		        <label for="beginTime" class="infolabel from_label label_member">开标时间：</label>  
-		        <label class="label_member">${entity.beginTime}</label>
+		        <label for="product.id" class="infolabel from_label label_member">产品：</label>  
+		        <label class="label_member">${info.productName}</label>
 		    </div> 
 		    <div class="row1">   
+		        <label for="beginTime" class="infolabel from_label label_member">开标时间：</label>  
+		        <label class="label_member">${info.beginTime}</label>
+		    </div> 
+		    <div class="row0">   
 		        <label for="endTime" class="infolabel from_label label_member">截止时间：</label>  
-		        <label class="label_member">${entity.endTime}</label>
+		        <label class="label_member">${info.endTime}</label>
 		    </div> 
-		    <div>   
+		    <div class="row1">   
 		        <label for="timeLimit" class="infolabel from_label label_member">时长简介：</label>  
-		        <label class="label_member">${entity.timeLimit}</label>
+		        <label class="label_member">${info.timeLimit}</label>
 		    </div> 
-		    <div>   
+		    <div class="row0">   
 		        <label for="calcBeginTime" class="infolabel from_label label_member">开始计息日：</label>  
-		        <label class="label_member">${entity.calcBeginTime}</label>
+		        <label class="label_member">${info.calcBeginTime}</label>
 		    </div> 
-		    <div>   
+		    <div class="row1">   
 		        <label for="calcEndTime" class="infolabel from_label label_member">结束计息日：</label> 
-		        <label class="label_member">${entity.calcEndTime}</label> 
+		        <label class="label_member">${info.calcEndTime}</label> 
 		    </div> 
-		    <div>   
+		    <div class="row0">   
 		        <label for="revenue" class="infolabel from_label label_member">收益率：</label>  
-		        <label class="label_member">${entity.revenue}</label>
+		        <label class="label_member">${info.revenue}</label>
 		    </div> 
-		    <div>   
+		    <div class="row1">   
 		        <label for="revenueAdd" class="infolabel from_label label_member">附收益率：</label>  
-		        <label class="label_member">${entity.revenueAdd}</label>
+		        <label class="label_member">${info.revenueAdd}</label>
 		    </div>
-		    <div>   
+		    <div class="row0">   
 		        <label for="maxLimit" class="infolabel from_label label_member">单笔限额：</label>  
-		        <label class="label_member">${entity.maxLimit}</label>
+		        <label class="label_member">${info.maxLimit}</label>
 		    </div> 
-		    <div>   
+		    <div class="row1">   
 		        <label for="returnStyle" class="infolabel from_label label_member">还款方式：</label>  
-		        <label class="label_member">${entity.returnStyle}</label>
+		        <label class="label_member">${info.returnStyle}</label>
 		    </div> 
-		    <div>   
+		    <div class="row0">   
 		        <label for="useTicket" class="infolabel from_label label_member">可使用理财券：</label>  
-		        <label class="label_member">${entity.useTicket}</label>
+		        <label class="label_member">${info.useTicket}</label>
 		    </div> 
-		    <div>   
+		    <div class="row1">   
 		        <label for="transfer" class="infolabel from_label label_member">可转让：</label>  
-		        <label class="label_member">${entity.transfer}</label>
+		        <label class="label_member">${info.transfer}</label>
 		    </div> 
-		    <div>   
+		    <div class="row0">   
 		        <label for="turnDate" class="infolabel from_label label_member">截止转让日期：</label>  
-		        <label class="label_member">${entity.turnDate}</label>
+		        <label class="label_member">${info.turnDate}</label>
 		    </div>
-		    <div>   
+		    <div class="row1">   
 		        <label for="totalMoney" class="infolabel from_label label_member">标总额：</label>  
-		        <label class="label_member">${entity.totalMoney}</label>
+		        <label class="label_member">${info.totalMoney}</label>
 		    </div> 
-		    <div>   
+		    <div class="row0">   
 		        <label for="residueMoney" class="infolabel from_label label_member">可投金额：</label>  
-		        <label class="label_member">${entity.residueMoney}</label>
+		        <label class="label_member">${info.residueMoney}</label>
 		    </div> 
-		    <div>   
+		    <div class="row1">   
 		        <label for="yetMoney" class="infolabel from_label label_member">已投金额：</label>  
-		        <label class="label_member">${entity.yetMoney}</label>
+		        <label class="label_member">${info.yetMoney}</label>
 		    </div> 
-		    <div>   
+		    <div class="row0">   
 		        <label for="scoreBonus" class="infolabel from_label label_member">积分奖励：</label>  
-		        <label class="label_member">${entity.scoreBonus}</label>
+		        <label class="label_member">${info.scoreBonus}</label>
 		    </div> 
-		    <div>   
+		    <div class="row1">   
 		        <label for="onesScore" class="infolabel from_label label_member">单位积分：</label>  
-		        <label class="label_member">${entity.onesScore}</label>
+		        <label class="label_member">${info.onesScore}</label>
 		    </div> 
-		    <div>   
+		    <div class="row0">   
 		        <label for="isTurn" class="infolabel from_label label_member">转让标：</label>  
-		        <label class="label_member">${entity.isTurn}</label>
+		        <label class="label_member">${info.isTurn}</label>
 		    </div> 
-		    <div>   
+		    <div class="row1">   
 		        <label for="tags" class="infolabel from_label label_member">标签：</label>  
-		        <label class="label_member">${entity.tags}</label> 
+		        <label class="label_member">${info.tags}</label> 
 		    </div>
 		</form>  
 	</div>

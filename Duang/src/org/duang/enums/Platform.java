@@ -30,6 +30,11 @@ public enum Platform {
 		public Object setDefaultDesc() {
 			return this;
 		}
+
+		@Override
+		public String toString() {
+			return "未知";
+		}
 		
 	},
 	P1 {

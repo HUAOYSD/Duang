@@ -30,7 +30,11 @@ public enum UseTicket {
 		public Object setDefaultDesc() {
 			return this;
 		}
-		
+
+		@Override
+		public String toString() {
+			return "未知";
+		}
 	},
 	UT1 {
 		private String desc = "未使用";

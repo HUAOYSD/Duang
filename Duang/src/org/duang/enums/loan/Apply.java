@@ -31,6 +31,11 @@ public enum Apply {
 			return this;
 		}
 		
+		@Override
+		public String toString() {
+			return "未知";
+		}
+		
 	},
 	A1 {
 		private String desc = "待审核";

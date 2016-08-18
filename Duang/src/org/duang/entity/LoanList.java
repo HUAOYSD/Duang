@@ -74,6 +74,10 @@ public class LoanList implements java.io.Serializable {
 		this.id = id;
 		this.loanMember = loanMember;
 	}
+	
+	public LoanList(String id) {
+		this.id = id;
+	}
 
 	/** full constructor */
 	public LoanList(String id, LoanMember loanMember, int loanType, String pactNumber, int isSell, int poundageState, double money, double realMoney, double manageCost, double poundage, double getMoney, double yetMoney, double returnMoney, double agoMoney, double yetReturnMoney, int returnStatus, int loanState, int applyState, String loanUse, double loanInterest, Date createTime, Date signDate, Date beginReturnDate, Date endReturnDate, Date doneReturnDate, int loanStyle, int backStyle, CustomerManager customerManager,Set<Stock> stocks, Set<ApplyLoanResult> applyLoanResults, Set<ScaleLoanList> scaleLoanLists, Set<BillLoan> billLoans, Set<ApplyLoanInfo> applyLoanInfos, Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {

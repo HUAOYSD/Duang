@@ -30,7 +30,11 @@ public enum BackStyle {
 		public Object setDefaultDesc() {
 			return this;
 		}
-		
+
+		@Override
+		public String toString() {
+			return "未知";
+		}
 	},
 	B1 {
 		private String desc = "等额本息";

@@ -31,6 +31,11 @@ public enum Status {
 			return this;
 		}
 		
+		@Override
+		public String toString() {
+			return "未知";
+		}
+		
 	},
 	S1 {
 		private String desc = "可投入";

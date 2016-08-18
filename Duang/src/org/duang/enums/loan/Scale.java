@@ -30,7 +30,11 @@ public enum Scale {
 		public Object setDefaultDesc() {
 			return this;
 		}
-		
+
+		@Override
+		public String toString() {
+			return "未知";
+		}
 	},
 	S1 {
 		private String desc = "未起标";

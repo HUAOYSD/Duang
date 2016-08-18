@@ -30,7 +30,11 @@ public enum TakeMoney {
 		public Object setDefaultDesc() {
 			return this;
 		}
-		
+
+		@Override
+		public String toString() {
+			return "未知";
+		}
 	},
 	T1 {
 		private String desc = "未放款";

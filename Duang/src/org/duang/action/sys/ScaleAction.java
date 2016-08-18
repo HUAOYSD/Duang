@@ -276,6 +276,30 @@ public class ScaleAction extends BaseAction<Scale> {
 			} else if (ResultPath.INFO.equals(path)) {
 				if (entity != null && DataUtils.notEmpty(entity.getId())) {
 					entity = service.findById(entity.getId());
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("productName", entity.getProduct().getName());
+					map.put("name", entity.getName());
+					map.put("beginTime", DateUtils.date2Str(entity.getBeginTime(), "yyyy-MM-dd"));
+					map.put("endTime", DateUtils.date2Str(entity.getEndTime(), "yyyy-MM-dd"));
+					map.put("calcBeginTime", DateUtils.date2Str(entity.getCalcBeginTime(), "yyyy-MM-dd"));
+					map.put("calcEndTime", DateUtils.date2Str(entity.getCalcEndTime(), "yyyy-MM-dd"));
+					map.put("turnDate", DateUtils.date2Str(entity.getTurnDate(), "yyyy-MM-dd"));
+					map.put("timeLimit", entity.getTimeLimit());
+					map.put("revenue", entity.getRevenue());
+					map.put("revenueAdd", entity.getRevenueAdd());
+					map.put("maxLimit", entity.getMaxLimit());
+					map.put("returnStyle", entity.getReturnStyle());
+					map.put("tags", entity.getTags());
+					map.put("useTicket", May.valueOf("May"+entity.getUseTicket()).toString());
+					map.put("transfer", May.valueOf("May"+entity.getTransfer()).toString());
+					map.put("totalMoney", entity.getTotalMoney());
+					map.put("residueMoney", entity.getResidueMoney());
+					map.put("yetMoney", entity.getYetMoney());
+					map.put("scoreBonus", Has.valueOf("Has"+entity.getScoreBonus()).toString());
+					map.put("onesScore", entity.getOnesScore());
+					map.put("status", Status.valueOf("S"+entity.getStatus()).toString());
+					map.put("isTurn", If.valueOf("If"+entity.getIsTurn()).toString());
+					getRequest().setAttribute("info", map);
 				}
 				return ResultPath.INFO;
 			}

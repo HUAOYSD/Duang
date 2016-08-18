@@ -30,7 +30,11 @@ public enum Poundage {
 		public Object setDefaultDesc() {
 			return this;
 		}
-		
+
+		@Override
+		public String toString() {
+			return "未知";
+		}
 	},
 	P1 {
 		private String desc = "未扣手续费";
