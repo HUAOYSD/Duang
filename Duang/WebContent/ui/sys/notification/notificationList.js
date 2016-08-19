@@ -24,11 +24,11 @@ $(function(){
 		toolbar:'#notificationList_toolbar',
 		columns:[[
 				{field:'id',checkbox:true},
-				{field:'title',title:'标题',halign:"center", align:"center",width:200},
-		        {field:'publishTime',title:'发布日期',halign:"center", align:"center",width:300},
+				{field:'title',title:'标题',halign:"center", align:"left",width:300},
+		        {field:'publishTime',title:'发布日期',halign:"center", align:"center",width:200},
 		        {field:'beginDate',title:'有效期始',halign:"center", align:"center",width:200},
 				{field:'endDate',title:'有效期至',halign:"center", align:"center",width:200},
-		        {field:'content',title:'内容',halign:"center", align:"center",width:100},
+		        {field:'content',title:'内容',halign:"center", align:"left",width:600},
 		        {field:'status',title:'状态',halign:"center", align:"center",width:200,
 					formatter: function(value,row,index){
 						  if(value==1){
