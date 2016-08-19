@@ -16,7 +16,6 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
 import org.duang.entity.Message;
 import org.duang.service.MessageService;

@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @date 2016年8月18日 上午11:21:42
  */
 @ServiceLog(ModelName="通知")
-@Service(value="Notificationserviceimpl")
+@Service(value="notificationserviceimpl")
 public class NotificationServiceImpl implements NotificationService{
 
 	private NotificationDao dao;
