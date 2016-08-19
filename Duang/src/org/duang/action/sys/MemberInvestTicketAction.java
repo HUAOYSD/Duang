@@ -16,6 +16,8 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.entity.InvestTicket;
+import org.duang.entity.MemberInfo;
 import org.duang.entity.MemberInvestTicket;
 import org.duang.service.MemberInvestTicketService;
 import org.duang.util.DataUtils;
@@ -56,8 +58,8 @@ public class MemberInvestTicketAction extends BaseAction<MemberInvestTicket> {
 	 * @return: String      
 	 * @throws
 	 */
-	public String gotoBindInfoList(){
-		return "MemberInvestTicketList";
+	public String gotoList(){
+		return "memberInvestTicketList";
 	}
 	
 	public void queryAllMemberInvestTicket() {
@@ -132,6 +134,62 @@ public class MemberInvestTicketAction extends BaseAction<MemberInvestTicket> {
 	}
 	
 	/**
+	 * 封装集合
+	 * @Title: fillDataObjectArray   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param list
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年8月19日 下午2:52:40
+	 * @return: List<Map<String,Object>>      
+	 * @throws
+	 */
+	private List<Map<String, Object>> fillDataObjectArray(@SuppressWarnings("rawtypes") List list) {
+		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+		try {
+			for (int i=0;i<list.size();i++) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				
+				Object[] array = (Object[]) list.get(i);
+				InvestTicket ticket = (InvestTicket) array[0];
+				MemberInfo memberInfo = (MemberInfo) array[1];
+				MemberInvestTicket memberInvestTicket = (MemberInvestTicket)array[2];
+				
+				
+				map.put("id", memberInvestTicket.getId());
+				map.put("isUse", memberInvestTicket.getIsUse());
+				map.put("resourceStyle", memberInvestTicket.getResourceStyle());
+				
+				//用户信息
+				map.put("loginName", memberInfo.getLoginName());
+				map.put("realName", memberInfo.getRealName());
+				map.put("nickname", memberInfo.getNickname());
+				map.put("email", memberInfo.getEmail());
+				map.put("sex", memberInfo.getSex());
+				map.put("phone", memberInfo.getPhone());
+				
+				//理财券
+				map.put("ticketName", ticket.getName());
+				map.put("remark", ticket.getRemark());
+				map.put("describes", ticket.getDescribes());
+				map.put("money", ticket.getMoney());
+				map.put("beginTime",DateUtils.date2Str(ticket.getBeginTime()));
+				map.put("endTime",DateUtils.date2Str(ticket.getEndTime()));
+				map.put("createTime",DateUtils.date2Str(ticket.getCreateTime()));
+				map.put("minMoney", ticket.getMinMoney());
+				map.put("productIds", ticket.getProductIds());
+				map.put("state", ticket.getState());
+				listMap.add(map);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("用户理财券封装错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("用户理财券封装错误：" + e.getLocalizedMessage(), this.getClass());
+		}
+		return listMap;
+	}
+	
+	/**
 	 * 根据参数查询
 	 * @Title: queryByParameter   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -143,27 +201,41 @@ public class MemberInvestTicketAction extends BaseAction<MemberInvestTicket> {
 	 */
 	public void queryByParameter() {
 		try {
-			//封装参数
+			condsUtils.addProperties(true, "memberInfo");
+			condsUtils.concatValue(new String[] { "memberin", "as" });
 			if (DataUtils.notEmpty(entity.getMemberInfo().getRealName())) {
-				condsUtils.addProperties(false, "memberInfo.realName");
-				condsUtils.concatValue(new String[] { entity.getMemberInfo().getRealName(), "like" });
+				condsUtils.addProperties(false, "memberin.realName");
+				condsUtils.concatValue(new String[] {entity.getMemberInfo().getRealName(), "like" });
 			}
 			if (DataUtils.notEmpty(entity.getMemberInfo().getLoginName())) {
-				condsUtils.addProperties(false, "memberInfo.loginName");
+				condsUtils.addProperties(false, "memberin.loginName");
 				condsUtils.concatValue(new String[] { entity.getMemberInfo().getLoginName(), "like" });
 			}
+			if (DataUtils.notEmpty(entity.getMemberInfo().getPhone())) {
+				condsUtils.addProperties(false, "memberin.phone");
+				condsUtils.concatValue(new String[] { entity.getMemberInfo().getPhone(), "like" });
+			}
+			condsUtils.addProperties(false, "investTicket");
+			condsUtils.concatValue(new String[] { "ticket", "as" });
 			if (DataUtils.notEmpty(entity.getInvestTicket().getName())) {
-				condsUtils.addProperties(false, "investTicket.name");
+				condsUtils.addProperties(false, "ticket.name");
 				condsUtils.concatValue(new String[] {entity.getInvestTicket().getName(), "like" });
 			}
+			if (DataUtils.notEmpty(getRequest().getParameter("endTime"))) {
+				condsUtils.concat("ticket.endTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("endTime")+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "lt"});
+			}
+			if (DataUtils.notEmpty(getRequest().getParameter("startTime"))) {
+				condsUtils.concat("ticket.beginTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("startTime")+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), "gt"});
+			}
 			//查询数据
-			List<MemberInvestTicket> list = memberInvestTicketService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+			@SuppressWarnings("rawtypes")
+			List list = memberInvestTicketService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			int count = memberInvestTicketService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			//封装json
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				//fillDataObjectArray方法用于重新组合数据集，让其能够符合页面展示
-				jsonObject.put("rows", fillDataObjectList(list));
+				jsonObject.put("rows", fillDataObjectArray(list));
 				jsonObject.put("total", count);
 			} else {
 				jsonObject.put("rows", new JSONArray());

@@ -59,7 +59,7 @@ public class MemberInvestTicket implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "invest_ticket_id")
 	public InvestTicket getInvestTicket() {
 		return this.investTicket;
@@ -69,7 +69,7 @@ public class MemberInvestTicket implements java.io.Serializable {
 		this.investTicket = investTicket;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "member_info")
 	public MemberInfo getMemberInfo() {
 		return this.memberInfo;
