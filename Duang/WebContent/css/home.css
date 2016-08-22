@@ -288,7 +288,11 @@ a:hover {
 	width: 100px;
 	text-align: right;
 }
-
+.applyLoanInfo_from_label{
+	display: inline-block;
+	width: 200px;
+	text-align: right;
+}
 #footer-oper {
 	background-color: #f2f2f2;
 	width: 100%;

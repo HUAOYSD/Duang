@@ -102,7 +102,7 @@ $("#notificationList-add-btn").on('click',function(){
 $("#notificationList-update-btn").on('click',function(){
 	//判断是否选择
 	if(!isSelectedRow()){
-		layer.msg("请选择需要修改的理财券",{time:2000});
+		layer.msg("请选择需要修改的通知",{time:2000});
 		return;
 	}
 	indexLayer = layer.open({

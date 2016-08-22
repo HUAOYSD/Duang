@@ -6,19 +6,14 @@
 <%@ include file="/page/inc/inc.jsp"%>
 <body style="background-color:#fff;" class="bodyContent">
 	<div class="content">
-	  	<form id="addNotifycationForm" method="post"> 
+	  	<form id="applyLoanInfoForm" method="post"> 
 		    <div>   
-		        <label for="title" class="from_label">名称：</label>   
-		        <input class="easyui-validatebox" type="text" name="title" data-options="required:true" />   
+		        <label for="name" class="from_label">名称：</label>   
+		        <input class="easyui-validatebox" type="text" name="name" data-options="required:true" />   
 		    </div>   
 		    <div>   
-		        <label for="status" class="from_label">状态：</label> <select
-					class="easyui-combobox" name="status"
-					data-options="panelHeight:'auto'">
-					<option value="1" >启动弹窗</option>
-					<option value="2" selected="selected">通告列表内</option>
-					<option value="3">以上都有</option>
-				</select>  
+		        <label for="money" class="from_label">状态：</label> 
+		         <input class="easyui-validatebox" type="text" name="name" data-options="required:true" />   
 		    </div>
 		    <div>   
 		        <label for="publishTime" class="from_label">发布时间：</label>   
@@ -37,13 +32,51 @@
 		        <textarea rows="5" cols="30" name="content"></textarea>    
 		    </div>
 		    <input type="hidden" name="id" /> 
+		    map.put("id", applyLoanInfo.getId());
+				map.put("name", applyLoanInfo.getName());
+				map.put("money", applyLoanInfo.getMoney());
+				map.put("timeLimit", applyLoanInfo.getTimeLimit());
+				map.put("sex", applyLoanInfo.getSex());
+				map.put("phone", applyLoanInfo.getPhone());
+				map.put("idcard", applyLoanInfo.getIdcard());
+				map.put("email", applyLoanInfo.getEmail());
+				map.put("nativeAddress", applyLoanInfo.getNativeAddress());
+				map.put("nativeInfo", applyLoanInfo.getNativeInfo());
+				
+				map.put("address", applyLoanInfo.getAddress());
+				map.put("liveStyle", applyLoanInfo.getLiveStyle());
+				map.put("education", applyLoanInfo.getEducation());
+				map.put("marriage", applyLoanInfo.getMarriage());
+				map.put("house", applyLoanInfo.getHouse());
+				
+				map.put("hasCredit", applyLoanInfo.getHasCredit());
+				map.put("creditCard", applyLoanInfo.getCreditCard());
+				map.put("industry", applyLoanInfo.getIndustry());
+				map.put("jobStyle", applyLoanInfo.getJobStyle());
+				map.put("job", applyLoanInfo.getJob());
+				
+				map.put("jobCity", applyLoanInfo.getJobCity());
+				map.put("company", applyLoanInfo.getCompany());
+				map.put("publicTel", applyLoanInfo.getPublicTel());
+				map.put("salaryFromBank", applyLoanInfo.getSalaryFromBank());
+				map.put("yearIncome", applyLoanInfo.getYearIncome());
+				
+				map.put("use", applyLoanInfo.getUse());
+				map.put("monthBack", applyLoanInfo.getMonthBack());
+				map.put("urgencyPerson", applyLoanInfo.getUrgencyPerson());
+				map.put("urgencyPhone", applyLoanInfo.getUrgencyPhone());
+				map.put("datums", applyLoanInfo.getDatums());
+				map.put("assetCertificates", applyLoanInfo.getAssetCertificates());
+				
+				LoanList loanList = (LoanList) array[0];
+				map.put("loanListId", loanList.getId());
 		</form>
 	</div>
 	<div align="center" class="footer-oper">
    	    <div class="content-oper">
 	    	 <a  id="submitNotifycation_btn" class="easyui-linkbutton my-search-button" data-options="iconCls:'icon-2012092109942'" plain="true">保存</a>
 		     &nbsp;&nbsp;&nbsp;&nbsp;
-		     <a  onclick="javascript:$('#addNotifycationForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
+		     <a  onclick="javascript:$('#applyLoanInfoForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
     	</div>
 	</div>  
 	<script type="text/javascript">
@@ -57,14 +90,14 @@
 					data:"id=${id}",
 					dataType:'json',
 					success:function(msg) {
-						$("#addNotifycationForm").form('load',msg);
+						$("#applyLoanInfoForm").form('load',msg);
 					}
 				});
 			}
 		});
 		
 		$(function(){
-			$('#addNotifycationForm').form({    
+			$('#applyLoanInfoForm').form({    
 			    url:"notification!saveNotification.do",    
 			    onSubmit: function(){    
 			    	
@@ -85,11 +118,11 @@
 			});
 		});
 		$("#submitNotifycation_btn").on("click", function(){
-			if(!$("#addNotifycationForm").form('validate')){
+			if(!$("#applyLoanInfoForm").form('validate')){
 				return false;
 			}
 			$.messager.progress();
-			$('#addNotifycationForm').submit();
+			$('#applyLoanInfoForm').submit();
 		});
 	</script>
 </body>

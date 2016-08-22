@@ -205,4 +205,56 @@ $("#allot_btn_loanlist").on("click",function(){
 	}); 
 });
 
+/**
+ * 详细信息
+ * @param {Object} memberId
+ */
+$("#detail_btn_loanlist").on("click",function(){
+	var selectedRow = $("#loanlist").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一条记录",{time:1500});
+		return;
+	}else{
+		recordid = selectedRow.id;
+	}
+	
+	var contentStr='';
+	if(selectedRow.loanType=='普通模式' || selectedRow.loanType=='急速模式'){
+		contentStr='applyloaninfo!showApplyLoanInfo.do?loanList.id='+selectedRow.id;
+		layer.open({
+			type: 2,
+			title: selectedRow.loanMemberNickName+'用户的借贷详细',
+			shadeClose: true,
+			maxmin:true,
+			shade: 0.8,
+			area: ['35%', '97%'],
+			content: contentStr
+		});
+	}else if(selectedRow.loanType=='产权模式'){
+		//判断是房贷还是车贷 如果返回true,说明是房抵押，否则说明是车子抵押
+		$.ajax({
+			   type: "POST",
+			   url: "applyloanhouse!findApplyLoanHouse.do",
+			   data: "loanList.id="+selectedRow.id,
+			   success: function(data){
+				   data = JSON.parse(data);
+				   console.info(data);
+				   if(data.result==true){
+					   contentStr='applyloanhouse!showApplyLoanHouse.do?loanList.id='+selectedRow.id;
+				   }else{
+					   contentStr='applyloancar!showApplyLoanCar.do?loanList.id='+selectedRow.id;
+				   }
+				   layer.open({
+						type: 2,
+						title: selectedRow.loanMemberNickName+'用户的借贷详细',
+						shadeClose: true,
+						maxmin:true,
+						shade: 0.8,
+						area: ['35%', '55%'],
+						content: contentStr
+					});
+			   }
+		});
+	}
+});
 

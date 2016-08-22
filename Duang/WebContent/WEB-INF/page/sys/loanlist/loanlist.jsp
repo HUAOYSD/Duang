@@ -111,6 +111,7 @@
 	 	  <!-- 表格顶部工具按钮 -->
 		  <div id="tt_toolbar_loanlist">
 	          <a id="allot_btn_loanlist" class="easyui-linkbutton" iconCls="icon-2012080412301" plain="true">分配客户经理</a>
+	          <a id="detail_btn_loanlist" class="easyui-linkbutton" iconCls="icon-application_form_magnify" plain="true">查看详细</a>
 	  	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path %>/ui/sys/loanlist/loanlist.js"></script>
