@@ -1,16 +1,16 @@
 package org.duang.service.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Resource;
-
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.config.Basic;
 import org.duang.dao.LoanListDao;
-import org.duang.dao.ScaleDao;
 import org.duang.dao.ScaleLoanListDao;
 import org.duang.dao.StockDao;
 import org.duang.entity.LoanList;
@@ -18,6 +18,8 @@ import org.duang.entity.Scale;
 import org.duang.entity.ScaleLoanList;
 import org.duang.entity.InvestMember;
 import org.duang.entity.Stock;
+import org.duang.enums.If;
+import org.duang.enums.stock.Status;
 import org.duang.service.ScaleLoanListService;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
@@ -54,7 +56,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	public ScaleLoanListServiceImpl(){
 		LoggerUtils.info("注入ScaleLoanListServiceImpl服务层", this.getClass());
 	}
-	
+
 	/**   
 	 * 匹配借贷记录到理财标
 	 * @Title: matchScaleLoanRecords   
@@ -81,7 +83,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 			}
 		}
 		List<LoanList> loanLists = loanListDao.queryByHQL(hql, null);
-		
+
 		//2、放入表scale_loan_list
 		Scale scale = new Scale(scaleId);
 		List<ScaleLoanList> scaleLoanLists = new LinkedList<ScaleLoanList>();
@@ -91,18 +93,38 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 		for (ScaleLoanList scaleLoanList : scaleLoanLists) {
 			dao.saveEntity(scaleLoanList);
 		}
-		
+
 		//3、分配库存
 		List<Stock> stocks = new ArrayList<Stock>();
 		for (LoanList loanList : loanLists) {
-			//stocks.add(new Stock(DataUtils.randomUUID(), scale, loanList, investListByTurnInvestListId, investListByInvestListId, money, fetch, createTime, fetchTime, difference, status, isTurn));
+			if (loanList.getMoney()!=0) {
+				if (loanList.getMoney() % Basic.INTERVAL_MONEY == 0) {
+					double count = loanList.getMoney() / Basic.INTERVAL_MONEY;
+					for (double i = 1; i <= count; i++) {
+						stocks.add(new Stock(DataUtils.randomUUID(), scale, loanList, null, null, Basic.INTERVAL_MONEY, 0, new Date(), null, 0, Status.S0.getVal(), If.If0.getVal()));
+					}
+				}else {
+					throw new Exception("借贷金额不为基础金额"+Basic.INTERVAL_MONEY+"元倍数");
+				}
+			}
 		}
-		
-		//4、改变借贷记录的状态
-		
+
+		//4、保存库存
+		for (Stock stock : stocks) {
+			stockDao.saveEntity(stock);
+		}
+
+		//5、改变借贷记录的状态
+		Map<String, Object> datas = new HashMap<String, Object>();
+		datas.put("isSell", org.duang.enums.loan.Scale.S2.getVal());
+		for (String id : loanListIds) {
+			loanListDao.updateEntity(datas, "id", id);
+		}
 		return true;
 	}
-	
+
+
+
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
@@ -226,7 +248,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 		return dao.deleteEntity(id);
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
@@ -235,7 +257,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
 		return dao.deleteEntity(map);
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -324,7 +346,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 		return dao.findEntity(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句

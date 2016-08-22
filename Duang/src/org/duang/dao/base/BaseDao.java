@@ -1589,6 +1589,10 @@ public class BaseDao<M> {
 						dt.add(Restrictions.gt(properties.get(i), arg[0]));
 					}else if("lt".equalsIgnoreCase(arg[arg.length-1].toString())){//lt小于
 						dt.add(Restrictions.lt(properties.get(i), arg[0]));
+					}else if("ge".equalsIgnoreCase(arg[arg.length-1].toString())){//ge大于等于
+						dt.add(Restrictions.ge(properties.get(i), arg[0]));
+					}else if("le".equalsIgnoreCase(arg[arg.length-1].toString())){//le小于等于
+						dt.add(Restrictions.le(properties.get(i), arg[0]));
 					}else if("class".equalsIgnoreCase(arg[arg.length-1].toString())){//对象等于
 						dt.add(Restrictions.eq(properties.get(i), arg[0]));
 					}else if("ne".equalsIgnoreCase(arg[arg.length-1].toString())){//<>

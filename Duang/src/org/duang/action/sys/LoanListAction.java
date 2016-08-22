@@ -49,6 +49,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("sys")
 @Results(value = { 
 		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/loanlist/loanlist.jsp"),
+		@Result(name = "allot", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/allotLoanlist.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 })
 public class LoanListAction extends BaseAction<LoanList> {
@@ -180,6 +181,8 @@ public class LoanListAction extends BaseAction<LoanList> {
 						resultMap.put("beginReturnDate", DateUtils.getTimeStamp(pk.getBeginReturnDate()));
 						resultMap.put("endReturnDate", DateUtils.getTimeStamp(pk.getEndReturnDate()));
 						resultMap.put("doneReturnDate", DateUtils.getTimeStamp(pk.getDoneReturnDate()));
+						resultMap.put("passTime", DateUtils.getTimeStamp(pk.getPassTime()));
+						resultMap.put("applyContent", pk.getApplyContent());
 						resultMap.put("loanStyle", Platform.valueOf("P"+pk.getLoanStyle()).toString());
 						resultMap.put("backStyle", BackStyle.valueOf("B"+pk.getBackStyle()).toString());
 					}
@@ -209,6 +212,45 @@ public class LoanListAction extends BaseAction<LoanList> {
 
 
 	/**   
+	 * 查询根据条件日期查询全部审核通过的借贷记录
+	 * @Title: queryPassLoanRecords   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年8月18日 下午2:47:07
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void queryPassLoanRecords() {
+		try {
+			//审核通过且未起标
+			condsUtils.addProperties(true, "loanMember", "customerManager", "myAlias.memberInfo", "applyState", "isSell", "order");
+			condsUtils.addValues(true, new Object[]{"myAlias","as"}, new Object[]{"customerAlias","as"}, new Object[]{"memberAlias","as"}, Apply.A2.getVal(), Scale.S1.getVal(), Order.desc("createTime"));
+			if (DataUtils.notEmpty(getRequest().getParameter("begin_date")) && DataUtils.notEmpty(getRequest().getParameter("end_date"))) {
+				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("begin_date")), "ge"});
+				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("end_date")) + " 23:59:59", "le"});
+			}else{
+				condsUtils.concat("passTime", new Object[]{DateUtils.getMinAtToday(), "ge"});
+				condsUtils.concat("passTime", new Object[]{DateUtils.getMaxAtToday(), "le"});
+			}
+			@SuppressWarnings("rawtypes")
+			List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+			fillDatagridCons(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("借贷记录ACTION方法queryByPage错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("借贷记录ACTION方法queryByPage错误："+e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("total", 0);
+			jsonObject.put("currPage", 0);
+			jsonObject.put("pageSize", 0);
+			jsonObject.put("rows",new JSONArray());
+		} finally {
+			printJsonResult();
+		}
+	}
+
+
+	/**   
 	 * 页面跳转
 	 * @Title: openDialog   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -220,12 +262,10 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 */  
 	public String openDialog() {
 		try {
-			//			String path = getRequest().getParameter("path");
-			//			if(ResultPath.ADD.equals(path)) {
-			//				return ResultPath.ADD;
-			//			} else if(ResultPath.EDIT.equals(path)) {
-			//				return ResultPath.EDIT;
-			//			}
+			String path = getRequest().getParameter("path");
+			if("allot".equals(path)) {
+				return "allot";
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("借贷记录ACTION方法openDialog错误："+e.getMessage(), this.getClass());

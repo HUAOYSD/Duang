@@ -52,11 +52,12 @@ public class LoanList implements java.io.Serializable {
 	private Date beginReturnDate;
 	private Date endReturnDate;
 	private Date doneReturnDate;
+	private Date passTime;
+	private String applyContent;
 	private int loanStyle;
 	private int backStyle;
 	private CustomerManager customerManager;
 	private Set<Stock> stocks = new HashSet<Stock>(0);
-	private Set<ApplyLoanResult> applyLoanResults = new HashSet<ApplyLoanResult>(0);
 	private Set<ScaleLoanList> scaleLoanLists = new HashSet<ScaleLoanList>(0);
 	private Set<BillLoan> billLoans = new HashSet<BillLoan>(0);
 	private Set<ApplyLoanInfo> applyLoanInfos = new HashSet<ApplyLoanInfo>(0);
@@ -80,11 +81,18 @@ public class LoanList implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public LoanList(String id, LoanMember loanMember, int loanType, String pactNumber, int isSell, int poundageState, double money, double realMoney, double manageCost, double poundage, double getMoney, double yetMoney, double returnMoney, double agoMoney, double yetReturnMoney, int returnStatus, int loanState, int applyState, String loanUse, double loanInterest, Date createTime, Date signDate, Date beginReturnDate, Date endReturnDate, Date doneReturnDate, int loanStyle, int backStyle, CustomerManager customerManager,Set<Stock> stocks, Set<ApplyLoanResult> applyLoanResults, Set<ScaleLoanList> scaleLoanLists, Set<BillLoan> billLoans, Set<ApplyLoanInfo> applyLoanInfos, Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {
+	public LoanList(String id, LoanMember loanMember, int loanType, String pactNumber, int isSell, int poundageState, double money, 
+			double realMoney, double manageCost, double poundage, double getMoney, double yetMoney, double returnMoney, double agoMoney, 
+			double yetReturnMoney, int returnStatus, int loanState, int applyState, String loanUse, double loanInterest, Date createTime, 
+			Date signDate, Date beginReturnDate, Date endReturnDate, Date doneReturnDate, int loanStyle, int backStyle,
+			CustomerManager customerManager,Set<Stock> stocks, Date passTime,
+			String applyContent, Set<ScaleLoanList> scaleLoanLists, Set<BillLoan> billLoans, Set<ApplyLoanInfo> applyLoanInfos, Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {
 		this.id = id;
 		this.loanMember = loanMember;
 		this.loanType = loanType;
 		this.pactNumber = pactNumber;
+		this.passTime = passTime;
+		this.applyContent = applyContent;
 		this.isSell = isSell;
 		this.poundageState = poundageState;
 		this.money = money;
@@ -109,7 +117,6 @@ public class LoanList implements java.io.Serializable {
 		this.loanStyle = loanStyle;
 		this.backStyle = backStyle;
 		this.stocks = stocks;
-		this.applyLoanResults = applyLoanResults;
 		this.scaleLoanLists = scaleLoanLists;
 		this.billLoans = billLoans;
 		this.applyLoanInfos = applyLoanInfos;
@@ -384,13 +391,22 @@ public class LoanList implements java.io.Serializable {
 		this.stocks = stocks;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")
-	public Set<ApplyLoanResult> getApplyLoanResults() {
-		return this.applyLoanResults;
+	@Column(name = "pass_time", length = 19)
+	public Date getPassTime() {
+		return passTime;
 	}
 
-	public void setApplyLoanResults(Set<ApplyLoanResult> applyLoanResults) {
-		this.applyLoanResults = applyLoanResults;
+	public void setPassTime(Date passTime) {
+		this.passTime = passTime;
+	}
+
+	@Column(name = "apply_content", length = 16777215)
+	public String getApplyContent() {
+		return applyContent;
+	}
+
+	public void setApplyContent(String applyContent) {
+		this.applyContent = applyContent;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanList")

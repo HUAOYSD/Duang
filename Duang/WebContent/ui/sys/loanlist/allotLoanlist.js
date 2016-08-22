@@ -2,12 +2,11 @@
  * 初始化
  */
 $(function() {
-	$('#allot_btn_loanlist').linkbutton('disable');
 	$('#loanlist_open_close').on("click",function(){
 		$('#loanlist_conditon').toggle(80);
 		setTimeout(domresize,100);//条件隐藏，改变表格高度
 	});	
-	loadloanlist("loanlist!queryByPage.do");
+	loadloanlist("loanlist!queryPassLoanRecords.do");
 });
 
 
@@ -40,10 +39,10 @@ function loadloanlist(url, dataObj){
 		height:$("#body_loanlist").height()-$('#loanlist_search_area').height()-8,
 		width:$("#body_loanlist").width(),
 		loadMsg : "正在加载，请稍后...",
-		singleSelect:true, 
+		singleSelect:false, 
 		nowrap:true,
 		rownumbers:true,
-		pagination:true,
+		pagination:false,
 		pageSize:50,
 		pageList:[50,100,150,200,250],
 		sortOrder:'desc',
@@ -156,53 +155,42 @@ $("#loanlistQueryForm_Btn").on("click", function(){
 	});
 	urlStr += "'submitTime':'"+(new Date().getTime())+"'}";
 	var data = eval('('+urlStr+')');
-	loadloanlist("loanlist!queryByPage.do", data);
+	loadloanlist("loanlist!queryPassLoanRecords.do", data);
 });
 
 
 /**
- * 刷新数据
+ * 借贷分配
  */
-function reloadDataGrid(){
-	loadloanlist("loanlist!queryByPage.do");
-}
-
-/**
- * id
- */
-var recordid = "";
-
-
-/**
- * 获取记录id
- * @returns {String}
- */
-function getRecordId(){
-	return recordid;
-}
-
-
-/**
- * 打开分配客户经理页面
- * @param {Object} memberId
- */
-$("#allot_btn_loanlist").on("click",function(){
+$("#chose_loanlist_scale").on("click",function(){
 	var selectedRow = $("#loanlist").datagrid('getSelected');
 	if(selectedRow==null){
 		layer.msg("请选择一条记录",{time:1500});
 		return;
-	}else{
-		recordid = selectedRow.id;
 	}
-	layer.open({
-		type: 2,
-		title: '分配客户经理',
-		shadeClose: true,
-		maxmin:true,
-		shade: 0.8,
-		area: ['80%', '80%'],
-		content: 'customermanager!openDialog.do?path=chose'
-	}); 
+	$.messager.confirm('确认','您确认操作吗？',function(r){    
+	    if (r){    
+	    	var lists = "scaleid=" + $("#scaleid").val();
+	    	$.each($("#loanlist").datagrid('getSelections'), function(i,n){
+	    		lists += "&loanListIds=" + n.id;
+	    	});
+	    	lists += "&optime="+new Date().getTime(); 
+	    	$.messager.progress();
+	    	$.ajax({
+	         	type:"post",
+	         	url:"scaleloanlist!confirmAllotLoanList.do?",
+	         	data:{"loanListIds":lists},
+	         	success:function(msg) {
+	         		var result = eval('('+msg+')');
+	         		if(result.success) {
+	         			//window.parent.reloadDataGrid();
+	         			parent.layer.closeAll();
+	         		} else {
+	         			layer.msg("借贷分配失败",{time:1500});
+	         		}
+	         	}
+	        }); 
+	    	$.messager.progress("close");
+	    }    
+	});
 });
-
-

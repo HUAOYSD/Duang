@@ -351,12 +351,9 @@ public class DateUtils {
 		Date date = null;
 		if (dateStr != null && (!dateStr.equals(""))) {
 			if (dateStr.matches("\\d{4}-\\d{1,2}-\\d{1,2}")) {
-				dateStr = dateStr + " 00:00";
+				dateStr = dateStr + " 00:00:00";
 			} else if (dateStr.matches("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}")) {
 				dateStr = dateStr + ":00";
-			} else {
-				System.out.println(dateStr + " 格式不正确");
-				return null;
 			}
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			try {
@@ -367,6 +364,7 @@ public class DateUtils {
 		}
 		return date;
 	}
+	
 
 	/**
 	 * 把日期转换为字符串
@@ -519,6 +517,48 @@ public class DateUtils {
 		}
 		long time = this.fiducialDate.getTime() + 60 * 60 * 24 * 1000;
 		return new Date(time);
+	}
+	
+	
+	/**   
+	 * 获取今日最早的凌晨时间
+	 * @Title: getMinAtToday   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年8月18日 下午3:00:41
+	 * @return: Date      
+	 * @throws   
+	 */  
+	public static Date getMinAtToday(){
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(System.currentTimeMillis());
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+	
+	
+	/**   
+	 * 获取今日最晚的24点时间
+	 * @Title: getMaxAtToday   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年8月18日 下午3:09:41
+	 * @return: Date      
+	 * @throws   
+	 */  
+	public static Date getMaxAtToday(){
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(System.currentTimeMillis());
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
 	}
 
 

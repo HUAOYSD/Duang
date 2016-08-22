@@ -4,6 +4,8 @@
 $(function() {
 	$('#edit_btn_scale').linkbutton('disable');
 	$('#info_btn_scale').linkbutton('disable');
+	$('#allot_btn_scale').linkbutton('disable');
+	$('#match_btn_scale').linkbutton('disable');
 	$('#scale_open_close').on("click",function(){
 		$('#scale_conditon').toggle(80);
 		setTimeout(domresize,100);//条件隐藏，改变表格高度
@@ -125,14 +127,20 @@ function loadscale(url, dataObj){
 			onSelect:function(rowIndex, rowData){
 				$('#edit_btn_scale').linkbutton('enable');
 				$('#info_btn_scale').linkbutton('enable');
+				$('#allot_btn_scale').linkbutton('enable');
+				$('#match_btn_scale').linkbutton('enable');
 			},
 			onUnselect:function(rowIndex, rowData){
 				$('#edit_btn_scale').linkbutton('disable');
 				$('#info_btn_scale').linkbutton('disable');
+				$('#allot_btn_scale').linkbutton('disable');
+				$('#match_btn_scale').linkbutton('disable');
 			},
 			onLoadSuccess: function(data){
 				$('#edit_btn_scale').linkbutton('disable');
 				$('#info_btn_scale').linkbutton('disable');
+				$('#allot_btn_scale').linkbutton('disable');
+				$('#match_btn_scale').linkbutton('disable');
 			}
 		});
 }
@@ -218,6 +226,49 @@ $("#info_btn_scale").on("click",function(){
 		maxmin:true,
 		shade: 0.8,
 		area: ['600px', '85%'],
+		content: 'scale!openDialog.do?path=info&id='+selectedRow.id
+	}); 
+});
+
+
+/**
+ * 打开借贷分配 
+ */
+$("#allot_btn_scale").on("click",function(){
+	var selectedRow = $("#scale").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一个理财标",{time:1500});
+		return;
+	}
+	id = 
+	layer.open({
+		type: 2,
+		title: '借贷分配',
+		shadeClose: true,
+		maxmin:true,
+		shade: 0.8,
+		area: ['80%', '85%'],
+		content: 'loanlist!openDialog.do?path=allot&scaleid='+selectedRow.id
+	}); 
+});
+
+
+/**
+ * 打开借贷匹配 
+ */
+$("#match_btn_scale").on("click",function(){
+	var selectedRow = $("#scale").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一个理财标",{time:1500});
+		return;
+	}
+	layer.open({
+		type: 2,
+		title: '借贷匹配',
+		shadeClose: true,
+		maxmin:true,
+		shade: 0.8,
+		area: ['80%', '85%'],
 		content: 'scale!openDialog.do?path=info&id='+selectedRow.id
 	}); 
 });
