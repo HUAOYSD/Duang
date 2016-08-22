@@ -61,7 +61,7 @@ public class MemberInfo implements java.io.Serializable {
 	private Set<InvestMember> investMembers = new HashSet<InvestMember>(0);
 	private Set<ScoreList> scoreLists = new HashSet<ScoreList>(0);
 	private Set<Message> messagesForSender = new HashSet<Message>(0);
-
+	private Set<MemberInvestTicket> memberInvestTickets = new HashSet<MemberInvestTicket>(0);
 	// Constructors
 
 	/** default constructor */
@@ -86,7 +86,7 @@ public class MemberInfo implements java.io.Serializable {
 			Set<MemberExtraInfo> memberExtraInfos,
 			Set<Friends> friendsesForTarget, Set<Friends> friendsesForSelf,
 			Set<LoanMember> loanMembers, Set<Message> messagesForReceiver,
-			Set<BindCard> bindCards, Set<InvestMember> investMembers,
+			Set<BindCard> bindCards, Set<InvestMember> investMembers,Set<MemberInvestTicket> memberInvestTickets,
 			Set<ScoreList> scoreLists, Set<Message> messagesForSender) {
 		this.id = id;
 		this.loginName = loginName;
@@ -124,8 +124,19 @@ public class MemberInfo implements java.io.Serializable {
 		this.investMembers = investMembers;
 		this.scoreLists = scoreLists;
 		this.messagesForSender = messagesForSender;
+		this.memberInvestTickets = memberInvestTickets;
 	}
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberInfo")
+	public Set<MemberInvestTicket> getMemberInvestTickets() {
+		return this.memberInvestTickets;
+	}
+
+	public void setMemberInvestTickets(
+			Set<MemberInvestTicket> memberInvestTickets) {
+		this.memberInvestTickets = memberInvestTickets;
+	}
+	
 	// Property accessors
 	@Id
 	@Column(name = "id", unique = true, nullable = false, length = 36)

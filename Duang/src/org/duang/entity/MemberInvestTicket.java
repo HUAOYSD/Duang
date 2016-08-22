@@ -23,7 +23,7 @@ public class MemberInvestTicket implements java.io.Serializable {
 
 	private String id;
 	private InvestTicket investTicket;
-	private InvestMember investMember;
+	private MemberInfo memberInfo;
 	private String resourceStyle;
 	private int isUse;
 
@@ -40,10 +40,10 @@ public class MemberInvestTicket implements java.io.Serializable {
 
 	/** full constructor */
 	public MemberInvestTicket(String id, InvestTicket investTicket,
-			InvestMember investMember, String resourceStyle, int isUse) {
+			MemberInfo memberInfo, String resourceStyle, int isUse) {
 		this.id = id;
 		this.investTicket = investTicket;
-		this.investMember = investMember;
+		this.memberInfo = memberInfo;
 		this.resourceStyle = resourceStyle;
 		this.isUse = isUse;
 	}
@@ -59,7 +59,7 @@ public class MemberInvestTicket implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "invest_ticket_id")
 	public InvestTicket getInvestTicket() {
 		return this.investTicket;
@@ -69,14 +69,14 @@ public class MemberInvestTicket implements java.io.Serializable {
 		this.investTicket = investTicket;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "invest_member_id")
-	public InvestMember getInvestMember() {
-		return this.investMember;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "member_info")
+	public MemberInfo getMemberInfo() {
+		return this.memberInfo;
 	}
 
-	public void setInvestMember(InvestMember investMember) {
-		this.investMember = investMember;
+	public void setMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
 	}
 
 	@Column(name = "resource_style", length = 500)

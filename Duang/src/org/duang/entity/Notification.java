@@ -66,7 +66,7 @@ public class Notification  implements java.io.Serializable {
     // Property accessors
     @Id 
     
-    @Column(name="id", unique=true, nullable=false, length=1)
+    @Column(name="id", unique=true, nullable=false, length=36)
 
     public String getId() {
         return this.id;
