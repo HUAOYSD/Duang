@@ -75,8 +75,8 @@ public class InvestListAction extends BaseAction<InvestList> {
 	 */  
 	public void queryByPage() {
 		try {
-			condsUtils.addProperties(true, "investMember", "myAlias.memberInfo", "scale", "order");
-			condsUtils.addValues(true, new Object[]{"myAlias","as"}, new Object[]{"memberAlias","as"}, new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
+			condsUtils.addProperties(true, "memberInfo", "scale", "order");
+			condsUtils.addValues(true, new Object[]{"memberAlias","as"}, new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
 			if (DataUtils.notEmpty(getRequest().getParameter("memberName"))) {
 				condsUtils.concat("memberAlias.realName", URLDecoder.decode(getRequest().getParameter("memberName"),"UTF-8"));
 			}
@@ -151,10 +151,9 @@ public class InvestListAction extends BaseAction<InvestList> {
 			for(Object temp : list) {
 				if (temp instanceof Object[]) {
 					Map<String,Object> resultMap = new HashMap<String,Object>();
-					InvestList pk = (InvestList)((Object[])temp)[3];
-					MemberInfo fk = (MemberInfo)((Object[])temp)[1];
-					//InvestMember fk1 = (InvestMember)((Object[])temp)[0];
-					Scale fk2 = (Scale)((Object[])temp)[2];
+					InvestList pk = (InvestList)((Object[])temp)[2];
+					MemberInfo fk = (MemberInfo)((Object[])temp)[0];
+					Scale fk2 = (Scale)((Object[])temp)[1];
 					if (pk != null) {
 						resultMap.put("id", pk.getId());
 						resultMap.put("money", pk.getMoney());

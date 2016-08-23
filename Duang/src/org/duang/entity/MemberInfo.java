@@ -62,6 +62,8 @@ public class MemberInfo implements java.io.Serializable {
 	private Set<ScoreList> scoreLists = new HashSet<ScoreList>(0);
 	private Set<Message> messagesForSender = new HashSet<Message>(0);
 	private Set<MemberInvestTicket> memberInvestTickets = new HashSet<MemberInvestTicket>(0);
+	private Set<InvestList> investLists = new HashSet<InvestList>(0);
+	private Set<LoanList> loanLists = new HashSet<LoanList>(0);
 	// Constructors
 
 	/** default constructor */
@@ -85,9 +87,9 @@ public class MemberInfo implements java.io.Serializable {
 			String handPassword, int isFreeze, String myQr,
 			Set<MemberExtraInfo> memberExtraInfos,
 			Set<Friends> friendsesForTarget, Set<Friends> friendsesForSelf,
-			Set<LoanMember> loanMembers, Set<Message> messagesForReceiver,
+			Set<LoanMember> loanMembers, Set<Message> messagesForReceiver,Set<LoanList> loanLists,
 			Set<BindCard> bindCards, Set<InvestMember> investMembers,Set<MemberInvestTicket> memberInvestTickets,
-			Set<ScoreList> scoreLists, Set<Message> messagesForSender) {
+			Set<ScoreList> scoreLists, Set<Message> messagesForSender,Set<InvestList> investLists) {
 		this.id = id;
 		this.loginName = loginName;
 		this.realName = realName;
@@ -97,6 +99,7 @@ public class MemberInfo implements java.io.Serializable {
 		this.sex = sex;
 		this.phone = phone;
 		this.idCard = idCard;
+		this.loanLists = loanLists;
 		this.idCardImg1 = idCardImg1;
 		this.idCardImg2 = idCardImg2;
 		this.miDescribe = miDescribe;
@@ -125,6 +128,7 @@ public class MemberInfo implements java.io.Serializable {
 		this.scoreLists = scoreLists;
 		this.messagesForSender = messagesForSender;
 		this.memberInvestTickets = memberInvestTickets;
+		this.investLists = investLists;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberInfo")
@@ -462,5 +466,22 @@ public class MemberInfo implements java.io.Serializable {
 	public void setMessagesForSender(Set<Message> messagesForSender) {
 		this.messagesForSender = messagesForSender;
 	}
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
+	public Set<InvestList> getInvestLists() {
+		return this.investLists;
+	}
 
+	public void setInvestLists(Set<InvestList> investLists) {
+		this.investLists = investLists;
+	}
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanMember")
+	public Set<LoanList> getLoanLists() {
+		return this.loanLists;
+	}
+
+	public void setLoanLists(Set<LoanList> loanLists) {
+		this.loanLists = loanLists;
+	}
 }

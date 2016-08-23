@@ -46,8 +46,6 @@ public class LoanMember implements java.io.Serializable {
 	 * 总逾期
 	 */
 	private double expectMoney;
-	//private Set<Stock> stocks = new HashSet<Stock>(0);
-	private Set<LoanList> loanLists = new HashSet<LoanList>(0);
 
 	// Constructors
 
@@ -64,16 +62,13 @@ public class LoanMember implements java.io.Serializable {
 	/** full constructor */
 	public LoanMember(String id, 
 			MemberInfo memberInfo, double lendMoney, double backMoney,
-			double residueMoney, double expectMoney,
-			Set<LoanList> loanLists) {
+			double residueMoney, double expectMoney) {
 		this.id = id;
 		this.memberInfo = memberInfo;
 		this.lendMoney = lendMoney;
 		this.backMoney = backMoney;
 		this.residueMoney = residueMoney;
 		this.expectMoney = expectMoney;
-		//this.stocks = stocks;
-		this.loanLists = loanLists;
 	}
 
 	// Property accessors
@@ -135,22 +130,7 @@ public class LoanMember implements java.io.Serializable {
 		this.expectMoney = expectMoney;
 	}
 
-	/*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanMember")
-	public Set<Stock> getStocks() {
-		return this.stocks;
-	}
 
-	public void setStocks(Set<Stock> stocks) {
-		this.stocks = stocks;
-	}*/
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "loanMember")
-	public Set<LoanList> getLoanLists() {
-		return this.loanLists;
-	}
-
-	public void setLoanLists(Set<LoanList> loanLists) {
-		this.loanLists = loanLists;
-	}
 
 }

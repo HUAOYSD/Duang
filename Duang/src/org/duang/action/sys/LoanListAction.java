@@ -79,8 +79,8 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 */  
 	public void queryByPage() {
 		try {
-			condsUtils.addProperties(true, "loanMember", "customerManager", "myAlias.memberInfo", "order");
-			condsUtils.addValues(true, new Object[]{"myAlias","as"}, new Object[]{"customerAlias","as"}, new Object[]{"memberAlias","as"}, Order.desc("createTime"));
+			condsUtils.addProperties(true, "memberInfo", "customerManager", "order");
+			condsUtils.addValues(true, new Object[]{"memberAlias","as"}, new Object[]{"customerAlias","as"}, Order.desc("createTime"));
 			if (DataUtils.notEmpty(getRequest().getParameter("loanMemberName"))) {
 				condsUtils.concat("memberAlias.realName", URLDecoder.decode(getRequest().getParameter("loanMemberName"),"UTF-8"));
 			}
@@ -152,9 +152,8 @@ public class LoanListAction extends BaseAction<LoanList> {
 			for(Object temp : list) {
 				if (temp instanceof Object[]) {
 					Map<String,Object> resultMap = new HashMap<String,Object>();
-					LoanList pk = (LoanList)((Object[])temp)[3];
-					MemberInfo fk = (MemberInfo)((Object[])temp)[2];
-					//LoanMember fk1 = (LoanMember)((Object[])temp)[1];
+					LoanList pk = (LoanList)((Object[])temp)[2];
+					MemberInfo fk = (MemberInfo)((Object[])temp)[1];
 					CustomerManager fk2 = (CustomerManager)((Object[])temp)[0];
 					if (pk != null) {
 						resultMap.put("id", pk.getId());

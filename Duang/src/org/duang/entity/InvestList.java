@@ -30,7 +30,7 @@ public class InvestList implements java.io.Serializable {
 	private String id;
 	private Scale scale;
 	private InvestTicket investTicket;
-	private InvestMember investMember;
+	private MemberInfo memberInfo;
 	private double money;
 	private double yetMoney;
 	private double spaceMoney;
@@ -70,7 +70,8 @@ public class InvestList implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public InvestList(String id,Date calcBeginDate,Date calcEndDate,int isTurn,int turnStatus, Scale scale, InvestTicket investTicket, InvestMember investMember, double money, double yetMoney, double spaceMoney, double backIncome, double backMoney, int useTicket, double expectIncome, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, String pactNumber, int investStyle, double poundageTurn, double poundagePrivilege, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales) {
+	public InvestList(String id,Date calcBeginDate,Date calcEndDate,int isTurn,int turnStatus, Scale scale, InvestTicket investTicket, 
+			MemberInfo memberInfo, double money, double yetMoney, double spaceMoney, double backIncome, double backMoney, int useTicket, double expectIncome, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, String pactNumber, int investStyle, double poundageTurn, double poundagePrivilege, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales) {
 		this.id = id;
 		this.calcBeginDate = calcBeginDate;
 		this.calcEndDate = calcEndDate;
@@ -78,7 +79,7 @@ public class InvestList implements java.io.Serializable {
 		this.isTurn = isTurn;
 		this.scale = scale;
 		this.investTicket = investTicket;
-		this.investMember = investMember;
+		this.memberInfo = memberInfo;
 		this.money = money;
 		this.yetMoney = yetMoney;
 		this.spaceMoney = spaceMoney;
@@ -134,14 +135,15 @@ public class InvestList implements java.io.Serializable {
 		this.investTicket = investTicket;
 	}
 
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "invest_member_id")
-	public InvestMember getInvestMember() {
-		return this.investMember;
+	@JoinColumn(name = "member_info")
+	public MemberInfo getMemberInfo() {
+		return memberInfo;
 	}
 
-	public void setInvestMember(InvestMember investMember) {
-		this.investMember = investMember;
+	public void setMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
 	}
 
 	@Column(name = "money", precision = 22, scale = 0)

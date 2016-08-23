@@ -26,6 +26,7 @@ public class BillLoan implements java.io.Serializable {
 	private String id;
 	private LoanList loanList;
 	private BindCard bindCard;
+	private MemberInfo memberInfo;
 	private int status;
 	private double money;
 	private double doneMoney;
@@ -47,7 +48,7 @@ public class BillLoan implements java.io.Serializable {
 
 	/** full constructor */
 	public BillLoan(String id, LoanList loanList, BindCard bindCard,
-			int status, double money, double doneMoney, int billStatus,
+			int status, double money, double doneMoney, int billStatus,MemberInfo memberInfo,
 			Date optTime, String remark, int style) {
 		this.id = id;
 		this.loanList = loanList;
@@ -59,6 +60,7 @@ public class BillLoan implements java.io.Serializable {
 		this.optTime = optTime;
 		this.remark = remark;
 		this.style = style;
+		this.memberInfo = memberInfo;
 	}
 
 	// Property accessors
@@ -92,6 +94,16 @@ public class BillLoan implements java.io.Serializable {
 		this.bindCard = bindCard;
 	}
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "member_info")
+	public MemberInfo getMemberInfo() {
+		return this.memberInfo;
+	}
+
+	public void setMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
+	}
+	
 	@Column(name = "status")
 	public int getStatus() {
 		return this.status;

@@ -24,7 +24,7 @@ public class BillInvest implements java.io.Serializable {
 	// Fields
 
 	private String id;
-	private InvestMember investMember;
+	private MemberInfo memberInfo;
 	private InvestList investList;
 	private BindCard bindCard;
 	private int useType;
@@ -48,12 +48,12 @@ public class BillInvest implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public BillInvest(String id, InvestMember investMember,
+	public BillInvest(String id, MemberInfo memberInfo,
 			InvestList investList, BindCard bindCard, int useType,
 			double money, double balance, double asset, int status,
 			Date optTime, String remark, int style) {
 		this.id = id;
-		this.investMember = investMember;
+		this.memberInfo = memberInfo;
 		this.investList = investList;
 		this.bindCard = bindCard;
 		this.useType = useType;
@@ -77,14 +77,14 @@ public class BillInvest implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "invest_member_id")
-	public InvestMember getInvestMember() {
-		return this.investMember;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "member_info")
+	public MemberInfo getMemberInfo() {
+		return this.memberInfo;
 	}
 
-	public void setInvestMember(InvestMember investMember) {
-		this.investMember = investMember;
+	public void setMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

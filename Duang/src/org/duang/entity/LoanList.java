@@ -28,7 +28,7 @@ public class LoanList implements java.io.Serializable {
 	// Fields
 
 	private String id;
-	private LoanMember loanMember;
+	private MemberInfo memberInfo;
 	private int loanType;
 	private String pactNumber;
 	private int isSell;
@@ -71,9 +71,9 @@ public class LoanList implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public LoanList(String id, LoanMember loanMember) {
+	public LoanList(String id, MemberInfo memberInfo) {
 		this.id = id;
-		this.loanMember = loanMember;
+		this.memberInfo = memberInfo;
 	}
 	
 	public LoanList(String id) {
@@ -81,14 +81,14 @@ public class LoanList implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public LoanList(String id, LoanMember loanMember, int loanType, String pactNumber, int isSell, int poundageState, double money, 
+	public LoanList(String id, MemberInfo memberInfo,LoanMember loanMember, int loanType, String pactNumber, int isSell, int poundageState, double money, 
 			double realMoney, double manageCost, double poundage, double getMoney, double yetMoney, double returnMoney, double agoMoney, 
 			double yetReturnMoney, int returnStatus, int loanState, int applyState, String loanUse, double loanInterest, Date createTime, 
 			Date signDate, Date beginReturnDate, Date endReturnDate, Date doneReturnDate, int loanStyle, int backStyle,
 			CustomerManager customerManager,Set<Stock> stocks, Date passTime,
 			String applyContent, Set<ScaleLoanList> scaleLoanLists, Set<BillLoan> billLoans, Set<ApplyLoanInfo> applyLoanInfos, Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {
 		this.id = id;
-		this.loanMember = loanMember;
+		this.memberInfo = memberInfo;
 		this.loanType = loanType;
 		this.pactNumber = pactNumber;
 		this.passTime = passTime;
@@ -148,13 +148,13 @@ public class LoanList implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "loan_member_id", nullable = false)
-	public LoanMember getLoanMember() {
-		return this.loanMember;
+	@JoinColumn(name = "member_info", nullable = false)
+	public MemberInfo getMemberInfo() {
+		return this.memberInfo;
 	}
 
-	public void setLoanMember(LoanMember loanMember) {
-		this.loanMember = loanMember;
+	public void setMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
 	}
 
 	@Column(name = "loan_type")

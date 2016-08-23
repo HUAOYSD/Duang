@@ -1,7 +1,4 @@
 package org.duang.entity;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +6,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -35,9 +31,6 @@ public class InvestMember implements java.io.Serializable {
 	private double totalMoney;
 	private int useableScore;
 	private int registerStyle;
-	//private Set<Stock> stocks = new HashSet<Stock>(0);
-	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
-	private Set<InvestList> investLists = new HashSet<InvestList>(0);
 
 	// Constructors
 
@@ -56,9 +49,7 @@ public class InvestMember implements java.io.Serializable {
 			 String managerName,
 			int isContract, double balance, double investing,
 			double totalIncome, double totalMoney, int useableScore,
-			int registerStyle,
-			Set<BillInvest> billInvests,
-			Set<InvestList> investLists) {
+			int registerStyle) {
 		this.id = id;
 		this.memberInfo = memberInfo;
 		this.managerName = managerName;
@@ -70,8 +61,6 @@ public class InvestMember implements java.io.Serializable {
 		this.useableScore = useableScore;
 		this.registerStyle = registerStyle;
 		//this.stocks = stocks;
-		this.billInvests = billInvests;
-		this.investLists = investLists;
 	}
 
 	// Property accessors
@@ -168,31 +157,6 @@ public class InvestMember implements java.io.Serializable {
 		this.registerStyle = registerStyle;
 	}
 
-	/*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
-	public Set<Stock> getStocks() {
-		return this.stocks;
-	}
 
-	public void setStocks(Set<Stock> stocks) {
-		this.stocks = stocks;
-	}*/
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
-	public Set<BillInvest> getBillInvests() {
-		return this.billInvests;
-	}
-
-	public void setBillInvests(Set<BillInvest> billInvests) {
-		this.billInvests = billInvests;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "investMember")
-	public Set<InvestList> getInvestLists() {
-		return this.investLists;
-	}
-
-	public void setInvestLists(Set<InvestList> investLists) {
-		this.investLists = investLists;
-	}
 
 }
