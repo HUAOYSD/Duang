@@ -11,7 +11,6 @@ import org.duang.dao.ApplyLoanInfoDao;
 import org.duang.entity.ApplyLoanInfo;
 import org.duang.entity.InvestMember;
 import org.duang.service.ApplyLoanInfoService;
-import org.duang.service.ApplyLoanInfoService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;

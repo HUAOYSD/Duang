@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @date 2016年8月23日 下午2:19:26      
  */  
 @ServiceLog(ModelName="好友")
-@Service(value="Friendsserviceimpl")
+@Service(value="friendsserviceimpl")
 public class FriendsServiceImpl implements FriendsService{
 
 	private FriendsDao dao;

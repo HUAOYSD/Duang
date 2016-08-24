@@ -9,11 +9,40 @@
 			<form id="querybillInvestListForm" method="post">
 				  <table border="0">
 					<tr height="35px">
-					  	<td>&nbsp;&nbsp;<span class="investPro-search">名称：</span></td>
-					  	<td ><input  name="investTicket.name"/></td>
-					 	<td>&nbsp;<span class="investPro-search">使用时间：</span></td>
+					  	<td>&nbsp;&nbsp;<span class="investPro-search">姓名：</span></td>
+					  	<td ><input  name="memberInfo.realName"/></td>
+					  	<td>&nbsp;&nbsp;<span class="investPro-search">电话：</span></td>
+					  	<td ><input  name="memberInfo.phone"/></td>
+					  	<td>&nbsp;&nbsp;<span class="investPro-search">投资标名称：</span></td>
+					  	<td ><input  name="investList.scale.name"/></td>
+					  	<td>&nbsp;&nbsp;<span class="investPro-search">状态：</span></td>
 					  	<td>
-					  		<input  type="text" class="easyui-datebox"  name="useTime"></input>
+					  		<select  class="easyui-combobox" name="status" data-options="panelHeight:'auto'">   
+							    <!-- 状态，1进行中，2成功，3失败 -->
+							    <option value="-1" selected="selected">--请选择--</option>   
+				    			<option value="1">进行中</option>
+				    			<option value="2">成功</option>
+				    			<option value="3">失败</option>
+							</select> 
+					  	</td>
+					  	<td>&nbsp;&nbsp;<span class="investPro-search">资金类型：</span></td>
+					  	<td>
+					  		<select  class="easyui-combobox" name="useType" data-options="panelHeight:'auto'">   
+							    <!-- 资金类型，1充值，2提现，3消费（购买理财产品），4购买手续费，5赎回（仅本金），6收益，7转让手续费 -->
+							    <option value="-1" selected="selected">--请选择--</option>   
+							    <option value="1">充值</option>   
+				    			<option value="2">提现</option>
+				    			<option value="3">消费（购买理财产品）</option>
+				    			<option value="4">购买手续费</option>
+				    			<option value="5">赎回（仅本金）</option>
+				    			<option value="6">收益</option>
+				    			<option value="7">转让手续费</option>
+							</select> 
+					  	</td>
+					  	
+					 	<td>&nbsp;&nbsp;<span class="investPro-search">操作时间：</span></td>
+					  	<td>
+					  		<input  type="text" class="easyui-datebox"  name="optTime"></input>
 					  	</td>
 					  	<td>
 							  &nbsp;&nbsp;
