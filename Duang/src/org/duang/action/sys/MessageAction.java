@@ -64,12 +64,11 @@ public class MessageAction extends BaseAction<Message> {
 	
 	public void queryAllMessage() {
 		try {
-			List<Message> list = messageService.queryAllEntity(Order.asc("time"));
-			int count = messageService.count();
+			List<Message> list = messageService.queryAllEntity(getPageUtil(),Order.asc("time"));
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -196,13 +195,12 @@ public class MessageAction extends BaseAction<Message> {
 			//查询数据
 			@SuppressWarnings("rawtypes")
 			List list = messageService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = messageService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			//封装json
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				//fillDataObjectArray方法用于重新组合数据集，让其能够符合页面展示
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

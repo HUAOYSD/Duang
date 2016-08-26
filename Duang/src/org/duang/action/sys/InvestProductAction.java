@@ -243,16 +243,12 @@ public class InvestProductAction extends BaseAction<Product>{
 	public JSONObject getJSONObject(){
 		List<Product> list = null;
 		try {
-			PageUtil<Product> page = new PageUtil<Product>();
-			page.setPageRecords(50);
-			page.setCurrentPageNum(1);
 			condsUtils.addProperties(true, "isdelete");
 			condsUtils.concatValue(new Object[]{1,"ne"});
-			list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), page);
-			int count = service.count(condsUtils.getPropertys(), condsUtils.getValues());
+			list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			if(list != null && list.size() > 0) {
 				jsonObject.put("rows", fillDataObject(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			}else{
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -308,11 +304,10 @@ public class InvestProductAction extends BaseAction<Product>{
 				condsUtils.concatValue(new Object[]{"%"+nameZh+"%","like"});
 			}
 			list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = service.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if(list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObject(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			}else{
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

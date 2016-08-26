@@ -69,15 +69,18 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 	public void confirmAllotLoanList(){
 		try {
 			String scaleId = getRequest().getParameter("scaleid");
-			String[] loanListIds = getRequest().getParameterValues("loanListIds");
-			if (DataUtils.notEmpty(scaleId) && loanListIds!=null && loanListIds.length>0) {
-				if (service.matchScaleLoanRecords(scaleId, loanListIds)) {
-					jsonObject.put("success", true);
-				}else{
+			String loanListIds = getRequest().getParameter("loanListIds");
+			if(DataUtils.notEmpty(loanListIds)){
+				String[] loanListIdsArray = loanListIds.split(","); 
+				if (DataUtils.notEmpty(scaleId) && loanListIdsArray!=null && loanListIdsArray.length>0) {
+					if (service.matchScaleLoanRecords(scaleId, loanListIdsArray)) {
+						jsonObject.put("success", true);
+					}else{
+						jsonObject.put("success", false);
+					}
+				}else {
 					jsonObject.put("success", false);
 				}
-			}else {
-				jsonObject.put("success", false);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,10 +104,10 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 	 * @return: Object      
 	 * @throws   
 	 */  
-	public void findScaleLoanListInfo(String scaleid) {
+	public void findScaleLoanListInfo() {
 		try {
-			condsUtils.addProperties(true, "scale", "loanList", "loanListAlias.loanMember", "order");
-			condsUtils.addValues(true, new Object[]{"scaleAlias","as"}, new Object[]{"loanListAlias","as"}, new Object[]{"loanMemberAlias","as"}, Order.desc("loanListAlias.createTime"));
+			condsUtils.addProperties(true, "scale", "loanList", "loanListAlias.memberInfo", "order");
+			condsUtils.addValues(true, new Object[]{"scaleAlias","as"}, new Object[]{"loanListAlias","as"}, new Object[]{"memberInfoAlias","as"}, Order.desc("loanListAlias.createTime"));
 			@SuppressWarnings("rawtypes")
 			List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			fillDatagridCons(list);
@@ -137,8 +140,8 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 			for(Object temp : list) {
 				if (temp instanceof Object[]) {
 					Map<String,Object> resultMap = new HashMap<String,Object>();
-					LoanList loanlist = (LoanList)((Object[])temp)[3];
-					MemberInfo memberinfo = (MemberInfo)((Object[])temp)[2];
+					LoanList loanlist = (LoanList)((Object[])temp)[0];
+					MemberInfo memberinfo = (MemberInfo)((Object[])temp)[1];
 					if (loanlist != null) {
 						resultMap.put("loanType", LoanMode.valueOf("M"+loanlist.getLoanType()).toString());
 						resultMap.put("createTime", DateUtils.getTimeStamp(loanlist.getCreateTime()));

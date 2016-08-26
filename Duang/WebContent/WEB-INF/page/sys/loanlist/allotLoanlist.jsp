@@ -7,7 +7,7 @@
 		  <div id="loanlist_search_area" class="search_area query_conds_area">
 		    <div class="conditon" id="loanlist_conditon">
 				<form id="loanlistQueryForm" method="post">
-					  <input type="hidden" name="scaleid" id="scaleid" value="${params.scaleid }"/>
+					  <input type="hidden" name="scaleid" id="scaleid" value="${scaleid}"/>
 					  <table border="0">
 						<tr height="35px">
 							<td class="showRight"><span class="investPro-search">审核通过日期：</span></td>
@@ -30,10 +30,9 @@
 		  <!-- 数据表格区域 -->
 		  <table id="loanlist" style="table-layout:fixed;" ></table>
 	 	  <!-- 表格顶部工具按钮 -->
-		  <div id="tt_toolbar_loanlist" style="margin:15px 0px;text-align:center;">
-		     <hr/>
-		  	 <a id="chose_loanlist_scale" class="easyui-linkbutton" iconCls="icon-2012080404391" plain="true"><b>确认</b></a>
-	  	  </div>
+	 	  <div class="footer-btn">
+				<a id="chose_loanlist_scale" class="btn-ok"><b>确认</b></a>
+		  </div>
 	</div>
 	<script type="text/javascript" src="<%=path %>/ui/sys/loanlist/allotLoanlist.js"></script>
 </body>

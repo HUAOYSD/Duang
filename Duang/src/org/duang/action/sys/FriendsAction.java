@@ -74,11 +74,11 @@ public class FriendsAction extends BaseAction<Friends> {
 	 */
 	public void queryAll() {
 		try {
-			List<Friends> list = friendsService.queryAllEntity(Order.asc("optTime"));
+			List<Friends> list = friendsService.queryAllEntity(getPageUtil(),Order.asc("optTime"));
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", list.size());
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

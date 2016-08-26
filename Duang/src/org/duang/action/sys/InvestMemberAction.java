@@ -172,11 +172,10 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 			condsUtils.addValues(false, "0");
 			@SuppressWarnings("rawtypes")
 			List list = investMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = investMemberService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -234,11 +233,10 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 
 			@SuppressWarnings("rawtypes")
 			List list = investMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = investMemberService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

@@ -48,7 +48,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name = ResultPath.ADD, type = "dispatcher", location = "WEB-INF/page/sys/scale/addScale.jsp"),
 		@Result(name = ResultPath.EDIT, type = "dispatcher", location = "WEB-INF/page/sys/scale/editScale.jsp"),
 		@Result(name = ResultPath.INFO, type = "dispatcher", location = "WEB-INF/page/sys/scale/infoScale.jsp"),
-		@Result(name = "loanlistinfo", type = "dispatcher", location = "WEB-INF/page/sys/loaninfo/loanlistinfo.jsp"),
+		@Result(name = "loanlistinfo", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/loanlistinfo.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 })
 public class ScaleAction extends BaseAction<Scale> {

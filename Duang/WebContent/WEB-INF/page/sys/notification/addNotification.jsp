@@ -32,44 +32,6 @@
 		        <textarea rows="5" cols="30" name="content"></textarea>    
 		    </div>
 		    <input type="hidden" name="id" /> 
-		    map.put("id", applyLoanInfo.getId());
-				map.put("name", applyLoanInfo.getName());
-				map.put("money", applyLoanInfo.getMoney());
-				map.put("timeLimit", applyLoanInfo.getTimeLimit());
-				map.put("sex", applyLoanInfo.getSex());
-				map.put("phone", applyLoanInfo.getPhone());
-				map.put("idcard", applyLoanInfo.getIdcard());
-				map.put("email", applyLoanInfo.getEmail());
-				map.put("nativeAddress", applyLoanInfo.getNativeAddress());
-				map.put("nativeInfo", applyLoanInfo.getNativeInfo());
-				
-				map.put("address", applyLoanInfo.getAddress());
-				map.put("liveStyle", applyLoanInfo.getLiveStyle());
-				map.put("education", applyLoanInfo.getEducation());
-				map.put("marriage", applyLoanInfo.getMarriage());
-				map.put("house", applyLoanInfo.getHouse());
-				
-				map.put("hasCredit", applyLoanInfo.getHasCredit());
-				map.put("creditCard", applyLoanInfo.getCreditCard());
-				map.put("industry", applyLoanInfo.getIndustry());
-				map.put("jobStyle", applyLoanInfo.getJobStyle());
-				map.put("job", applyLoanInfo.getJob());
-				
-				map.put("jobCity", applyLoanInfo.getJobCity());
-				map.put("company", applyLoanInfo.getCompany());
-				map.put("publicTel", applyLoanInfo.getPublicTel());
-				map.put("salaryFromBank", applyLoanInfo.getSalaryFromBank());
-				map.put("yearIncome", applyLoanInfo.getYearIncome());
-				
-				map.put("use", applyLoanInfo.getUse());
-				map.put("monthBack", applyLoanInfo.getMonthBack());
-				map.put("urgencyPerson", applyLoanInfo.getUrgencyPerson());
-				map.put("urgencyPhone", applyLoanInfo.getUrgencyPhone());
-				map.put("datums", applyLoanInfo.getDatums());
-				map.put("assetCertificates", applyLoanInfo.getAssetCertificates());
-				
-				LoanList loanList = (LoanList) array[0];
-				map.put("loanListId", loanList.getId());
 		</form>
 	</div>
 	<div align="center" class="footer-oper">

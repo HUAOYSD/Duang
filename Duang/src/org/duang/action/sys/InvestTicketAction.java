@@ -140,12 +140,11 @@ public class InvestTicketAction extends BaseAction<InvestTicket> {
 	 */
 	public void queryAllInvestTicket() {
 		try {
-			List<InvestTicket> list = investTicketService.queryAllEntity(Order.asc("createTime"));
-			int count = investTicketService.count();
+			List<InvestTicket> list = investTicketService.queryAllEntity(getPageUtil(),Order.asc("createTime"));
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -250,13 +249,12 @@ public class InvestTicketAction extends BaseAction<InvestTicket> {
 			}
 			//查询数据
 			List<InvestTicket> list = investTicketService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = investTicketService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			//封装json
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				//fillDataObjectArray方法用于重新组合数据集，让其能够符合页面展示
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

@@ -77,12 +77,11 @@ public class MemberTicketRecordAction extends BaseAction<MemberTicketRecord> {
 	 */
 	public void queryAllMemberTicketRecord() {
 		try {
-			List<MemberTicketRecord> list = memberTicketRecordService.queryAllEntity(Order.desc("useTime"));
-			int count = memberTicketRecordService.count();
+			List<MemberTicketRecord> list = memberTicketRecordService.queryAllEntity(getPageUtil(),Order.desc("useTime"));
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -207,11 +206,10 @@ public class MemberTicketRecordAction extends BaseAction<MemberTicketRecord> {
 			
 			@SuppressWarnings("rawtypes")
 			List list = memberTicketRecordService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = memberTicketRecordService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

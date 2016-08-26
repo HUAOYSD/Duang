@@ -80,11 +80,10 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 			condsUtils.addProperties(false, "isdelete");
 			condsUtils.addValues(false, "0");
 			List<MemberInfo> list = sysMemberInfoService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = sysMemberInfoService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -325,11 +324,10 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 				condsUtils.concatValue(new String[] { entity.getPhone(), "like" });
 			}
 			List<MemberInfo> list = sysMemberInfoService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = sysMemberInfoService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

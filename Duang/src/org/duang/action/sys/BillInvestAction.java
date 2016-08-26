@@ -80,11 +80,11 @@ public class BillInvestAction extends BaseAction<BillInvest> {
 	 */
 	public void queryAllBillInvest() {
 		try {
-			List<BillInvest> list = billInvestService.queryAllEntity(Order.desc("optTime"));
+			List<BillInvest> list = billInvestService.queryAllEntity(getPageUtil(),Order.desc("optTime"));
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", list.size());
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

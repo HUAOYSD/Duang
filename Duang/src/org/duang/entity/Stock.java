@@ -122,7 +122,7 @@ public class Stock implements java.io.Serializable {
 		this.money = money;
 	}
 
-	@Column(name = "fetch", precision = 22, scale = 0)
+	@Column(name = "fetch_money", precision = 22, scale = 0)
 	public double getFetch() {
 		return this.fetch;
 	}

@@ -112,12 +112,11 @@ public class NotificationAction extends BaseAction<Notification> {
 	 */
 	public void queryAllNotification() {
 		try {
-			List<Notification> list = notificationService.queryAllEntity(Order.asc("publishTime"));
-			int count = notificationService.count();
+			List<Notification> list = notificationService.queryAllEntity(getPageUtil(),Order.asc("publishTime"));
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -224,13 +223,12 @@ public class NotificationAction extends BaseAction<Notification> {
 			}
 			//查询数据
 			List<Notification> list = notificationService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = notificationService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			//封装json
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				//fillDataObjectArray方法用于重新组合数据集，让其能够符合页面展示
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

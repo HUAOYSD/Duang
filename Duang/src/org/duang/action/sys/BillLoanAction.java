@@ -202,7 +202,7 @@ public class BillLoanAction extends BaseAction<BillLoan> {
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", list.size());
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

@@ -223,11 +223,11 @@ public class LoanListAction extends BaseAction<LoanList> {
 	public void queryPassLoanRecords() {
 		try {
 			//审核通过且未起标
-			condsUtils.addProperties(true, "loanMember", "customerManager", "myAlias.memberInfo", "applyState", "isSell", "order");
-			condsUtils.addValues(true, new Object[]{"myAlias","as"}, new Object[]{"customerAlias","as"}, new Object[]{"memberAlias","as"}, Apply.A2.getVal(), Scale.S1.getVal(), Order.desc("createTime"));
+			condsUtils.addProperties(true, "customerManager", "memberInfo", "applyState", "isSell", "order");
+			condsUtils.addValues(true, new Object[]{"customerAlias","as"}, new Object[]{"memberAlias","as"}, Apply.A2.getVal(), Scale.S1.getVal(), Order.desc("createTime"));
 			if (DataUtils.notEmpty(getRequest().getParameter("begin_date")) && DataUtils.notEmpty(getRequest().getParameter("end_date"))) {
-				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("begin_date")), "ge"});
-				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("end_date")) + " 23:59:59", "le"});
+				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("begin_date")+" 00:00:00"), "ge"});
+				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("end_date")+" 23:59:59"), "le"});
 			}else{
 				condsUtils.concat("passTime", new Object[]{DateUtils.getMinAtToday(), "ge"});
 				condsUtils.concat("passTime", new Object[]{DateUtils.getMaxAtToday(), "le"});
@@ -263,6 +263,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 		try {
 			String path = getRequest().getParameter("path");
 			if("allot".equals(path)) {
+				getRequest().setAttribute("scaleid", getRequest().getParameter("scaleid"));
 				return "allot";
 			} 
 		} catch (Exception e) {

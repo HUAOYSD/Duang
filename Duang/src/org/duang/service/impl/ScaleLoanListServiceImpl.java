@@ -74,10 +74,10 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 			return false;
 		}
 		//1、获取所有借贷记录
-		String hql = "FROM LoanList";
+		String hql = " FROM LoanList ";
 		for (int j = 0; j < loanListIds.length; j++) {
 			if (j == 0) {
-				hql += "WHERE id = '" + loanListIds[j] + "'";
+				hql += " WHERE id = '" + loanListIds[j] + "'";
 			}else {
 				hql += " OR id = '" + loanListIds[j] + "'";
 			}

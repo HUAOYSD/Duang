@@ -240,7 +240,6 @@ $("#allot_btn_scale").on("click",function(){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
 	}
-	id = 
 	layer.open({
 		type: 2,
 		title: '借贷分配',

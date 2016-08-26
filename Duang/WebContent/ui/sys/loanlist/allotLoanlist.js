@@ -15,7 +15,7 @@ $(function() {
  */
 function domresize(){
 	$('#loanlist').datagrid('resize',{  
-		height:$("#body_loanlist").height()-$('#loanlist_search_area').height()-8,
+		height:$("#body_loanlist").height()-$('#loanlist_search_area').height()-75,
 		width:$("#body_loanlist").width()
 	});
 }
@@ -36,7 +36,7 @@ window.onresize = function(){
  */
 function loadloanlist(url, dataObj){
 	$('#loanlist').datagrid({
-		height:$("#body_loanlist").height()-$('#loanlist_search_area').height()-8,
+		height:$("#body_loanlist").height()-$('#loanlist_search_area').height()-75,
 		width:$("#body_loanlist").width(),
 		loadMsg : "正在加载，请稍后...",
 		singleSelect:false, 
@@ -60,7 +60,7 @@ function loadloanlist(url, dataObj){
 			             {field : "loanMemberName", title : "借款人", width : 115, align : "center" },
 			             {field : "loanMemberNickName", title : "用户名", width : 115, align : "center" },
 			             {field : "loanType", title : "借款模式", width : 100, align : "center" },
-			             {field : "customerManagerName", title : "客户经理", width : 115, align : "center" },
+			             {field : "customerManagerName", title : "客户经理", width : 115, align : "center" }
 		 ]],
 		columns : [ [
 		             {field : "loanMemberPhone", title : "手机号", width : 120, align : "center" },
@@ -170,16 +170,21 @@ $("#chose_loanlist_scale").on("click",function(){
 	}
 	$.messager.confirm('确认','您确认操作吗？',function(r){    
 	    if (r){    
-	    	var lists = "scaleid=" + $("#scaleid").val();
-	    	$.each($("#loanlist").datagrid('getSelections'), function(i,n){
-	    		lists += "&loanListIds=" + n.id;
-	    	});
-	    	lists += "&optime="+new Date().getTime(); 
+	    	var selectedRows = $("#loanlist").datagrid('getSelections');
+	    	var selectedRowsId="";
+	    	for(var i = 0;i<selectedRows.length;i++){
+	    		selectedRowsId+=selectedRows[i].id;
+	    		if(i<selectedRows.length-1){
+	    			selectedRowsId+=",";
+	    		}
+	    	}
+	    	var scaleId = $("#scaleid").val();
+	    	var oprData = "scaleid="+scaleId+"&loanListIds="+selectedRowsId+"&optime="+new Date().getTime();
 	    	$.messager.progress();
 	    	$.ajax({
 	         	type:"post",
 	         	url:"scaleloanlist!confirmAllotLoanList.do?",
-	         	data:{"loanListIds":lists},
+	         	data:oprData,
 	         	success:function(msg) {
 	         		var result = eval('('+msg+')');
 	         		if(result.success) {

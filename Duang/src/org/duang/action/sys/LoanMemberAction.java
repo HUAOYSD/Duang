@@ -173,11 +173,10 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 			condsUtils.addValues(false, "0");
 			@SuppressWarnings("rawtypes")
 			List list = loanMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = loanMemberService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -227,11 +226,10 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 
 			@SuppressWarnings("rawtypes")
 			List list = loanMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = loanMemberService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);

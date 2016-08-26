@@ -71,11 +71,10 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo> {
 			}
 			@SuppressWarnings("rawtypes")
 			List list = applyLoanInfoService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = applyLoanInfoService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -183,13 +182,12 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo> {
 			}
 			//查询数据
 			List<ApplyLoanInfo> list = applyLoanInfoService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
-			int count = applyLoanInfoService.count(condsUtils.getPropertys(), condsUtils.getValues());
 			//封装json
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				//fillDataObjectArray方法用于重新组合数据集，让其能够符合页面展示
 				//jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", count);
+				jsonObject.put("total",  getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
