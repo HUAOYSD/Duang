@@ -26,7 +26,6 @@ import org.duang.enums.product.Category;
 import org.duang.service.ProductService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
-import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
