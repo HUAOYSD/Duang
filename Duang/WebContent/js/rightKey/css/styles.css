@@ -1,0 +1,98 @@
+
+/* Menu */
+
+.right-menu {
+    position: absolute;
+    width: 100px;
+    border: 1px solid #bbb;
+    z-index: 100;
+    border-radius: 5px;
+    background-color:#fff;
+    box-shadow: 1px 1px 4px rgba(0,0,0,.2);
+    opacity: 0;
+    -webkit-transform: translate(0, 15px) scale(.95);
+    transform: translate(0, 15px) scale(.95);
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+    pointer-events: none;
+    text-align: center;
+}
+
+.menu-item {
+    display: block;
+    position: relative;
+    margin: 0;
+    margin-left:-40px;
+    padding: 0;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.menu-btn { 
+    background: none;
+    line-height: normal;
+    overflow: visible;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    display: block;
+    width: 100%;
+    font-family: 'Microsoft YaHei', sans-serif;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.menu-btn::-moz-focus-inner,
+.menu-btn::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+.menu-btn .fa {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.menu-item:hover > .menu-btn{ 
+    color: #fff; 
+    outline: none; 
+    background-color: #34CD62;
+    border: 1px solid #34CD62;
+}
+
+.menu-item.disabled {
+    opacity: .5;
+    pointer-events: none;
+}
+
+.menu-item.disabled .menu-btn {
+    cursor: default;
+}
+
+.menu-separator {
+    display:block;
+    margin: 7px 5px;
+    height:1px;
+    margin-left:-35px;
+    border-bottom: 1px solid #fff;
+    background-color: #aaa;
+}
+.show-menu,
+.menu-item:hover > .menu {
+    opacity: 1;
+    -webkit-transform: translate(0, 0) scale(1);
+    transform: translate(0, 0) scale(1);
+    pointer-events: auto;
+}
+
+.menu-item:hover > .menu {
+    -webkit-transition-delay: 100ms;
+    transition-delay: 300ms;
+}

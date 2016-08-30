@@ -11,7 +11,7 @@
     setTimeout("systemTime()",1000);  
 }  */
 var $parent = self.parent.$;
-
+var selectedTab = null;
 $(function(){
 	//隐藏显示查询条件区域
 	$('#openOrClose').on("click",function(){
@@ -48,6 +48,107 @@ function addTab(title, url,icon){
 			closable:true
 		});
 	} else {
-		$('#tabs').tabs('select', title);
+		selectedTab = $('#tabs').tabs('select', title);
 	}
 }
+
+/**
+ * 关闭右键弹窗，并且移除监听
+ */
+function closeRightMenu(){
+	menu.classList.remove('show-menu');
+	document.removeEventListener('mousedown', onMouseDown);
+}
+
+/**
+ * 刷新本页
+ */
+function refresh(){
+	var currTab =  $('#tabs').tabs('getSelected'); //获得当前tab
+	var url = $(currTab.panel('options').content).attr('src');
+	$('#tabs').tabs('update', {
+	    tab : currTab,
+	    options : {
+	    	content:'<iframe src="'+url+'" frameBorder="0" border="0" scrolling="no" style="width: 100%; height: 100%;"/>' 
+	    }
+	});
+	closeRightMenu();
+}
+
+/**
+ * 关闭当前页
+ */
+function closeCurrentPage(){
+	var currentTab =  $('#tabs').tabs('getSelected'); //获得当前tab
+	var currentTabIndex = $('#tabs').tabs('getTabIndex',currentTab);
+	$('#tabs').tabs('close',currentTabIndex);
+	closeRightMenu();
+}
+
+/**
+ * 关闭其他标签
+ */
+function closeOtherPage(){
+	//获得当前tab
+	var currentTab =  $('#tabs').tabs('getSelected'); 
+	//当前tab的标题
+	var currentTabTitle = currentTab.panel('options').title;
+	//遍历所有打开的tab
+	$(".tabs li").each(function(index, obj) {
+        //关闭除了当前tab  
+        var tabTitle = $(".tabs-closable", this).text();
+        if(tabTitle != currentTabTitle){
+        	$('#tabs').tabs('close', tabTitle);
+        }
+    }); 
+	closeRightMenu();
+}
+
+/**
+ * 关闭左边的标签
+ */
+function closeLeftPage(){
+	//获得当前tab
+	var currentTab =  $('#tabs').tabs('getSelected'); 
+	//当前tab的标题
+	var currentTabIndex = $('#tabs').tabs('getTabIndex',currentTab);
+	$(".tabs li").each(function(index, obj) {
+		if(index < currentTabIndex){
+	        //关闭除了当前tab  
+	        var tabTitle = $(".tabs-closable", this).text();
+	        $('#tabs').tabs('close', tabTitle);
+		}
+    }); 
+	closeRightMenu();
+}
+
+/**
+ * 关闭右边的标签
+ */
+function closeRightPage(){
+	//获得当前tab
+	var currentTab =  $('#tabs').tabs('getSelected'); 
+	//当前tab的标题
+	var currentTabIndex = $('#tabs').tabs('getTabIndex',currentTab);
+	$(".tabs li").each(function(index, obj) {
+		if(index > currentTabIndex){
+	        //关闭除了当前tab  
+	        var tabTitle = $(".tabs-closable", this).text();
+	        $('#tabs').tabs('close', tabTitle);
+		}
+    }); 
+	closeRightMenu();
+}
+
+/**
+ * 关闭全部的标签
+ */
+function closeAllPage(){
+	$(".tabs li").each(function(index, obj) {
+        //关闭除了当前tab  
+        var tabTitle = $(".tabs-closable", this).text();
+        $('#tabs').tabs('close', tabTitle);
+    }); 
+	closeRightMenu();
+}
+
