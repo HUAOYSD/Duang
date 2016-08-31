@@ -126,8 +126,6 @@
 			var nameZh = $("#editInvestPro_nameZh").val();
 			var name = $("#editInvestPro_name").val();
 			var yield = $("#editInvestPro_yield").val();
-			var min_deadline = $("#editInvestPro_minDeadline").val();
-			var min_money = $("#editInvestPro_minMoney").val();
 			if(isNull(nameZh)){
 				$('#editInvestPro_nameZh').validatebox({    
 					required: true 
@@ -146,24 +144,11 @@
 				}); 
 				return;
 			}
-			if(isNull(min_deadline)){
-				$('#editInvestPro_minDeadline').validatebox({    
-				    required: true
-				}); 
-				return;
-			}
-			if(isNull(min_money)){
-				$('#editInvestPro_minMoney').validatebox({    
-				    required: true
-				}); 
-				return;
-			}
 			$.messager.progress();
 			$('#investProEditForm').submit();
 		});
-		
 		function isNull(val){
-			if(val==null || val.trim() == ''){
+			if(val==null || val.trim() == '' || val=='undefined'){
 				return true;
 			}else{
 				return false;
