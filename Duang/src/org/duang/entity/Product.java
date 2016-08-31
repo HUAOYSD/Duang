@@ -42,6 +42,7 @@ public class Product implements java.io.Serializable {
 	private String riskControl;
 	private String details;
 	private int isdelete;
+	private int days;
 	private Date createtime;
 	private Date modifytime;
 	private String createuser;
@@ -62,7 +63,10 @@ public class Product implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Product(String id, int category, String nameZh, String name, String nameDescribe, String yieldDescribe, double yield, String timeLimit, String title1, String title2, int isSell, int isNewProduct, int isRecommend, String productDescribe, String riskControl, String details, int isdelete, Date createtime, Date modifytime, String createuser, String modifyuser, Set<Scale> scales) {
+	public Product(String id, int category, String nameZh, String name, String nameDescribe, String yieldDescribe, 
+			double yield, String timeLimit, String title1, String title2, int isSell, int isNewProduct, int days,
+			int isRecommend, String productDescribe, String riskControl, String details, int isdelete,
+			Date createtime, Date modifytime, String createuser, String modifyuser, Set<Scale> scales) {
 		this.id = id;
 		this.category = category;
 		this.nameZh = nameZh;
@@ -85,6 +89,7 @@ public class Product implements java.io.Serializable {
 		this.createuser = createuser;
 		this.modifyuser = modifyuser;
 		this.scales = scales;
+		this.days = days;
 	}
 
 	// Property accessors
@@ -133,7 +138,15 @@ public class Product implements java.io.Serializable {
 	public void setNameDescribe(String nameDescribe) {
 		this.nameDescribe = nameDescribe;
 	}
+	@Column(name = "days")
+	public int getDays() {
+		return days;
+	}
 
+	public void setDays(int days) {
+		this.days = days;
+	}
+	
 	@Column(name = "yield_describe", length = 2000)
 	public String getYieldDescribe() {
 		return this.yieldDescribe;

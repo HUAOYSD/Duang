@@ -167,6 +167,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 						resultMap.put("poundage", pk.getPoundage());
 						resultMap.put("getMoney", pk.getGetMoney());
 						resultMap.put("yetMoney", pk.getYetMoney());
+						resultMap.put("days", pk.getDays());
 						resultMap.put("returnMoney", pk.getReturnMoney());
 						resultMap.put("agoMoney", pk.getAgoMoney());
 						resultMap.put("yetReturnMoney", pk.getYetReturnMoney());

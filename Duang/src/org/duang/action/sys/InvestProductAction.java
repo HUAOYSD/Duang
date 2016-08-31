@@ -22,6 +22,7 @@ import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.SessionTools;
 import org.duang.entity.Product;
+import org.duang.enums.days.Days;
 import org.duang.enums.product.Category;
 import org.duang.service.ProductService;
 import org.duang.util.ConstantCode;
@@ -111,6 +112,28 @@ public class InvestProductAction extends BaseAction<Product>{
 		return "addInvestPro";
 	}
 
+	/**
+	 * 获取周期
+	 * @Title: getDays   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年8月31日 下午4:31:34
+	 * @return: void      
+	 * @throws
+	 */
+	public void getDays(){
+		String json="";
+		for(Days day:Days.values()){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("id", day.getVal());
+			map.put("text", day.getVal()+"天");
+			listMap.add(map);
+		}
+		json = JSONArray.fromObject(listMap).toString();
+		printJsonResult(json);
+	}
+	
 	/**
 	 * 跳转到编辑页面
 	 * @Title: editInvestPro   
@@ -346,7 +369,8 @@ public class InvestProductAction extends BaseAction<Product>{
 			map.put("details", pro.getDetails());
 			map.put("isNewProduct", pro.getIsNewProduct());
 			map.put("isRecommend", pro.getIsRecommend());
-
+			
+			map.put("days", pro.getDays());
 			map.put("isSell", pro.getIsSell());
 			map.put("isdelete", pro.getIsdelete());
 			map.put("modifytime", pro.getModifytime());
@@ -392,6 +416,7 @@ public class InvestProductAction extends BaseAction<Product>{
 					jsonObject.put("isdelete", entity.getIsdelete());
 					jsonObject.put("modifytime", entity.getModifytime());
 					jsonObject.put("modifyuser", entity.getModifyuser());
+					jsonObject.put("days", entity.getDays());
 
 					jsonObject.put("productDescribe", entity.getProductDescribe());
 					jsonObject.put("riskControl", entity.getRiskControl());

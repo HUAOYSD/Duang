@@ -23,6 +23,10 @@
 				</select>   
 		    </div> 
 		    <div>   
+		        <label for="days" class="investPro_add_from_label">周期：</label>   
+		       	<input name="days" class="easyui-combobox" data-options="editable:false,valueField:'id',textField:'text',url:'investpro!getDays.do',panelHeight:'auto'" />   
+		    </div>
+		    <div>   
 		        <label for="nameDescribe" class="investPro_add_from_label">描述：</label>   
 		        <input class="easyui-validatebox" type="text" name="nameDescribe" id="editInvestPro_nameDescribe"/>   
 		    </div> 

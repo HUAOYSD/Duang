@@ -1,6 +1,8 @@
 <%@page import="org.duang.entity.Product"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<% String path = request.getContextPath();%>
+<% String path = request.getContextPath();
+%>
+
 <%@ include file="/page/inc/inc.jsp"%>
 <body style="background-color:#fff;" id="body_add_investpro">
 	<div id="investPro_add_contans">
@@ -20,6 +22,10 @@
 				    <option value="0" selected="selected">信贷产品</option>   
 				    <option value="1">标类产品</option>   
 				</select>   
+		    </div>
+		    <div>   
+		        <label for="days" class="investPro_add_from_label">周期：</label>   
+		       	<input name="days" class="easyui-combobox" data-options="editable:false,valueField:'id',textField:'text',url:'investpro!getDays.do',panelHeight:'auto'" />   
 		    </div> 
 		    <div>   
 		        <label for="nameDescribe" class="investPro_add_from_label">描述：</label>   
@@ -111,5 +117,6 @@
 			$.messager.progress();
 			$('#investProSaveForm').submit();
 		});
+		
 	</script>
 </body>

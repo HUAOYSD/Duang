@@ -47,6 +47,11 @@ $(function(){
 					return value.toFixed(6);
 				}
 			},
+			{field:'days',title:'周期',width:100,halign:"center", align:"center" ,
+				formatter: function(value,row,index){
+					return value+"天";
+				}
+			},
 			{field:'title1',title:'标题1',width:100,halign:"center", align:"center" },
 			{field:'title2',title:'标题2',width:150,halign:"center", align:"center" },
 			{field:'isSell',title:'是否起售',width:100,halign:"center", align:"center",

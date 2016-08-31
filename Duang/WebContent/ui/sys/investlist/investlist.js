@@ -96,6 +96,11 @@ function loadinvestlist(url, dataObj){
 		             {field : "poundageTurn", title : "转让手续费", width : 100, align : "center" },
 		             {field : "poundagePrivilege", title : "优惠手续费", width : 100, align : "center" },
 		             {field : "investStyle", title : "平台", width : 100, align : "center" },
+		             {field : "days", title : "周期", width : 150, align : "center",
+		            	 formatter: function(value,row,index){
+		            		 return value+"天";
+		            	 }
+		             },
 		             {field : "pactNumber", title : "合同编号", width : 150, align : "center" },
 		             {field : "openDate", title : "创建日期", width : 150, align : "center",
 		            	 formatter: function(value,row,index){

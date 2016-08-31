@@ -45,6 +45,7 @@ public class LoanList implements java.io.Serializable {
 	private int returnStatus;
 	private int loanState;
 	private int applyState;
+	private int days;
 	private String loanUse;
 	private double loanInterest;
 	private Date createTime;
@@ -81,7 +82,7 @@ public class LoanList implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public LoanList(String id, MemberInfo memberInfo,int loanType, String pactNumber, int isSell, int poundageState, double money, 
+	public LoanList(String id, MemberInfo memberInfo,int loanType, String pactNumber, int isSell, int poundageState, double money, int days,
 			double realMoney, double manageCost, double poundage, double getMoney, double yetMoney, double returnMoney, double agoMoney, 
 			double yetReturnMoney, int returnStatus, int loanState, int applyState, String loanUse, double loanInterest, Date createTime, 
 			Date signDate, Date beginReturnDate, Date endReturnDate, Date doneReturnDate, int loanStyle, int backStyle,
@@ -111,6 +112,7 @@ public class LoanList implements java.io.Serializable {
 		this.loanInterest = loanInterest;
 		this.createTime = createTime;
 		this.signDate = signDate;
+		this.days = days;
 		this.beginReturnDate = beginReturnDate;
 		this.endReturnDate = endReturnDate;
 		this.doneReturnDate = doneReturnDate;
@@ -166,6 +168,15 @@ public class LoanList implements java.io.Serializable {
 		this.loanType = loanType;
 	}
 
+	@Column(name = "days")
+	public int getDays() {
+		return days;
+	}
+
+	public void setDays(int days) {
+		this.days = days;
+	}
+	
 	@Column(name = "pact_number", length = 50)
 	public String getPactNumber() {
 		return this.pactNumber;

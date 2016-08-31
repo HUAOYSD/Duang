@@ -78,6 +78,11 @@ function loadloanlist(url, dataObj){
 		             {field : "getMoney", title : "应该放款金额", width : 100, align : "center" },
 		             {field : "yetMoney", title : "已放款金额", width : 100, align : "center" },
 		             {field : "isSell", title : "起售状态", width : 100, align : "center" },
+		             {field : "days", title : "周期", width : 150, align : "center",
+		            	 formatter: function(value,row,index){
+		            		 return value+"天";
+		            	 }
+		             }, 
 		             {field : "returnStatus", title : "还款状态", width : 100, align : "center" },
 		             {field : "returnMoney", title : "应还款金额", width : 100, align : "center" },
 		             {field : "agoMoney", title : "逾期费", width : 100, align : "center" },

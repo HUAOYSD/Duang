@@ -165,6 +165,7 @@ public class InvestListAction extends BaseAction<InvestList> {
 						resultMap.put("expectIncome", pk.getExpectIncome());
 						resultMap.put("totalMoney", pk.getTotalMoney());
 						resultMap.put("income", pk.getIncome());
+						resultMap.put("days", pk.getDays());
 						resultMap.put("ticketBonus", pk.getTicketBonus());
 						resultMap.put("status", Status.valueOf("S"+pk.getStatus()).toString());
 						resultMap.put("openDate", DateUtils.getTimeStamp(pk.getOpenDate()));
@@ -177,6 +178,7 @@ public class InvestListAction extends BaseAction<InvestList> {
 						resultMap.put("poundagePrivilege", pk.getPoundagePrivilege());
 						resultMap.put("isTurn", If.valueOf("If"+pk.getIsTurn()).toString());
 						resultMap.put("turnStatus", TurnStatus.valueOf("TS"+pk.getTurnStatus()).toString());
+						
 					}
 					if (fk != null) {
 						resultMap.put("memberName", fk.getRealName());

@@ -52,6 +52,7 @@ public class InvestList implements java.io.Serializable {
 	private int investStyle;
 	private double poundageTurn;
 	private double poundagePrivilege;
+	private int  days;
 	private Set<Stock> stocksForInvestListId = new HashSet<Stock>(0);
 	private Set<MemberTicketRecord> memberTicketRecords = new HashSet<MemberTicketRecord>(0);
 	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
@@ -70,7 +71,7 @@ public class InvestList implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public InvestList(String id,Date calcBeginDate,Date calcEndDate,int isTurn,int turnStatus, Scale scale, InvestTicket investTicket, 
+	public InvestList(String id,Date calcBeginDate,Date calcEndDate,int isTurn,int turnStatus, Scale scale, InvestTicket investTicket,int  days, 
 			MemberInfo memberInfo, double money, double yetMoney, double spaceMoney, double backIncome, double backMoney, int useTicket, double expectIncome, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, String pactNumber, int investStyle, double poundageTurn, double poundagePrivilege, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales) {
 		this.id = id;
 		this.calcBeginDate = calcBeginDate;
@@ -79,6 +80,7 @@ public class InvestList implements java.io.Serializable {
 		this.isTurn = isTurn;
 		this.scale = scale;
 		this.investTicket = investTicket;
+		this.days = days;
 		this.memberInfo = memberInfo;
 		this.money = money;
 		this.yetMoney = yetMoney;
@@ -319,6 +321,14 @@ public class InvestList implements java.io.Serializable {
 		this.investStyle = investStyle;
 	}
 
+	@Column(name = "days")
+	public int getDays() {
+		return days;
+	}
+
+	public void setDays(int days) {
+		this.days = days;
+	}
 
 	@Column(name = "poundage_turn", precision = 22, scale = 0)
 	public double getPoundageTurn() {
