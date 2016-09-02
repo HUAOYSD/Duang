@@ -134,12 +134,19 @@ function loadloanlist(url, dataObj){
 		             ] ],
 		             onSelect:function(rowIndex, rowData){
 		            	 $('#allot_btn_loanlist').linkbutton('enable');
+		            	 if(rowData.applyState=='待审核'){
+		            		 $('#review_btn_loanlist').linkbutton('enable');
+		            	 }else{
+		            		 $('#review_btn_loanlist').linkbutton('disable');
+		            	 }
 		             },
 		             onUnselect:function(rowIndex, rowData){
 		            	 $('#allot_btn_loanlist').linkbutton('disable');
+		            	 $('#review_btn_loanlist').linkbutton('disable');
 		             },
 		             onLoadSuccess: function(data){
 		            	 $('#allot_btn_loanlist').linkbutton('disable');
+		            	 $('#review_btn_loanlist').linkbutton('disable');
 		             }
 	});
 }
@@ -208,6 +215,31 @@ $("#allot_btn_loanlist").on("click",function(){
 		area: ['80%', '80%'],
 		content: 'customermanager!openDialog.do?path=chose'
 	}); 
+});
+
+/**
+ * 审核
+ */
+$("#review_btn_loanlist").on("click",function(){
+	var selectedRow = $("#loanlist").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一条记录",{time:1500});
+		return;
+	}else if(selectedRow.applyState=='待审核'){
+		layer.open({
+			type: 2,
+			title: '审核',
+			shadeClose: true,
+			maxmin:true,
+			shade: 0.8,
+			area: ['50%', '40%'],
+			content: 'loanlist!openDialog.do?path=review&id='+selectedRow.id
+		}); 
+	}else{
+		layer.msg("已经过审核，不能重复审核！",{time:1500});
+		return;
+	}
+	
 });
 
 /**

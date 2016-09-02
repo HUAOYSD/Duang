@@ -38,8 +38,8 @@
 				<input type="hidden" name="loanListIds" id="loanListIds" value="${loanListIds }" />
 			</form>
 		</div>
-		<a id="prev_loanlist_scale" class="btn-ok" style="width:80px;"><b>上一步</b></a>
-		<a id="confirm_loanlist_scale" class="btn-ok"><b>确认</b></a>
+		<button type="button" class="btn btn-default" id="prev_loanlist_scale">上一步</button>
+		<button type="button" class="btn btn-primary" id="confirm_loanlist_scale">确认</button>
     </div>
 	<script type="text/javascript">
 		$("#prev_loanlist_scale").on("click", function(){

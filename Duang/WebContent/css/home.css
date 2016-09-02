@@ -16,10 +16,34 @@ input {
 	border-right: 1px solid #B2B2B2;
 }
 
-textarea {
-	padding: 0px;
-	overflow-y: auto;
-	border: 1px solid #B2B2B2;
+.form-textarea {
+	margin-top: 0px;
+    margin-bottom: 0px;
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    font-family: inherit;
+    overflow: auto;
+    -webkit-appearance: textarea;
+    -webkit-rtl-ordering: logical;
+    -webkit-user-select: text;
+    flex-direction: column;
+    resize: auto;
+    cursor: auto;
+    padding: 2px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 input[readonly] {
@@ -288,11 +312,13 @@ a:hover {
 	width: 100px;
 	text-align: right;
 }
-.applyLoanInfo_from_label{
+
+.applyLoanInfo_from_label {
 	display: inline-block;
 	width: 200px;
 	text-align: right;
 }
+
 #footer-oper {
 	background-color: #f2f2f2;
 	width: 100%;
@@ -307,7 +333,7 @@ a:hover {
 	left: 0;
 	width: 100%;
 	_position: absolute;
-	_top: expression_r(documentElement.scrollTop +   
+	_top: expression_r(documentElement.scrollTop +    
 		 documentElement.clientHeight-this.offsetHeight);
 	overflow: visible;
 }
@@ -351,15 +377,17 @@ a:hover {
 }
 /********************************************investOrLanInfo.jsp***********************************************************/
 .row1 {
-	background-color:#f7f7f7;
-	height:45px;
+	background-color: #f7f7f7;
+	height: 45px;
 }
+
 .row0 {
-	background-color:#fff;
-	height:45px;
+	background-color: #fff;
+	height: 45px;
 }
+
 .label_member {
-	padding-top:10px;
+	padding-top: 10px;
 	font-family: "微软雅黑", "黑体", "宋体";
 	font-size: 16px;
 }
@@ -369,47 +397,141 @@ a:hover {
 	font-size: 14px;
 }
 
-.footer-btn  .btn-ok{
-	background:#4375A6;
-	border-color:#4898d5;
-	color:#fff;
-	height: 35px;
-	width:50px;
-    line-height: 28px;
-    border: 1px solid #dedede;
-    border-radius: 2px;
-    font-weight: 400;
-    font-size:16px;
-    cursor: pointer;
-    margin: 0 6px;
-    padding: 0 15px;
-    text-decoration: none;
-    text-align:center;
-    display: inline-block;
-    vertical-align: middle;
+#footer {
+	background-repeat: repeat-x;
+	clear: both;
+	height: 24px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	bottom: 30px;
+	width: 95%;
 }
 
-.footer-btn  .btn-cancel{
-	background:#c2bcbc;
-	border-color:#f6f6f6;
-	color:#fff;
-	height: 35px;
-	font-size:16px;
-	width:50px;
-    line-height: 28px;
-    border: 1px solid #dedede;
-    border-radius: 2px;
-    font-weight: 400;
-    cursor: pointer;
-    margin: 0 6px;
-    padding: 0 15px;
-    text-decoration: none;
-    text-align:center;
-    display: inline-block;
-    vertical-align: top;
+#footerbox {
+	color: #fff;
+	margin: 0;
+	padding: 0;
+	clear: both;
+	position: absolute;
+	bottom: 0px;
+	width: 95%;
 }
+
+.footer {
+	width: 100%;
+	color: #fff;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.btn-default:HOVER {
+    background-color: #e6e6e6;
+}
+.btn-primary {
+	color: #fff;
+    background-color: #428bca;
+    border-color: #357ebd;
+}
+.btn-primary:HOVER {
+    background-color: #3071a9;
+}
+.btn-success {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+.btn-success {
+    background-color: #449d44;
+}
+.btn-info {
+    color: #fff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+}
+.btn-info:HOVER {
+    background-color: #31b0d5;
+}
+.btn-warning {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+.btn-warning:HOVER {
+    background-color: #ec971f;
+}
+.btn-danger {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+.btn-danger:HOVER {
+    background-color: #c9302c;
+}
+.btn-link, .btn-link:hover, .btn-link:focus, .btn-link:active {
+    border-color: transparent;
+}
+.btn-link, .btn-link:active, .btn-link.active, .btn-link[disabled], fieldset[disabled] .btn-link {
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.btn-link {
+    font-weight: 400;
+    color: #428bca;
+    border-radius: 0;
+}
+
+input, button, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+button, html input[type=button], input[type=reset], input[type=submit] {
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+button, select {
+    text-transform: none;
+}
+button {
+    overflow: visible;
+}
+button, input, optgroup, select, textarea {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+}
+
 .footer-btn {
-    text-align: right;
-    margin: 15px;
-    pointer-events: auto;
+	text-align: right;
+	margin: 15px;
+	pointer-events: auto;
 }

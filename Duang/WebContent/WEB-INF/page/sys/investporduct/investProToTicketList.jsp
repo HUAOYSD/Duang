@@ -26,8 +26,8 @@
 	  <!-- 数据表格区域 -->
 	  <table id="investProToTicketListTable" style="table-layout:fixed;" ></table>
 	  <div  class="footer-btn">
-		<a class="btn-ok" onclick="saveInvestProTicket()">确定</a>
-		<a class="btn-cancel" onclick="cancle()">取消</a>
+		<button type="button" class="btn btn-primary" onclick="saveInvestProTicket()">确定</button>
+		<button type="button" class="btn btn-default" onclick="cancle()">取消</button>
 	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path%>/ui/sys/investproduct/investProToTicket.js"></script>

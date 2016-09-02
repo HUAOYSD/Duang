@@ -52,6 +52,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Results(value = { 
 		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/loanlist/loanlist.jsp"),
 		@Result(name = "allot", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/allotLoanlist.jsp"),
+		@Result(name = "review", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/reviewLoanList.jsp"),
 		@Result(name = "confirm", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/confirmLoanlist.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 })
@@ -324,7 +325,10 @@ public class LoanListAction extends BaseAction<LoanList> {
 			if("allot".equals(path)) {
 				getRequest().setAttribute("scaleid", getRequest().getParameter("scaleid"));
 				return "allot";
-			} 
+			}else if("review".equals(path)){
+				entity = service.findById(entity.getId());
+				return "review";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("借贷记录ACTION方法openDialog错误："+e.getMessage(), this.getClass());
@@ -362,6 +366,43 @@ public class LoanListAction extends BaseAction<LoanList> {
 			LoggerUtils.error("借贷记录ACTION方法updateCustomerManager错误："+e.getMessage(), this.getClass());
 			LoggerUtils.error("借贷记录ACTION方法updateCustomerManager错误："+e.getLocalizedMessage(), this.getClass());
 			jsonObject.put("success", false);
+		} finally {
+			printJsonResult();
+		}
+	}
+	
+	/**
+	 * 更改审核结果
+	 * @Title: updateLoanApplyState   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年9月2日 上午9:28:55
+	 * @return: void      
+	 * @throws
+	 */
+	public void updateLoanApplyState(){
+		try {
+			if (entity!=null && DataUtils.notEmpty(entity.getId())) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("applyState", entity.getApplyState());
+				map.put("applyContent", entity.getApplyContent());
+				if (service.updateEntity(map, "id", entity.getId())) {
+					jsonObject.put("result", true);
+				}else {
+					jsonObject.put("result", false);
+					jsonObject.put("msg", "修改操作数据库发生错误");
+				}
+			} else {
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "修改的对象为空");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("借贷记录ACTION方法更改审核结果错误："+e.getMessage(), this.getClass());
+			LoggerUtils.error("借贷记录ACTION方法更改审核结果错误："+e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("result", false);
+			jsonObject.put("msg", "发生异常，请联系管理员");
 		} finally {
 			printJsonResult();
 		}
