@@ -2,6 +2,7 @@ package org.duang.action.sys;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -388,6 +389,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 				map.put("applyState", entity.getApplyState());
 				map.put("applyContent", entity.getApplyContent());
 				map.put("loanState", entity.getLoanState());
+				map.put("passTime", new Date());
 				if (service.updateEntity(map, "id", entity.getId())) {
 					jsonObject.put("result", true);
 				}else {

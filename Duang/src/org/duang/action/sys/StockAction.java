@@ -76,7 +76,7 @@ public class StockAction extends BaseAction<Stock> {
 	public void queryByPage() {
 		try {
 			condsUtils.addProperties(true, "scale", "loanList", "investList", "loanAlias.memberInfo", "investAlis.memberInfo", "order");
-			condsUtils.addValues(true, new Object[]{"scaleAlias","as"}, new Object[]{"loanAlias","as"}, new Object[]{"investAlis","as"}, new Object[]{"loanMemberAlis","as"}, new Object[]{"investMemberAlis","as"}, Order.desc("createTime"));
+			condsUtils.addValues(true, new Object[]{"scaleAlias","asleft"}, new Object[]{"loanAlias","asleft"}, new Object[]{"investAlis","asleft"}, new Object[]{"loanMemberAlis","asleft"}, new Object[]{"investMemberAlis","asleft"}, Order.desc("createTime"));
 			if (DataUtils.notEmpty(getRequest().getParameter("loanname"))) {
 				condsUtils.concat("loanMemberAlis.realName", URLDecoder.decode(getRequest().getParameter("loanname"),"UTF-8"));
 			}
@@ -136,21 +136,36 @@ public class StockAction extends BaseAction<Stock> {
 					Scale scale = (Scale)((Object[])obj)[4];
 					Stock stock = (Stock)((Object[])obj)[5];
 					Map<String,Object> resultMap = new HashMap<String,Object>();
-					resultMap.put("id", stock.getId());
-					resultMap.put("loanPersonName", loanMember.getRealName());
-					resultMap.put("loanPersonPhone", loanMember.getPhone());
-					resultMap.put("scaleName", scale.getName());
-					resultMap.put("pactNumberLoan", loanList.getPactNumber());
-					resultMap.put("pactNumberInvest", investList.getPactNumber());
-					resultMap.put("money", stock.getMoney());
-					resultMap.put("fetch", stock.getFetch());
-					resultMap.put("investPersonName", investMember.getRealName());
-					resultMap.put("investPersonPhone", investMember.getPhone());
-					resultMap.put("difference", stock.getDifference());
-					resultMap.put("status", Status.valueOf("S"+stock.getStatus()).toString());
-					resultMap.put("isTurn", If.valueOf("If"+stock.getIsTurn()).toString());
-					resultMap.put("createTime", DateUtils.getTimeStamp(stock.getCreateTime()));
-					resultMap.put("fetchTime", DateUtils.getTimeStamp(stock.getFetchTime()));
+					
+					if(stock != null){
+						resultMap.put("id", stock.getId());
+						resultMap.put("money", stock.getMoney());
+						resultMap.put("fetch", stock.getFetch());
+						resultMap.put("difference", stock.getDifference());
+						resultMap.put("status", Status.valueOf("S"+stock.getStatus()).toString());
+						resultMap.put("isTurn", If.valueOf("If"+stock.getIsTurn()).toString());
+						resultMap.put("createTime", DateUtils.getTimeStamp(stock.getCreateTime()));
+						resultMap.put("fetchTime", DateUtils.getTimeStamp(stock.getFetchTime()));
+					}
+					if(loanMember != null){
+						resultMap.put("loanPersonName", loanMember.getRealName());
+						resultMap.put("loanPersonPhone", loanMember.getPhone());
+					}
+					if(scale != null){
+						resultMap.put("scaleName", scale.getName());
+					}
+					if(loanList != null){
+						resultMap.put("pactNumberLoan", loanList.getPactNumber());
+					}
+					
+					if(investList!=null){
+						resultMap.put("pactNumberInvest", investList.getPactNumber());
+					}
+					if(investMember !=null){
+						resultMap.put("investPersonName", investMember.getRealName());
+						resultMap.put("investPersonPhone", investMember.getPhone());
+					}
+					
 					listMap.add(resultMap);
 				}
 			}
