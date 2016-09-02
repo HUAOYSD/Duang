@@ -90,13 +90,13 @@ public class StockAction extends BaseAction<Stock> {
 				condsUtils.concat("investMemberAlis.phone", URLDecoder.decode(getRequest().getParameter("investphone"),"UTF-8"));
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("status"))) {
-				condsUtils.concat("status", Status.valueOf("S"+getRequest().getParameter("status")).toString());
+				condsUtils.concat("status",Integer.parseInt(getRequest().getParameter("status")));
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("istrans"))) {
-				condsUtils.concat("isTurn", If.valueOf("If"+getRequest().getParameter("istrans")).toString());
+				condsUtils.concat("isTurn", Integer.parseInt(getRequest().getParameter("istrans")));
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("scalename"))) {
-				condsUtils.concat("loanAlias.name", new Object[]{URLDecoder.decode(getRequest().getParameter("scalename"),"UTF-8"), "like"});
+				condsUtils.concat("scaleAlias.name", new String[]{URLDecoder.decode(getRequest().getParameter("scalename"),"UTF-8"), "like"});
 			}
 			@SuppressWarnings("rawtypes")
 			List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
@@ -129,12 +129,12 @@ public class StockAction extends BaseAction<Stock> {
 		if (list !=null && list.size() > 0) {
 			for (Object obj : list) {
 				if (obj instanceof Object[]) {
-					Stock stock = (Stock)((Object[])obj)[3];
-					LoanList loanList = (LoanList)((Object[])obj)[3];
+					InvestList investList = (InvestList)((Object[])obj)[0];
+					MemberInfo investMember = (MemberInfo)((Object[])obj)[1];
+					LoanList loanList = (LoanList)((Object[])obj)[2];
 					MemberInfo loanMember = (MemberInfo)((Object[])obj)[3];
-					InvestList investList = (InvestList)((Object[])obj)[3];
-					MemberInfo investMember = (MemberInfo)((Object[])obj)[3];
-					Scale scale = (Scale)((Object[])obj)[3];
+					Scale scale = (Scale)((Object[])obj)[4];
+					Stock stock = (Stock)((Object[])obj)[5];
 					Map<String,Object> resultMap = new HashMap<String,Object>();
 					resultMap.put("id", stock.getId());
 					resultMap.put("loanPersonName", loanMember.getRealName());
