@@ -387,6 +387,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("applyState", entity.getApplyState());
 				map.put("applyContent", entity.getApplyContent());
+				map.put("loanState", entity.getLoanState());
 				if (service.updateEntity(map, "id", entity.getId())) {
 					jsonObject.put("result", true);
 				}else {

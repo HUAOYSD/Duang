@@ -89,15 +89,6 @@ function loadloanlist(url, dataObj){
 		             {field : "yetReturnMoney", title : "已还款金额", width : 100, align : "center" },
 		             {field : "loanStyle", title : "平台", width : 100, align : "center" },
 		             {field : "pactNumber", title : "合同编号", width : 150, align : "center" },
-		             {field : "passTime", title : "审核时间", width : 150, align : "center",
-		            	 formatter: function(value,row,index){
-		            		 if(value==0)
-		            			 return "-&nbsp;&nbsp;-";
-		            		 else	   
-		            			 return new Date(value).format("yyyy-MM-dd hh:mm:ss");
-		            	 }
-		             }, 
-		             {field : "applyContent", title : "审核内容", width : 150, align : "center" },
 		             {field : "signDate", title : "签约日", width : 150, align : "center",
 		            	 formatter: function(value,row,index){
 		            		 if(value==0)
@@ -130,7 +121,16 @@ function loadloanlist(url, dataObj){
 		            			 return new Date(value).format("yyyy-MM-dd hh:mm:ss");
 		            	 }
 		             },
-		             {field : "loanUse", title : "借款用途", width : 200, align : "center" }
+		             {field : "loanUse", title : "借款用途", width : 200, align : "center" },
+		             {field : "passTime", title : "审核时间", width : 150, align : "center",
+		            	 formatter: function(value,row,index){
+		            		 if(value==0)
+		            			 return "-&nbsp;&nbsp;-";
+		            		 else	   
+		            			 return new Date(value).format("yyyy-MM-dd hh:mm:ss");
+		            	 }
+		             }, 
+		             {field : "applyContent", title : "审核内容", width : 150, align : "center" }
 		             ] ],
 		             onSelect:function(rowIndex, rowData){
 		            	 $('#allot_btn_loanlist').linkbutton('enable');

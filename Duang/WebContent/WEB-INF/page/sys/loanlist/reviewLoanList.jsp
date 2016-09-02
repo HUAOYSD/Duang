@@ -23,11 +23,15 @@
 		var id="${entity.id}";
 		function review(t){
 			var applyContent = $("#applyContent").val();
+			var loanState = 1;
+			if(t==2){
+				loanState =2;
+			}
 			$.messager.progress();
 	    	$.ajax({
 	         	type:"post",
 	         	url:"loanlist!updateLoanApplyState.do?",
-	         	data:{"id":id, "applyState":t,"applyContent":applyContent},
+	         	data:{"id":id, "applyState":t,"applyContent":applyContent,"loanState":loanState},
 	         	success:function(data) {
 	         		data = eval('('+data+')');
 	         		if(data.result) {
