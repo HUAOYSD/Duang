@@ -23,35 +23,54 @@ public class ApplyLoanInfo implements java.io.Serializable {
 
 	private String id;
 	private LoanList loanList;
+	//贷款金额
 	private double money;
+	//贷款期限(单位月)
 	private double timeLimit;
 	private String sex;
 	private String name;
 	private String phone;
 	private String idcard;
 	private String email;
+	//户籍所在地
 	private String nativeAddress;
+	//户籍详信息
 	private String nativeInfo;
+	//现在居住地
 	private String address;
+	//住房方式，租房和自居房 0:租房 1:自居房
 	private String liveStyle;
+	//学历 [0专科  1本科  2硕士研究生 3博士研究生]
 	private String education;
+	//婚姻状况 0未婚 1已婚
 	private String marriage;
+	//房子状况
 	private String house;
+	//有无信用卡 0没有  1有
 	private String hasCredit;
 	private String creditCard;
+	//工作行业
 	private String industry;
+	//职业性质 0兼职 1全职
 	private String jobStyle;
+	//担任职务
 	private String job;
 	private String jobCity;
 	private String company;
 	private String publicTel;
+	//工资是否属于银行代发 0不是 1是
 	private String salaryFromBank;
+	//年收入
 	private String yearIncome;
+	//用途
 	private String use;
 	private double monthBack;
+	//紧急联系人
 	private String urgencyPerson;
 	private String urgencyPhone;
+	//个人资料 用;隔开
 	private String datums;
+	//收入证明用;隔开
 	private String assetCertificates;
 
 	// Constructors

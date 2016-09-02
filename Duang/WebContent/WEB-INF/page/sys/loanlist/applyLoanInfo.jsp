@@ -53,7 +53,6 @@
 		       		<c:if test="${entity.education eq 1}">本科</c:if>
 		       		<c:if test="${entity.education eq 2}">硕士研究生</c:if>
 		       		<c:if test="${entity.education eq 3}">博士研究生</c:if>
-		       		<c:if test="${entity.education eq 4}">自居房</c:if>
 		       </label>
 		    </div>
 		    <div class="row1">   
