@@ -15,9 +15,11 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.entity.Ad;
 import org.duang.entity.BindCard;
 import org.duang.entity.FileUpload;
 import org.duang.entity.MemberInfo;
+import org.duang.service.AdService;
 import org.duang.service.BindCardService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
@@ -60,6 +62,14 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 		this.bindCardService = bindCardService;
 	}
 	
+	/**
+	 * 广告
+	 */
+	private AdService adService;
+	@Resource(name = "adserviceimpl")
+	public void setService(AdService adService) {
+		this.adService = adService;
+	}
 	/**
 	 * 上传用户图像或者身份证照片
 	 * 
@@ -172,6 +182,48 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 		}
 	}
 	
+	/**
+	 * 上传广告
+	 * @Title: uploadAdImg
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param:
+	 * @author LiYonghui
+	 * @date 2016年9月5日 上午8:43:24
+	 * @return: void
+	 * @throws
+	 */
+	public void uploadAdImg() {
+		try {
+			String deleteFilePath = null;
+				// 1.获取文件名称
+				reSetFileName();
+				Ad ad = adService.findById(getRequest().getParameter("id"));
+				String exPath = "ad";
+				deleteFilePath = ad.getImageAddress();
+				ad.setImageAddress(entity.getNewFileName());
+				 
+				reSetFilePathByUserId(exPath);
+				boolean result = adService.updateEntity(ad);
+				if (result) {
+					result = upload();
+					jsonObject.put("result", true);
+					jsonObject.put("msg", "上传成功！");
+					if (DataUtils.notEmpty(deleteFilePath)) {
+						//上传成功，则需要删除源文件
+						deleteFile(deleteFilePath);
+					}
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("上传广告图片错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("上传广告图片错误：" + e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("result", false);
+			jsonObject.put("msg", "上传失败！");
+		} finally {
+			printJsonResult();
+		}
+	}
+	
 	
 	/**
 	 * 重新命名文件名称,防止上传文件重名现象
@@ -234,7 +286,7 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * 根据时间创建文件路径，适用于流水文件
 	 * 

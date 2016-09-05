@@ -35,6 +35,12 @@ $.extend($.fn.validatebox.defaults.rules, {
 				},
 				message : '手机号码格式不正确'
 			},
+			url : {// url
+				validator : function(value) {
+					return /^[a-zA-z]+:\/\/[^\s]*$/i.test(value);
+				},
+				message : '地址格式不正确'
+			},
 			phoneAndMobile : {// 电话号码或手机号码
 				validator : function(value) {
 					return /^((\(\d{2,3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}(\-\d{1,4})?$/i.test(value) || /^(13|15|18)\d{9}$/i.test(value);

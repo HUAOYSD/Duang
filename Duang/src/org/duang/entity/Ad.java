@@ -26,6 +26,7 @@ public class Ad implements java.io.Serializable {
 	private Date createTime;
 	private String imageAddress;
 	private String linkAddress;
+	private int isUse;
 	// Constructors
 
 	/** default constructor */
@@ -100,5 +101,13 @@ public class Ad implements java.io.Serializable {
 	}
 	public void setLinkAddress(String linkAddress) {
 		this.linkAddress = linkAddress;
+	}
+	
+	@Column(name = "is_use")
+	public int getIsUse() {
+		return isUse;
+	}
+	public void setIsUse(int isUse) {
+		this.isUse = isUse;
 	}
 }
