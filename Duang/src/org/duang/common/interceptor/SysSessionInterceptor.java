@@ -11,13 +11,13 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
 
 /**   
- * Session拦截器
+ * Session拦截器  系统后台使用
  * @ClassName:  SessionInterceptor   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 白攀
  * @date 2016年7月17日 上午10:32:35      
  */  
-public class SessionInterceptor extends MethodFilterInterceptor {
+public class SysSessionInterceptor extends MethodFilterInterceptor {
 
 	/**   
 	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)   

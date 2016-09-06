@@ -13,20 +13,51 @@
 		</global-exception-mappings>
 	</package>
 	
+	
 	<!-- 后台使用宝宝 -->
 	<package name="sys" extends="crud-default">
 		<interceptors>
 			<!-- session拦截器 -->
-			<interceptor name="sessionInterceptor"
-				class="org.duang.common.interceptor.SessionInterceptor" />
+			<interceptor name="sysSessionInterceptor" class="org.duang.common.interceptor.SysSessionInterceptor" />
 			<interceptor-stack name="sysLoginStack">
 				<interceptor-ref name="defaultStack"></interceptor-ref>
-				<interceptor-ref name="sessionInterceptor">
+				<interceptor-ref name="sysSessionInterceptor">
 					<param name="excludeMethods">login,goLoginView,getValidateCode,checkValidateCode</param>
 				</interceptor-ref>
 			</interceptor-stack>
 		</interceptors>
 		<!--全局拦截器栈 -->
 		<default-interceptor-ref name="sysLoginStack"></default-interceptor-ref>
-    </package>   
+    </package>
+    
+    
+	<!--     接口所使用的包 （登录拦截器不适用于接口开发） -->
+	<!--     <package name="provider" extends="crud-default"> -->
+	<!-- 		<interceptors> -->
+	<!-- 			session拦截器  -->
+	<!-- 			<interceptor name="providerSessionInterceptor" -->
+	<!-- 				class="org.duang.common.interceptor.ProviderSessionInterceptor" /> -->
+	<!-- 			<interceptor-stack name="providerLoginStack"> -->
+	<!-- 				<interceptor-ref name="defaultStack"></interceptor-ref> -->
+	<!-- 				<interceptor-ref name="providerSessionInterceptor"> -->
+	<!-- 					<param name="excludeMethods">login,goLoginView,getValidateCode,checkValidateCode</param> -->
+	<!-- 				</interceptor-ref> -->
+	<!-- 			</interceptor-stack> -->
+	<!-- 		</interceptors> -->
+	<!-- 		全局拦截器栈  -->
+	<!-- 		<default-interceptor-ref name="providerLoginStack"></default-interceptor-ref> -->
+	<!--     </package>      -->
+    
+    
+    <!-- 接口所使用的包 -->
+    <package name="provider" extends="crud-default">
+		<interceptors>
+			<!-- session拦截器 -->
+			<interceptor-stack name="providerStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<!--全局拦截器栈 -->
+		<default-interceptor-ref name="providerStack"></default-interceptor-ref>
+    </package>    
 </struts>     

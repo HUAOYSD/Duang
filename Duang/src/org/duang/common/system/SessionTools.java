@@ -1,7 +1,9 @@
 package org.duang.common.system;
 
 import java.util.Map;
+
 import org.apache.struts2.ServletActionContext;
+import org.duang.entity.MemberInfo;
 import org.duang.entity.SysUser;
 
 
@@ -143,4 +145,70 @@ public class SessionTools {
 		sessionMap.remove(SYSUSER);
 	}
 
+
+	/**   
+	 * 获取当前登陆的会员用户名
+	 * @Title: getSessionMemberName   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年9月5日 上午10:42:55
+	 * @return: String      
+	 * @throws   
+	 */  
+	public static String getSessionMemberName(){
+		MemberInfo memberInfo= getSessionMember();
+		if(memberInfo==null){
+			return null;
+		}
+		return memberInfo.getNickname();
+	}
+
+
+	/**   
+	 * 获取系统当前的登陆的会员用户
+	 * @Title: getSessionMember   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年9月5日 上午10:43:58
+	 * @return: MemberInfo      
+	 * @throws   
+	 */  
+	public static MemberInfo getSessionMember(){
+		Map<String,Object> sessionMap = ServletActionContext.getContext().getSession();
+		return (MemberInfo) sessionMap.get(MEMBER);
+	}
+
+
+	/**   
+	 * 设置当前登陆的会员用户
+	 * @Title: setSessionMember   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param memberinfo  
+	 * @author 白攀    
+	 * @date 2016年9月5日 上午10:45:42
+	 * @return: void      
+	 * @throws   
+	 */  
+	public static void setSessionMember(MemberInfo memberinfo){
+		Map<String,Object> sessionMap = ServletActionContext.getContext().getSession();
+		sessionMap.put(MEMBER, memberinfo);
+	}
+
+
+	/**   
+	 * 移除SessionMember
+	 * @Title: removeSessionMember   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年9月5日 上午10:47:10
+	 * @return: void      
+	 * @throws   
+	 */  
+	public static void removeSessionMember(){
+		Map<String,Object> sessionMap = ServletActionContext.getContext().getSession();
+		sessionMap.remove(MEMBER);
+	}
 }
