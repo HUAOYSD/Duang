@@ -11,14 +11,12 @@ $(function(){
 		height:$("#ad_body").height()-$('#ad_search_area').height()-5,
 		width:$("#ad_body").width(),
 		loadMsg : "正在加载，请稍后...",
-		url:"ad!queryAll.do",  
+		url:"ad!queryAd.do",  
 		singleSelect:true,  
 		nowrap:true,
 		rownumbers:true,
-		pagination:true,
+		pagination:false,
 		fitColumns:true,
-		pageSize:50,
-		pageList:[50,80,100,150,200],
 		sortOrder:'desc',
 		toolbar:'#adToolBar',
 		columns:[[
@@ -26,12 +24,12 @@ $(function(){
 				{field:'name',title:'名称',halign:"center", align:"center",width:200},
 				{field:'remark',title:'说明',halign:"center", align:"center",width:300 },
 		        {field:'createTime',title:'创建时间',halign:"center", align:"center",width:150},  
-		        {field:'isUse',title:'是否使用',halign:"center", align:"center",width:100,
+		        {field:'isUse',title:'状态',halign:"center", align:"center",width:100,
 		        	formatter: function(value,row,index){
 						if(value==1){
-							return "使用";
+							return "启用";
 						}else if(value == 0){
-							return "不使用";
+							return "禁用";
 						}else{
 							return"--";
 						}
@@ -61,6 +59,17 @@ $(function(){
 			}
 		},
 		onSelect:function(rowIndex, rowData){
+			if(rowData.isUse==1){
+				$("#ad-delete-btn").linkbutton({    
+				    iconCls: 'icon-01',
+				    text:'禁用'
+				});
+			}else{
+				$("#ad-delete-btn").linkbutton({    
+				    iconCls: 'icon-accept',
+				    text:'启用'
+				});
+			}
 			showButton();
 		},
 		onUnselect:function(rowIndex, rowData){
@@ -71,7 +80,7 @@ $(function(){
 		}
 	});
 	$('#queryadForm').form({    
-	    url:"ad!queryByParameter.do",    
+	    url:"ad!queryAd.do",    
 	    onSubmit: function(){    
 	        
 	    },    
@@ -159,7 +168,7 @@ $("#ad-update-btn").on("click",function(){
 });
 
 /**
- * 删除
+ * 启用，禁用
  */
 $("#ad-delete-btn").on("click",function(){
 	var selectRowt = tableObj.datagrid("getSelected");
@@ -169,7 +178,7 @@ $("#ad-delete-btn").on("click",function(){
 	}
 	$.ajax({
 		type:'POST',
-		url:"ad!delete.do?id="+selectRowt.id,
+		url:"ad!updateIsUse.do?id="+selectRowt.id,
 		data:"",
 		dataType:'json',
 		success:function(msg) {

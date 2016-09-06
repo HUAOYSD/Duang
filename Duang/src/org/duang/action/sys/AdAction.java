@@ -69,7 +69,7 @@ public class AdAction extends BaseAction<Ad> {
 	
 	/**
 	 * 查询所有
-	 * @Title: queryAll   
+	 * @Title: queryAd   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
 	 * @author LiYonghui    
@@ -77,13 +77,21 @@ public class AdAction extends BaseAction<Ad> {
 	 * @return: void      
 	 * @throws
 	 */
-	public void queryAll() {
+	public void queryAd() {
 		try {
-			List<Ad> list = adService.queryAllEntity(getPageUtil(),Order.asc("createTime"));
+			List<Ad> list = new ArrayList<Ad>();
+			if(entity != null && DataUtils.notEmpty(entity.getName())){
+				condsUtils.addProperties(true, "name");
+				condsUtils.concatValue(new String[] { entity.getName(), "like" });
+				condsUtils.addProperties(false, "order");
+				condsUtils.addValues(false, Order.desc("createTime"));
+				list = adService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+			}else{
+				list = adService.queryAllEntity(Order.desc("createTime"));
+			}
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
@@ -131,39 +139,6 @@ public class AdAction extends BaseAction<Ad> {
 			LoggerUtils.error("广告封装错误：" + e.getLocalizedMessage(), this.getClass());
 		}
 		return listMap;
-	}
-	
-	/**
-	 * 根据参数查询
-	 * @Title: queryByParameter   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author LiYonghui    
-	 * @date 2016年9月5日 下午2:53:19
-	 * @return: void      
-	 * @throws
-	 */
-	public void queryByParameter() {
-		try {
-			List<Ad> list = adService.queryEntity("name", entity.getName(), getPageUtil(), Order.asc("createTime"));
-			//封装json
-			if (list != null && list.size() > 0) {
-				jsonObject.put("result", true);
-				jsonObject.put("rows", fillDataObjectList(list));
-				jsonObject.put("total", getPageUtil().getCountRecords());
-			} else {
-				jsonObject.put("rows", new JSONArray());
-				jsonObject.put("total", 0);
-				jsonObject.put("result", false);
-				jsonObject.put("msg", "没有符合条件的数据！");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("广告ACTION查询错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("广告ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
-		} finally {
-			printJsonResult();
-		}
 	}
 	
 	/**
@@ -334,7 +309,7 @@ public class AdAction extends BaseAction<Ad> {
 	}
 	
 	/**
-	 * 删除
+	 * 启用或者禁用
 	 * @Title: add   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
@@ -343,12 +318,16 @@ public class AdAction extends BaseAction<Ad> {
 	 * @return: void      
 	 * @throws
 	 */
-	public void delete(){
+	public void updateIsUse(){
 		try {
 			boolean result = false;
 			if(entity != null && DataUtils.notEmpty(entity.getId())){
 				entity = adService.findById(entity.getId());
-				entity.setIsUse(If.If0.getVal());
+				if(entity.getIsUse()==If.If0.getVal()){
+					entity.setIsUse(If.If1.getVal());
+				}else{
+					entity.setIsUse(If.If0.getVal());
+				}
 				result = adService.updateEntity(entity);
 				if(!result){
 					jsonObject.put("result", false);

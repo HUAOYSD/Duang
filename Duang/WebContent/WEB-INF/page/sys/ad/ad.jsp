@@ -28,7 +28,7 @@
 	  <div id="adToolBar" style="margin-left:10px;">
 	  	  <a id="ad-add-btn" class="easyui-linkbutton" iconCls="icon-add" plain="true">新增</a>
 	      <a id="ad-update-btn" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
-	      <a id="ad-delete-btn" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+	      <a id="ad-delete-btn" class="easyui-linkbutton" iconCls="icon-01" plain="true">禁用</a>
 	      <a id="ad-icon-btn" class="easyui-linkbutton" iconCls="icon-palette" plain="true">上传图片</a>
 	  </div>
 	  <!-- 数据表格区域 -->
