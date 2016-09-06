@@ -153,6 +153,7 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 					map.put("totalIncome", investMember.getInvesting());
 					map.put("totalMoney", investMember.getTotalMoney());
 					map.put("useableScore", investMember.getUseableScore());
+					map.put("currentIncome", investMember.getCurrentIncome());
 				}
 				//封装借贷客户信息
 				Set<LoanMember> loanMembers =  memberInfo.getLoanMembers();

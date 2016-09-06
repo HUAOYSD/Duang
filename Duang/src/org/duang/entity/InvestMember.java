@@ -29,6 +29,7 @@ public class InvestMember implements java.io.Serializable {
 	private double investing;
 	private double totalIncome;
 	private double totalMoney;
+	private double currentIncome;
 	private int useableScore;
 
 	// Constructors
@@ -45,7 +46,7 @@ public class InvestMember implements java.io.Serializable {
 
 	/** full constructor */
 	public InvestMember(String id, MemberInfo memberInfo,
-			 String managerName,
+			 String managerName,double currentIncome,
 			int isContract, double balance, double investing,
 			double totalIncome, double totalMoney, int useableScore,
 			int registerStyle) {
@@ -58,6 +59,7 @@ public class InvestMember implements java.io.Serializable {
 		this.totalIncome = totalIncome;
 		this.totalMoney = totalMoney;
 		this.useableScore = useableScore;
+		this.currentIncome = currentIncome;
 		//this.stocks = stocks;
 	}
 
@@ -137,6 +139,15 @@ public class InvestMember implements java.io.Serializable {
 		this.totalMoney = totalMoney;
 	}
 
+	@Column(name = "current_income", precision = 22, scale = 0)
+	public double getCurrentIncome() {
+		return this.currentIncome;
+	}
+
+	public void setCurrentIncome(double currentIncome) {
+		this.currentIncome = currentIncome;
+	}
+	
 	@Column(name = "useable_score")
 	public int getUseableScore() {
 		return this.useableScore;

@@ -60,6 +60,7 @@ $(function(){
 			{field:'investing',title:'投资中金额',width:100,halign:"center", align:"center"},
 			{field:'totalIncome',title:'总收益',width:100,halign:"center", align:"center" },
 			{field:'totalMoney',title:'总资产',width:100,halign:"center", align:"center" },
+			{field:'currentIncome',title:'当期收益',width:100,halign:"center", align:"center" },
 			{field:'useableScore',title:'可用积分',width:100,halign:"center", align:"center" },
 			{field:'isEliteAccount',title:'是否为金账户',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){

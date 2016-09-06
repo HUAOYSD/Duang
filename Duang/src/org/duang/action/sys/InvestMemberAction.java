@@ -274,6 +274,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				map.put("totalIncome", im.getInvesting());
 				map.put("totalMoney", im.getTotalMoney());
 				map.put("useableScore", im.getUseableScore());
+				map.put("currentIncome", im.getCurrentIncome());
 				MemberInfo memberInfo = (MemberInfo) array[0];
 				map.put("memberInfoId", memberInfo.getId());
 				map.put("loginName", memberInfo.getLoginName());
@@ -355,6 +356,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					jsonObject.put("totalIncome", im.getInvesting());
 					jsonObject.put("totalMoney", im.getTotalMoney());
 					jsonObject.put("useableScore", im.getUseableScore());
+					jsonObject.put("currentIncome", im.getCurrentIncome());
 					MemberInfo memberInfo = im.getMemberInfo();
 					jsonObject.put("memberInfoId", memberInfo.getId());
 					jsonObject.put("memberInfo.memberInfoId", memberInfo.getId());
