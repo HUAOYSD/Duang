@@ -19,14 +19,6 @@
 					<tr height="35px">
 						<td>&nbsp;&nbsp;<span class="investPro-search">客户经理姓名：</span></td>
 					  	<td><input  name="managerName"/></td>
-					  	<td>&nbsp;<span class="investPro-search">客户类型：</span></td>
-					  	<td>
-					  		<select  class="easyui-combobox" name="memberInfo.type" data-options="panelHeight:'auto'">   
-							    <option value="-1" selected="selected">--请选择--</option>   
-							    <option value="0">个体用户</option>   
-				    			<option value="1">企业用户</option>
-							</select> 
-					  	</td>
 					  	<td>&nbsp;<span class="investPro-search">契约用户：</span></td>
 					  	<td>
 						       	<select  class="easyui-combobox" name="isContract" data-options="panelHeight:'auto'">

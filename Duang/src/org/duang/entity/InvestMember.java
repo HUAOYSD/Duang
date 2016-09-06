@@ -30,7 +30,6 @@ public class InvestMember implements java.io.Serializable {
 	private double totalIncome;
 	private double totalMoney;
 	private int useableScore;
-	private int registerStyle;
 
 	// Constructors
 
@@ -59,7 +58,6 @@ public class InvestMember implements java.io.Serializable {
 		this.totalIncome = totalIncome;
 		this.totalMoney = totalMoney;
 		this.useableScore = useableScore;
-		this.registerStyle = registerStyle;
 		//this.stocks = stocks;
 	}
 
@@ -147,16 +145,5 @@ public class InvestMember implements java.io.Serializable {
 	public void setUseableScore(int useableScore) {
 		this.useableScore = useableScore;
 	}
-
-	@Column(name = "register_style")
-	public int getRegisterStyle() {
-		return this.registerStyle;
-	}
-
-	public void setRegisterStyle(int registerStyle) {
-		this.registerStyle = registerStyle;
-	}
-
-
 
 }

@@ -52,14 +52,18 @@
 				    <option value="0" selected="selected">否</option>   
 				    <option value="1">是</option>
 				</select>   
-		    </div> 
+		    </div>
+		    
 		    <div>   
-		        <label for="memberInfo.type" class="from_label">用户类型：</label>   
-		        <select  class="easyui-combobox" name="memberInfo.type" data-options="panelHeight:'auto'">   
-				    <option value="0" selected="selected">个体用户</option>   
-				    <option value="1">企业用户</option>
-				</select>    
-		    </div> 
+		        <label for="memberInfo.registerStyle" class="from_label">注册方式：</label>   
+		       	<select  class="easyui-combobox" name="memberInfo.registerStyle" data-options="panelHeight:'auto'">   
+				    <option value="1">线下</option>   
+				    <option value="2">Android</option>
+				    <option value="3">IOS</option>
+				    <option value="4" selected="selected">平台系统</option>
+				</select> 
+		    </div>
+		     
 		     <div>   
 		        <label for="memberInfo.level" class="from_label">级别：</label>   
 		        <select  class="easyui-combobox" name="memberInfo.level" data-options="panelHeight:'auto'">   
@@ -103,15 +107,6 @@
 		    <div>   
 		        <label for="useableScore" class="from_label">可用积分：</label>   
 		       	<input  type="text" name="useableScore" class="easyui-validatebox" data-options="validType:'integer'"/>
-		    </div>
-		    <div>   
-		        <label for="registerStyle" class="from_label">注册方式：</label>   
-		       	<select  class="easyui-combobox" name="registerStyle" data-options="panelHeight:'auto'">   
-				    <option value="1">线下</option>   
-				    <option value="2">Android</option>
-				    <option value="3">IOS</option>
-				    <option value="4" selected="selected">平台系统</option>
-				</select> 
 		    </div>
 		    <div>   
 		        <label for="isContract" class="from_label">契约用户：</label>   

@@ -44,7 +44,6 @@ public class MemberInfo implements java.io.Serializable {
 	private String modifyuser;
 	private String userImg;
 	private int isEliteAccount;
-	private String type;
 	private String level;
 	private String price;
 	private String password;
@@ -52,6 +51,7 @@ public class MemberInfo implements java.io.Serializable {
 	private String handPassword;
 	private int isFreeze;
 	private String myQr;
+	private int registerStyle;
 	private Set<MemberExtraInfo> memberExtraInfos = new HashSet<MemberExtraInfo>(0);
 	private Set<Friends> friendsesForTarget = new HashSet<Friends>(0);
 	private Set<Friends> friendsesForSelf = new HashSet<Friends>(0);
@@ -82,14 +82,14 @@ public class MemberInfo implements java.io.Serializable {
 			String phone, String idCard, String idCardImg1, String idCardImg2,
 			String miDescribe, String isdelete, Date createTime,
 			Date modifyTime, String createuser, String modifyuser,
-			String userImg, int isEliteAccount, String type, String level,
+			String userImg, int isEliteAccount, String level,
 			String price, String password, String payPassword,
 			String handPassword, int isFreeze, String myQr,
 			Set<MemberExtraInfo> memberExtraInfos,
 			Set<Friends> friendsesForTarget, Set<Friends> friendsesForSelf,
 			Set<LoanMember> loanMembers, Set<Message> messagesForReceiver,Set<LoanList> loanLists,
 			Set<BindCard> bindCards, Set<InvestMember> investMembers,Set<MemberInvestTicket> memberInvestTickets,
-			Set<ScoreList> scoreLists, Set<Message> messagesForSender,Set<InvestList> investLists) {
+			Set<ScoreList> scoreLists, Set<Message> messagesForSender,Set<InvestList> investLists,int registerStyle) {
 		this.id = id;
 		this.loginName = loginName;
 		this.realName = realName;
@@ -110,7 +110,6 @@ public class MemberInfo implements java.io.Serializable {
 		this.modifyuser = modifyuser;
 		this.userImg = userImg;
 		this.isEliteAccount = isEliteAccount;
-		this.type = type;
 		this.level = level;
 		this.price = price;
 		this.password = password;
@@ -129,6 +128,7 @@ public class MemberInfo implements java.io.Serializable {
 		this.messagesForSender = messagesForSender;
 		this.memberInvestTickets = memberInvestTickets;
 		this.investLists = investLists;
+		this.registerStyle = registerStyle;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberInfo")
@@ -314,15 +314,6 @@ public class MemberInfo implements java.io.Serializable {
 		this.isEliteAccount = isEliteAccount;
 	}
 
-	@Column(name = "type", length = 10)
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	@Column(name = "level", length = 10)
 	public String getLevel() {
 		return this.level;
@@ -483,5 +474,13 @@ public class MemberInfo implements java.io.Serializable {
 
 	public void setLoanLists(Set<LoanList> loanLists) {
 		this.loanLists = loanLists;
+	}
+	@Column(name = "register_style")
+	public int getRegisterStyle() {
+		return this.registerStyle;
+	}
+
+	public void setRegisterStyle(int registerStyle) {
+		this.registerStyle = registerStyle;
 	}
 }

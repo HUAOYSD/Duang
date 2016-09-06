@@ -26,6 +26,22 @@ $(function(){
 						{field:'id',checkbox:true,halign:"center", align:"center"},
 						{field:'loginName',title:'登录名',width:150,halign:"center", align:"center"},
 						{field:'realName',title:'真实姓名',width:100,halign:"center", align:"center",editor:'center'},
+						{field:'registerStyle',title:'注册方式',width:100,halign:"center", align:"center",
+							formatter: function(value,row,index){
+								//1线下，2Android，3IOS，4平台系统
+								if(value==1){
+									return "线下";
+								}else if(value == 2){
+									return "Android";
+								}else if(value == 3){
+									return "IOS";
+								}else if(value == 4){
+									return "平台系统";
+								}else{
+									return "--";
+								}
+							}
+						}
 		            ]],
 		columns:[[
 			{field:'nickname',title:'昵称',width:100,halign:"center", align:"center" },
@@ -54,15 +70,6 @@ $(function(){
 					}
 				}
 			},
-			{field:'type',title:'用户类型',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==0){
-						return "个体用户";
-					}else if(value==1){
-						return "企业用户";
-					}
-				}
-			},
 			{field:'isContract',title:'契约用户',width:100,halign:"center", align:"center",
 				formatter: function(value,row,index){
 					if(value==1){
@@ -79,19 +86,6 @@ $(function(){
 				   }else{ 
 					   return new Date(value).format("yyyy-MM-dd hh:mm:ss");
 				   }
-				}
-			},
-			{field:'registerStyle',title:'注册方式',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==1){
-						return "线下";
-					}else if(value==2){
-						return "Android";
-					}else if(value==3){
-						return "IOS";
-					}else{
-						return "平台系统";
-					}
 				}
 			},
 			{field:'idCard',title:'身份证号',width:200,halign:"center", align:"center"},

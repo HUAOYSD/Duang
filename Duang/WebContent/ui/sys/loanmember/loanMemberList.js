@@ -53,15 +53,6 @@ $(function(){
 					}
 				}
 			},
-			{field:'type',title:'用户类型',width:100,halign:"center", align:"center",
-				formatter: function(value,row,index){
-					if(value==0){
-						return "个体用户";
-					}else if(value==1){
-						return "企业用户";
-					}
-				}
-			},
 			{field:'createTime',title:'开户日期',width:200,halign:"center", align:"center",
 				formatter: function(value,row,index){
 				   if(value==0){

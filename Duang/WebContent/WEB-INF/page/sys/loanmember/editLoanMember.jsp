@@ -67,14 +67,6 @@
 				</select>
 			</div>
 			<div>
-				<label for="memberInfo.type" class="from_label">用户类型：</label> <select
-					class="easyui-combobox" name="memberInfo.type"
-					data-options="panelHeight:'auto'">
-					<option value="0">个体用户</option>
-					<option value="1">企业用户</option>
-				</select>
-			</div>
-			<div>
 				<label for="memberInfo.level" class="from_label">级别：</label> <select
 					class="easyui-combobox" name="memberInfo.level"
 					data-options="panelHeight:'auto'">

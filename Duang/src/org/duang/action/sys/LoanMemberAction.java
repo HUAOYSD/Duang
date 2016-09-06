@@ -27,7 +27,6 @@ import org.duang.enums.If;
 import org.duang.enums.InvestOrLoan;
 import org.duang.service.LoanMemberService;
 import org.duang.service.MemberInfoService;
-import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.duang.util.MD5Utils;
@@ -219,10 +218,7 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 				condsUtils.addProperties(false, "infoAlias.phone");
 				condsUtils.concatValue(new String[] { entity.getMemberInfo().getPhone(), "like" });
 			}
-			if (DataUtils.notEmpty(entity.getMemberInfo().getType()) && !ConstantCode.NOSELECTED1.equals(entity.getMemberInfo().getType())) {
-				condsUtils.addProperties(false, "infoAlias.type");
-				condsUtils.addValues(false, entity.getMemberInfo().getType());
-			}
+			
 
 			@SuppressWarnings("rawtypes")
 			List list = loanMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
@@ -286,7 +282,6 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 				map.put("modifyuser", memberInfo.getModifyuser());
 				map.put("userImg", memberInfo.getUserImg());
 				map.put("isEliteAccount", memberInfo.getIsEliteAccount());
-				map.put("type", memberInfo.getType());
 				map.put("level", memberInfo.getLevel());
 				map.put("price", memberInfo.getPrice());
 				map.put("password", memberInfo.getPassword());
@@ -377,7 +372,6 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 					jsonObject.put("memberInfo.modifyuser", memberInfo.getModifyuser());
 					jsonObject.put("memberInfo.userImg", memberInfo.getUserImg());
 					jsonObject.put("memberInfo.isEliteAccount", memberInfo.getIsEliteAccount());
-					jsonObject.put("memberInfo.type", memberInfo.getType());
 					jsonObject.put("memberInfo.level", memberInfo.getLevel());
 					jsonObject.put("memberInfo.price", memberInfo.getPrice());
 					jsonObject.put("memberInfo.password", memberInfo.getPassword());

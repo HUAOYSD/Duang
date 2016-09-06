@@ -218,10 +218,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				condsUtils.addProperties(false, "infoAlias.phone");
 				condsUtils.concatValue(new String[] { entity.getMemberInfo().getPhone(), "like" });
 			}
-			if (DataUtils.notEmpty(entity.getMemberInfo().getType()) && !ConstantCode.NOSELECTED1.equals(entity.getMemberInfo().getType())) {
-				condsUtils.addProperties(false, "infoAlias.type");
-				condsUtils.addValues(false, entity.getMemberInfo().getType());
-			}
 			if (DataUtils.notEmpty(entity.getManagerName())) {
 				condsUtils.addProperties(false, "managerName");
 				condsUtils.concatValue(new String[] { entity.getManagerName(), "like" });
@@ -278,8 +274,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				map.put("totalIncome", im.getInvesting());
 				map.put("totalMoney", im.getTotalMoney());
 				map.put("useableScore", im.getUseableScore());
-				map.put("registerStyle", im.getRegisterStyle());
-				
 				MemberInfo memberInfo = (MemberInfo) array[0];
 				map.put("memberInfoId", memberInfo.getId());
 				map.put("loginName", memberInfo.getLoginName());
@@ -296,7 +290,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				map.put("modifyuser", memberInfo.getModifyuser());
 				map.put("userImg", memberInfo.getUserImg());
 				map.put("isEliteAccount", memberInfo.getIsEliteAccount());
-				map.put("type", memberInfo.getType());
+				map.put("registerStyle", memberInfo.getRegisterStyle());
 				map.put("level", memberInfo.getLevel());
 				map.put("price", memberInfo.getPrice());
 				map.put("password", memberInfo.getPassword());
@@ -361,7 +355,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					jsonObject.put("totalIncome", im.getInvesting());
 					jsonObject.put("totalMoney", im.getTotalMoney());
 					jsonObject.put("useableScore", im.getUseableScore());
-					jsonObject.put("registerStyle", im.getRegisterStyle());
 					MemberInfo memberInfo = im.getMemberInfo();
 					jsonObject.put("memberInfoId", memberInfo.getId());
 					jsonObject.put("memberInfo.memberInfoId", memberInfo.getId());
@@ -379,7 +372,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					jsonObject.put("memberInfo.modifyuser", memberInfo.getModifyuser());
 					jsonObject.put("memberInfo.userImg", memberInfo.getUserImg());
 					jsonObject.put("memberInfo.isEliteAccount", memberInfo.getIsEliteAccount());
-					jsonObject.put("memberInfo.type", memberInfo.getType());
 					jsonObject.put("memberInfo.level", memberInfo.getLevel());
 					jsonObject.put("memberInfo.price", memberInfo.getPrice());
 					jsonObject.put("memberInfo.password", memberInfo.getPassword());
@@ -391,6 +383,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					jsonObject.put("memberInfo.idCardImg1", memberInfo.getIdCardImg1());
 					jsonObject.put("memberInfo.idCardImg2", memberInfo.getIdCardImg2());
 					jsonObject.put("memberInfo.myQr", memberInfo.getMyQr());
+					jsonObject.put("memberInfo.registerStyle", memberInfo.getRegisterStyle());
 				}
 			}
 		} catch (Exception e) {
