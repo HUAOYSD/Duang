@@ -18,8 +18,9 @@
 		    <div>   
 		        <label for="category" class="investPro_add_from_label">产品类型：</label>   
 		       	<select class="easyui-combobox" name="category" data-options="panelHeight:'auto'">   
-				    <option value="0">信贷产品</option>   
-				    <option value="1">标类产品</option>   
+				    <option value="1">信贷产品</option>   
+				    <option value="2">房标产品</option>  
+				    <option value="3">车标产品</option>   
 				</select>   
 		    </div> 
 		    <div>   

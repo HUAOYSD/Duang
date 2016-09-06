@@ -27,10 +27,12 @@ $(function(){
 			{field:'name',title:'名称',width:100,halign:"center", align:"center",editor:'center'},
 			{field:'category',title:'产品类型',width:100,halign:"center", align:"center",editor:'center',
 				formatter: function(value,row,index){
-					if(value==0){
+					if(value==1){
 						return "信贷产品";
-					}else if(value==1){
-						return "标类产品";
+					}else if(value==2){
+						return "房标产品";
+					}else if(value==3){
+						return "车标产品";
 					}else{
 						return "--";
 					}
