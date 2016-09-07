@@ -12,6 +12,7 @@ import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
 import org.duang.service.MemberInfoService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.MD5Utils;
 import org.springframework.context.annotation.Scope;
@@ -53,8 +54,10 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 	public void checkPhone(){
 		boolean success = false;
 		try {
-			if (DataUtils.notEmpty(entity.getPhone())) {
-				entity = service.findEntity("phone", entity.getPhone().trim());
+			String phone = getRequest().getParameter("phoneNum");
+			if (DataUtils.notEmpty(phone)) {
+				phone = DES.decryptBasedDes(phone);
+				entity = service.findEntity("phone", phone.trim());
 				if (entity != null) {
 					msg = "您已注册，请直接登录";
 				} else {
@@ -89,7 +92,9 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 	public void sendValidateCode(){
 		boolean success = false;
 		try {
-			if (DataUtils.notEmpty(entity.getPhone())) {
+			String phone = getRequest().getParameter("phoneNum");
+			if (DataUtils.notEmpty(phone)) {
+				phone = DES.decryptBasedDes(phone);
 				String platform = getRequest().getParameter("platform");
 				if (DataUtils.notEmpty(platform) && ("IOS".equals(platform) || "Android".equals(platform))) {
 					String signature = getRequest().getParameter("signature");
@@ -133,9 +138,12 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 	public void register(){
 		boolean success = false;
 		try {
-			if (DataUtils.notEmpty(entity.getPhone())) {
+			String phone = getRequest().getParameter("phoneNum");
+			if (DataUtils.notEmpty(phone)) {
+				phone = DES.decryptBasedDes(phone);
 				String password = getRequest().getParameter("pwd");
 				if (DataUtils.notEmpty(password)) {
+					entity.setPhone(password);
 					entity.setPassword(MD5Utils.md5(password));
 					entity.setId(DataUtils.randomUUID());
 					//附加投资用户身份
