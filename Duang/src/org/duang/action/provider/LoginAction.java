@@ -14,8 +14,8 @@ import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.If;
 import org.duang.service.MemberInfoService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
-import org.duang.util.MD5Utils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -55,10 +55,12 @@ public class LoginAction extends BaseAction<MemberInfo>{
 	public void login(){
 		boolean success = false;
 		try {
-			if (DataUtils.notEmpty(entity.getPhone()) && DataUtils.notEmpty(getRequest().getParameter("pwd"))) {
-				MemberInfo memberInfo = service.findEntity("phone", entity.getPhone());
+			String phone = getRequest().getParameter("phoneNum"), pwd = getRequest().getParameter("pwd");
+			if (DataUtils.notEmpty(phone) && DataUtils.notEmpty(pwd)) {
+				phone = DES.decryptBasedDes(phone);
+				MemberInfo memberInfo = service.findEntity("phone", phone);
 				if (memberInfo != null) {
-					if (MD5Utils.md5(getRequest().getParameter("pwd")).equals(memberInfo.getPassword())) {
+					if (pwd.equals(memberInfo.getPassword())) {
 						String token = DataUtils.randomUUID();
 						fillMemberInfo(token, memberInfo);
 						MemberCollection.getInstance().putJsonObject(token, jsonObject);
@@ -98,10 +100,11 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		boolean success = false;
 		JSONObject jsonInfo = null;
 		try {
-			if (DataUtils.notEmpty(getRequest().getParameter("token")) && DataUtils.notEmpty(getRequest().getParameter("pwd"))) {
-				jsonInfo = MemberCollection.getInstance().optJsonObject(getRequest().getParameter("token"));
+			String token = getRequest().getParameter("token"), pwd = getRequest().getParameter("pwd");
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(pwd)) {
+				jsonInfo = MemberCollection.getInstance().optJsonObject(token);
 				if (jsonInfo != null) {
-					if (MD5Utils.md5(getRequest().getParameter("pwd")).equals(jsonInfo.optString("pd"))) {
+					if (pwd.equals(jsonInfo.optString("pd"))) {
 						success = true;
 					}else{
 						msg = "登录失效请重新登录";
