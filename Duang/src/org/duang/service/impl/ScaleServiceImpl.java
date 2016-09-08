@@ -267,8 +267,8 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Scale> queryByHQL(String hql, PageUtil<Scale> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<Scale> queryByHQL(String hql,String counthql, PageUtil<Scale> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class ScaleServiceImpl implements ScaleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Scale> queryBySQL(String sql, PageUtil<Scale> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<Scale> queryBySQL(String sql,String countsql, PageUtil<Scale> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

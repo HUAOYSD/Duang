@@ -8,8 +8,8 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.MessageDao;
-import org.duang.entity.Message;
 import org.duang.entity.InvestMember;
+import org.duang.entity.Message;
 import org.duang.service.MessageService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -267,8 +267,8 @@ public class MessageServiceImpl implements MessageService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Message> queryByHQL(String hql, PageUtil<Message> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<Message> queryByHQL(String hql,String counthql, PageUtil<Message> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class MessageServiceImpl implements MessageService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Message> queryBySQL(String sql, PageUtil<Message> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<Message> queryBySQL(String sql,String countsql, PageUtil<Message> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

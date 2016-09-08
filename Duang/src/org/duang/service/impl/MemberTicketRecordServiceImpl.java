@@ -267,8 +267,8 @@ public class MemberTicketRecordServiceImpl implements MemberTicketRecordService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberTicketRecord> queryByHQL(String hql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<MemberTicketRecord> queryByHQL(String hql,String counthql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class MemberTicketRecordServiceImpl implements MemberTicketRecordService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberTicketRecord> queryBySQL(String sql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<MemberTicketRecord> queryBySQL(String sql,String countsql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

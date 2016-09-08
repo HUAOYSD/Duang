@@ -336,8 +336,8 @@ public class SysPowerServiceImpl implements SysPowerService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysPower> queryByHQL(String hql, PageUtil<SysPower> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<SysPower> queryByHQL(String hql,String counthql, PageUtil<SysPower> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -349,8 +349,8 @@ public class SysPowerServiceImpl implements SysPowerService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysPower> queryBySQL(String sql, PageUtil<SysPower> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<SysPower> queryBySQL(String sql,String countsql, PageUtil<SysPower> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 }

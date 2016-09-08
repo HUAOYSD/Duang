@@ -267,8 +267,8 @@ public class BillInvestServiceImpl implements BillInvestService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BillInvest> queryByHQL(String hql, PageUtil<BillInvest> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<BillInvest> queryByHQL(String hql,String counthql, PageUtil<BillInvest> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class BillInvestServiceImpl implements BillInvestService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BillInvest> queryBySQL(String sql, PageUtil<BillInvest> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<BillInvest> queryBySQL(String sql,String countsql, PageUtil<BillInvest> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

@@ -2,7 +2,9 @@ package org.duang.service.impl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.InvestListDao;
@@ -265,8 +267,8 @@ public class InvestListServiceImpl implements InvestListService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestList> queryByHQL(String hql, PageUtil<InvestList> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<InvestList> queryByHQL(String hql,String counthql, PageUtil<InvestList> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -278,8 +280,8 @@ public class InvestListServiceImpl implements InvestListService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestList> queryBySQL(String sql, PageUtil<InvestList> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<InvestList> queryBySQL(String sql,String countsql, PageUtil<InvestList> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

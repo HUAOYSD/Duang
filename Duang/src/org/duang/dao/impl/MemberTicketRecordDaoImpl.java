@@ -263,7 +263,7 @@ public class MemberTicketRecordDaoImpl extends BaseDao<MemberTicketRecord> imple
 		return super.find(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -272,8 +272,8 @@ public class MemberTicketRecordDaoImpl extends BaseDao<MemberTicketRecord> imple
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberTicketRecord> queryByHQL(String hql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<MemberTicketRecord> queryByHQL(String hql, String countHql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,8 +285,8 @@ public class MemberTicketRecordDaoImpl extends BaseDao<MemberTicketRecord> imple
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberTicketRecord> queryBySQL(String sql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<MemberTicketRecord> queryBySQL(String sql, String countSql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 
 }

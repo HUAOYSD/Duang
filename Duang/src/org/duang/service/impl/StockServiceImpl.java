@@ -2,12 +2,14 @@ package org.duang.service.impl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.StockDao;
-import org.duang.entity.Stock;
 import org.duang.entity.InvestMember;
+import org.duang.entity.Stock;
 import org.duang.service.StockService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -265,8 +267,8 @@ public class StockServiceImpl implements StockService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Stock> queryByHQL(String hql, PageUtil<Stock> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<Stock> queryByHQL(String hql,String counthql, PageUtil<Stock> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -278,8 +280,8 @@ public class StockServiceImpl implements StockService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Stock> queryBySQL(String sql, PageUtil<Stock> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<Stock> queryBySQL(String sql,String countsql, PageUtil<Stock> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

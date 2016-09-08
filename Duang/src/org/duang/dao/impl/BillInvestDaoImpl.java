@@ -263,7 +263,6 @@ public class BillInvestDaoImpl extends BaseDao<BillInvest> implements BillInvest
 		return super.find(params);
 	}
 
-	
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -272,8 +271,8 @@ public class BillInvestDaoImpl extends BaseDao<BillInvest> implements BillInvest
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BillInvest> queryByHQL(String hql, PageUtil<BillInvest> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<BillInvest> queryByHQL(String hql, String countHql, PageUtil<BillInvest> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,9 +284,8 @@ public class BillInvestDaoImpl extends BaseDao<BillInvest> implements BillInvest
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BillInvest> queryBySQL(String sql, PageUtil<BillInvest> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<BillInvest> queryBySQL(String sql, String countSql, PageUtil<BillInvest> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
-
 }
 

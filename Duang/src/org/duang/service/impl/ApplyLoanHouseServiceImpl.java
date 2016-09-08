@@ -267,8 +267,8 @@ public class ApplyLoanHouseServiceImpl implements ApplyLoanHouseService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ApplyLoanHouse> queryByHQL(String hql, PageUtil<ApplyLoanHouse> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<ApplyLoanHouse> queryByHQL(String hql,String counthql, PageUtil<ApplyLoanHouse> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,10 +280,9 @@ public class ApplyLoanHouseServiceImpl implements ApplyLoanHouseService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ApplyLoanHouse> queryBySQL(String sql, PageUtil<ApplyLoanHouse> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<ApplyLoanHouse> queryBySQL(String sql,String countsql, PageUtil<ApplyLoanHouse> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
-
 	@Override
 	public boolean deleteEntity(ApplyLoanHouse t) throws Exception {
 		return dao.deleteEntity(t);

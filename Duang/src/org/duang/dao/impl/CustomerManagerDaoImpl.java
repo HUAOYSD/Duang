@@ -271,8 +271,8 @@ public class CustomerManagerDaoImpl extends BaseDao<CustomerManager> implements 
 	 * @return
 	 * @throws Exception
 	 */
-	public List<CustomerManager> queryByHQL(String hql, PageUtil<CustomerManager> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<CustomerManager> queryByHQL(String hql, String countHql, PageUtil<CustomerManager> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -284,8 +284,8 @@ public class CustomerManagerDaoImpl extends BaseDao<CustomerManager> implements 
 	 * @return
 	 * @throws Exception
 	 */
-	public List<CustomerManager> queryBySQL(String sql, PageUtil<CustomerManager> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<CustomerManager> queryBySQL(String sql, String countSql, PageUtil<CustomerManager> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 
 }

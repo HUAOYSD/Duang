@@ -272,8 +272,8 @@ public class AdDaoImpl extends BaseDao<Ad> implements AdDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Ad> queryByHQL(String hql, PageUtil<Ad> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<Ad> queryByHQL(String hql, String countHql, PageUtil<Ad> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,8 +285,8 @@ public class AdDaoImpl extends BaseDao<Ad> implements AdDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Ad> queryBySQL(String sql, PageUtil<Ad> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<Ad> queryBySQL(String sql, String countSql, PageUtil<Ad> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 
 }

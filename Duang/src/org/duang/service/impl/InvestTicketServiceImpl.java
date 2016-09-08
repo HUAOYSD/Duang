@@ -267,8 +267,8 @@ public class InvestTicketServiceImpl implements InvestTicketService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestTicket> queryByHQL(String hql, PageUtil<InvestTicket> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<InvestTicket> queryByHQL(String hql,String counthql, PageUtil<InvestTicket> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class InvestTicketServiceImpl implements InvestTicketService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestTicket> queryBySQL(String sql, PageUtil<InvestTicket> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<InvestTicket> queryBySQL(String sql,String countsql, PageUtil<InvestTicket> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

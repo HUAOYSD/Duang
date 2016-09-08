@@ -263,7 +263,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao{
 		return super.find(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -272,8 +272,8 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Message> queryByHQL(String hql, PageUtil<Message> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<Message> queryByHQL(String hql, String countHql, PageUtil<Message> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,9 +285,8 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Message> queryBySQL(String sql, PageUtil<Message> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<Message> queryBySQL(String sql, String countSql, PageUtil<Message> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
-
 }
 

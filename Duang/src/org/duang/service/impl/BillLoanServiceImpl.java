@@ -267,8 +267,8 @@ public class BillLoanServiceImpl implements BillLoanService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BillLoan> queryByHQL(String hql, PageUtil<BillLoan> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<BillLoan> queryByHQL(String hql,String counthql, PageUtil<BillLoan> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class BillLoanServiceImpl implements BillLoanService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BillLoan> queryBySQL(String sql, PageUtil<BillLoan> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<BillLoan> queryBySQL(String sql,String countsql, PageUtil<BillLoan> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

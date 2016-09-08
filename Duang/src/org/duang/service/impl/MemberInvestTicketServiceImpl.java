@@ -8,8 +8,8 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.MemberInvestTicketDao;
-import org.duang.entity.MemberInvestTicket;
 import org.duang.entity.InvestMember;
+import org.duang.entity.MemberInvestTicket;
 import org.duang.service.MemberInvestTicketService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -267,8 +267,8 @@ public class MemberInvestTicketServiceImpl implements MemberInvestTicketService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberInvestTicket> queryByHQL(String hql, PageUtil<MemberInvestTicket> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<MemberInvestTicket> queryByHQL(String hql,String counthql, PageUtil<MemberInvestTicket> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class MemberInvestTicketServiceImpl implements MemberInvestTicketService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberInvestTicket> queryBySQL(String sql, PageUtil<MemberInvestTicket> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<MemberInvestTicket> queryBySQL(String sql,String countsql, PageUtil<MemberInvestTicket> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

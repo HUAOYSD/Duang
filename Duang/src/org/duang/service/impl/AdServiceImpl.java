@@ -267,8 +267,8 @@ public class AdServiceImpl implements AdService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Ad> queryByHQL(String hql, PageUtil<Ad> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<Ad> queryByHQL(String hql,String counthql, PageUtil<Ad> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class AdServiceImpl implements AdService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Ad> queryBySQL(String sql, PageUtil<Ad> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<Ad> queryBySQL(String sql,String countsql, PageUtil<Ad> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

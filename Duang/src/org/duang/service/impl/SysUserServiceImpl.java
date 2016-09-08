@@ -266,8 +266,8 @@ public class SysUserServiceImpl implements SysUserService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysUser> queryByHQL(String hql, PageUtil<SysUser> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<SysUser> queryByHQL(String hql,String counthql, PageUtil<SysUser> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -279,8 +279,8 @@ public class SysUserServiceImpl implements SysUserService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysUser> queryBySQL(String sql, PageUtil<SysUser> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<SysUser> queryBySQL(String sql,String countsql, PageUtil<SysUser> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 

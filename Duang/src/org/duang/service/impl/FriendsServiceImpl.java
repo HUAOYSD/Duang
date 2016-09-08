@@ -267,8 +267,8 @@ public class FriendsServiceImpl implements FriendsService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Friends> queryByHQL(String hql, PageUtil<Friends> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<Friends> queryByHQL(String hql,String counthql, PageUtil<Friends> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class FriendsServiceImpl implements FriendsService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Friends> queryBySQL(String sql, PageUtil<Friends> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<Friends> queryBySQL(String sql,String countsql, PageUtil<Friends> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

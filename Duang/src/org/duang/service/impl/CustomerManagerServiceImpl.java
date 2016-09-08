@@ -267,8 +267,8 @@ public class CustomerManagerServiceImpl implements CustomerManagerService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<CustomerManager> queryByHQL(String hql, PageUtil<CustomerManager> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<CustomerManager> queryByHQL(String hql,String counthql, PageUtil<CustomerManager> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class CustomerManagerServiceImpl implements CustomerManagerService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<CustomerManager> queryBySQL(String sql, PageUtil<CustomerManager> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<CustomerManager> queryBySQL(String sql,String countsql, PageUtil<CustomerManager> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

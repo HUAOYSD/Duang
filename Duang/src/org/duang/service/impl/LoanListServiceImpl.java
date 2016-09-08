@@ -2,12 +2,14 @@ package org.duang.service.impl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.LoanListDao;
-import org.duang.entity.LoanList;
 import org.duang.entity.InvestMember;
+import org.duang.entity.LoanList;
 import org.duang.service.LoanListService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -265,8 +267,8 @@ public class LoanListServiceImpl implements LoanListService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanList> queryByHQL(String hql, PageUtil<LoanList> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<LoanList> queryByHQL(String hql,String counthql, PageUtil<LoanList> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -278,8 +280,8 @@ public class LoanListServiceImpl implements LoanListService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanList> queryBySQL(String sql, PageUtil<LoanList> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<LoanList> queryBySQL(String sql,String countsql, PageUtil<LoanList> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

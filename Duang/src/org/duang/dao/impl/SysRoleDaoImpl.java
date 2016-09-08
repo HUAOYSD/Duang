@@ -274,8 +274,8 @@ public class SysRoleDaoImpl extends BaseDao<SysRole> implements SysRoleDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysRole> queryByHQL(String hql, PageUtil<SysRole> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<SysRole> queryByHQL(String hql, String countHql, PageUtil<SysRole> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -287,8 +287,8 @@ public class SysRoleDaoImpl extends BaseDao<SysRole> implements SysRoleDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysRole> queryBySQL(String sql, PageUtil<SysRole> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<SysRole> queryBySQL(String sql, String countSql, PageUtil<SysRole> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 }
 

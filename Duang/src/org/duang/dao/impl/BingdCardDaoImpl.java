@@ -272,8 +272,8 @@ public class BingdCardDaoImpl extends BaseDao<BindCard> implements BindCardDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BindCard> queryByHQL(String hql, PageUtil<BindCard> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<BindCard> queryByHQL(String hql, String countHql, PageUtil<BindCard> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,8 +285,8 @@ public class BingdCardDaoImpl extends BaseDao<BindCard> implements BindCardDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BindCard> queryBySQL(String sql, PageUtil<BindCard> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<BindCard> queryBySQL(String sql, String countSql, PageUtil<BindCard> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 
 }

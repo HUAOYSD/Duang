@@ -263,7 +263,7 @@ public class NotificationDaoImpl extends BaseDao<Notification> implements Notifi
 		return super.find(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -272,8 +272,8 @@ public class NotificationDaoImpl extends BaseDao<Notification> implements Notifi
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Notification> queryByHQL(String hql, PageUtil<Notification> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<Notification> queryByHQL(String hql, String countHql, PageUtil<Notification> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,9 +285,8 @@ public class NotificationDaoImpl extends BaseDao<Notification> implements Notifi
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Notification> queryBySQL(String sql, PageUtil<Notification> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<Notification> queryBySQL(String sql, String countSql, PageUtil<Notification> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
-
 }
 

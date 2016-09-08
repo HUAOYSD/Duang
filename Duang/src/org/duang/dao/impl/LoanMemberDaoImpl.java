@@ -263,6 +263,7 @@ public class LoanMemberDaoImpl extends BaseDao<LoanMember> implements LoanMember
 	}
 
 	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -271,8 +272,8 @@ public class LoanMemberDaoImpl extends BaseDao<LoanMember> implements LoanMember
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanMember> queryByHQL(String hql, PageUtil<LoanMember> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<LoanMember> queryByHQL(String hql, String countHql, PageUtil<LoanMember> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -284,8 +285,8 @@ public class LoanMemberDaoImpl extends BaseDao<LoanMember> implements LoanMember
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanMember> queryBySQL(String sql, PageUtil<LoanMember> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<LoanMember> queryBySQL(String sql, String countSql, PageUtil<LoanMember> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 
 }

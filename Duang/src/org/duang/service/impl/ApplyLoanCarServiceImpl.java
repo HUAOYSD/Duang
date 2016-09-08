@@ -267,8 +267,8 @@ public class ApplyLoanCarServiceImpl implements ApplyLoanCarService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ApplyLoanCar> queryByHQL(String hql, PageUtil<ApplyLoanCar> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<ApplyLoanCar> queryByHQL(String hql,String counthql, PageUtil<ApplyLoanCar> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class ApplyLoanCarServiceImpl implements ApplyLoanCarService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ApplyLoanCar> queryBySQL(String sql, PageUtil<ApplyLoanCar> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<ApplyLoanCar> queryBySQL(String sql,String countsql, PageUtil<ApplyLoanCar> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

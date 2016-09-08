@@ -82,7 +82,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 			sql += "INNER JOIN SYS_USER ON SYS_USER.ROLE_ID = SYS_ROLE.ID ";
 			sql += "WHERE SYS_POWER.PARENT_ID = ? AND SYS_USER.ID = ? ";
 			sql += "ORDER BY SYS_POWER.SORT_INDEX ASC";
-			return queryBySQL(sql, null, parentid, userid);
+			return queryBySQL(sql,null, null, parentid, userid);
 		}else {
 			return null;
 		}
@@ -110,7 +110,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 			sql += "AND ID IN (SELECT POWER_ID FROM SYS_ROLE_POWER WHERE ROLE_ID = (SELECT ROLE_ID FROM SYS_USER WHERE ID = '"+userid+"')) ";
 			sql += ") ";
 			sql += "ORDER BY SYS_POWER.SORT_INDEX DESC";
-			return queryBySQL(sql, null);
+			return queryBySQL(sql,null,null);
 		}else {
 			return null;
 		}
@@ -330,8 +330,8 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysPower> queryByHQL(String hql, PageUtil<SysPower> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<SysPower> queryByHQL(String hql, String countHql, PageUtil<SysPower> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -343,8 +343,8 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysPower> queryBySQL(String sql, PageUtil<SysPower> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<SysPower> queryBySQL(String sql, String countSql, PageUtil<SysPower> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 
 }

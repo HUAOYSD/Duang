@@ -266,8 +266,8 @@ public class LoanMemberServiceImpl implements LoanMemberService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanMember> queryByHQL(String hql, PageUtil<LoanMember> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<LoanMember> queryByHQL(String hql,String counthql, PageUtil<LoanMember> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -279,7 +279,7 @@ public class LoanMemberServiceImpl implements LoanMemberService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanMember> queryBySQL(String sql, PageUtil<LoanMember> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<LoanMember> queryBySQL(String sql,String countsql, PageUtil<LoanMember> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 }

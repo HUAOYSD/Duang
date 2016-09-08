@@ -267,8 +267,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BindCard> queryByHQL(String hql, PageUtil<BindCard> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<BindCard> queryByHQL(String hql,String counthql, PageUtil<BindCard> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class BindCardServiceImpl implements BindCardService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BindCard> queryBySQL(String sql, PageUtil<BindCard> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<BindCard> queryBySQL(String sql,String countsql, PageUtil<BindCard> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

@@ -272,8 +272,8 @@ public class MemberInfoDaoImpl extends BaseDao<MemberInfo> implements MemberInfo
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberInfo> queryByHQL(String hql, PageUtil<MemberInfo> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<MemberInfo> queryByHQL(String hql, String countHql, PageUtil<MemberInfo> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,8 +285,8 @@ public class MemberInfoDaoImpl extends BaseDao<MemberInfo> implements MemberInfo
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberInfo> queryBySQL(String sql, PageUtil<MemberInfo> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<MemberInfo> queryBySQL(String sql, String countSql, PageUtil<MemberInfo> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 }
 

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.SysPowerDao;
@@ -352,8 +354,8 @@ public class SysRoleServiceImpl implements SysRoleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysRole> queryByHQL(String hql, PageUtil<SysRole> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<SysRole> queryByHQL(String hql,String counthql, PageUtil<SysRole> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -365,8 +367,8 @@ public class SysRoleServiceImpl implements SysRoleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysRole> queryBySQL(String sql, PageUtil<SysRole> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<SysRole> queryBySQL(String sql,String countsql, PageUtil<SysRole> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 }

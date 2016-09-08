@@ -266,8 +266,8 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestMember> queryByHQL(String hql, PageUtil<InvestMember> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<InvestMember> queryByHQL(String hql,String counthql, PageUtil<InvestMember> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -279,7 +279,7 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestMember> queryBySQL(String sql, PageUtil<InvestMember> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<InvestMember> queryBySQL(String sql,String countsql, PageUtil<InvestMember> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 }

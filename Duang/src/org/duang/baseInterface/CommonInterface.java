@@ -83,7 +83,7 @@ public interface CommonInterface<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract List<T> queryByHQL(String hql, PageUtil<T> page, Object... params) throws Exception;
+	public abstract List<T> queryByHQL(String hql, String countHql, PageUtil<T> page, Object... params) throws Exception;
 	
 	
 	/**
@@ -94,7 +94,7 @@ public interface CommonInterface<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract List<T> queryBySQL(String sql, PageUtil<T> page, Object... params) throws Exception;
+	public abstract List<T> queryBySQL(String sql, String countSql, PageUtil<T> page, Object... params) throws Exception;
 
 
 	/**

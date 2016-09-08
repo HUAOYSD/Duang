@@ -262,7 +262,7 @@ public class ScaleDaoImpl extends BaseDao<Scale> implements ScaleDao{
 		return super.find(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -271,8 +271,8 @@ public class ScaleDaoImpl extends BaseDao<Scale> implements ScaleDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Scale> queryByHQL(String hql, PageUtil<Scale> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<Scale> queryByHQL(String hql, String countHql, PageUtil<Scale> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -284,8 +284,8 @@ public class ScaleDaoImpl extends BaseDao<Scale> implements ScaleDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Scale> queryBySQL(String sql, PageUtil<Scale> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<Scale> queryBySQL(String sql, String countSql, PageUtil<Scale> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 
 }

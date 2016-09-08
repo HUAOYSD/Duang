@@ -91,7 +91,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 				hql += " OR id = '" + loanListIds[j] + "'";
 			}
 		}
-		List<LoanList> loanLists = loanListDao.queryByHQL(hql, null);
+		List<LoanList> loanLists = loanListDao.queryByHQL(hql,null, null);
 
 		//2、找到理财标对象scale
 		Scale scale = scaleDao.findById(scaleId);
@@ -376,8 +376,8 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ScaleLoanList> queryByHQL(String hql, PageUtil<ScaleLoanList> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<ScaleLoanList> queryByHQL(String hql,String counthql, PageUtil<ScaleLoanList> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -389,8 +389,8 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ScaleLoanList> queryBySQL(String sql, PageUtil<ScaleLoanList> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<ScaleLoanList> queryBySQL(String sql,String countsql, PageUtil<ScaleLoanList> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

@@ -8,8 +8,8 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.NotificationDao;
-import org.duang.entity.Notification;
 import org.duang.entity.InvestMember;
+import org.duang.entity.Notification;
 import org.duang.service.NotificationService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -267,8 +267,8 @@ public class NotificationServiceImpl implements NotificationService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Notification> queryByHQL(String hql, PageUtil<Notification> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<Notification> queryByHQL(String hql,String counthql, PageUtil<Notification> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -280,8 +280,8 @@ public class NotificationServiceImpl implements NotificationService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Notification> queryBySQL(String sql, PageUtil<Notification> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<Notification> queryBySQL(String sql,String countsql, PageUtil<Notification> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 
 	@Override

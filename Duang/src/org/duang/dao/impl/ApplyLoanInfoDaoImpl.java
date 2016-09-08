@@ -272,8 +272,8 @@ public class ApplyLoanInfoDaoImpl extends BaseDao<ApplyLoanInfo> implements Appl
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ApplyLoanInfo> queryByHQL(String hql, PageUtil<ApplyLoanInfo> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<ApplyLoanInfo> queryByHQL(String hql, String countHql, PageUtil<ApplyLoanInfo> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,9 +285,8 @@ public class ApplyLoanInfoDaoImpl extends BaseDao<ApplyLoanInfo> implements Appl
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ApplyLoanInfo> queryBySQL(String sql, PageUtil<ApplyLoanInfo> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<ApplyLoanInfo> queryBySQL(String sql, String countSql, PageUtil<ApplyLoanInfo> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
-
 }
 

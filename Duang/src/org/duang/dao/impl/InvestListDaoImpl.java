@@ -263,7 +263,6 @@ public class InvestListDaoImpl extends BaseDao<InvestList> implements InvestList
 		return super.find(params);
 	}
 
-	
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -272,8 +271,8 @@ public class InvestListDaoImpl extends BaseDao<InvestList> implements InvestList
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestList> queryByHQL(String hql, PageUtil<InvestList> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<InvestList> queryByHQL(String hql, String countHql, PageUtil<InvestList> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,8 +284,8 @@ public class InvestListDaoImpl extends BaseDao<InvestList> implements InvestList
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestList> queryBySQL(String sql, PageUtil<InvestList> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<InvestList> queryBySQL(String sql, String countSql, PageUtil<InvestList> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 
 }

@@ -272,8 +272,8 @@ public class FriendsDaoImpl extends BaseDao<Friends> implements FriendsDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Friends> queryByHQL(String hql, PageUtil<Friends> page, Object... params) throws Exception{
-		return super.queryByHQL(hql, page, params);
+	public List<Friends> queryByHQL(String hql, String countHql, PageUtil<Friends> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -285,8 +285,8 @@ public class FriendsDaoImpl extends BaseDao<Friends> implements FriendsDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Friends> queryBySQL(String sql, PageUtil<Friends> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, page, params);
+	public List<Friends> queryBySQL(String sql, String countSql, PageUtil<Friends> page, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, page, params);
 	}
 
 }

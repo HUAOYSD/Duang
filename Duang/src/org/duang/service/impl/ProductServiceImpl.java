@@ -266,8 +266,8 @@ public class ProductServiceImpl implements ProductService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Product> queryByHQL(String hql, PageUtil<Product> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql, page, params);
+	public List<Product> queryByHQL(String hql,String counthql, PageUtil<Product> page, Object... params) throws Exception{
+		return dao.queryByHQL(hql,counthql, page, params);
 	}
 
 
@@ -279,7 +279,7 @@ public class ProductServiceImpl implements ProductService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Product> queryBySQL(String sql, PageUtil<Product> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql, page, params);
+	public List<Product> queryBySQL(String sql,String countsql, PageUtil<Product> page, Object... params) throws Exception{
+		return dao.queryBySQL(sql,countsql, page, params);
 	}
 }

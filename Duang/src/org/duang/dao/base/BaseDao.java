@@ -444,8 +444,8 @@ public class BaseDao<M> {
 		}
 		return criteria.list();
 	}
-	
-	
+
+
 	/**
 	 * 分页查询
 	 * @Title: query 
@@ -529,10 +529,10 @@ public class BaseDao<M> {
 	 * @date 2014-3-25 上午8:59:15
 	 */
 	@SuppressWarnings("unchecked")
-	public List<M> queryBySQL(String sql, PageUtil<M> page) throws Exception{
+	public List<M> queryBySQL(String sql, String countSql, PageUtil<M> page) throws Exception{
 		Query q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
 		if (page != null) {
-			int countRecords = countBySql(sql);
+			int countRecords = countBySql(countSql);
 			//设置总条数
 			page.setCountRecords(countRecords);
 			//设置总页数（加判断是by zero）
@@ -559,7 +559,7 @@ public class BaseDao<M> {
 	 * @see com.dao.BaseDao#queryBySQL(java.lang.String, java.lang.Object[]) 
 	 */ 
 	@SuppressWarnings("unchecked")
-	public List<M> queryBySQL(String sql, PageUtil<M> page, Object... params) throws Exception{
+	public List<M> queryBySQL(String sql, String countSql, PageUtil<M> page, Object... params) throws Exception{
 		Query q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
 		int index = 0;
 		for(int i = 0 ; i < params.length ; i++){
@@ -575,7 +575,7 @@ public class BaseDao<M> {
 			}
 		}
 		if (page != null) {
-			int countRecords = countBySql(sql, params);
+			int countRecords = countBySql(countSql, params);
 			//设置总条数
 			page.setCountRecords(countRecords);
 			//设置总页数（加判断是by zero）
@@ -601,10 +601,10 @@ public class BaseDao<M> {
 	 * @date 2014-3-25 上午8:59:25
 	 */
 	@SuppressWarnings("unchecked")
-	public List<M> queryByHQL(String hql, PageUtil<M> page) throws Exception{
+	public List<M> queryByHQL(String hql, String countHql, PageUtil<M> page) throws Exception{
 		Query q = this.getSession().createQuery(hql);
 		if (page != null) {
-			int countRecords = countByHql(hql);
+			int countRecords = countByHql(countHql);
 			//设置总条数
 			page.setCountRecords(countRecords);
 			//设置总页数（加判断是by zero）
@@ -630,13 +630,13 @@ public class BaseDao<M> {
 	 * @see com.dao.BaseDao#queryByHQL(java.lang.String, java.lang.Object[]) 
 	 */ 
 	@SuppressWarnings("unchecked")
-	public List<M> queryByHQL(String hql, PageUtil<M> page, Object... params) throws Exception{
+	public List<M> queryByHQL(String hql, String countHql, PageUtil<M> page, Object... params) throws Exception{
 		Query q = this.getSession().createQuery(hql);
 		for(int i = 0 ; i < params.length ; i++){
 			q.setParameter(i, params[i]);
 		}
 		if (page != null) {
-			int countRecords = countByHql(hql, params);
+			int countRecords = countByHql(countHql, params);
 			//设置总条数
 			page.setCountRecords(countRecords);
 			//设置总页数（加判断是by zero）
@@ -649,7 +649,7 @@ public class BaseDao<M> {
 		}
 		return q.list();
 	}
-	
+
 
 	/** 
 	 * 根据criteria查询数据集合
@@ -668,8 +668,8 @@ public class BaseDao<M> {
 		}
 		return criteria.list();
 	}
-	
-	
+
+
 	/**
 	 * 分页查询
 	 * @Title: query 
@@ -706,7 +706,7 @@ public class BaseDao<M> {
 		return criteria.list();
 	}
 
-	
+
 
 	/** 
 	 * 根据离线criteria查询数据集合
