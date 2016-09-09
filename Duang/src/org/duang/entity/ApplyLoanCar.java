@@ -34,7 +34,8 @@ public class ApplyLoanCar implements java.io.Serializable {
 	private String engine;
 	private String use;
 	private String carProperty;
-
+	private String datums;
+	private String assetCertificates;
 	// Constructors
 
 	/** default constructor */
@@ -50,7 +51,7 @@ public class ApplyLoanCar implements java.io.Serializable {
 	public ApplyLoanCar(String id, LoanList loanList, String name,
 			String idcard, String phone, String province, String city,
 			String brand, String age, String limit, String engine, String use,
-			String carProperty) {
+			String carProperty,String datums,String assetCertificates) {
 		this.id = id;
 		this.loanList = loanList;
 		this.name = name;
@@ -64,6 +65,8 @@ public class ApplyLoanCar implements java.io.Serializable {
 		this.engine = engine;
 		this.use = use;
 		this.carProperty = carProperty;
+		this.datums = datums;
+		this.assetCertificates = assetCertificates;
 	}
 
 	// Property accessors
@@ -186,4 +189,21 @@ public class ApplyLoanCar implements java.io.Serializable {
 		this.carProperty = carProperty;
 	}
 
+	@Column(name = "datums", length = 16777215)
+	public String getDatums() {
+		return this.datums;
+	}
+
+	public void setDatums(String datums) {
+		this.datums = datums;
+	}
+
+	@Column(name = "asset_certificates", length = 16777215)
+	public String getAssetCertificates() {
+		return this.assetCertificates;
+	}
+
+	public void setAssetCertificates(String assetCertificates) {
+		this.assetCertificates = assetCertificates;
+	}
 }

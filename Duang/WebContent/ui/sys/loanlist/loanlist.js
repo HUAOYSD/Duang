@@ -295,3 +295,80 @@ $("#detail_btn_loanlist").on("click",function(){
 	}
 });
 
+
+/**
+ * 个人资料
+ * @param {Object} memberId
+ */
+$("#datums_btn_loanlist").on("click",function(){
+	var selectedRow = $("#loanlist").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一条记录",{time:1500});
+		return;
+	}else{
+		recordid = selectedRow.id;
+	}
+	showDatumsAndAsset(selectedRow,recordid,"datums");
+});
+
+/**
+ * 个人资料
+ * @param {Object} memberId
+ */
+$("#asset_btn_loanlist").on("click",function(){
+	var selectedRow = $("#loanlist").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一条记录",{time:1500});
+		return;
+	}else{
+		recordid = selectedRow.id;
+	}
+	showDatumsAndAsset(selectedRow,recordid,"asset");
+});
+
+/*显示个人资料或者收入资料
+ * selectedRow 选中行数据对象
+ * id=选中的loanlistId
+ * type=datums说明是查询个人资料
+ * type=asset说明是查询工资证明
+ * */
+function showDatumsAndAsset(selectedRow,id,type){
+	var contentStr='';
+	if(selectedRow.loanType=='普通模式' || selectedRow.loanType=='急速模式'){
+		contentStr='applyloaninfo!showDatumsAndAsset.do?loanList.id='+id+"&type="+type;
+		layer.open({
+			type: 2,
+			title: selectedRow.loanMemberNickName+'的个人资料',
+			shadeClose: true,
+			maxmin:true,
+			shade: 0.8,
+			area: ['98%', '95%'],
+			content: contentStr
+		});
+	}else if(selectedRow.loanType=='产权模式'){
+		//判断是房贷还是车贷 如果返回true,说明是房抵押，否则说明是车子抵押
+		$.ajax({
+			   type: "POST",
+			   url: "applyloanhouse!findApplyLoanHouse.do",
+			   data: "loanList.id="+selectedRow.id,
+			   success: function(data){
+				   data = JSON.parse(data);
+				   console.info(data);
+				   if(data.result==true){
+					   contentStr='applyloanhouse!showDatumsAndAsset.do?loanList.id='+id+"&type="+type;
+				   }else{
+					   contentStr='applyloancar!showDatumsAndAsset.do?loanList.id='+id+"&type="+type;
+				   }
+				   layer.open({
+						type: 2,
+						title: selectedRow.loanMemberNickName+'用户的借贷详细',
+						shadeClose: true,
+						maxmin:true,
+						shade: 0.8,
+						area: ['98%', '95%'],
+						content: contentStr
+					});
+			   }
+		});
+	}
+}

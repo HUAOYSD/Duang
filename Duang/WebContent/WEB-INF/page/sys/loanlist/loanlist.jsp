@@ -113,6 +113,8 @@
 	          <a id="allot_btn_loanlist" class="easyui-linkbutton" iconCls="icon-2012080412301" plain="true">分配客户经理</a>
 	          <a id="detail_btn_loanlist" class="easyui-linkbutton" iconCls="icon-application_form_magnify" plain="true">查看详细</a>
 	          <a id="review_btn_loanlist" class="easyui-linkbutton" iconCls="icon-shield" plain="true">审核</a>
+	          <a id="datums_btn_loanlist" class="easyui-linkbutton" iconCls="idcard_grey" plain="true">个人资料</a>
+	           <a id="asset_btn_loanlist" class="easyui-linkbutton" iconCls="icon-20130410120031302_easyicon_net_16" plain="true">收入证明</a>
 	  	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path %>/ui/sys/loanlist/loanlist.js"></script>

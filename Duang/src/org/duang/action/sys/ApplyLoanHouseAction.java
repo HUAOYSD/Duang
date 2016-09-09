@@ -27,6 +27,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("sys")
 @Results(value = { 
 			@Result(name = "showApplyLoanHouse", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/applyLoanHouse.jsp"),
+			@Result(name = "showDatumsAndAssetInfo", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/showDatumsAndAssetInfo.jsp"),
 			@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") })
 public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse> {
 	private static final long serialVersionUID = 1L;
@@ -88,4 +89,35 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse> {
 		} 
 	}
 	
+	/**
+	 * 个人资料，或者个人收入
+	 * @Title: showApplyLoanInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年8月22日 下午3:02:50
+	 * @return: String      
+	 * @throws
+	 */
+	public String showDatumsAndAsset() {
+		try {
+			entity = applyLoanHouseService.findEntity("loanList.id", entity.getLoanList().getId());
+			if(entity!=null){
+				//个人资料
+				if("datums".equals(getRequest().getParameter("type"))){
+					getRequest().setAttribute("path", entity.getDatums());
+				}else if("asset".equals(getRequest().getParameter("type"))){
+					getRequest().setAttribute("path", entity.getAssetCertificates());
+				}
+			}else{
+				getRequest().setAttribute("path", "");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("房产贷款信息息ACTION查询错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("房产贷款信息ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
+		return "showDatumsAndAssetInfo";
+	}
 }

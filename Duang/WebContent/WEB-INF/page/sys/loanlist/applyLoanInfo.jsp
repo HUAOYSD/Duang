@@ -140,14 +140,6 @@
 		       <label for="yearIncome" class="applyLoanInfo_from_label label_member">年收入：</label>   
 		       <label class="label_member">${entity.yearIncome}</label>
 		    </div>
-		     <div class="row0">   
-		       <label for="datums" class="applyLoanInfo_from_label label_member">个人资料：</label>   
-		       <label class="label_member">${entity.datums}</label>
-		    </div>
-		    <div class="row1">   
-		       <label for="assetCertificates" class="applyLoanInfo_from_label label_member">收入证明：</label>   
-		       <label class="label_member">${entity.assetCertificates}</label>
-		    </div>
 	</div>
 	<script type="text/javascript">
 		$(function(){
