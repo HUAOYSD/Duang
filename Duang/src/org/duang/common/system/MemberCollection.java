@@ -3,7 +3,6 @@ package org.duang.common.system;
 import java.util.HashMap;
 import net.sf.json.JSONObject;
 
-
 /**   
  * App登录的会员用户集合
  * @ClassName:  MemberCollection   
@@ -28,7 +27,7 @@ public class MemberCollection {
 	private HashMap<String, JSONObject> members;  
 	private HashMap<String, String> id_token;
 
-	public synchronized void putJsonObject(String token, JSONObject jsonObject) {  
+	public synchronized void putJsonObject(String token, JSONObject jsonObject) throws Exception{  
 		String id = jsonObject.optString("id");
 		String old_token = "";
 		if (id_token.containsKey(id)) {
@@ -39,13 +38,20 @@ public class MemberCollection {
 		id_token.put(id, token);  
 	}  
 
-	public synchronized JSONObject optJsonObject(String token) {  
+	public synchronized JSONObject optJsonObject(String token) throws Exception{  
 		return members.get(token);  
 	}  
 
-	public synchronized void removeJsonObject(String token, String id) {
+	public synchronized void removeJsonObject(String token, String id) throws Exception{
 		members.remove(token);
 		id_token.remove(id);
 	}  
-
+	
+	public synchronized String getMainField(String token) throws Exception{
+		return optJsonObject(token).optString("id", "");
+	}
+	
+	public synchronized String getField(String token, String field) throws Exception{
+		return optJsonObject(token).optString(field, "");
+	}
 }  

@@ -1,31 +1,122 @@
 package org.duang.util;
-import java.security.SecureRandom;
-import javax.crypto.spec.DESKeySpec;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.SecretKey;
 import javax.crypto.Cipher;
-import org.duang.common.logger.LoggerUtils;
-import Decoder.BASE64Decoder;
-import Decoder.BASE64Encoder;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * DES加密解密
  */
 public class DES {
-	
+
 	private DES(){
 	}
-	
-	/** 
-	 * DES算法密钥 
-	 */  
-	private static final byte[] DES_KEY = { 21, 1, -110, 82, -32, -85, -128, -65 };  
 
-	/** 
+	private static final byte[] IV = {9, 3, 1, 2, 7, 0, 8, 6};
+	private static final String DES_KEY = "o!20&^/@";
+
+	/**   
+	 * 加密
+	 * @Title: encryptDES   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param encryptString
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年9月8日 上午9:58:15
+	 * @return: String      
+	 * @throws   
+	 */  
+	public static String encryptDES(String encryptString) throws Exception {
+		IvParameterSpec zeroIv = new IvParameterSpec(IV);
+		SecretKeySpec key = new SecretKeySpec(DES_KEY.getBytes(), "DES");
+		Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+		cipher.init(Cipher.ENCRYPT_MODE, key, zeroIv);
+		byte[] encryptedData = cipher.doFinal(encryptString.getBytes());
+		return Base64.encode(encryptedData);
+	}
+
+
+	/**   
+	 * 解密
+	 * @Title: decryptDES   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param decryptString
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年9月8日 上午9:58:36
+	 * @return: String      
+	 * @throws   
+	 */  
+	public static String decryptDES(String decryptString) throws Exception {
+		byte[] byteMi = Base64.decode(decryptString);
+		IvParameterSpec zeroIv = new IvParameterSpec(IV);
+		SecretKeySpec key = new SecretKeySpec(DES_KEY.getBytes(), "DES");
+		Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+		cipher.init(Cipher.DECRYPT_MODE, key, zeroIv);
+		byte decryptedData[] = cipher.doFinal(byteMi);
+		return new String(decryptedData);
+	}
+	
+	/**
+	 * 将二进制转换成16进制 
+	 * @param buf 
+	 * @return  String
+	 */  
+	public static String parseByte2HexStr(byte buf[]) {  
+		StringBuffer sb = new StringBuffer();  
+		for (int i = 0; i < buf.length; i++) {  
+			String hex = Integer.toHexString(buf[i] & 0xFF);  
+			if (hex.length() == 1) {  
+				hex = '0' + hex;  
+			}  
+			sb.append(hex.toUpperCase());  
+		}  
+		return sb.toString();  
+	}
+
+
+	/*public static void main(String[] args) throws Exception{
+		String key = "o!20&^/@";  //我的密钥，只能是8位字节的倍数，我这JAVA
+		String plaintext = "华澳融信huao123.,!@#$%^&*()[]{}";//我要加密的字符串
+		String ciphertext = DES.encryptDES(plaintext, key);
+		System.out.println("明文：" + plaintext);
+		System.out.println("密文：" + ciphertext);
+		System.out.println("解密后：" + DES.decryptDES(ciphertext, key));
+	}*/
+
+
+
+	
+	
+	
+	/*  
+	private static final byte[] DES_KEY = { 21, 1, -110, 82, -32, -85, -128, -65 };  //DES算法密钥 
+
+
+	public static void main(String args[])  throws Exception{
+		System.out.println(new String(DES_KEY,"ISO-8859-1"));
+		String str="华澳融信huao123.,!@#$%^&*()[]{}";  
+		//加密  
+		String string = encryptBasedDes(str);  
+		System.out.println(string);  
+		//解密  
+		String s2=decryptBasedDes(string);  
+		System.out.println(s2);  
+
+		String base64 = new BASE64Encoder().encode("".getBytes());  
+		System.out.println(base64);
+
+		String base64jiema = new String(new BASE64Decoder().decodeBuffer("cS8hweL2a0miWNfFgEWmdUClZnzx5UmOywegAyUesJLbokLRKHxvNA=="));
+		System.out.println(base64jiema);
+	}
+
+
+	 *//** 
 	 * 数据加密
 	 * @param data 
 	 * @return 加密后的数据 
-	 */  
+	 *//*  
 	public static String encryptBasedDes(String data) throws Exception {  
 		String encryptedData = null;  
 		try {  
@@ -38,6 +129,8 @@ public class DES {
 			//加密对象  
 			Cipher cipher = Cipher.getInstance("DES");  
 			cipher.init(Cipher.ENCRYPT_MODE, key, sr);  
+			StringBuffer sfBuffer = new StringBuffer(new String(cipher.doFinal(data.getBytes())));
+			System.out.println("加密结果（未Base64编码前的结果）\t"+sfBuffer.toString());
 			//加密，并把字节数组编码成字符串  
 			encryptedData = new BASE64Encoder().encode(cipher.doFinal(data.getBytes()));  
 		} catch (Exception e) {  
@@ -48,10 +141,10 @@ public class DES {
 	}  
 
 
-	/** 
-	 * 数据解密
-	 * @return 解密后的数据 
-	 */  
+	  *//** 
+	  * 数据解密
+	  * @return 解密后的数据 
+	  *//*  
 	public static String decryptBasedDes(String cryptData) throws Exception{  
 		String decryptedData = null;  
 		try {  
@@ -71,18 +164,7 @@ public class DES {
 			throw new RuntimeException("解密错误，错误信息：", e);  
 		}  
 		return decryptedData;  
-	}  
-
-
-	/*public static void main(String args[])  throws Exception{
-		String str="华澳融信huao123.,!@#$%^&*()[]{}";  
-		//加密  
-		String string = encryptBasedDes(str);  
-		System.out.println(string);  
-		//解密  
-		String s2=decryptBasedDes(string);  
-		System.err.println(s2);  
-	}*/
+	}  */
 
 
 }

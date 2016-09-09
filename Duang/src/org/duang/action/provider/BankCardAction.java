@@ -119,15 +119,14 @@ public class BankCardAction extends BaseAction<BindCard>{
 				memberInfo.setId(memberid);
 				BindCard bindCard = new BindCard();
 				bindCard.setId(DataUtils.randomUUID());
-				bindCard.setBankNo(DES.decryptBasedDes(p_bankNo));
-				bindCard.setIdcard(DES.decryptBasedDes(p_idcard));
+				bindCard.setBankNo(DES.decryptDES(p_bankNo));
+				bindCard.setIdcard(DES.decryptDES(p_idcard));
 				bindCard.setMemberInfo(memberInfo);
-				bindCard.setName(DES.decryptBasedDes(p_name));
-				bindCard.setOpenBank(DES.decryptBasedDes(p_openBank));
+				bindCard.setName(DES.decryptDES(p_name));
+				bindCard.setOpenBank(DES.decryptDES(p_openBank));
 				bindCard.setOptTime(new Date());
-				bindCard.setPhone(DES.decryptBasedDes(p_phone));
-				bindCard.setType(Integer.valueOf(DES.decryptBasedDes(p_type)));
-				
+				bindCard.setPhone(DES.decryptDES(p_phone));
+				bindCard.setType(Integer.valueOf(DES.decryptDES(p_type)));
 				success = bindCardService.saveEntity(bindCard);
 				if(!success){
 					msg = "用户未实名";

@@ -60,7 +60,7 @@ public class ScaleAction extends BaseAction<Scale> {
 
 	private ScaleService service;
 
-	@Resource()
+	@Resource
 	public void setService(ScaleService service) {
 		this.service = service;
 	}

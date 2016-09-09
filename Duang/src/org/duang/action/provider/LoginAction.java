@@ -11,6 +11,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.InvestMember;
+import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.If;
 import org.duang.service.MemberInfoService;
@@ -57,13 +58,17 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		try {
 			String phone = getRequest().getParameter("phoneNum"), pwd = getRequest().getParameter("pwd");
 			if (DataUtils.notEmpty(phone) && DataUtils.notEmpty(pwd)) {
-				phone = DES.decryptBasedDes(phone);
-				MemberInfo memberInfo = service.findEntity("phone", phone);
-				if (memberInfo != null) {
-					if (pwd.equals(memberInfo.getPassword())) {
+				phone = DES.decryptDES(phone);
+				entity = service.findEntity("phone", phone);
+				if (entity != null) {
+					if (pwd.equals(entity.getPassword())) {
 						String token = DataUtils.randomUUID();
-						fillMemberInfo(token, memberInfo);
-						MemberCollection.getInstance().putJsonObject(token, jsonObject);
+						fillMemberInfo(token);
+						JSONObject resultjson = new JSONObject();
+						resultjson.put("pd", jsonObject.optString("pd"));
+						resultjson.put("token", jsonObject.optString("token"));
+						resultjson.put("id", jsonObject.optString("id"));
+						MemberCollection.getInstance().putJsonObject(token, resultjson);
 						success = true;
 					} else {
 						msg = "密码错误";
@@ -98,16 +103,26 @@ public class LoginAction extends BaseAction<MemberInfo>{
 	 */  
 	public void findInfo(){
 		boolean success = false;
-		JSONObject jsonInfo = null;
 		try {
 			String token = getRequest().getParameter("token"), pwd = getRequest().getParameter("pwd");
 			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(pwd)) {
-				jsonInfo = MemberCollection.getInstance().optJsonObject(token);
-				if (jsonInfo != null) {
-					if (pwd.equals(jsonInfo.optString("pd"))) {
-						success = true;
+				String pd = MemberCollection.getInstance().getField(token, "pd");
+				if (DataUtils.notEmpty(pd)) {
+					if (pwd.equals(pd)) {
+						entity = service.findById(MemberCollection.getInstance().getMainField(token));
+						if (entity != null) {
+							fillMemberInfo(token);
+							JSONObject resultjson = new JSONObject();
+							resultjson.put("pd", jsonObject.optString("pd"));
+							resultjson.put("token", jsonObject.optString("token"));
+							resultjson.put("id", jsonObject.optString("id"));
+							MemberCollection.getInstance().putJsonObject(token, resultjson);
+							success = true;
+						}else {
+							msg = "未获取到该用户";
+						}
 					}else{
-						msg = "登录失效请重新登录";
+						msg = "密码错误，请重新登录";
 					}
 				}else{
 					msg = "登录失效请重新登录";
@@ -121,13 +136,9 @@ public class LoginAction extends BaseAction<MemberInfo>{
 			LoggerUtils.error("LoginAction——login方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
-		if (success) {
-			printJsonResult(jsonInfo.toString());
-		} else {
-			jsonObject.put("msg", msg);
-			jsonObject.put("success", success);
-			printJsonResult();
-		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
 	}
 
 
@@ -146,12 +157,9 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		try {
 			String token = getRequest().getParameter("token");
 			if (DataUtils.notEmpty(token)) {
-				JSONObject jsonInfo = MemberCollection.getInstance().optJsonObject(token);
-				if (jsonInfo != null) {
-					String id = jsonInfo.optString("id");
-					if (DataUtils.notEmpty(id)) {
-						MemberCollection.getInstance().removeJsonObject(token, id);
-					}
+				String id = MemberCollection.getInstance().getMainField(token);
+				if (DataUtils.notEmpty(id)) {
+					MemberCollection.getInstance().removeJsonObject(token, id);
 				}
 				success = true;
 			}else{
@@ -179,26 +187,32 @@ public class LoginAction extends BaseAction<MemberInfo>{
 	 * @return: void      
 	 * @throws   
 	 */  
-	private void fillMemberInfo(String token, MemberInfo memberInfo){
+	private void fillMemberInfo(String token){
 		jsonObject.put("time", System.currentTimeMillis());
-		jsonObject.put("pd", memberInfo.getPassword());
+		jsonObject.put("pd", entity.getPassword());
 		jsonObject.put("token", token);
-		jsonObject.put("id", memberInfo.getId());
-		jsonObject.put("name", memberInfo.getRealName());
-		jsonObject.put("nickname", memberInfo.getNickname());
-		jsonObject.put("phone", memberInfo.getPhone());
-		jsonObject.put("idcard", memberInfo.getIdCard());
-		jsonObject.put("email", memberInfo.getEmail());
-		jsonObject.put("age", memberInfo.getAge());
-		jsonObject.put("sex", memberInfo.getSex());
-		jsonObject.put("photo", memberInfo.getUserImg());
-		jsonObject.put("isEliteAccount", If.valueOf("If"+memberInfo.getIsEliteAccount()).toString());
-		InvestMember investMember = memberInfo.getInvestMembers().iterator().next();
+		jsonObject.put("id", entity.getId());
+		jsonObject.put("name", entity.getRealName());
+		jsonObject.put("nickname", entity.getNickname());
+		jsonObject.put("phone", entity.getPhone());
+		jsonObject.put("idcard", entity.getIdCard());
+		jsonObject.put("email", entity.getEmail());
+		jsonObject.put("age", entity.getAge());
+		jsonObject.put("sex", entity.getSex());
+		jsonObject.put("photo", entity.getUserImg());
+		jsonObject.put("isEliteAccount", If.valueOf("If"+entity.getIsEliteAccount()).toString());
+
+		InvestMember investMember = entity.getInvestMembers().iterator().next();
 		jsonObject.put("money", investMember.getTotalMoney());
 		jsonObject.put("investing", investMember.getInvesting());
 		jsonObject.put("balance", investMember.getBalance());
 		jsonObject.put("totalEarnings", investMember.getTotalIncome());
 		jsonObject.put("currentEarnings", investMember.getCurrentIncome());
+
+		LoanMember loanMember = entity.getLoanMembers().iterator().next();
+		jsonObject.put("loanMoney", loanMember.getLendMoney());
+		jsonObject.put("overdue", loanMember.getExpectMoney());
+		jsonObject.put("residue", loanMember.getResidueMoney());
 	}
 
 

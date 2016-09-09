@@ -208,7 +208,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		try {
 			if (entity != null && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(getRequest().getParameter("nickname"))) {
 				String DESNickname = getRequest().getParameter("nickname");
-				String nickName = DES.decryptBasedDes(DESNickname);
+				String nickName = DES.decryptDES(DESNickname);
 				MemberInfo memberInfoByNickName = service.findEntity("nickname", nickName);
 				if(memberInfoByNickName !=null){
 					success = false;
@@ -256,7 +256,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		try {
 			if (entity != null && DataUtils.notEmpty(getRequest().getParameter("idcard")) && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(getRequest().getParameter("name"))) {
 				String DESIdCard = getRequest().getParameter("idcard");
-				String idcard = DES.decryptBasedDes(DESIdCard);
+				String idcard = DES.decryptDES(DESIdCard);
 				MemberInfo memberInfoByNickName = service.findEntity("idCard", idcard);
 				if(memberInfoByNickName !=null){
 					success = false;
@@ -265,13 +265,12 @@ public class MemberAction extends BaseAction<MemberInfo>{
 					MemberInfo memberInfo = service.findEntity("id", entity.getId());
 					if (memberInfo != null) {
 						String DESName = getRequest().getParameter("name");
-						memberInfo.setRealName(DES.decryptBasedDes(DESName));
+						memberInfo.setRealName(DES.decryptDES(DESName));
 						memberInfo.setIdCard(idcard);
 						success = service.updateEntity(memberInfo);
 						if(!success){
 							msg = "身份证信息已被占用，请检查";
 						}
-						
 					} else {
 						msg = "未查到该用户";
 					}

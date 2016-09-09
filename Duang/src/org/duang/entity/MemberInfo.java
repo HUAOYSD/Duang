@@ -458,7 +458,7 @@ public class MemberInfo implements java.io.Serializable {
 		this.messagesForSender = messagesForSender;
 	}
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "memberInfo")
 	public Set<InvestList> getInvestLists() {
 		return this.investLists;
 	}
@@ -467,7 +467,7 @@ public class MemberInfo implements java.io.Serializable {
 		this.investLists = investLists;
 	}
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberInfo")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "memberInfo")
 	public Set<LoanList> getLoanLists() {
 		return this.loanLists;
 	}

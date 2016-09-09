@@ -56,7 +56,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 		try {
 			String phone = getRequest().getParameter("phoneNum");
 			if (DataUtils.notEmpty(phone)) {
-				phone = DES.decryptBasedDes(phone);
+				phone = DES.decryptDES(phone);
 				entity = service.findEntity("phone", phone.trim());
 				if (entity != null) {
 					msg = "您已注册，请直接登录";
@@ -94,7 +94,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 		try {
 			String phone = getRequest().getParameter("phoneNum");
 			if (DataUtils.notEmpty(phone)) {
-				phone = DES.decryptBasedDes(phone);
+				phone = DES.decryptDES(phone);
 				String platform = getRequest().getParameter("platform");
 				if (DataUtils.notEmpty(platform) && ("IOS".equals(platform) || "Android".equals(platform))) {
 					String signature = getRequest().getParameter("signature");
@@ -140,7 +140,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 		try {
 			String phone = getRequest().getParameter("phoneNum");
 			if (DataUtils.notEmpty(phone)) {
-				phone = DES.decryptBasedDes(phone);
+				phone = DES.decryptDES(phone);
 				String password = getRequest().getParameter("pwd");
 				if (DataUtils.notEmpty(password)) {
 					entity.setPhone(password);

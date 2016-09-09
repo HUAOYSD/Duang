@@ -1,4 +1,5 @@
-----前面带*号的是需要DES加密传参的，两个**号表示需要MD5加密传参
+----前面带*号的是需要DES加密传参的，两个**号表示需要MD5加密传参，有备注nullable表示参数可以为空
+	返回结果中的msg通常为错误提示信息，接口文档中的msg值只是为结果示范，并非真实场景提示，且msg错误提示值并非唯一
 
 一：注册
 	1、检查手机号码是否存在
@@ -39,7 +40,9 @@
 			**pwd：登录密码
 		返回结果：Json
 			失败：{'success':false,'msg':'手机号未注册'}
-			成功：{'success':true,'msg':'','token':'46546548784531545sddsadfsdweq','id':'ah1500445ssf125456131ffsdyhg','name':'刘芳','nickname':'翠花','phone':'15894496635','idcard':'101036199408088855','email':'liufang@163.com','age':'25','sex':'女','photo':'/xxx/xxx.jpg','isEliteAccount':'是','money':'505000','investing':'500000','currentEarnings':'2000','totalEarnings':'5000','balance':'250'}
+			成功：{'success':true,'msg':'','token':'46546548784531545sddsadfsdweq','id':'ah1500445ssf125456131ffsdyhg','name':'刘芳','nickname':'翠花','phone':'15894496635','idcard':'101036199408088855','email':'liufang@163.com','age':'25','sex':'女','photo':'/xxx/xxx.jpg','isEliteAccount':'是',
+			'money':'505000','investing':'500000','currentEarnings':'2000','totalEarnings':'5000','balance':'250'
+			'loanMoney':'50000','overdue':'1200'}
 			个别属性说明：token登录成功返回的唯一标示，以作下次打开app作为快捷获取用户信息，不必重新登录
 					   isEliteAccount是否是金账户
 					   money总资产
@@ -47,6 +50,8 @@
 					   currentEarnings当前收益
 					   totalEarnings总收益
 					   balance账户余额				
+					   loanMoney总借款额
+					   overdue总逾期额
 					   
 	 2、根据token获取用户信息
 		URL：http://192.168.11.56:8080/Duang/provider_login!findInfo.do
@@ -178,7 +183,7 @@
 			num：显示个数
 		返回结果：Json
 			失败：{'success':false,'msg':'未找到可使用广告'}	
-			成功：{'success':true,'msg':'',
+			成功：{'success':true,'msg':'','result':
 				[
 				{'imageAddress':'xxxx/xxxx.jpg','linkAddress':'www.baidu.com'},
 				{'imageAddress':'xxxx/xxxx.jpg','linkAddress':'www.baidu.com'},
@@ -187,14 +192,14 @@
 			}
 			
 
-五：首页公告列表
+六：首页公告列表
 	1、获取列表公告列表
 		URL：http://192.168.11.56:8080/Duang/provider_notification!getSystemNotifys.do
 		发送参数说明：
 			无参数
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'',
+			成功：{'success':true,'msg':'','result':
 				[
 				{'title':'新用户奖励','content':'九月注册的用户有丰厚大礼等你来领，速速来吧'},
 				{'title':'老用户奖励','content':'累计注册时长两年，投资20万以上会员享有投资加息券哟'}
@@ -207,7 +212,7 @@
 			无参数
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'',
+			成功：{'success':true,'msg':'','result':
 				[
 				{'title':'维护公告','content':'为更好的投资体验，今天晚上要系统维护'}
 				]
@@ -216,7 +221,7 @@
 		
 		
 
-六：标列表
+七：标列表
 	1、获取车标列表
 		URL：http://192.168.11.56:8080/Duang/provider_scale!queryCarScale.do
 		发送参数说明：
@@ -224,11 +229,11 @@
 			count：下拉次数（首次打开次数累计1次）
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'',
+			成功：{'success':true,'msg':'','result':
 				[
-				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','minMoney','500','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
-				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','minMoney','500','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
-				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','minMoney','500','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'}
+				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
+				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
+				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'}
 				]
 			}
 		属性说明：
@@ -258,11 +263,11 @@
 			count：下拉次数（首次打开次数累计1次）
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'',
+			成功：{'success':true,'msg':'','result':
 				[
-				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','minMoney','500','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
-				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','minMoney','500','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
-				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','minMoney','500','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'}
+				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
+				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
+				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'}
 				]
 			}
 		属性说明：
@@ -275,16 +280,390 @@
 			count：下拉次数（首次打开次数累计1次）
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'',
+			成功：{'success':true,'msg':'','result':
 				[
-				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','minMoney','500','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
-				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','minMoney','500','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
-				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','minMoney','500','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'}
+				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
+				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
+				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'}
 				]
 			}
 		属性说明：
 			同车标
-	
-		
 			
- 
+
+七：借贷
+	1、获总投资、借贷数据
+		URL：http://192.168.11.56:8080/Duang/provider_transaction!getLoanAndInvestData.do
+		发送参数说明：
+			token：登录token值
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':'','creditInvest':'500','houseInvest':'500','carInvest':'500','creditLoan':'500','houseLoan':'500','carInvest':'500'}
+			属性说明：
+				creditInvest信宝投资
+				houseInvest房宝投资
+				carInvest车宝投资
+				creditLoan信用借贷
+				houseLoan房产借贷
+				carLoan车产借贷
+
+	2、上传申请信息
+		URL：http://192.168.11.56:8080/Duang/provider_applyUpload!uploadApplyInfo.do
+		发送参数说明：
+			token：登录token值
+			file，File类文件，IOS不清楚什么类型的，用到了一起测试
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':'','path':'xxxxxxxxx'}
+		结果列说明：
+			path代表上传成功后，将存储路径DES加密返回给app端，app端在提交借贷订单的时候，再将整个加密串当做参数传到后台	
+	
+				
+	3、增加申请普通和急速模式贷款的申请信息记录
+		URL：http://192.168.11.56:8080/Duang/provider_applyLoanInfo!insertApplyLoanInfo.do
+		发送参数说明：
+			token登录会员token
+			*p_money借款额度
+			*p_days借款天数
+			p_loanType借款类型，传参为整数类型（1普通模式,2产权模式,3信用模式,4急速模式）
+			p_loanUse借款用途，比如：“借款垫付工程费”。————nullable
+			p_loanStyle平台，传参为整数类型（2Android，3IOS）
+			p_backStyle还款方式，传参为整数类型（1等额本息，2到期一次性还款）
+			
+			*p_sex性别
+			*p_name姓名
+			*p_phone联系电话
+			*p_idcard身份证号码
+			*p_email邮件————nullable
+			*p_nativeAddress户籍所在地————nullable
+			*p_nativeInfo户籍详信息————nullable
+			*p_address现在居住地————nullable
+			
+			p_liveStyle住房方式，取值租房和自居房等5字符以内字符串————nullable
+			p_education学历————nullable
+			p_marriage婚姻状况————nullable
+			p_house房产状况————nullable
+			p_hasCreditchar有无信用卡————nullable
+			*p_creditCardchar信用卡号码————nullable
+			p_industry工作行业————nullable
+			p_jobStyle职业性质（全职兼职等）————nullable
+			p_job担任职务————nullable
+			p_jobCity工作城市————nullable
+			p_company工作公司————nullable
+			p_publicTelchar公司电话————nullable
+			p_salaryFromBankchar工资是否属于银行代发————nullable
+			p_yearIncome年收入————nullable
+			p_monthBack每月可归还额度————nullable
+			*p_urgencyPerson紧急联系人————nullable
+			*p_urgencyPhone紧急联系人电话————nullable
+			p_datums个人资料,多份用英文';'隔开，这个值应当是使用【上传申请信息】这个接口返回来的path值，如果多个用';'相连
+			p_assetCertificates收入证明,多份用英文';'隔开，这个值应当是使用【上传申请信息】这个接口返回来的path值，如果多个用';'相连
+			
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'msg':''}
+			
+			
+	4、增加房产贷款的申请信息记录
+		URL：http://192.168.11.56:8080/Duang/provider_applyHouseLoanInfo!insertApplyHouseLoanInfo.do
+		发送参数说明：
+			token登录会员token
+			*p_money借款额度
+			*p_days借款天数
+			p_loanType借款类型，传参为整数类型（1普通模式,2产权模式,3信用模式,4急速模式）
+			p_loanUse借款用途，比如：“借款垫付工程费”。————nullable
+			p_loanStyle平台，传参为整数类型（2Android，3IOS）
+			p_backStyle还款方式，传参为整数类型（1等额本息，2到期一次性还款）
+			
+			*p_sex性别
+			*p_name姓名
+			*p_phone联系电话
+			*p_idcard身份证号码
+			*p_province省份
+			*p_city城市
+			*p_houseNumber房产号
+			p_datums个人资料,多份用英文';'隔开，这个值应当是使用【上传申请信息】这个接口返回来的path值，如果多个用';'相连
+			p_assetCertificates收入证明,多份用英文';'隔开，这个值应当是使用【上传申请信息】这个接口返回来的path值，如果多个用';'相连
+			
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'msg':''}
+			
+
+	5、增加车产贷款的申请信息记录
+		URL：http://192.168.11.56:8080/Duang/provider_applyCarLoanInfo!insertApplyCarLoanInfo.do
+		发送参数说明：
+			token登录会员token
+			*p_money借款额度
+			*p_days借款天数
+			p_loanType借款类型，传参为整数类型（1普通模式,2产权模式,3信用模式,4急速模式）
+			p_loanUse借款用途，比如：“借款垫付工程费”。————nullable
+			p_loanStyle平台，传参为整数类型（2Android，3IOS）
+			p_backStyle还款方式，传参为整数类型（1等额本息，2到期一次性还款）
+			
+			*p_sex性别
+			*p_name姓名
+			*p_phone联系电话
+			*p_idcard身份证号码
+			*p_province省份
+			*p_city城市
+			*p_brand品牌
+			*p_age使用年限
+			*p_limit公里数
+			*p_engine发动机编号
+			carProperty车辆性质(介绍)
+			p_datums个人资料,多份用英文';'隔开，这个值应当是使用【上传申请信息】这个接口返回来的path值，如果多个用';'相连
+			p_assetCertificates收入证明,多份用英文';'隔开，这个值应当是使用【上传申请信息】这个接口返回来的path值，如果多个用';'相连
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'msg':''}
+			
+			
+	6、查询借贷列表
+		URL：http://192.168.11.56:8080/Duang/provider_loanlist!queryLoanList.do
+		发送参数说明：
+			token登录会员token
+			num：单次获取标个数
+			count：下拉次数（首次打开次数累计1次）
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'msg':'','result':[
+				{'memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
+				'realMoney':'4500','poundage':'250','getMoney':'4500','yetMoney':'4500','returnMoney':'5500','agoMoney':'250','yetReturnMoney':'2000','returnStatus':'产生逾期',
+				'loanState':'放款完成','applyStateint':'审核通过','loanSype':'普通模式','loanUse':'抢了王二狗的钱了，打着要我还','loanInterest':'250','createTime':'2016-5-6',
+				'signDate':'2016-9-9','beginReturnDate':'2015-9-9','endReturnDate':'2016-9-7','doneReturnDate':'2019-9-9','backStyle':'等额本息','days':'365','passTime':'2015-9-9'},
+				{'memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
+				'realMoney':'4500','poundage':'250','getMoney':'4500','yetMoney':'4500','returnMoney':'5500','agoMoney':'250','yetReturnMoney':'2000','returnStatus':'产生逾期',
+				'loanState':'放款完成','applyStateint':'审核通过','loanSype':'普通模式','loanUse':'抢了王二狗的钱了，打着要我还','loanInterest':'250','createTime':'2016-5-6',
+				'signDate':'2016-9-9','beginReturnDate':'2015-9-9','endReturnDate':'2016-9-7','doneReturnDate':'2019-9-9','backStyle':'等额本息','days':'365','passTime':'2015-9-9'},
+				{'memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
+				'realMoney':'4500','poundage':'250','getMoney':'4500','yetMoney':'4500','returnMoney':'5500','agoMoney':'250','yetReturnMoney':'2000','returnStatus':'产生逾期',
+				'loanState':'放款完成','applyStateint':'审核通过','loanSype':'普通模式','loanUse':'抢了王二狗的钱了，打着要我还','loanInterest':'250','createTime':'2016-5-6',
+				'signDate':'2016-9-9','beginReturnDate':'2015-9-9','endReturnDate':'2016-9-7','doneReturnDate':'2019-9-9','backStyle':'等额本息','days':'365','passTime':'2015-9-9'}
+			]}
+		结果列说明：
+			memberid借贷用户id
+			membername借贷用户姓名	
+			pactNumber合同编号		
+			isSell是否起售,未起标|起标|标满
+			poundageState手续费状态,未扣手续费|已扣手续费
+			money申请借款金额
+			realMoney实际审核金额
+			poundage手续费
+			getMoney应该放款金额
+			yetMoney已经放款金额
+			returnMoney实际应该还款金额
+			agoMoney逾期费
+			yetReturnMoney实际已经还款金额
+			returnStatus还款状态,未还款|未还尽|产生逾期|完成还款
+			loanState放款状态,未开始放款|放款中|放款完成
+			applyStateint申请状态,待审核|审核通过|审核驳回|已取消
+			loanSype借款类型,普通模式|产权模式|信用模式|急速模式
+			loanUse借款用途
+			loanInterest借款利息
+			createTime创建时间
+			signDate签约日
+			beginReturnDate应该开始还款日
+			endReturnDate截止还款日
+			doneReturnDate实际完成还款日
+			backStyle还款方式，等额本息|到期一次性还款
+			days天数
+			passTime审核通过时间
+		说明：不是所有结果列都需要展示哈，有得列可能只是需要用来做记录，便于后期操作
+			
+			
+	7、查找单个借贷记录详情
+		URL：http://192.168.11.56:8080/Duang/provider_loanlist!findLoanInfo.do
+		发送参数说明：
+			token登录会员token
+			*p_id借贷
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'msg':'','memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
+				'realMoney':'4500','poundage':'250','getMoney':'4500','yetMoney':'4500','returnMoney':'5500','agoMoney':'250','yetReturnMoney':'2000','returnStatus':'产生逾期',
+				'loanState':'放款完成','applyStateint':'审核通过','loanSype':'普通模式','loanUse':'抢了王二狗的钱了，打着要我还','loanInterest':'250','createTime':'2016-5-6',
+				'signDate':'2016-9-9','beginReturnDate':'2015-9-9','endReturnDate':'2016-9-7','doneReturnDate':'2019-9-9','backStyle':'等额本息','days':'365','passTime':'2015-9-9'},
+		结果列说明：
+			memberid借贷用户id
+			membername借贷用户姓名	
+			pactNumber合同编号		
+			isSell是否起售,未起标|起标|标满
+			poundageState手续费状态,未扣手续费|已扣手续费
+			money申请借款金额
+			realMoney实际审核金额
+			poundage手续费
+			getMoney应该放款金额
+			yetMoney已经放款金额
+			returnMoney实际应该还款金额
+			agoMoney逾期费
+			yetReturnMoney实际已经还款金额
+			returnStatus还款状态,未还款|未还尽|产生逾期|完成还款
+			loanState放款状态,未开始放款|放款中|放款完成
+			applyStateint申请状态,待审核|审核通过|审核驳回|已取消
+			loanSype借款类型,普通模式|产权模式|信用模式|急速模式
+			loanUse借款用途
+			loanInterest借款利息
+			createTime创建时间
+			signDate签约日
+			beginReturnDate应该开始还款日
+			endReturnDate截止还款日
+			doneReturnDate实际完成还款日
+			backStyle还款方式，等额本息|到期一次性还款
+			days天数
+			passTime审核通过时间
+			
+八：理财
+	1、增加理财记录
+		URL：http://192.168.11.56:8080/Duang/provider_investlist!addInvestList.do
+		发送参数说明：
+			token登录会员token
+			*p_pactNumber合同单号
+			*p_scaleId理财标id
+			*p_money投资总金额
+			*p_useTicket是否使用了理财券，传参为整数类型（1没有，2使用了）,暂时默认为1
+			*p_ticketBonus理财奖励发放，暂为0
+			*p_income实际收益（账面总金额不含理财券奖励）
+			*p_totalMoney账面总金额(投资金额+收益+理财券奖励)
+			investStyle平台，传参为整数类型（2Android，3IOS）
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'msg':'','id':'理财记录id'}
+			
+			
+	2、查询单个理财记录
+		URL：http://192.168.11.56:8080/Duang/provider_investlist!findInvestInfo.do
+		发送参数说明：
+			*id记录id
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'msg':'','membername':'张三','productName':'年年余','name':'年年余-160911号','days':'90','calcBegin':'2016-5-6','calcEnd':'2017-5-6',
+				'money':'50000','useTicke':'是|否','income':'500','ticketBonus':'20','totalMoney':'50520','status':'投资收益中',
+				'pactNumber':'HJH160591GS','openDate':'2016-5-5','backIncome':'520','backMoney':'50520','backDate':'2017-5-6',
+				'isTurn':'是','poundageTurn':'250','poundagePrivilege':'50','turnStatus':'转让中'}
+		属性说明：
+			productName产品名称
+			name理财标名称
+			calcBegin开始计息日	
+			calcEnd回款日
+			money投资本金总额
+			useTicke是否使用了理财券，取值是|否
+			income实际收益（不含理财券奖励）
+			ticketBonus实际理财奖励发放
+			totalMoney账面总金额(投资金额+收益+理财券)
+			status理财状态
+			pactNumber合同编号
+			openDate创建日期
+			backIncome实际赎回收益
+			backMoney实际赎回(本金)
+			backDate实际回款到账日期
+			isTurn是否已经转让
+			poundageTurn转让手续费
+			poundagePrivilege转让优惠手续费
+			turnStatus转让状态
+
+	3、支付理财金额
+		URL：http://192.168.11.56:8080/Duang/provider_wallet!payInvest.do
+		发送参数说明：
+			token登录会员token
+			*p_investListId理财记录id
+		返回结果：Json
+			失败：{'success':false,'msg':'支付失败、token无效'}	
+			成功：{'success':true,'msg':''}
+			
+		
+	5、赎回理财
+		URL：http://192.168.11.56:8080/Duang/provider_wallet!redemptiveInvest.do
+		发送参数说明：
+			token登录会员token
+			*p_investListId理财记录id
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'msg':''}	
+			
+			
+	6、查询理财列表记录
+		URL：http://192.168.11.56:8080/Duang/provider_investlist!queryInvestList.do
+		发送参数说明：
+			token登录会员token
+			num：单次获取标个数
+			count：下拉次数（首次打开次数累计1次）
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'msg':''.................}
+			
+			
+			
+九：充值、提现
+	1、充值
+		URL：http://192.168.11.56:8080/Duang/provider_wallet!deposit.do
+		发送参数说明：
+			token登录会员token
+			*p_pushMany充值金额
+			*p_bankid使用的银行卡id
+		返回结果：Json
+			失败：{'success':false,'msg':'充值失败、token无效'}	
+			成功：{'success':true,'msg':''}
+			
+		
+	2、提现
+		URL：http://192.168.11.56:8080/Duang/provider_wallet!withdrawals.do
+		发送参数说明：
+			token登录会员token
+			*p_fetchMany充值金额
+			*p_bankid使用的银行卡id
+		返回结果：Json
+			失败：{'success':false,'msg':'提现失败、余额不足'}	
+			成功：{'success':true,'msg':''}		
+			
+
+十：消息
+	1、增加消息记录
+		URL：http://192.168.11.56:8080/Duang/provider_message!insertMessage.do
+		发送参数说明：
+			token登录会员的token
+			*p_senderid消息发送人的id————nullable
+			*p_receiver消息接收人的id
+			title标题
+			content内容
+		返回结果：Json
+			失败：{'success':false,'msg':'接收人无效'}	
+			成功：{'success':true,'msg':''}
+			
+	2、查询消息记录
+		URL：http://192.168.11.56:8080/Duang/provider_message!insertMessage.do
+		发送参数说明：
+			token登录会员的token
+			count查询最近条数（包括已读和未读）
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':'','result':[
+				{'id':'fds456f4ds65f4d65456','receiver':'张三','sender':'李四','time':'2016-5-5 08:05:55','title':'你妈有话说','content':'今晚晚上包饺子，早些回家吃饭','read':'未读'},
+				{'id':'fds456f4ds65f4d65456','receiver':'张三','sender':'李四','time':'2016-5-5 08:05:55','title':'你妈有话说','content':'今晚晚上包饺子，早些回家吃饭','read':'未读'}
+			]}
+			
+	3、查询单条消息记录详情
+		URL：http://192.168.11.56:8080/Duang/provider_message!findMessage.do
+		发送参数说明：
+			token登录会员的token
+			*p_id消息记录id
+		返回结果：Json
+			失败：{'success':false,'msg':'未找到消息'}	
+			成功：{'success':true,'msg':'','id':'fds456f4ds65f4d65456','receiver':'张三','sender':'李四','time':'2016-5-5 08:05:55','title':'你妈有话说','content':'今晚晚上包饺子，早些回家吃饭','read':'未读'}
+			
+	4、标记已读
+		URL：http://192.168.11.56:8080/Duang/provider_message!updateReaded.do
+		发送参数说明：
+			token登录会员的token
+			*p_id消息记录id
+		返回结果：Json
+			失败：{'success':false,'msg':'未找到消息'}	
+			成功：{'success':true,'msg':''}
+
+	5、标记全部已读
+		URL：http://192.168.11.56:8080/Duang/provider_message!updateAllReaded.do
+		发送参数说明：
+			token登录会员的token
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':''}
+				
