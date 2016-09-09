@@ -32,14 +32,11 @@ public class InvestList implements java.io.Serializable {
 	private InvestTicket investTicket;
 	private MemberInfo memberInfo;
 	private double money;
-	private double yetMoney;
-	private double spaceMoney;
 	private double backIncome;
 	private double backMoney;
 	private int useTicket;
 	private int isTurn;
 	private int turnStatus;
-	private double expectIncome;
 	private double totalMoney;
 	private double income;
 	private double ticketBonus;
@@ -72,7 +69,7 @@ public class InvestList implements java.io.Serializable {
 
 	/** full constructor */
 	public InvestList(String id,Date calcBeginDate,Date calcEndDate,int isTurn,int turnStatus, Scale scale, InvestTicket investTicket,int  days, 
-			MemberInfo memberInfo, double money, double yetMoney, double spaceMoney, double backIncome, double backMoney, int useTicket, double expectIncome, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, String pactNumber, int investStyle, double poundageTurn, double poundagePrivilege, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales) {
+			MemberInfo memberInfo, double money,  double backIncome, double backMoney, int useTicket, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, String pactNumber, int investStyle, double poundageTurn, double poundagePrivilege, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales) {
 		this.id = id;
 		this.calcBeginDate = calcBeginDate;
 		this.calcEndDate = calcEndDate;
@@ -83,12 +80,9 @@ public class InvestList implements java.io.Serializable {
 		this.days = days;
 		this.memberInfo = memberInfo;
 		this.money = money;
-		this.yetMoney = yetMoney;
-		this.spaceMoney = spaceMoney;
 		this.backIncome = backIncome;
 		this.backMoney = backMoney;
 		this.useTicket = useTicket;
-		this.expectIncome = expectIncome;
 		this.totalMoney = totalMoney;
 		this.income = income;
 		this.ticketBonus = ticketBonus;
@@ -157,24 +151,6 @@ public class InvestList implements java.io.Serializable {
 		this.money = money;
 	}
 
-	@Column(name = "yet_money", precision = 22, scale = 0)
-	public double getYetMoney() {
-		return this.yetMoney;
-	}
-
-	public void setYetMoney(double yetMoney) {
-		this.yetMoney = yetMoney;
-	}
-
-	@Column(name = "space_money", precision = 22, scale = 0)
-	public double getSpaceMoney() {
-		return this.spaceMoney;
-	}
-
-	public void setSpaceMoney(double spaceMoney) {
-		this.spaceMoney = spaceMoney;
-	}
-
 	@Column(name = "back_income", precision = 22, scale = 0)
 	public double getBackIncome() {
 		return this.backIncome;
@@ -218,15 +194,6 @@ public class InvestList implements java.io.Serializable {
 
 	public void setIsTurn(int isTurn) {
 		this.isTurn = isTurn;
-	}
-
-	@Column(name = "expect_income", precision = 22, scale = 0)
-	public double getExpectIncome() {
-		return this.expectIncome;
-	}
-
-	public void setExpectIncome(double expectIncome) {
-		this.expectIncome = expectIncome;
 	}
 
 	@Column(name = "total_money", precision = 22, scale = 0)

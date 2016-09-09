@@ -157,12 +157,9 @@ public class InvestListAction extends BaseAction<InvestList> {
 					if (pk != null) {
 						resultMap.put("id", pk.getId());
 						resultMap.put("money", pk.getMoney());
-						resultMap.put("yetMoney", pk.getYetMoney());
-						resultMap.put("spaceMoney", pk.getSpaceMoney());
 						resultMap.put("backIncome", pk.getBackIncome());
 						resultMap.put("backMoney", pk.getBackMoney());
 						resultMap.put("useTicket", UseTicket.valueOf("UT"+pk.getUseTicket()).toString());
-						resultMap.put("expectIncome", pk.getExpectIncome());
 						resultMap.put("totalMoney", pk.getTotalMoney());
 						resultMap.put("income", pk.getIncome());
 						resultMap.put("days", pk.getDays());
