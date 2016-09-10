@@ -589,9 +589,44 @@
 			count：下拉次数（首次打开次数累计1次）
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':''.................}
-			
-			
+			成功：{'success':true,'msg':'','result':[
+				{'membername':'张三','productName':'年年余','name':'年年余-160911号','days':'90','calcBegin':'2016-5-6','calcEnd':'2017-5-6',
+				'money':'50000','useTicke':'是|否','income':'500','ticketBonus':'20','totalMoney':'50520','status':'投资收益中',
+				'pactNumber':'HJH160591GS','openDate':'2016-5-5','backIncome':'520','backMoney':'50520','backDate':'2017-5-6',
+				'isTurn':'是','poundageTurn':'250','poundagePrivilege':'50','turnStatus':'转让中'},
+				{'membername':'张三','productName':'年年余','name':'年年余-160911号','days':'90','calcBegin':'2016-5-6','calcEnd':'2017-5-6',
+				'money':'50000','useTicke':'是|否','income':'500','ticketBonus':'20','totalMoney':'50520','status':'投资收益中',
+				'pactNumber':'HJH160591GS','openDate':'2016-5-5','backIncome':'520','backMoney':'50520','backDate':'2017-5-6',
+				'isTurn':'是','poundageTurn':'250','poundagePrivilege':'50','turnStatus':'转让中'},
+				{'membername':'张三','productName':'年年余','name':'年年余-160911号','days':'90','calcBegin':'2016-5-6','calcEnd':'2017-5-6',
+				'money':'50000','useTicke':'是|否','income':'500','ticketBonus':'20','totalMoney':'50520','status':'投资收益中',
+				'pactNumber':'HJH160591GS','openDate':'2016-5-5','backIncome':'520','backMoney':'50520','backDate':'2017-5-6',
+				'isTurn':'是','poundageTurn':'250','poundagePrivilege':'50','turnStatus':'转让中'}				
+				]}
+		属性说明：
+			productName产品名称
+			name理财标名称
+			calcBegin开始计息日	
+			calcEnd回款日
+			money投资本金总额
+			useTicke是否使用了理财券，取值是|否
+			income实际收益（不含理财券奖励）
+			ticketBonus实际理财奖励发放
+			totalMoney账面总金额(投资金额+收益+理财券)
+			status理财状态
+			pactNumber合同编号
+			openDate创建日期
+			backIncome实际赎回收益
+			backMoney实际赎回(本金)
+			backDate实际回款到账日期
+			isTurn是否已经转让
+			poundageTurn转让手续费
+			poundagePrivilege转让优惠手续费
+			turnStatus转让状态
+	
+	7、债券转让记录...
+	8、添加转让...
+	9、查询转让记录...
 			
 九：充值、提现
 	1、充值
@@ -666,4 +701,80 @@
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
 			成功：{'success':true,'msg':''}
+			
+十一：财友
+	1、查询我关注的财友
+		URL：http://192.168.11.56:8080/Duang/provider_friends!queryMyStars.do
+		发送参数说明：
+			token登录会员的token
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':'','result':[
+				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'},
+				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'0'},
+				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'}
+			]}
+		参数说明：
+			id记录唯一标示
+			friendid关注的朋友的id
+			friendname关注的朋友的姓名
+			together是否相互关注，取值1|0,1相互关注，0非相互关注
+			
+	2、查询我的粉丝
+		URL：http://192.168.11.56:8080/Duang/provider_friends!queryStarMes.do
+		发送参数说明：
+			token登录会员的token
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':'','result':[
+				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'},
+				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'0'},
+				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'}
+			]}
+		参数说明：
+			id记录唯一标示
+			friendid粉丝的id
+			friendname粉丝的姓名
+			together是否相互关注，取值1|0,1相互关注，0非相互关注
+
+			
+	3、获取我的二维码
+		URL：http://192.168.11.56:8080/Duang/provider_friends!getMyQR.do
+		发送参数说明：
+			token登录会员的token
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':'','qrpath':'xxx/xxx.jpg'}
+		参数说明：qrpath我的二维码显示地址
+			
+	4、获取和我差不多投资额度的会员
+		URL：http://192.168.11.56:8080/Duang/provider_friends!getFairlysMember.do
+		发送参数说明：
+			token登录会员的token
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':'','result':[
+				{'memberid':'fdsfdsf4564fsd','membername':'王大山','invertMoney':'550000','registTime':'2015-9-9','investCount':'15'},
+				{'memberid':'fdsfdsf4564fsd','membername':'王大山','invertMoney':'550000','registTime':'2015-9-9','investCount':'15'},
+				{'memberid':'fdsfdsf4564fsd','membername':'王大山','invertMoney':'550000','registTime':'2015-9-9','investCount':'15'}
+			]}
+		列说明：
+			memberid会员id
+			membername会员名称
+			invertMoney累计投资理财金额
+			investCount累计投资理财次数
+			registTime注册时日
+			
+	5、添加财友
+		URL：http://192.168.11.56:8080/Duang/provider_friends!addFriends.do
+		发送参数说明：
+			token登录会员的token
+			*targetMemberid关注的人的id
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':''}
+			
+			
+			
+			
 				
