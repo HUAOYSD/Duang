@@ -183,7 +183,7 @@
 			num：显示个数
 		返回结果：Json
 			失败：{'success':false,'msg':'未找到可使用广告'}	
-			成功：{'success':true,'msg':'','result':
+			成功：{'success':true,'msg':'','result': 
 				[
 				{'imageAddress':'xxxx/xxxx.jpg','linkAddress':'www.baidu.com'},
 				{'imageAddress':'xxxx/xxxx.jpg','linkAddress':'www.baidu.com'},
