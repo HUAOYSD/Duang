@@ -285,9 +285,8 @@ public class LoanListDaoImpl extends BaseDao<LoanList> implements LoanListDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanList> queryBySQL(String sql, String countSql, PageUtil<LoanList> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<LoanList> queryBySQL(String sql, String countSql, PageUtil<LoanList> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
-
 }
 

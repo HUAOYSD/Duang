@@ -146,6 +146,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 					entity.setPhone(password);
 					entity.setPassword(MD5Utils.md5(password));
 					entity.setId(DataUtils.randomUUID());
+					entity.setNickname("手机用户"+phone);
 					//附加投资用户身份
 					LoanMember loanMember = new LoanMember();
 					loanMember.setId(DataUtils.randomUUID());

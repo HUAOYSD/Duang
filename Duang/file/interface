@@ -650,6 +650,9 @@
 			失败：{'success':false,'msg':'提现失败、余额不足'}	
 			成功：{'success':true,'msg':''}		
 			
+	3、理财账单记录
+	4、借贷账单记录
+			
 
 十：消息
 	1、增加消息记录
@@ -703,7 +706,7 @@
 			成功：{'success':true,'msg':''}
 			
 十一：财友
-	1、查询我关注的财友
+	1、查询我关注的财友√
 		URL：http://192.168.11.56:8080/Duang/provider_friends!queryMyStars.do
 		发送参数说明：
 			token登录会员的token
@@ -711,16 +714,16 @@
 			失败：{'success':false,'msg':'未登录'}	
 			成功：{'success':true,'msg':'','result':[
 				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'},
-				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'0'},
+				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'2'},
 				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'}
 			]}
 		参数说明：
 			id记录唯一标示
 			friendid关注的朋友的id
-			friendname关注的朋友的姓名
-			together是否相互关注，取值1|0,1相互关注，0非相互关注
+			friendname关注的朋友的昵称（用户名）
+			together是否相互关注，取值1|2,2相互关注，1非相互关注
 			
-	2、查询我的粉丝
+	2、查询我的粉丝√
 		URL：http://192.168.11.56:8080/Duang/provider_friends!queryStarMes.do
 		发送参数说明：
 			token登录会员的token
@@ -734,8 +737,8 @@
 		参数说明：
 			id记录唯一标示
 			friendid粉丝的id
-			friendname粉丝的姓名
-			together是否相互关注，取值1|0,1相互关注，0非相互关注
+			friendname粉丝的昵称（用户名）
+			together是否相互关注，取值1|2,2相互关注，1非相互关注
 
 			
 	3、获取我的二维码
@@ -745,27 +748,31 @@
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
 			成功：{'success':true,'msg':'','qrpath':'xxx/xxx.jpg'}
-		参数说明：qrpath我的二维码显示地址
+		参数说明：qrpath我的二维码显示地址（就是添加朋友的方法的路径）
+		
 			
 	4、获取和我差不多投资额度的会员
+		备注：投资额度和该会员投资额度相差不过5万的前20人
 		URL：http://192.168.11.56:8080/Duang/provider_friends!getFairlysMember.do
 		发送参数说明：
 			token登录会员的token
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':'','result':[
-				{'memberid':'fdsfdsf4564fsd','membername':'王大山','invertMoney':'550000','registTime':'2015-9-9','investCount':'15'},
-				{'memberid':'fdsfdsf4564fsd','membername':'王大山','invertMoney':'550000','registTime':'2015-9-9','investCount':'15'},
-				{'memberid':'fdsfdsf4564fsd','membername':'王大山','invertMoney':'550000','registTime':'2015-9-9','investCount':'15'}
+			成功：{'success':true,'msg':'','tn':'5','tm':'50000','result':[
+				{'memberid':'fdsfdsf4564fsd','membernickname':'wnagmazi','membername':'王大山','invertMoney':'550000','investCount':'15'},
+				{'memberid':'fdsfdsf4564fsd','membernickname':'wnagmazi','membername':'王大山','invertMoney':'550000','investCount':'15'},
+				{'memberid':'fdsfdsf4564fsd','membernickname':'wnagmazi','membername':'王大山','invertMoney':'550000','investCount':'15'}
 			]}
 		列说明：
+			tn我的累计投资次数
+			tm我的累计投资金额
 			memberid会员id
+			membernickname会员昵称
 			membername会员名称
 			invertMoney累计投资理财金额
 			investCount累计投资理财次数
-			registTime注册时日
 			
-	5、添加财友
+	5、添加财友√
 		URL：http://192.168.11.56:8080/Duang/provider_friends!addFriends.do
 		发送参数说明：
 			token登录会员的token
@@ -774,6 +781,14 @@
 			失败：{'success':false,'msg':'未登录'}	
 			成功：{'success':true,'msg':''}
 			
+	6、取消关注财友√
+		URL：http://192.168.11.56:8080/Duang/provider_friends!removeFriends.do
+		发送参数说明：
+			token登录会员的token
+			*targetMemberid要取消关注的人的id
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'msg':''}
 			
 			
 			

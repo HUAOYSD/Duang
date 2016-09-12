@@ -367,8 +367,8 @@ public class SysRoleServiceImpl implements SysRoleService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysRole> queryBySQL(String sql,String countsql, PageUtil<SysRole> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<SysRole> queryBySQL(String sql,String countsql, PageUtil<SysRole> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
 }

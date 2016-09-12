@@ -89,12 +89,14 @@ public interface CommonInterface<T> {
 	/**
 	 * 根据Sql语句查询
 	 * @param sql   sql语句
+	 * @param countSql 计数语句
+	 * @param convert 代表是否转换为业务实体
 	 * @param page  是否分页          null表示不分页
 	 * @param params 写法有俩；A:"张三，男，24岁"、   B:"Object[]{'name','张三'}，Object[]{'sex','男'}"
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract List<T> queryBySQL(String sql, String countSql, PageUtil<T> page, Object... params) throws Exception;
+	public abstract List<T> queryBySQL(String sql, String countSql, PageUtil<T> page, boolean convert, Object... params) throws Exception;
 
 
 	/**

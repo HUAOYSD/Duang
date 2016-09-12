@@ -1,4 +1,4 @@
-package org.duang.enums.product;
+package org.duang.enums.friends;
 
 import org.duang.util.DataUtils;
 
@@ -9,8 +9,8 @@ import org.duang.util.DataUtils;
  * @author 白攀
  * @date 2016年8月9日 上午11:22:24      
  */  
-public enum Category {
-	C0 {
+public enum FriendStatus {
+	FS0 {
 		@Override
 		public int getVal() {
 			return 0;
@@ -36,8 +36,8 @@ public enum Category {
 			return "未知";
 		}
 	},
-	C1 {
-		private String desc = "信贷产品";
+	FS1 {
+		private String desc = "仅关注";
 		
 		@Override
 		public int getVal() {
@@ -61,53 +61,18 @@ public enum Category {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "信贷产品";
+			this.desc = "仅关注";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "信贷产品";
+			return "仅关注";
 		}
 		
 	},
-	C2 {
-		private String desc = "房标产品";
-		
-		@Override
-		public int getVal() {
-			return 2;
-		}
-
-		@Override
-		public String getDesc() {
-			return desc;
-		}
-
-		@Override
-		public Object setDesc(String desc) {
-			if (DataUtils.notEmpty(desc)) {
-				this.desc = desc;
-				return this;
-			}else {
-				return setDefaultDesc();
-			}
-		}
-
-		@Override
-		public Object setDefaultDesc() {
-			this.desc = "标类产品";
-			return this;
-		}
-		
-		@Override
-		public String toString() {
-			return "标类产品";
-		}
-
-	},
-	C3 {
-		private String desc = "车标产品";
+	FS2 {
+		private String desc = "相互关注";
 		
 		@Override
 		public int getVal() {

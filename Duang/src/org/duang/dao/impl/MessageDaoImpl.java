@@ -285,8 +285,8 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Message> queryBySQL(String sql, String countSql, PageUtil<Message> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<Message> queryBySQL(String sql, String countSql, PageUtil<Message> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 }
 

@@ -182,7 +182,7 @@ public class BaseDao<M> {
 	 * @see com.dao.BaseDao#countBySql(java.lang.String, java.lang.Object[]) 
 	 */ 
 	public int countBySql(String sql, Object... params) throws Exception{
-		Query q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
+		Query q = this.getSession().createSQLQuery(sql);
 		for(int i = 0 ; i < params.length ; i++){
 			q.setParameter(i, params[i]);
 		}
@@ -288,22 +288,26 @@ public class BaseDao<M> {
 	 * @author 白攀
 	 * @date 2014-4-4 上午10:54:05
 	 * @param sql
-	 * @param start
-	 * @param size
+	 * @param convert 代表是否转换为业务实体
 	 * @param params
 	 * @return 
 	 * @see com.dao.BaseDao#query(java.lang.String, int, int, java.lang.Object[]) 
 	 */ 
 	@SuppressWarnings("unchecked")
-	public List<M> query(String sql, PageUtil<M> page, Object... params) throws Exception{
-		Query query = this.getSession().createSQLQuery(sql).addEntity(entityClass);
+	public List<M> query(String sql, String countSql, boolean convert, PageUtil<M> page, Object... params) throws Exception{
+		Query query = null;
+		if (convert) {
+			query = this.getSession().createSQLQuery(sql).addEntity(entityClass);
+		}else {
+			query = this.getSession().createSQLQuery(sql);
+		}
 		if(params != null && "".equals(params)) {
 			for(int i = 0 ; i < params.length ; i++){
 				query.setParameter(i, params[i]);
 			}
 		}
 		if (page != null) {
-			int countRecords = countBySql(sql, params);
+			int countRecords = countBySql(countSql, params);
 			//设置总条数
 			page.setCountRecords(countRecords);
 			//设置总页数（加判断是by zero）
@@ -523,14 +527,20 @@ public class BaseDao<M> {
 	 * @Title: queryBySQL 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @param SQL
+	 * @param convert 代表是否转换为业务实体
 	 * @return
 	 * @return List    返回类型 
 	 * @author 白攀
 	 * @date 2014-3-25 上午8:59:15
 	 */
 	@SuppressWarnings("unchecked")
-	public List<M> queryBySQL(String sql, String countSql, PageUtil<M> page) throws Exception{
-		Query q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
+	public List<M> queryBySQL(String sql, String countSql, boolean convert, PageUtil<M> page) throws Exception{
+		Query q = null;
+		if (convert) {
+			q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
+		}else {
+			q = this.getSession().createSQLQuery(sql);
+		}
 		if (page != null) {
 			int countRecords = countBySql(countSql);
 			//设置总条数
@@ -554,13 +564,19 @@ public class BaseDao<M> {
 	 * @author 白攀
 	 * @date 2014-3-31 下午4:31:21
 	 * @param SQL
+	 * @param convert 代表是否转换为业务实体
 	 * @param params 的写法有俩；A:"张三，男，24岁"、   B:"Object[]{'name','张三'}，Object[]{'sex','男'}"
 	 * @return 
 	 * @see com.dao.BaseDao#queryBySQL(java.lang.String, java.lang.Object[]) 
 	 */ 
 	@SuppressWarnings("unchecked")
-	public List<M> queryBySQL(String sql, String countSql, PageUtil<M> page, Object... params) throws Exception{
-		Query q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
+	public List<M> queryBySQL(String sql, String countSql, boolean convert, PageUtil<M> page, Object... params) throws Exception{
+		Query q = null;
+		if (convert) {
+			q = this.getSession().createSQLQuery(sql).addEntity(entityClass);
+		}else {
+			q = this.getSession().createSQLQuery(sql);
+		}
 		int index = 0;
 		for(int i = 0 ; i < params.length ; i++){
 			if(params[i] instanceof Object[]){

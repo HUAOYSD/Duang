@@ -280,8 +280,8 @@ public class ApplyLoanCarServiceImpl implements ApplyLoanCarService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ApplyLoanCar> queryBySQL(String sql,String countsql, PageUtil<ApplyLoanCar> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<ApplyLoanCar> queryBySQL(String sql,String countsql, PageUtil<ApplyLoanCar> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
 	@Override

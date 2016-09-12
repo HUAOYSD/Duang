@@ -349,8 +349,8 @@ public class SysPowerServiceImpl implements SysPowerService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysPower> queryBySQL(String sql,String countsql, PageUtil<SysPower> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<SysPower> queryBySQL(String sql,String countsql, PageUtil<SysPower> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
 }

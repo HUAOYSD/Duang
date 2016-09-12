@@ -279,8 +279,8 @@ public class SysUserServiceImpl implements SysUserService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysUser> queryBySQL(String sql,String countsql, PageUtil<SysUser> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<SysUser> queryBySQL(String sql,String countsql, PageUtil<SysUser> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
 

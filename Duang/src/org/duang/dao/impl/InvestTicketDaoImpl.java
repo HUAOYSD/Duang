@@ -285,9 +285,8 @@ public class InvestTicketDaoImpl extends BaseDao<InvestTicket> implements Invest
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestTicket> queryBySQL(String sql, String countSql, PageUtil<InvestTicket> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<InvestTicket> queryBySQL(String sql, String countSql, PageUtil<InvestTicket> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
-
 }
 

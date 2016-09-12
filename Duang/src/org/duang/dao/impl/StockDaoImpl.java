@@ -285,8 +285,8 @@ public class StockDaoImpl extends BaseDao<Stock> implements StockDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Stock> queryBySQL(String sql, String countSql, PageUtil<Stock> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<Stock> queryBySQL(String sql, String countSql, PageUtil<Stock> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

@@ -287,8 +287,8 @@ public class SysUserDaoImpl extends BaseDao<SysUser> implements SysUserDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysUser> queryBySQL(String sql, String countSql, PageUtil<SysUser> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<SysUser> queryBySQL(String sql, String countSql, PageUtil<SysUser> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 }
 

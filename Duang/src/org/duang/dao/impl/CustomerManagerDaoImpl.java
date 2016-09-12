@@ -284,8 +284,8 @@ public class CustomerManagerDaoImpl extends BaseDao<CustomerManager> implements 
 	 * @return
 	 * @throws Exception
 	 */
-	public List<CustomerManager> queryBySQL(String sql, String countSql, PageUtil<CustomerManager> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<CustomerManager> queryBySQL(String sql, String countSql, PageUtil<CustomerManager> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

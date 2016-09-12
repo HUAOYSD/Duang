@@ -285,8 +285,8 @@ public class AdDaoImpl extends BaseDao<Ad> implements AdDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Ad> queryBySQL(String sql, String countSql, PageUtil<Ad> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<Ad> queryBySQL(String sql, String countSql, PageUtil<Ad> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

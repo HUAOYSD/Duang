@@ -279,8 +279,8 @@ public class MemberInfoServiceImpl implements MemberInfoService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberInfo> queryBySQL(String sql,String countsql, PageUtil<MemberInfo> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<MemberInfo> queryBySQL(String sql,String countsql, PageUtil<MemberInfo> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
 

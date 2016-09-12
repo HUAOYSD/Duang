@@ -283,9 +283,8 @@ public class InvestMemberDaoImpl extends BaseDao<InvestMember> implements Invest
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestMember> queryBySQL(String sql, String countSql, PageUtil<InvestMember> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<InvestMember> queryBySQL(String sql, String countSql, PageUtil<InvestMember> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
-
 }
 

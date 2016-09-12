@@ -279,7 +279,7 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestMember> queryBySQL(String sql,String countsql, PageUtil<InvestMember> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<InvestMember> queryBySQL(String sql,String countsql, PageUtil<InvestMember> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 }

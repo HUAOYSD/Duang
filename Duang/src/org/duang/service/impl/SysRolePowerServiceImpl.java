@@ -279,7 +279,7 @@ public class SysRolePowerServiceImpl implements SysRolePowerService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysRolePower> queryBySQL(String sql,String countsql, PageUtil<SysRolePower> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<SysRolePower> queryBySQL(String sql,String countsql, PageUtil<SysRolePower> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 }

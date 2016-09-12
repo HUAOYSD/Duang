@@ -285,9 +285,9 @@ public class BingdCardDaoImpl extends BaseDao<BindCard> implements BindCardDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BindCard> queryBySQL(String sql, String countSql, PageUtil<BindCard> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<BindCard> queryBySQL(String sql, String countSql, PageUtil<BindCard> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
-
+	
 }
 

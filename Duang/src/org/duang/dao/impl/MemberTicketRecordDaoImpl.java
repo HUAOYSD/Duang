@@ -285,8 +285,8 @@ public class MemberTicketRecordDaoImpl extends BaseDao<MemberTicketRecord> imple
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberTicketRecord> queryBySQL(String sql, String countSql, PageUtil<MemberTicketRecord> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<MemberTicketRecord> queryBySQL(String sql, String countSql, PageUtil<MemberTicketRecord> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

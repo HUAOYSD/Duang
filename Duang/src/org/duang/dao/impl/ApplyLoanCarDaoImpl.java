@@ -285,8 +285,8 @@ public class ApplyLoanCarDaoImpl extends BaseDao<ApplyLoanCar> implements ApplyL
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ApplyLoanCar> queryBySQL(String sql, String countSql, PageUtil<ApplyLoanCar> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<ApplyLoanCar> queryBySQL(String sql, String countSql, PageUtil<ApplyLoanCar> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

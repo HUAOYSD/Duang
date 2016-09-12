@@ -310,8 +310,8 @@ public class SysRolePowerDaoImpl extends BaseDao<SysRolePower> implements SysRol
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SysRolePower> queryBySQL(String sql, String countSql, PageUtil<SysRolePower> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<SysRolePower> queryBySQL(String sql, String countSql, PageUtil<SysRolePower> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

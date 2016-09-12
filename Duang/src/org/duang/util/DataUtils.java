@@ -3,6 +3,7 @@ package org.duang.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /** 
@@ -30,6 +31,26 @@ public class DataUtils {
 	 */
 	public static boolean isEmpty(String s){
 		return s==null || "".equals(s.trim()) || "null".equals(s.trim());
+	}
+	
+	
+	/**
+	 * 检测List是否不为空
+	 * @param list
+	 * @return 不为空则返回true，否则返回false
+	 */
+	public static boolean notEmpty(List<?> list){
+		return list!=null && list.size()>0;
+	}
+
+	
+	/**
+	 * 检测List是否为空
+	 * @param list
+	 * @return 为空则返回true，不否则返回false
+	 */
+	public static boolean isEmpty(List<?> list){
+		return list==null || list.size()<1;
 	}
 
 	
@@ -89,7 +110,33 @@ public class DataUtils {
 	 */ 
 	public static int str2int(String string){
 		try {
-			return Integer.parseInt(string);
+			java.math.BigDecimal b = new java.math.BigDecimal(string);
+			java.math.BigDecimal one = new java.math.BigDecimal("1");
+			return b.divide(one, 0, java.math.BigDecimal.ROUND_HALF_UP).intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+
+	/**   
+	 * String转成double
+	 * @Title: str2double   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param string
+	 * @param: @param scale
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年9月12日 下午3:09:43
+	 * @return: double      
+	 * @throws   
+	 */  
+	public static double str2double(String string, int scale){
+		try {
+			java.math.BigDecimal b = new java.math.BigDecimal(string);
+			java.math.BigDecimal one = new java.math.BigDecimal("1");
+			return b.divide(one, scale, java.math.BigDecimal.ROUND_HALF_UP).doubleValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -114,11 +161,11 @@ public class DataUtils {
 	}
 
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		for (int i = 0; i < 5; i++) {
 			System.out.println(UUID.randomUUID().toString());
 			System.out.println(UUID.randomUUID().toString().length());
 		}
-	}
+	}*/
 }
 

@@ -280,11 +280,16 @@ public class InvestTicketServiceImpl implements InvestTicketService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InvestTicket> queryBySQL(String sql,String countsql, PageUtil<InvestTicket> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<InvestTicket> queryBySQL(String sql,String countsql, PageUtil<InvestTicket> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
-	@Override
+
+	/**
+	 * 通过实体对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
 	public boolean deleteEntity(InvestTicket t) throws Exception {
 		return dao.deleteEntity(t);
 	}

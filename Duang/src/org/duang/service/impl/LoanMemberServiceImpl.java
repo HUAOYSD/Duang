@@ -279,7 +279,7 @@ public class LoanMemberServiceImpl implements LoanMemberService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanMember> queryBySQL(String sql,String countsql, PageUtil<LoanMember> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<LoanMember> queryBySQL(String sql,String countsql, PageUtil<LoanMember> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 }

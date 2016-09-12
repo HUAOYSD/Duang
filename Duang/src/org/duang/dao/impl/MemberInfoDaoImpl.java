@@ -285,8 +285,8 @@ public class MemberInfoDaoImpl extends BaseDao<MemberInfo> implements MemberInfo
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MemberInfo> queryBySQL(String sql, String countSql, PageUtil<MemberInfo> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<MemberInfo> queryBySQL(String sql, String countSql, PageUtil<MemberInfo> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 }
 

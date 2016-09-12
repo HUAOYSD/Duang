@@ -285,8 +285,8 @@ public class BillLoanDaoImpl extends BaseDao<BillLoan> implements BillLoanDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BillLoan> queryBySQL(String sql, String countSql, PageUtil<BillLoan> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<BillLoan> queryBySQL(String sql, String countSql, PageUtil<BillLoan> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

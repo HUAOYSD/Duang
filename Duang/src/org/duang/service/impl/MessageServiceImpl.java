@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.MessageDao;
-import org.duang.entity.InvestMember;
 import org.duang.entity.Message;
 import org.duang.service.MessageService;
 import org.duang.util.PageUtil;
@@ -146,16 +145,6 @@ public class MessageServiceImpl implements MessageService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
-	}
-
-
-	/**
-	 * 通过实体对象删除实体数据
-	 * @param t  实体对象
-	 * @return   是否删除成功
-	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
 		return dao.deleteEntity(id);
 	}
@@ -280,11 +269,16 @@ public class MessageServiceImpl implements MessageService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Message> queryBySQL(String sql,String countsql, PageUtil<Message> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<Message> queryBySQL(String sql,String countsql, PageUtil<Message> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
-	@Override
+
+	/**
+	 * 通过实体对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
 	public boolean deleteEntity(Message t) throws Exception {
 		return dao.deleteEntity(t);
 	}

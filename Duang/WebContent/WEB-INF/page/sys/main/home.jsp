@@ -24,7 +24,7 @@ function login() {
 	<!-- 头部标题 -->
 	<div data-options="region:'north',border:false"
 		style="height: 60px; padding: 5px; background: #F3F3F3">
-		<a href="http://www.baidu.com" target="_blank"><span class="northTitle">www.baidu.com</span></a>
+		<a href="http://localhost:8080/Duang/provider_friends!getFairlysMember.do" target="_blank"><span class="northTitle">www.baidu.com</span></a>
 		<c:choose>
 			<c:when test="${sessionScope.sysUser == null}">
 				<span class="loginInfo">

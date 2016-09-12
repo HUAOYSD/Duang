@@ -71,6 +71,10 @@ public class MemberInfo implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
+	public MemberInfo(String id) {
+		this.id = id;
+	}
+	
 	public MemberInfo(String id, String loginName) {
 		this.id = id;
 		this.loginName = loginName;

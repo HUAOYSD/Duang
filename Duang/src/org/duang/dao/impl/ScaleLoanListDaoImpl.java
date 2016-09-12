@@ -285,8 +285,8 @@ public class ScaleLoanListDaoImpl extends BaseDao<ScaleLoanList> implements Scal
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ScaleLoanList> queryBySQL(String sql, String countSql, PageUtil<ScaleLoanList> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<ScaleLoanList> queryBySQL(String sql, String countSql, PageUtil<ScaleLoanList> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

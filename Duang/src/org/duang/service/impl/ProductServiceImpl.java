@@ -279,7 +279,7 @@ public class ProductServiceImpl implements ProductService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Product> queryBySQL(String sql,String countsql, PageUtil<Product> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<Product> queryBySQL(String sql,String countsql, PageUtil<Product> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 }

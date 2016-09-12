@@ -1,5 +1,7 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,8 +11,10 @@ import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.FriendsDao;
 import org.duang.entity.Friends;
-import org.duang.entity.InvestMember;
+import org.duang.entity.MemberInfo;
+import org.duang.enums.friends.FriendStatus;
 import org.duang.service.FriendsService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -36,7 +40,7 @@ public class FriendsServiceImpl implements FriendsService{
 	public FriendsServiceImpl(){
 		LoggerUtils.info("注入FriendsServiceImpl服务层", this.getClass());
 	}
-	
+
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
@@ -146,21 +150,11 @@ public class FriendsServiceImpl implements FriendsService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
-	}
-
-
-	/**
-	 * 通过实体对象删除实体数据
-	 * @param t  实体对象
-	 * @return   是否删除成功
-	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
 		return dao.deleteEntity(id);
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
@@ -169,7 +163,7 @@ public class FriendsServiceImpl implements FriendsService{
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
 		return dao.deleteEntity(map);
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -258,7 +252,7 @@ public class FriendsServiceImpl implements FriendsService{
 		return dao.findEntity(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -280,12 +274,86 @@ public class FriendsServiceImpl implements FriendsService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Friends> queryBySQL(String sql,String countsql, PageUtil<Friends> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<Friends> queryBySQL(String sql,String countsql, PageUtil<Friends> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
-	@Override
+
+	/**
+	 * 通过实体对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
 	public boolean deleteEntity(Friends t) throws Exception {
 		return dao.deleteEntity(t);
+	}
+
+
+	/**   
+	 * 增加财友
+	 * @Title: addFriend   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param selfid 自己的id
+	 * @param: @param targetid 如果对方事先有关注你，需要更新对方的关注你的状态为互相关注
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年9月12日 上午10:20:28
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public boolean addFriend(String selfid, String targetid) throws Exception{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberInfoBySelf.id", targetid);
+		map.put("memberInfoByTarget.id", selfid);
+		Friends friends = dao.findEntity(map);
+		int together = friends == null ? FriendStatus.FS1.getVal() : FriendStatus.FS2.getVal();
+		Friends newfriends = new Friends(DataUtils.randomUUID(), new MemberInfo(targetid), new MemberInfo(selfid), together, new Date());
+		if(friends == null){
+			if (dao.saveEntity(newfriends)) {
+				return true;
+			}
+		}else {
+			friends.setTogether(FriendStatus.FS2.getVal());
+			if (dao.saveEntity(newfriends) && dao.updateEntity(friends)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	/**   
+	 * 取消关注财友
+	 * @Title: cancelFriend   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param selfid
+	 * @param: @param targetid
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年9月12日 上午10:23:04
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public boolean cancelFriend(String selfid, String targetid) throws Exception{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberInfoBySelf.id", targetid);
+		map.put("memberInfoByTarget.id", selfid);
+		Friends friends = dao.findEntity(map);
+		map.clear();
+		map.put("memberInfoBySelf.id", selfid);
+		map.put("memberInfoByTarget.id", targetid);
+		if(friends == null){
+			if (dao.deleteEntity(map)) {
+				return true;
+			}
+		}else{
+			friends.setTogether(FriendStatus.FS1.getVal());
+			if (dao.deleteEntity(map) && dao.updateEntity(friends)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

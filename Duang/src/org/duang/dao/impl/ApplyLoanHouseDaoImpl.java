@@ -285,8 +285,8 @@ public class ApplyLoanHouseDaoImpl extends BaseDao<ApplyLoanHouse> implements Ap
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ApplyLoanHouse> queryBySQL(String sql, String countSql, PageUtil<ApplyLoanHouse> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<ApplyLoanHouse> queryBySQL(String sql, String countSql, PageUtil<ApplyLoanHouse> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

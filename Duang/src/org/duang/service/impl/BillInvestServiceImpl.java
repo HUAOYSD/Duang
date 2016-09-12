@@ -9,7 +9,6 @@ import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.BillInvestDao;
 import org.duang.entity.BillInvest;
-import org.duang.entity.InvestMember;
 import org.duang.service.BillInvestService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -146,16 +145,6 @@ public class BillInvestServiceImpl implements BillInvestService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
-	}
-
-
-	/**
-	 * 通过实体对象删除实体数据
-	 * @param t  实体对象
-	 * @return   是否删除成功
-	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
 		return dao.deleteEntity(id);
 	}
@@ -280,12 +269,70 @@ public class BillInvestServiceImpl implements BillInvestService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BillInvest> queryBySQL(String sql,String countsql, PageUtil<BillInvest> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<BillInvest> queryBySQL(String sql,String countsql, PageUtil<BillInvest> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
-	@Override
+	/**
+	 * 通过实体对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
 	public boolean deleteEntity(BillInvest t) throws Exception {
 		return dao.deleteEntity(t);
+	}
+	
+
+	/**   
+	 * 查询累计投资次数与金额
+	 * @Title: findCostInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param memberid
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年9月12日 下午2:48:36
+	 * @return: List<BillInvest>      
+	 * @throws   
+	 */  
+	public List<BillInvest> findCostInfo(String memberid) throws Exception{
+		StringBuffer sb = new StringBuffer();
+		sb.append("SELECT SUM(MONEY) AS TM, COUNT(MONEY) AS TN FROM BILL_INVEST WHERE MEMBER_INFO = '"+memberid+"' AND USE_TYPE = 3 AND STATUS = 2");
+		List<BillInvest> list = dao.queryBySQL(sb.toString(), null, null, false);
+		return list;
+	}
+	
+	
+	/**   
+	 * 获取和我差不多投资额度的会员
+	 * 投资额度和该会员投资额度相差不过5万的前20人
+	 * @Title: queryFairlysMemberCostInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param memberid
+	 * @param: @param tm
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年9月12日 下午2:51:36
+	 * @return: List<BillInvest>      
+	 * @throws   
+	 */  
+	public List<BillInvest> queryFairlysMemberCostInfo(String memberid, double tm) throws Exception{
+		StringBuffer sb = new StringBuffer();
+		sb.append("SELECT ");
+		sb.append("COUNT(MONEY) AS TN,");
+		sb.append("SUM(MONEY) AS TM,");
+		sb.append("BILL_INVEST.MEMBER_INFO,");
+		sb.append("MEMBER_INFO.NICKNAME,");
+		sb.append("MEMBER_INFO.REAL_NAME ");
+		sb.append("FROM BILL_INVEST ");
+		sb.append("INNER JOIN MEMBER_INFO ON MEMBER_INFO.ID = BILL_INVEST.MEMBER_INFO ");
+		sb.append("WHERE MEMBER_INFO <> '"+memberid+"' ");
+		sb.append("AND USE_TYPE = 3 AND STATUS = 2 ");
+		sb.append("GROUP BY MEMBER_INFO ");
+		sb.append("HAVING TM BETWEEN "+(tm-50000)+" AND "+(tm+50000)+" ");
+		sb.append("LIMIT 0, 20 ");
+		List<BillInvest> list = dao.queryBySQL(sb.toString(), null, null, false);
+		return list;
 	}
 }

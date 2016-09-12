@@ -285,8 +285,8 @@ public class FriendsDaoImpl extends BaseDao<Friends> implements FriendsDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Friends> queryBySQL(String sql, String countSql, PageUtil<Friends> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<Friends> queryBySQL(String sql, String countSql, PageUtil<Friends> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

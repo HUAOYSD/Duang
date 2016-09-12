@@ -287,8 +287,8 @@ public class ProductDaoImpl extends BaseDao<Product> implements ProductDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Product> queryBySQL(String sql, String countSql, PageUtil<Product> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<Product> queryBySQL(String sql, String countSql, PageUtil<Product> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
 }

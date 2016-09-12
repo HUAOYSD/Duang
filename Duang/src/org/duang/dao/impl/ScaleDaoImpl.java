@@ -284,9 +284,8 @@ public class ScaleDaoImpl extends BaseDao<Scale> implements ScaleDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Scale> queryBySQL(String sql, String countSql, PageUtil<Scale> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<Scale> queryBySQL(String sql, String countSql, PageUtil<Scale> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
-
 }
 

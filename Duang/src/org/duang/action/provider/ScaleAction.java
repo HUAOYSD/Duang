@@ -63,7 +63,7 @@ public class ScaleAction extends BaseAction<Scale>{
 				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
 				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_HOUSE)");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
-				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null);
+				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				if (list != null && list.size() > 0) {
 					success = true;
 					jsonObject.put("result", fillDatagridCons(list));
@@ -108,7 +108,7 @@ public class ScaleAction extends BaseAction<Scale>{
 				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
 				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_CAR)");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
-				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null);
+				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				if (list != null && list.size() > 0) {
 					success = true;
 					jsonObject.put("result", fillDatagridCons(list));
@@ -153,7 +153,7 @@ public class ScaleAction extends BaseAction<Scale>{
 				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
 				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_INFO)");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
-				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null);
+				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				if (list != null && list.size() > 0) {
 					success = true;
 					jsonObject.put("result", fillDatagridCons(list));

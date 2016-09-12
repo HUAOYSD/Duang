@@ -9,7 +9,6 @@ import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.BillLoanDao;
 import org.duang.entity.BillLoan;
-import org.duang.entity.InvestMember;
 import org.duang.service.BillLoanService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -146,16 +145,6 @@ public class BillLoanServiceImpl implements BillLoanService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
-	}
-
-
-	/**
-	 * 通过实体对象删除实体数据
-	 * @param t  实体对象
-	 * @return   是否删除成功
-	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
 		return dao.deleteEntity(id);
 	}
@@ -280,11 +269,16 @@ public class BillLoanServiceImpl implements BillLoanService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<BillLoan> queryBySQL(String sql,String countsql, PageUtil<BillLoan> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<BillLoan> queryBySQL(String sql,String countsql, PageUtil<BillLoan> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
-	@Override
+
+	/**
+	 * 通过实体对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
 	public boolean deleteEntity(BillLoan t) throws Exception {
 		return dao.deleteEntity(t);
 	}

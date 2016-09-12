@@ -16,7 +16,6 @@ import org.duang.dao.LoanListDao;
 import org.duang.dao.ScaleDao;
 import org.duang.dao.ScaleLoanListDao;
 import org.duang.dao.StockDao;
-import org.duang.entity.InvestMember;
 import org.duang.entity.LoanList;
 import org.duang.entity.Scale;
 import org.duang.entity.ScaleLoanList;
@@ -255,16 +254,6 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
-	}
-
-
-	/**
-	 * 通过实体对象删除实体数据
-	 * @param t  实体对象
-	 * @return   是否删除成功
-	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
 		return dao.deleteEntity(id);
 	}
@@ -389,11 +378,16 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ScaleLoanList> queryBySQL(String sql,String countsql, PageUtil<ScaleLoanList> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<ScaleLoanList> queryBySQL(String sql,String countsql, PageUtil<ScaleLoanList> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
-	@Override
+
+	/**
+	 * 通过实体对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
 	public boolean deleteEntity(ScaleLoanList t) throws Exception {
 		return dao.deleteEntity(t);
 	}

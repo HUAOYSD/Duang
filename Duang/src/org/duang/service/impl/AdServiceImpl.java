@@ -280,8 +280,8 @@ public class AdServiceImpl implements AdService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Ad> queryBySQL(String sql,String countsql, PageUtil<Ad> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<Ad> queryBySQL(String sql,String countsql, PageUtil<Ad> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.LoanListDao;
-import org.duang.entity.InvestMember;
 import org.duang.entity.LoanList;
 import org.duang.service.LoanListService;
 import org.duang.util.PageUtil;
@@ -36,7 +35,7 @@ public class LoanListServiceImpl implements LoanListService{
 	public LoanListServiceImpl(){
 		LoggerUtils.info("注入LoanListServiceImpl服务层", this.getClass());
 	}
-	
+
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
@@ -146,21 +145,11 @@ public class LoanListServiceImpl implements LoanListService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
-	}
-
-
-	/**
-	 * 通过实体对象删除实体数据
-	 * @param t  实体对象
-	 * @return   是否删除成功
-	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
 		return dao.deleteEntity(id);
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
@@ -169,7 +158,7 @@ public class LoanListServiceImpl implements LoanListService{
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
 		return dao.deleteEntity(map);
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -258,7 +247,7 @@ public class LoanListServiceImpl implements LoanListService{
 		return dao.findEntity(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -280,11 +269,16 @@ public class LoanListServiceImpl implements LoanListService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanList> queryBySQL(String sql,String countsql, PageUtil<LoanList> page, Object... params) throws Exception{
-		return dao.queryBySQL(sql,countsql, page, params);
+	public List<LoanList> queryBySQL(String sql,String countsql, PageUtil<LoanList> page, boolean convert, Object... params) throws Exception{
+		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
-	@Override
+
+	/**
+	 * 通过实体对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
 	public boolean deleteEntity(LoanList t) throws Exception {
 		return dao.deleteEntity(t);
 	}

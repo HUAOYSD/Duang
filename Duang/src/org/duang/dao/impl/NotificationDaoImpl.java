@@ -285,8 +285,8 @@ public class NotificationDaoImpl extends BaseDao<Notification> implements Notifi
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Notification> queryBySQL(String sql, String countSql, PageUtil<Notification> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<Notification> queryBySQL(String sql, String countSql, PageUtil<Notification> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 }
 

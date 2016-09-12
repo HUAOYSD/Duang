@@ -285,9 +285,8 @@ public class LoanMemberDaoImpl extends BaseDao<LoanMember> implements LoanMember
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanMember> queryBySQL(String sql, String countSql, PageUtil<LoanMember> page, Object... params) throws Exception{
-		return super.queryBySQL(sql, countSql, page, params);
+	public List<LoanMember> queryBySQL(String sql, String countSql, PageUtil<LoanMember> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
-
 }
 
