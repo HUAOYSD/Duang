@@ -2,15 +2,15 @@
 	返回结果中的msg通常为错误提示信息，接口文档中的msg值只是为结果示范，并非真实场景提示，且msg错误提示值并非唯一
 
 一：注册
-	1、检查手机号码是否存在
+	1、检查手机号码是否存在√
 		URL：http://192.168.11.56:8080/Duang/provider_register!checkPhone.do
 		发送参数说明：
 			*phoneNum：需要验证的手机号
 		返回结果：Json
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			失败：{'success':false,'msg':'您已注册，请直接登录'}
 			
-	2、发送手机号注册验证码
+	2、发送手机号注册验证码√
 		URL：http://192.168.11.56:8080/Duang/provider_register!sendValidateCode.do
 		发送参数说明：
 			*phoneNum：需要验证的手机号
@@ -22,25 +22,25 @@
 			成功：{'success':true,'vc':'987995':'msg':''}
 			失败：{'success':false,'vc':'','msg':'签名错误'}
 			
-	3、注册方法
+	3、注册方法√
 		URL：http://192.168.11.56:8080/Duang/provider_register!register.do
 		发送参数说明：
 			*phoneNum：手机号
 			**pwd：密码
 			registerStyle：注册来源，Android设值2，IOS设值3
 		返回结果：Json
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			失败：{'success':false,'msg':'注册失败'}
 
 二：登录
-	1、登录方法
+	1、登录方法√
 		URL：http://192.168.11.56:8080/Duang/provider_login!login.do
 		发送参数说明：
 			*phoneNum：登录手机号
 			**pwd：登录密码
 		返回结果：Json
 			失败：{'success':false,'msg':'手机号未注册'}
-			成功：{'success':true,'msg':'','token':'46546548784531545sddsadfsdweq','id':'ah1500445ssf125456131ffsdyhg','name':'刘芳','nickname':'翠花','phone':'15894496635','idcard':'101036199408088855','email':'liufang@163.com','age':'25','sex':'女','photo':'/xxx/xxx.jpg','isEliteAccount':'是',
+			成功：{'success':true,'token':'46546548784531545sddsadfsdweq','id':'ah1500445ssf125456131ffsdyhg','name':'刘芳','nickname':'翠花','phone':'15894496635','idcard':'101036199408088855','email':'liufang@163.com','age':'25','sex':'女','photo':'/xxx/xxx.jpg','isEliteAccount':'是',
 			'money':'505000','investing':'500000','currentEarnings':'2000','totalEarnings':'5000','balance':'250'
 			'loanMoney':'50000','overdue':'1200'}
 			个别属性说明：token登录成功返回的唯一标示，以作下次打开app作为快捷获取用户信息，不必重新登录
@@ -53,14 +53,14 @@
 					   loanMoney总借款额
 					   overdue总逾期额
 					   
-	 2、根据token获取用户信息
+	 2、根据token获取用户信息√
 		URL：http://192.168.11.56:8080/Duang/provider_login!findInfo.do
 		发送参数说明：
 			token：token值
 			**pwd：密码（避免修改密码了还能获取信息）
 		返回结果：Json
 			失败：{'success':false,'msg':'密码错误'}
-			成功：{'success':true,'msg':'','token':'46546548784531545sddsadfsdweq','id':'ah1500445ssf125456131ffsdyhg','name':'刘芳','nickname':'翠花','phone':'15894496635','idcard':'101036199408088855','email':'liufang@163.com','age':'25','sex':'女','photo':'/xxx/xxx.jpg','isEliteAccount':'是','money':'505000','investing':'500000','currentEarnings':'2000','totalEarnings':'5000','balance':'250'}
+			成功：{'success':true,'token':'46546548784531545sddsadfsdweq','id':'ah1500445ssf125456131ffsdyhg','name':'刘芳','nickname':'翠花','phone':'15894496635','idcard':'101036199408088855','email':'liufang@163.com','age':'25','sex':'女','photo':'/xxx/xxx.jpg','isEliteAccount':'是','money':'505000','investing':'500000','currentEarnings':'2000','totalEarnings':'5000','balance':'250'}
 			个别属性说明：token登录成功返回的唯一标示，以作下次打开app作为快捷获取用户信息，不必重新登录（如果通过token获取信息成功，这个token值则和token参数值是一样的）
 					   isEliteAccount是否是金账户
 					   money总资产
@@ -69,13 +69,13 @@
 					   totalEarnings总收益
 					   balance账户余额	
 					   
-	 3、注销
+	 3、注销√
 		URL：http://192.168.11.56:8080/Duang/provider_login!loginout.do
 		发送参数说明：
 			token：token值
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器异常'}
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 
 三：会员信息
 	1、验证登录密码
@@ -84,7 +84,7 @@
 			id：唯一标识
 			**pwd：登录密码
 		返回结果：Json
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			失败：{'success':false,'msg':'登录密码错误'}
 			
 	2、验证支付密码
@@ -93,7 +93,7 @@
 			id：唯一标识
 			**pwd：支付密码
 		返回结果：Json
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			失败：{'success':false,'msg':'支付密码错误'}
 			
 	3、修改登录密码
@@ -102,7 +102,7 @@
 			id：唯一标识
 			**pwd：新登录错误
 		返回结果：Json
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			失败：{'success':false,'msg':'修改登录密码错误，连接超时'}
 			
 	4、修改登录密码
@@ -111,7 +111,7 @@
 			id：唯一标识
 			**pwd：新支付错误
 		返回结果：Json
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			失败：{'success':false,'msg':'修改支付密码错误，连接超时'}
 			
 	5、修改用户名
@@ -120,7 +120,7 @@
 			id：唯一标识
 			*nickname：用户名
 		返回结果：Json
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			失败：{'success':false,'msg':'该昵称已被使用，请重新填写'}
 						
 	6、验证用户真实名字和身份证号
@@ -130,7 +130,7 @@
 			*name：真实姓名
 			*idcard：身份证号码
 		返回结果：Json
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			失败：{'success':false,'msg':'身份证信息已被占用，请检查'}
 			
 
@@ -141,7 +141,7 @@
 			memberid：会员唯一标识
 		返回结果：Json
 			失败：{'success':false,'msg':'未找到银行卡绑定记录'}	
-			成功：{'success':true,'msg':'',
+			成功：{'success':true,
 				[
 					{'id':'fsdfsdf5456456f4sdfd','name':'刘芳','idcard':'101036199408088855','phone':'15894495936','bankno':'6220221699904564561123','openbank':'工商银行','type':'储蓄卡','opttime':'2016-9-9'},
 					{'id':'fsdfsdf5456456f4sdfd','name':'刘芳','idcard':'101036199408088855','phone':'15894495936','bankno':'6220221699904564561123','openbank':'工商银行','type':'借记卡','opttime':'2016-9-9'},
@@ -162,7 +162,7 @@
 			*p_type：银行卡类型，取值为int(1储蓄卡，2借记卡，3信用卡)
 		返回结果：Json
 			失败：{'success':false,'msg':'用户未实名'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 		说明：姓名，身份证，手机号这些应当与基本实名信息一致，在客户端绑定银行卡时，默认该类信息，不可更改！
 		
 	3、解绑银行卡
@@ -172,7 +172,7 @@
 			id：银行卡id标示
 		返回结果：Json
 			失败：{'success':false,'msg':'解绑前，清提现所有资产余额'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 		说明：解绑任何银行卡之前，应当使账户资产清空(APP端验证)
 		
 		
@@ -183,7 +183,7 @@
 			num：显示个数
 		返回结果：Json
 			失败：{'success':false,'msg':'未找到可使用广告'}	
-			成功：{'success':true,'msg':'','result':
+			成功：{'success':true,'result':
 				[
 				{'imageAddress':'xxxx/xxxx.jpg','linkAddress':'www.baidu.com'},
 				{'imageAddress':'xxxx/xxxx.jpg','linkAddress':'www.baidu.com'},
@@ -199,7 +199,7 @@
 			无参数
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','result':
+			成功：{'success':true,'result':
 				[
 				{'title':'新用户奖励','content':'九月注册的用户有丰厚大礼等你来领，速速来吧'},
 				{'title':'老用户奖励','content':'累计注册时长两年，投资20万以上会员享有投资加息券哟'}
@@ -212,7 +212,7 @@
 			无参数
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','result':
+			成功：{'success':true,'result':
 				[
 				{'title':'维护公告','content':'为更好的投资体验，今天晚上要系统维护'}
 				]
@@ -229,7 +229,7 @@
 			count：下拉次数（首次打开次数累计1次）
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','result':
+			成功：{'success':true,'result':
 				[
 				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
 				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
@@ -263,7 +263,7 @@
 			count：下拉次数（首次打开次数累计1次）
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','result':
+			成功：{'success':true,'result':
 				[
 				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
 				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
@@ -280,7 +280,7 @@
 			count：下拉次数（首次打开次数累计1次）
 		返回结果：Json
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','result':
+			成功：{'success':true,'result':
 				[
 				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
 				{'id':'fsdf56456456156151tbsd','scaleName':'信宝-0456456','revenue':'0.088','revenueAdd':'0.0005','days':'90','timeLimit':'90天','beginTime':'2016-8-9','endTime':'2016-9-9','maxLimit':'100000','totalMoney':'1000000','residueMoney':'200000','yetMoney':'800000','status':'1','returnStyle':'1','tags':'新品;推荐','useTicket':'0','transfer':'1'},
@@ -298,7 +298,7 @@
 			token：登录token值
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':'','creditInvest':'500','houseInvest':'500','carInvest':'500','creditLoan':'500','houseLoan':'500','carInvest':'500'}
+			成功：{'success':true,'creditInvest':'500','houseInvest':'500','carInvest':'500','creditLoan':'500','houseLoan':'500','carInvest':'500'}
 			属性说明：
 				creditInvest信宝投资
 				houseInvest房宝投资
@@ -314,7 +314,7 @@
 			file，File类文件，IOS不清楚什么类型的，用到了一起测试
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':'','path':'xxxxxxxxx'}
+			成功：{'success':true,'path':'xxxxxxxxx'}
 		结果列说明：
 			path代表上传成功后，将存储路径DES加密返回给app端，app端在提交借贷订单的时候，再将整个加密串当做参数传到后台	
 	
@@ -361,7 +361,7 @@
 			
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			
 			
 	4、增加房产贷款的申请信息记录
@@ -387,7 +387,7 @@
 			
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			
 
 	5、增加车产贷款的申请信息记录
@@ -416,7 +416,7 @@
 			p_assetCertificates收入证明,多份用英文';'隔开，这个值应当是使用【上传申请信息】这个接口返回来的path值，如果多个用';'相连
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			
 			
 	6、查询借贷列表
@@ -427,7 +427,7 @@
 			count：下拉次数（首次打开次数累计1次）
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','result':[
+			成功：{'success':true,'result':[
 				{'memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
 				'realMoney':'4500','poundage':'250','getMoney':'4500','yetMoney':'4500','returnMoney':'5500','agoMoney':'250','yetReturnMoney':'2000','returnStatus':'产生逾期',
 				'loanState':'放款完成','applyStateint':'审核通过','loanSype':'普通模式','loanUse':'抢了王二狗的钱了，打着要我还','loanInterest':'250','createTime':'2016-5-6',
@@ -479,7 +479,7 @@
 			*p_id借贷
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
+			成功：{'success':true,'memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
 				'realMoney':'4500','poundage':'250','getMoney':'4500','yetMoney':'4500','returnMoney':'5500','agoMoney':'250','yetReturnMoney':'2000','returnStatus':'产生逾期',
 				'loanState':'放款完成','applyStateint':'审核通过','loanSype':'普通模式','loanUse':'抢了王二狗的钱了，打着要我还','loanInterest':'250','createTime':'2016-5-6',
 				'signDate':'2016-9-9','beginReturnDate':'2015-9-9','endReturnDate':'2016-9-7','doneReturnDate':'2019-9-9','backStyle':'等额本息','days':'365','passTime':'2015-9-9'},
@@ -527,7 +527,7 @@
 			investStyle平台，传参为整数类型（2Android，3IOS）
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','id':'理财记录id'}
+			成功：{'success':true,'id':'理财记录id'}
 			
 			
 	2、查询单个理财记录
@@ -536,7 +536,7 @@
 			*id记录id
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','membername':'张三','productName':'年年余','name':'年年余-160911号','days':'90','calcBegin':'2016-5-6','calcEnd':'2017-5-6',
+			成功：{'success':true,'membername':'张三','productName':'年年余','name':'年年余-160911号','days':'90','calcBegin':'2016-5-6','calcEnd':'2017-5-6',
 				'money':'50000','useTicke':'是|否','income':'500','ticketBonus':'20','totalMoney':'50520','status':'投资收益中',
 				'pactNumber':'HJH160591GS','openDate':'2016-5-5','backIncome':'520','backMoney':'50520','backDate':'2017-5-6',
 				'isTurn':'是','poundageTurn':'250','poundagePrivilege':'50','turnStatus':'转让中'}
@@ -568,7 +568,7 @@
 			*p_investListId理财记录id
 		返回结果：Json
 			失败：{'success':false,'msg':'支付失败、token无效'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			
 		
 	5、赎回理财
@@ -578,7 +578,7 @@
 			*p_investListId理财记录id
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':''}	
+			成功：{'success':true}	
 			
 			
 	6、查询理财列表记录
@@ -589,7 +589,7 @@
 			count：下拉次数（首次打开次数累计1次）
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'msg':'','result':[
+			成功：{'success':true,'result':[
 				{'membername':'张三','productName':'年年余','name':'年年余-160911号','days':'90','calcBegin':'2016-5-6','calcEnd':'2017-5-6',
 				'money':'50000','useTicke':'是|否','income':'500','ticketBonus':'20','totalMoney':'50520','status':'投资收益中',
 				'pactNumber':'HJH160591GS','openDate':'2016-5-5','backIncome':'520','backMoney':'50520','backDate':'2017-5-6',
@@ -637,7 +637,7 @@
 			*p_bankid使用的银行卡id
 		返回结果：Json
 			失败：{'success':false,'msg':'充值失败、token无效'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			
 		
 	2、提现
@@ -648,7 +648,7 @@
 			*p_bankid使用的银行卡id
 		返回结果：Json
 			失败：{'success':false,'msg':'提现失败、余额不足'}	
-			成功：{'success':true,'msg':''}		
+			成功：{'success':true}		
 			
 	3、理财账单记录
 	4、借贷账单记录
@@ -665,7 +665,7 @@
 			content内容
 		返回结果：Json
 			失败：{'success':false,'msg':'接收人无效'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			
 	2、查询消息记录
 		URL：http://192.168.11.56:8080/Duang/provider_message!insertMessage.do
@@ -674,7 +674,7 @@
 			count查询最近条数（包括已读和未读）
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':'','result':[
+			成功：{'success':true,'result':[
 				{'id':'fds456f4ds65f4d65456','receiver':'张三','sender':'李四','time':'2016-5-5 08:05:55','title':'你妈有话说','content':'今晚晚上包饺子，早些回家吃饭','read':'未读'},
 				{'id':'fds456f4ds65f4d65456','receiver':'张三','sender':'李四','time':'2016-5-5 08:05:55','title':'你妈有话说','content':'今晚晚上包饺子，早些回家吃饭','read':'未读'}
 			]}
@@ -686,7 +686,7 @@
 			*p_id消息记录id
 		返回结果：Json
 			失败：{'success':false,'msg':'未找到消息'}	
-			成功：{'success':true,'msg':'','id':'fds456f4ds65f4d65456','receiver':'张三','sender':'李四','time':'2016-5-5 08:05:55','title':'你妈有话说','content':'今晚晚上包饺子，早些回家吃饭','read':'未读'}
+			成功：{'success':true,'id':'fds456f4ds65f4d65456','receiver':'张三','sender':'李四','time':'2016-5-5 08:05:55','title':'你妈有话说','content':'今晚晚上包饺子，早些回家吃饭','read':'未读'}
 			
 	4、标记已读
 		URL：http://192.168.11.56:8080/Duang/provider_message!updateReaded.do
@@ -695,7 +695,7 @@
 			*p_id消息记录id
 		返回结果：Json
 			失败：{'success':false,'msg':'未找到消息'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 
 	5、标记全部已读
 		URL：http://192.168.11.56:8080/Duang/provider_message!updateAllReaded.do
@@ -703,7 +703,7 @@
 			token登录会员的token
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			
 十一：财友
 	1、查询我关注的财友√
@@ -712,7 +712,7 @@
 			token登录会员的token
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':'','result':[
+			成功：{'success':true,'result':[
 				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'},
 				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'2'},
 				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'}
@@ -729,7 +729,7 @@
 			token登录会员的token
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':'','result':[
+			成功：{'success':true,'result':[
 				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'},
 				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'0'},
 				{'id':'gfdsfds56+4f6ds','friendid':'fsdfdsfsd456f4sd5f','friendname':'张二娃','together':'1'}
@@ -747,18 +747,18 @@
 			token登录会员的token
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':'','qrpath':'xxx/xxx.jpg'}
+			成功：{'success':true,'qrpath':'xxx/xxx.jpg'}
 		参数说明：qrpath我的二维码显示地址（就是添加朋友的方法的路径）
 		
 			
-	4、获取和我差不多投资额度的会员
+	4、获取和我差不多投资额度的会员√
 		备注：投资额度和该会员投资额度相差不过5万的前20人
 		URL：http://192.168.11.56:8080/Duang/provider_friends!getFairlysMember.do
 		发送参数说明：
 			token登录会员的token
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':'','tn':'5','tm':'50000','result':[
+			成功：{'success':true,'tn':'5','tm':'50000','result':[
 				{'memberid':'fdsfdsf4564fsd','membernickname':'wnagmazi','membername':'王大山','invertMoney':'550000','investCount':'15'},
 				{'memberid':'fdsfdsf4564fsd','membernickname':'wnagmazi','membername':'王大山','invertMoney':'550000','investCount':'15'},
 				{'memberid':'fdsfdsf4564fsd','membernickname':'wnagmazi','membername':'王大山','invertMoney':'550000','investCount':'15'}
@@ -779,7 +779,7 @@
 			*targetMemberid关注的人的id
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			
 	6、取消关注财友√
 		URL：http://192.168.11.56:8080/Duang/provider_friends!removeFriends.do
@@ -788,7 +788,7 @@
 			*targetMemberid要取消关注的人的id
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
-			成功：{'success':true,'msg':''}
+			成功：{'success':true}
 			
 			
 			

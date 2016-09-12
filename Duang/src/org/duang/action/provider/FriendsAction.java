@@ -13,7 +13,6 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
-import org.duang.entity.BillInvest;
 import org.duang.entity.Friends;
 import org.duang.entity.MemberInfo;
 import org.duang.service.BillInvestService;
@@ -171,8 +170,7 @@ public class FriendsAction extends BaseAction<Friends>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (true || DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
-				id = "lvbu";
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
 				List<?> list = billInvestService.findCostInfo(id);
 				if (list!=null && list.size()>0 && list.get(0) instanceof Object[]) {
 					int tm = DataUtils.str2int(((Object[])list.get(0))[0].toString());
@@ -193,6 +191,7 @@ public class FriendsAction extends BaseAction<Friends>{
 					}
 					jsonObject.put("tn", tn);
 					jsonObject.put("tm", tm);
+					success = true;
 				}else {
 					msg = "您未有投资记录";
 				}
@@ -212,10 +211,6 @@ public class FriendsAction extends BaseAction<Friends>{
 	}
 
 
-	private String[] Object(Object object) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	/**   
 	 * 添加财友
 	 * @Title: addFriends   
