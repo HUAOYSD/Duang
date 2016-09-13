@@ -183,7 +183,11 @@
 			num：显示个数
 		返回结果：Json
 			失败：{'success':false,'msg':'未找到可使用广告'}	
+<<<<<<< HEAD
 			成功：{'success':true,'result':
+=======
+			成功：{'success':true,'msg':'','result': 
+>>>>>>> branch 'baipan' of git@github.com:HUAOYSD/Duang.git
 				[
 				{'imageAddress':'xxxx/xxxx.jpg','linkAddress':'www.baidu.com'},
 				{'imageAddress':'xxxx/xxxx.jpg','linkAddress':'www.baidu.com'},
@@ -650,10 +654,47 @@
 			失败：{'success':false,'msg':'提现失败、余额不足'}	
 			成功：{'success':true}		
 			
-	3、理财账单记录
-	4、借贷账单记录
-			
+	3、理财账单记录√
+		URL：http://192.168.11.56:8080/Duang/provider_billinvest!queryBillList.do
+		发送参数说明：
+			token登录会员的token
+		返回结果：Json
+			失败：{'success':false,'msg':'登录失效'}	
+			成功：{'success':true,'result':[
+				{'id':'fdsfsdfsd564fd6sf1d5','useType':'理财消费','money':'600','balance':'1000','asset':'90000','status':'成功','optTime':'2016-8-8','remark':'购买信标-SH16052号'},
+				{'id':'fdsfsdfsd564fd6sf1d5','useType':'理财消费','money':'600','balance':'1000','asset':'90000','status':'成功','optTime':'2016-8-8','remark':'购买信标-SH16052号'},
+				{'id':'fdsfsdfsd564fd6sf1d5','useType':'理财消费','money':'600','balance':'1000','asset':'90000','status':'成功','optTime':'2016-8-8','remark':'购买信标-SH16052号'}
+			]}
+		结果列说明：
+			id账单id
+			useType资金类型
+			money该次活动金额
+			balance变动后账户余额
+			asset变动后总资产
+			status状态
+			optTime操作时间
+			remark操作说明
 
+	4、借贷账单记录√
+		URL：http://192.168.11.56:8080/Duang/provider_billloan!queryBillList.do
+		发送参数说明：
+			token登录会员的token
+		返回结果：Json
+			失败：{'success':false,'msg':'登录失效'}	
+			成功：{'success':true,'result':[
+				{'id':'fdsfsdfsd564fd6sf1d5','useType':'还款','money':'-5000','doneMoney':'5000','asset':'90000','status':'成功','optTime':'2016-8-8','remark':'还款信用贷-SH16052号'},
+				{'id':'fdsfsdfsd564fd6sf1d5','useType':'还款','money':'-5000','doneMoney':'5000','asset':'90000','status':'成功','optTime':'2016-8-8','remark':'还款信用贷-SH16052号'},
+				{'id':'fdsfsdfsd564fd6sf1d5','useType':'还款','money':'-5000','doneMoney':'5000','asset':'90000','status':'成功','optTime':'2016-8-8','remark':'还款信用贷-SH16052号'}
+			]}
+		结果列说明：
+			id账单id
+			useType资金类型
+			money金额放款+，还款-
+			doneMoney变动后账户余额
+			status状态
+			optTime操作时间
+			remark操作说明
+			
 十：消息
 	1、增加消息记录√
 		URL：http://192.168.11.56:8080/Duang/provider_message!insertMessage.do
@@ -789,7 +830,4 @@
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
 			成功：{'success':true}
-			
-			
-			
 				
