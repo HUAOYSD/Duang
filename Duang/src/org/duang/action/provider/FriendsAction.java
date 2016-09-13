@@ -71,7 +71,7 @@ public class FriendsAction extends BaseAction<Friends>{
 						map.put("together", friends.getTogether());
 						MemberInfo memberInfo = friends.getMemberInfoByTarget();
 						map.put("friendid", memberInfo.getId());
-						map.put("friendname", DataUtils.notEmpty(memberInfo.getNickname()) ? memberInfo.getNickname() : "手机用户"+(memberInfo.getPhone().substring(0, 3))+"***");
+						map.put("friendname", memberInfo.getNickname());
 						listMap.add(map);
 					}
 				}else {
