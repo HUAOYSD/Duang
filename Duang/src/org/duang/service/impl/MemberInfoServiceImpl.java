@@ -1,5 +1,6 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -283,5 +284,40 @@ public class MemberInfoServiceImpl implements MemberInfoService{
 		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
+	/**
+	 * 获总投资、借贷数据
+	 * <p>Title: queryLoanAndInvestInfo</p>   
+	 * <p>Description: </p>  
+	 * @author LiYonghui
+	 * @date 2016年9月13日 上午11:16:19
+	 * @return   
+	 * @see org.duang.service.MemberInfoService#queryLoanAndInvestInfo()
+	 */
+	public Map<String, Object> queryLoanAndInvestInfo(String id) throws Exception{
+		Map<String, Object> map = new HashMap<String, Object>();
+		String loanCarSQL ="select sum(loan.money) as carLoan  from apply_loan_car lcar left join loan_list loan on loan.id = lcar.loan_list_id where loan.loan_type = 2 and loan.member_info="+id;
+		String loanHouseSQL ="select sum(loan.money) as houseLoan from apply_loan_house lh left join loan_list loan on loan.id = lh.loan_list_id where loan.loan_type = 2 and loan.member_info="+id;
+		String creditLoanSQL ="select sum(ll.money) as creditLoan from loan_list ll where ll.loan_type=3 and loan.member_info="+id;
+		String investCarSQL ="select sum(il.money) as carInvest from invest_list il left join scale sce on sce.id=il.scale_id left join product prc on prc.id=sce.product_id where prc.category=1 and il.member_info="+id;
+		String investHouseSQL ="select sum(il.money) as houseInvest from invest_list il left join scale sce on sce.id=il.scale_id left join product prc on prc.id=sce.product_id where prc.category=2 and il.member_info="+id;
+		String creditInvestSQL ="select sum(il.money) as creditInvest from invest_list il left join scale sce on sce.id=il.scale_id left join product prc on prc.id=sce.product_id where prc.category=3 and il.member_info="+id;
+	
+		List<MemberInfo> loanCarlist = dao.queryBySQL(loanCarSQL, null, null, false);
+		List<MemberInfo> loanHouselist = dao.queryBySQL(loanHouseSQL, null, null, false);
+		List<MemberInfo> creditLoanlist = dao.queryBySQL(creditLoanSQL, null, null, false);
+		List<MemberInfo> investCarlist = dao.queryBySQL(investCarSQL, null, null, false);
+		List<MemberInfo> investHouselist = dao.queryBySQL(investHouseSQL, null, null, false);
+		List<MemberInfo> creditInvestlist = dao.queryBySQL(creditInvestSQL, null, null, false);
+		
+		map.put("carLoan",loanCarlist==null?0:loanCarlist.get(0));
+		map.put("houseLoan",loanCarlist==null?0:loanHouselist.get(0));
+		map.put("creditLoan",loanCarlist==null?0:creditLoanlist.get(0));
+		map.put("carInvest",loanCarlist==null?0:investCarlist.get(0));
+		map.put("houseInvest",loanCarlist==null?0:investHouselist.get(0));
+		map.put("creditInvest",loanCarlist==null?0:creditInvestlist.get(0));
+		
+		return map;
+	
+	}
 
 }

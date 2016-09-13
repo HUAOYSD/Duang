@@ -38,7 +38,7 @@ public class PayAction extends BaseAction<Object>{
 	
 	
 	/**   
-	 * 体现
+	 * 提现
 	 * @Title: withdrawals   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
