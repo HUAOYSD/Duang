@@ -1,0 +1,169 @@
+package org.duang.enums;
+
+import org.duang.util.DataUtils;
+
+/**   
+ * 文件上传路径
+ * @ClassName:  UploadFile   
+ * @Description:TODO(这里用一句话描述这个类的作用)   
+ * @author LiYonghui
+ * @date 2016年9月14日 下午4:11:39      
+ */  
+public enum UploadFile {
+	//广告
+	PATH{
+		@Override
+		public String getVal() {
+			return "resources\\file\\basic\\";
+		}
+
+		@Override
+		public String toString() {
+			return "上传路径";
+		}
+
+		@Override
+		public String getVal(String page) {
+			if(DataUtils.notEmpty(page)){
+				return "resources\\file\\basic\\" + page+"\\";
+			}else{
+				return "resources\\file\\basic\\";
+			}
+		}
+
+	},
+	SALARY{
+		@Override
+		public String getVal() {
+			return "\\salary";
+		}
+
+		@Override
+		public String toString() {
+			return "薪资证明";
+		}
+
+		@Override
+		public String getVal(String page) {
+			if(DataUtils.notEmpty(page)){
+				return page+"\\salary";
+			}else{
+				return "\\salary";
+			}
+		}
+
+	},
+	//身份证
+	IDCARD {
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\idcard";
+			}else{
+				return "\\idcard";
+			}
+		}
+
+		@Override
+		public String toString() {
+			return "身份证";
+		}
+
+		@Override
+		public String getVal() {
+			return "\\idcard";
+		}
+
+	},
+	//头像
+	HEAD {
+		@Override
+		public String getVal() {
+			return "\\head";
+		}
+
+		@Override
+		public String toString() {
+			return "头像";
+		}
+
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\head";
+			}else{
+				return "\\head";
+			}
+		}
+
+	},
+	//广告
+	AD{
+		@Override
+		public String getVal() {
+			return "ad";
+		}
+
+		@Override
+		public String toString() {
+			return "广告";
+		}
+
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\ad";
+			}else{
+				return "\\ad";
+			}
+		}
+
+	},
+	//银行卡
+	BANK{
+		@Override
+		public String getVal() {
+			return "\\bindcard";
+		}
+
+		@Override
+		public String toString() {
+			return "银行卡";
+		}
+
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\bindcard";
+			}else{
+				return "\\bindcard";
+			}
+		}
+	};
+	
+	
+	/**
+	 * 获取路径
+	 * @Title: getVal   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param path 用户的id唯一标识或者包组合
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年9月14日 上午11:14:17
+	 * @return: String      
+	 * @throws
+	 */
+	public abstract String getVal(String path);
+	
+	/**
+	 * 获取路径
+	 * @Title: getVal   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年9月14日 上午11:14:17
+	 * @return: String      
+	 * @throws
+	 */
+	public abstract String getVal();
+}
