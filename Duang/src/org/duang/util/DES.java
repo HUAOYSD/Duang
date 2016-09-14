@@ -49,6 +49,9 @@ public class DES {
 	 * @throws   
 	 */  
 	public static String decryptDES(String decryptString) throws Exception {
+		if (DataUtils.isEmpty(decryptString)) {
+			return "";
+		}
 		byte[] byteMi = Base64.decode(decryptString);
 		IvParameterSpec zeroIv = new IvParameterSpec(IV);
 		SecretKeySpec key = new SecretKeySpec(DES_KEY.getBytes(), "DES");

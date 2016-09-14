@@ -227,6 +227,10 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 		}
 		return pageutil;
 	}
+	public PageUtil<T> setPageUtil(PageUtil<T> pageUtil) {
+		this.pageutil = pageUtil;
+		return pageutil;
+	}
 	public String getMsg() {
 		return msg;
 	}
