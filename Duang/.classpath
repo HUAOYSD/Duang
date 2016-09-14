@@ -103,5 +103,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sun.misc.BASE64Decoder.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/itext-2.0.6.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/itextasian-1.5.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
