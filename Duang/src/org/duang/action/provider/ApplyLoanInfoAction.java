@@ -1,6 +1,4 @@
 package org.duang.action.provider;
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -13,8 +11,6 @@ import org.duang.common.system.MemberCollection;
 import org.duang.entity.ApplyLoanInfo;
 import org.duang.entity.LoanList;
 import org.duang.entity.MemberInfo;
-import org.duang.entity.Message;
-import org.duang.enums.If;
 import org.duang.service.ApplyLoanInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -42,7 +38,18 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		this.applyLoanInfoService = applyLoanInfoService;
 	}
 	
-	private ApplyLoanInfo setApplyLoanInfo() throws Exception{
+	/**
+	 * 封装参数
+	 * @Title: getApplyLoanInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年9月13日 下午5:05:54
+	 * @return: ApplyLoanInfo      
+	 * @throws
+	 */
+	private ApplyLoanInfo getApplyLoanInfo() throws Exception{
 		ApplyLoanInfo applyLoanInfo = new ApplyLoanInfo(DataUtils.randomUUID());
 		
 		LoanList loanList = new LoanList(DataUtils.randomUUID());
@@ -60,6 +67,13 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 			memberInfo.setId(MemberCollection.getInstance().getMainField(getRequest().getParameter("token")));
 			loanList.setMemberInfo(memberInfo);
 		}
+		if(DataUtils.notEmpty(getRequest().getParameter("p_money"))){
+			loanList.setMoney(DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_money")), 6));
+		}
+		if(DataUtils.notEmpty(getRequest().getParameter("p_loanUse"))){
+			loanList.setLoanUse(getRequest().getParameter("p_loanUse"));
+		}
+		
 		applyLoanInfo.setLoanList(loanList);
 		
 		
@@ -91,13 +105,6 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		if(DataUtils.notEmpty(getRequest().getParameter("p_address"))){
 			applyLoanInfo.setAddress(DES.decryptDES(getRequest().getParameter("p_address")));
 		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_loanUse"))){
-			applyLoanInfo.setUse(getRequest().getParameter("p_loanUse"));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_loanStyle"))){
-			applyLoanInfo.setUse(getRequest().getParameter("p_loanStyle"));
-		}
-		
 		if(DataUtils.notEmpty(getRequest().getParameter("p_liveStyle"))){
 			applyLoanInfo.setLiveStyle(getRequest().getParameter("p_liveStyle"));
 		}
@@ -174,36 +181,20 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		boolean success = false;
 		try {
 			String token = getRequest().getParameter("token");
-			String p_senderid = getRequest().getParameter("p_senderid");
-			String p_receiver = getRequest().getParameter("p_receiver");
-			String title = getRequest().getParameter("title");
-			String content = getRequest().getParameter("content");
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance().getMainField(token)) && 
-				DataUtils.notEmpty(p_senderid) && DataUtils.notEmpty(p_receiver)&& DataUtils.notEmpty(title)&& DataUtils.notEmpty(content)){
-				Message message = new Message();
-				message.setId(DataUtils.randomUUID());
-				message.setReaded(If.If0.getVal());
-				message.setTime(new Date());
-				message.setTitle(title);
-				message.setContent(content);
-				
-				MemberInfo p_reMemberInfo = new MemberInfo();
-				p_reMemberInfo.setId(p_receiver);
-				message.setMemberInfoByReceiver(p_reMemberInfo);
-				MemberInfo p_seMemberInfo = new MemberInfo();
-				p_seMemberInfo.setId(p_senderid);
-				//success = messageService.saveEntity(message);
+			if(DataUtils.notEmpty(token)){
+				ApplyLoanInfo applyLoanInfo = getApplyLoanInfo();
+				success = applyLoanInfoService.saveEntity(applyLoanInfo);
 				if(!success){
-					msg = "接收人无效";
+					msg = "服务器超时，请稍后重试";
 				}
 			}else{
-				msg = "参数不正确";
+				msg = "用户token为空";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("MessageAction——insertMessage方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("MessageAction——insertMessage方法错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanInfoAction——insertApplyLoanInfo方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanInfoAction——insertApplyLoanInfo方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);

@@ -35,8 +35,7 @@ public class ApplyUploadAction extends BaseAction<Object>{
 	 * @throws   
 	 */  
 	public void uploadApplyInfo(){
-		//文件命名规则是时间（20160815093055）+memberid
-		//存的申请资料图片我们先放到一个临时目录，在保存申请借贷订单的时候，再移动到指定位置
+		
 	}
 	
 }

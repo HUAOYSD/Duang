@@ -71,7 +71,7 @@ public class BankCardAction extends BaseAction<BindCard>{
 				condsUtils.addProperties(false, "infoAlias.id");
 				condsUtils.addValues(false, memberid);
 				@SuppressWarnings("rawtypes")
-				List list = bindCardService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+				List list = bindCardService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 				if (list == null || list.size()==0) {
 						msg = "未找到银行卡绑定记录";
 				}else{

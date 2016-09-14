@@ -128,7 +128,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 			//单次获取标个数
 			String num = getRequest().getParameter("num");
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance().getMainField(token))){
+			String id = "";
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
 				//初始化下滑次数
 				int currentPageNum = 1;
 				//初始化获取的条数
@@ -143,6 +144,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 				getPageUtil().setCurrentPageNum(currentPageNum);
 				condsUtils.addProperties(true, "memberInfo", "scale", "order");
 				condsUtils.addValues(true, new Object[]{"memberAlias","as"}, new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
+				condsUtils.addProperties(false, "memberAlias.id");
+				condsUtils.addValues(false, id);
 				@SuppressWarnings("rawtypes")
 				List list = investListService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 				if (list == null || list.size()==0) {
