@@ -307,7 +307,7 @@
 				houseLoan房产借贷
 				carLoan车产借贷
 
-	2、上传申请信息
+	2、上传申请信息√
 		URL：http://192.168.11.56:8080/Duang/provider_applyUpload!uploadApplyInfo.do
 		发送参数说明：
 			token：登录token值

@@ -19,6 +19,7 @@ import org.duang.entity.Ad;
 import org.duang.entity.BindCard;
 import org.duang.entity.FileUpload;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.UploadFile;
 import org.duang.service.AdService;
 import org.duang.service.BindCardService;
 import org.duang.service.MemberInfoService;
@@ -93,15 +94,16 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 				String exPath = null;
 				MemberInfo memberInfo = sysMemberInfoService.findById(userId);
 				if (ConstantCode.upload_user_head.equals(type)) {
-					exPath = userId+"\\head";
+					//路径
+					exPath = UploadFile.HEAD.getVal(userId);
 					deleteFilePath = memberInfo.getUserImg();
 					memberInfo.setUserImg(entity.getNewFileName());
 				} else if (ConstantCode.upload_user_idcard_1.equals(type)) {
-					exPath = userId+"\\idcard";
+					exPath = UploadFile.IDCARD.getVal(userId);
 					deleteFilePath = memberInfo.getIdCardImg1();
 					memberInfo.setIdCardImg1(entity.getNewFileName());
 				} else if (ConstantCode.upload_user_idcard_2.equals(type)) {
-					exPath = userId+"\\idcard";
+					exPath = UploadFile.IDCARD.getVal(userId);
 					deleteFilePath = memberInfo.getIdCardImg2();
 					memberInfo.setIdCardImg2(entity.getNewFileName());
 				}
@@ -148,14 +150,12 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 				// 1.获取文件名称
 				reSetFileName();
 				// 2.获取路径
-				String exPath = null;
+				String exPath = UploadFile.BANK.getVal(userId);;
 				BindCard bindCard = bindCardService.findById(userId);
 				if (ConstantCode.upload_user_idcard_1.equals(type)) {
-					exPath = userId+"\\bindcard";
 					deleteFilePath = bindCard.getPhotoImg1();
 					bindCard.setPhotoImg1(entity.getNewFileName());
 				} else if (ConstantCode.upload_user_idcard_2.equals(type)) {
-					exPath = userId+"\\bindcard";
 					deleteFilePath = bindCard.getPhotoImg2();
 					bindCard.setPhotoImg2(entity.getNewFileName());
 				}
@@ -198,7 +198,7 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 				// 1.获取文件名称
 				reSetFileName();
 				Ad ad = adService.findById(getRequest().getParameter("id"));
-				String exPath = "ad";
+				String exPath = UploadFile.AD.getVal();
 				deleteFilePath = ad.getImageAddress();
 				ad.setImageAddress(entity.getNewFileName());
 				 
@@ -275,7 +275,7 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 	private boolean reSetFilePathByUserId(String path) {
 		boolean result = false;
 		try {
-			path = getRequest().getSession().getServletContext().getRealPath("/") + "resources\\file\\basic\\" + path+"\\";
+			path = getRequest().getSession().getServletContext().getRealPath("/") + UploadFile.PATH.getVal(path);
 			entity.setPath(path);
 			result = true;
 		} catch (Exception e) {
