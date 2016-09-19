@@ -10,7 +10,6 @@ import org.duang.util.DataUtils;
  * @date 2016年9月14日 下午4:11:39      
  */  
 public enum UploadFile {
-	//广告
 	PATH{
 		@Override
 		public String getVal() {
@@ -23,14 +22,33 @@ public enum UploadFile {
 		}
 
 		@Override
-		public String getVal(String page) {
-			if(DataUtils.notEmpty(page)){
-				return "resources\\file\\basic\\" + page+"\\";
+		public String getVal(String path) {
+			if(DataUtils.notEmpty(path)){
+				return "resources\\file\\basic\\" + path+"\\";
 			}else{
 				return "resources\\file\\basic\\";
 			}
 		}
+	},
+	CONTRACT{
+		@Override
+		public String getVal() {
+			return "\\contract";
+		}
 
+		@Override
+		public String toString() {
+			return "合同";
+		}
+
+		@Override
+		public String getVal(String path) {
+			if(DataUtils.notEmpty(path)){
+				return path+"\\contract";
+			}else{
+				return "\\contract";
+			}
+		}
 	},
 	SALARY{
 		@Override
@@ -44,9 +62,9 @@ public enum UploadFile {
 		}
 
 		@Override
-		public String getVal(String page) {
-			if(DataUtils.notEmpty(page)){
-				return page+"\\salary";
+		public String getVal(String path) {
+			if(DataUtils.notEmpty(path)){
+				return path+"\\salary";
 			}else{
 				return "\\salary";
 			}

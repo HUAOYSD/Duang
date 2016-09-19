@@ -1,22 +1,25 @@
 package org.duang.test;
 
-import org.apache.log4j.Logger;
-import org.duang.enums.If;
+import java.util.Random;
+
 import org.junit.Before;
 
 public class Test {
 
-	private static final Logger logger = Logger.getLogger(Test.class);
 
+	/**   
+	 * 
+	 * @Title: main   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param args  
+	 * @author 白攀    
+	 * @date 2016年9月18日 上午11:25:17
+	 * @return: void      
+	 * @throws   
+	 */  
 	public static void main(String[] args) {
-		logger.debug(" This is debug!!!");
-		logger.info(" This is info!!!");
-		logger.warn(" This is warn!!!");
-		logger.error(" This is error!!!");
-		logger.fatal(" This is fatal!!!");
-		
-		If if1 = If.valueOf("E1");
-		System.out.println(if1);
+		String str="中文";
+    	System.out.println(str.getBytes().length);
 	}
 
 	@Before
@@ -24,10 +27,15 @@ public class Test {
 	}
 
 	@org.junit.Test
-	public void fds(){
-		If if1 = If.valueOf("E1");
-		System.out.println(if1);
+	public void fds() {
+		String str="中文abc123.。";
+    	System.out.println(str.getBytes().length);
+    	for (int i = 1; i < 600; i++) {
+			System.out.println(new Random().nextInt(10));
+		}
 	}
+	
+	
 
 
 

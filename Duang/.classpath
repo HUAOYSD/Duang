@@ -102,7 +102,12 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sun.misc.BASE64Decoder.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/itext-2.0.6.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/itext-2.0.6.jar" sourcepath="WebContent/WEB-INF/lib/itext-2.0.6.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/itextasian-1.5.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/fluent-hc-4.3.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-4.3.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-cache-4.3.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpcore-4.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpmime-4.3.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 /** 
@@ -23,7 +24,7 @@ public class DataUtils {
 		return s!=null && !"".equals(s.trim()) && !"null".equals(s.trim());
 	}
 
-	
+
 	/**
 	 * 检测字符串是否为空(null,"","null")
 	 * @param s
@@ -32,8 +33,8 @@ public class DataUtils {
 	public static boolean isEmpty(String s){
 		return s==null || "".equals(s.trim()) || "null".equals(s.trim());
 	}
-	
-	
+
+
 	/**
 	 * 检测List是否不为空
 	 * @param list
@@ -43,7 +44,7 @@ public class DataUtils {
 		return list!=null && list.size()>0;
 	}
 
-	
+
 	/**
 	 * 检测List是否为空
 	 * @param list
@@ -53,7 +54,7 @@ public class DataUtils {
 		return list==null || list.size()<1;
 	}
 
-	
+
 	/**
 	 * 字符串转换为字符串数组
 	 * @param str 字符串
@@ -76,7 +77,7 @@ public class DataUtils {
 	public static String[] str2StrArray(String str){
 		return str2StrArray(str,",\\s*");
 	}
-	
+
 
 	/**
 	 * 按照yyyy-MM-dd HH:mm:ss的格式，字符串转日期
@@ -118,7 +119,7 @@ public class DataUtils {
 			return 0;
 		}
 	}
-	
+
 
 	/**   
 	 * String转成double
@@ -143,7 +144,7 @@ public class DataUtils {
 		}
 	}
 
-	
+
 	/**
 	 * 获取一个UUID
 	 * randomUUID(这里用一句话描述这个方法的作用)
@@ -158,6 +159,26 @@ public class DataUtils {
 	public static String randomUUID(){
 		UUID uuid = UUID.randomUUID();
 		return uuid.toString().replaceAll("-", "");
+	}
+
+
+	/**   
+	 * 随机六位数字
+	 * @Title: sixNumber   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年9月19日 上午11:48:33
+	 * @return: String      
+	 * @throws   
+	 */  
+	public static String sixNumber(){
+		String string = "";
+		Random random = new Random();
+		for (int i = 1; i < 6; i++) {
+			string += random.nextInt(10);
+		}
+		return string;
 	}
 
 
