@@ -32,6 +32,28 @@ public enum UploadFile {
 		}
 
 	},
+	//广告
+	CONTRACT{
+		@Override
+		public String getVal() {
+			return "\\contract";
+		}
+
+		@Override
+		public String toString() {
+			return "上传路径";
+		}
+
+		@Override
+		public String getVal(String page) {
+			if(DataUtils.notEmpty(page)){
+				return page+"\\contract";
+			}else{
+				return "\\contract";
+			}
+		}
+
+	},
 	SALARY{
 		@Override
 		public String getVal() {
