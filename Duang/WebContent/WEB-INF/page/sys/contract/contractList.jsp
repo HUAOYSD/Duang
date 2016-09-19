@@ -11,6 +11,12 @@
 					<tr height="35px">
 					  	<td>&nbsp;&nbsp;<span class="investPro-search">名称：</span></td>
 					  	<td ><input  name="name"/></td>
+					  	<td>&nbsp;&nbsp;
+							<a id="submit_contractList_btn" class="easyui-linkbutton my-search-button" iconCls="icon-2012092109942" plain="true">查询</a>
+						</td>
+						<td>&nbsp;&nbsp;
+							<a onclick="javascript:$('#querycontractListForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true">重置</a>
+						</td>
 					</tr>
 				  </table>
 			</form>
