@@ -77,6 +77,8 @@ public class FriendsAction extends BaseAction<Friends>{
 				}else {
 					msg = "无记录";
 				}
+				success = true;
+				jsonObject.put("result", listMap);
 			}else {
 				msg = "登录失效";
 			}
@@ -88,7 +90,6 @@ public class FriendsAction extends BaseAction<Friends>{
 		}
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
-		jsonObject.put("result", listMap);
 		printJsonResult();
 	}
 
@@ -123,6 +124,8 @@ public class FriendsAction extends BaseAction<Friends>{
 				}else {
 					msg = "无记录";
 				}
+				success = true;
+				jsonObject.put("result", listMap);
 			}else {
 				msg = "登录失效";
 			}
@@ -134,7 +137,6 @@ public class FriendsAction extends BaseAction<Friends>{
 		}
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
-		jsonObject.put("result", listMap);
 		printJsonResult();
 	}
 
@@ -191,10 +193,11 @@ public class FriendsAction extends BaseAction<Friends>{
 					}
 					jsonObject.put("tn", tn);
 					jsonObject.put("tm", tm);
-					success = true;
 				}else {
 					msg = "您未有投资记录";
 				}
+				success = true;
+				jsonObject.put("result", listMap);
 			}else{
 				msg = "登录失效";
 			}
@@ -206,7 +209,6 @@ public class FriendsAction extends BaseAction<Friends>{
 		}
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
-		jsonObject.put("result", listMap);
 		printJsonResult();
 	}
 

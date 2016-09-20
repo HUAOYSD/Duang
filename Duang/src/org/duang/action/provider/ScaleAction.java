@@ -64,10 +64,9 @@ public class ScaleAction extends BaseAction<Scale>{
 				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_HOUSE)");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
-				if (list != null && list.size() > 0) {
-					success = true;
-					jsonObject.put("result", fillDatagridCons(list));
-				} else {
+				success = true;
+				jsonObject.put("result", fillDatagridCons(list));
+				if (list == null || list.size() == 0) {
 					msg = "没有更多了";
 				}
 			}else {
@@ -109,10 +108,9 @@ public class ScaleAction extends BaseAction<Scale>{
 				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_CAR)");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
-				if (list != null && list.size() > 0) {
-					success = true;
-					jsonObject.put("result", fillDatagridCons(list));
-				} else {
+				success = true;
+				jsonObject.put("result", fillDatagridCons(list));
+				if (list == null || list.size() == 0) {
 					msg = "没有更多了";
 				}
 			}else {
@@ -154,10 +152,9 @@ public class ScaleAction extends BaseAction<Scale>{
 				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_INFO)");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
-				if (list != null && list.size() > 0) {
-					success = true;
-					jsonObject.put("result", fillDatagridCons(list));
-				} else {
+				success = true;
+				jsonObject.put("result", fillDatagridCons(list));
+				if (list == null || list.size() == 0) {
 					msg = "没有更多了";
 				}
 			}else {

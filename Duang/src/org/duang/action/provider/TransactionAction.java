@@ -56,6 +56,7 @@ private static final long serialVersionUID = 1L;
 			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
 				Map<String, Object> map = sysMemberInfoService.queryLoanAndInvestInfo(id);
 				jsonObject.put("result", map);
+				success = true;
 			}else{
 				msg = "token不正确";
 			}

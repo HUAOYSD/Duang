@@ -68,11 +68,10 @@ public class MessageAction extends BaseAction<Message>{
 				getPageUtil().setCountRecords(queryCount);
 				List<Message> messages = messageService.queryAllEntity(getPageUtil(), Order.desc("time"));
 				if (messages == null || messages.size()==0) {
-					msg = "未登录";
-				}else{
-					jsonObject.put("result", fillDataObjectArray(messages));
-					success = true;
-				} 
+					msg = "未查到消息";
+				}
+				jsonObject.put("result", fillDataObjectArray(messages));
+				success = true;
 			}else{
 				msg = "参数不正确";
 			}
@@ -108,10 +107,9 @@ public class MessageAction extends BaseAction<Message>{
 				Message message = messageService.findById(p_id);
 				if (message == null) {
 					msg = "未找到消息";
-				}else{
-					jsonObject.put("result", fillDataObject(message));
-					success = true;
-				} 
+				}
+				jsonObject.put("result", fillDataObject(message));
+				success = true;
 			}else{
 				msg = "参数不正确";
 			}

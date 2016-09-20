@@ -55,11 +55,10 @@ public class NotificationAction extends BaseAction<Notification>{
 		try {
 			//查询数据
 			List<Notification> list = notificationService.queryEntity("status", NotificationStatus.status2.getVal(), null, Order.desc("publishTime"));
-			if (list != null && list.size() > 0) {
-				success = true;
-				jsonObject.put("result", fillDataObjectList(list));
-			} else {
-				msg = "获取超时，请稍后重试！";
+			success = true;
+			jsonObject.put("result", fillDataObjectList(list));
+			if (list == null || list.size() == 0) {
+				msg = "没有查到符合条件的数据";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -88,11 +87,10 @@ public class NotificationAction extends BaseAction<Notification>{
 		try {
 			//查询数据
 			List<Notification> list = notificationService.queryEntity("status", NotificationStatus.status1.getVal(), null, Order.desc("publishTime"));
-			if (list != null && list.size() > 0) {
-				success = true;
-				jsonObject.put("result", fillDataObjectList(list));
-			} else {
-				msg = "获取超时，请稍后重试！";
+			success = true;
+			jsonObject.put("result", fillDataObjectList(list));
+			if (list == null || list.size() == 0) {
+				msg = "未查到符合条件的数据";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
