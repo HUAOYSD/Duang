@@ -20,9 +20,9 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.SysRole;
 import org.duang.entity.SysUser;
 import org.duang.service.SysUserService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
-import org.duang.util.MD5Utils;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -212,7 +212,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 			entity.setCreateTime(new Date());
 			entity.setUpdateTime(new Date());
 			entity.setId(DataUtils.randomUUID());
-			entity.setPassword(MD5Utils.md5(entity.getPassword()));
+			entity.setPassword(DES.encryptDES(entity.getPassword()));
 			if (service.saveEntity(entity)) {
 				jsonObject.put("success", true);
 			}else {
@@ -304,7 +304,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 			if (DataUtils.notEmpty(entity.getId())) {
 				String pwd = entity.getPassword();
 				entity = service.findById(entity.getId());
-				entity.setPassword(MD5Utils.md5(pwd));
+				entity.setPassword(DES.encryptDES(pwd));
 				if (service.updateEntity(entity)) {
 					jsonObject.put("success", true);
 				}else{

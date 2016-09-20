@@ -9,7 +9,6 @@ import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.SMSDao;
 import org.duang.entity.SMS;
-import org.duang.entity.InvestMember;
 import org.duang.service.SMSService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -146,16 +145,6 @@ public class SMSServiceImpl implements SMSService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
-	}
-
-
-	/**
-	 * 通过实体对象删除实体数据
-	 * @param t  实体对象
-	 * @return   是否删除成功
-	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
 		return dao.deleteEntity(id);
 	}
@@ -284,7 +273,11 @@ public class SMSServiceImpl implements SMSService{
 		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
-	@Override
+	/**
+	 * 通过实体对象删除实体数据
+	 * @param t  实体对象
+	 * @return   是否删除成功
+	 */
 	public boolean deleteEntity(SMS t) throws Exception {
 		return dao.deleteEntity(t);
 	}

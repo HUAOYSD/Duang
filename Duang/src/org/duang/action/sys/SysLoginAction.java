@@ -23,9 +23,9 @@ import org.duang.entity.SysPower;
 import org.duang.entity.SysUser;
 import org.duang.service.SysPowerService;
 import org.duang.service.SysUserService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DrawImage;
-import org.duang.util.MD5Utils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -93,7 +93,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 		}
 		try {
 			condsUtils.addProperties(true, "name","password");
-			condsUtils.addValues(true, entity.getName(), MD5Utils.md5(entity.getPassword()));
+			condsUtils.addValues(true, entity.getName(), DES.encryptDES(entity.getPassword()));
 			List<SysUser> list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 			if(list!=null && list.size()==1) {
 				SessionTools.setSessionSysUser(list.get(0));

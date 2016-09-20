@@ -27,9 +27,9 @@ import org.duang.enums.If;
 import org.duang.enums.InvestOrLoan;
 import org.duang.service.LoanMemberService;
 import org.duang.service.MemberInfoService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
-import org.duang.util.MD5Utils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -420,9 +420,9 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 					entity.getMemberInfo().setCreateuser(SessionTools.getSessionSysUser().getId());
 					entity.getMemberInfo().setModifyuser(SessionTools.getSessionSysUser().getId());
 					if(DataUtils.notEmpty(entity.getMemberInfo().getPassword())){
-						entity.getMemberInfo().setPassword(MD5Utils.md5(entity.getMemberInfo().getLoginName()));
+						entity.getMemberInfo().setPassword(DES.encryptDES(entity.getMemberInfo().getLoginName()));
 					}else{
-						entity.getMemberInfo().setPassword(MD5Utils.md5(entity.getMemberInfo().getPassword()));
+						entity.getMemberInfo().setPassword(DES.encryptDES(entity.getMemberInfo().getPassword()));
 					}
 					boolean issuccess = loanMemberService.saveEntity(entity);
 					if (issuccess) {

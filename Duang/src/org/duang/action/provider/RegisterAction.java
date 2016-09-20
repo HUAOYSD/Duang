@@ -6,7 +6,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
-import org.duang.common.SMS;
+import org.duang.common.SMSUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
@@ -14,7 +14,6 @@ import org.duang.entity.MemberInfo;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
-import org.duang.util.MD5Utils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -98,11 +97,14 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 				String platform = getRequest().getParameter("platform");
 				if (DataUtils.notEmpty(platform) && ("IOS".equals(platform) || "Android".equals(platform))) {
 					String signature = getRequest().getParameter("signature");
-					if ("IOS".equals(platform) && SMS.IOS_SIGNATURE.equals(signature)) {
-						jsonObject.put("vc", "123456");
-						success = true;
-					}else if ("Android".equals(platform) && SMS.ANDORID_SIGNATURE.equals(signature)) {
-						jsonObject.put("vc", "654321");
+					String vc = DataUtils.sixNumber();
+					//String content = "您的注册验证码是："+vc;
+					if ("IOS".equals(platform) && SMSUtils.IOS_SIGNATURE.equals(signature)) {
+						jsonObject.put("vc", vc);
+						//success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P3.getVal());
+					}else if ("Android".equals(platform) && SMSUtils.ANDORID_SIGNATURE.equals(signature)) {
+						jsonObject.put("vc", vc);
+						//success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P2.getVal());
 						success = true;
 					}else {
 						msg = "短信签名错误";
@@ -144,7 +146,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 				String password = getRequest().getParameter("pwd");
 				if (DataUtils.notEmpty(password)) {
 					entity.setPhone(password);
-					entity.setPassword(MD5Utils.md5(password));
+					entity.setPassword(DES.encryptDES(password));
 					entity.setId(DataUtils.randomUUID());
 					entity.setNickname("手机用户"+phone);
 					//附加投资用户身份

@@ -24,9 +24,9 @@ import org.duang.entity.SysUser;
 import org.duang.enums.If;
 import org.duang.service.CustomerManagerService;
 import org.duang.service.SysUserService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
-import org.duang.util.MD5Utils;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -212,7 +212,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 				entity.setCreatetime(new Date());
 				entity.getSysUser().setId(DataUtils.randomUUID());
 				entity.getSysUser().setCreateTime(new Date());
-				entity.getSysUser().setPassword(MD5Utils.md5(entity.getSysUser().getName()+"12345"));
+				entity.getSysUser().setPassword(DES.encryptDES(entity.getSysUser().getName()+"12345"));
 				entity.getSysUser().setRemark("客户经理账号");
 				if (service.saveEntity(entity)) {
 					jsonObject.put("success", true);

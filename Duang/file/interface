@@ -1,4 +1,4 @@
-----前面带*号的是需要DES加密传参的，两个**号表示需要MD5加密传参，有备注nullable表示参数可以为空
+----前面带*号的是需要DES加密传参的，两个*号表示需要MD5加密传参，有备注nullable表示参数可以为空
 	返回结果中的msg通常为错误提示信息，接口文档中的msg值只是为结果示范，并非真实场景提示，且msg错误提示值并非唯一
 
 一：注册
@@ -26,18 +26,31 @@
 		URL：http://192.168.11.56:8080/Duang/provider_register!register.do
 		发送参数说明：
 			*phoneNum：手机号
-			**pwd：密码
+			*pwd：密码
 			registerStyle：注册来源，Android设值2，IOS设值3
 		返回结果：Json
 			成功：{'success':true}
 			失败：{'success':false,'msg':'注册失败'}
+			
+	4、发送短信
+		URL：http://192.168.11.56:8080/Duang/provider_sms!sendSMS.do
+		发送参数说明：
+			*phoneNum：手机号
+			*p_content：内容
+			signature：移动端调用短信接口的签名，如签名不正确则无法发送短信
+			签名：IOS取值bc11aa9516624184876ebec2d35e7a92
+				 Android取值037ab5277ca547cb84af7baf394bf8aa
+			platform：调用平台，取值Android|IOS，区分大小写
+		返回结果：Json
+			成功：{'success':true}
+			失败：{'success':false,'msg':'发送失败'}
 
 二：登录
 	1、登录方法√
 		URL：http://192.168.11.56:8080/Duang/provider_login!login.do
 		发送参数说明：
 			*phoneNum：登录手机号
-			**pwd：登录密码
+			*pwd：登录密码
 		返回结果：Json
 			失败：{'success':false,'msg':'手机号未注册'}
 			成功：{'success':true,'token':'46546548784531545sddsadfsdweq','id':'ah1500445ssf125456131ffsdyhg','name':'刘芳','nickname':'翠花','phone':'15894496635','idcard':'101036199408088855','email':'liufang@163.com','age':'25','sex':'女','photo':'/xxx/xxx.jpg','isEliteAccount':'是',
@@ -57,7 +70,7 @@
 		URL：http://192.168.11.56:8080/Duang/provider_login!findInfo.do
 		发送参数说明：
 			token：token值
-			**pwd：密码（避免修改密码了还能获取信息）
+			*pwd：密码（避免修改密码了还能获取信息）
 		返回结果：Json
 			失败：{'success':false,'msg':'密码错误'}
 			成功：{'success':true,'token':'46546548784531545sddsadfsdweq','id':'ah1500445ssf125456131ffsdyhg','name':'刘芳','nickname':'翠花','phone':'15894496635','idcard':'101036199408088855','email':'liufang@163.com','age':'25','sex':'女','photo':'/xxx/xxx.jpg','isEliteAccount':'是','money':'505000','investing':'500000','currentEarnings':'2000','totalEarnings':'5000','balance':'250'}
@@ -82,7 +95,7 @@
 		URL：http://192.168.11.56:8080/Duang/provider_member!checkLoginPassword.do?id=[标识]&pwd=[密码]
 		发送参数说明：
 			id：唯一标识
-			**pwd：登录密码
+			*pwd：登录密码
 		返回结果：Json
 			成功：{'success':true}
 			失败：{'success':false,'msg':'登录密码错误'}
@@ -91,7 +104,7 @@
 		URL：http://192.168.11.56:8080/Duang/provider_member!checkPayPassword.do?id=[标识]&pwd=[密码]
 		发送参数说明：
 			id：唯一标识
-			**pwd：支付密码
+			*pwd：支付密码
 		返回结果：Json
 			成功：{'success':true}
 			失败：{'success':false,'msg':'支付密码错误'}
@@ -100,7 +113,7 @@
 		URL：http://192.168.11.56:8080/Duang/provider_member!modifyLoginPassword.do?id=[标识]&pwd=[密码]
 		发送参数说明：
 			id：唯一标识
-			**pwd：新登录错误
+			*pwd：新登录错误
 		返回结果：Json
 			成功：{'success':true}
 			失败：{'success':false,'msg':'修改登录密码错误，连接超时'}
@@ -109,7 +122,7 @@
 		URL：http://192.168.11.56:8080/Duang/provider_member!modifyPayPassword.do?id=[标识]&pwd=[密码]
 		发送参数说明：
 			id：唯一标识
-			**pwd：新支付错误
+			*pwd：新支付错误
 		返回结果：Json
 			成功：{'success':true}
 			失败：{'success':false,'msg':'修改支付密码错误，连接超时'}

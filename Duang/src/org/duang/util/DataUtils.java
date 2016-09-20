@@ -175,18 +175,11 @@ public class DataUtils {
 	public static String sixNumber(){
 		String string = "";
 		Random random = new Random();
-		for (int i = 1; i < 6; i++) {
+		for (int i = 1; i <= 6; i++) {
 			string += random.nextInt(10);
 		}
 		return string;
 	}
 
-
-	/*public static void main(String[] args) {
-		for (int i = 0; i < 5; i++) {
-			System.out.println(UUID.randomUUID().toString());
-			System.out.println(UUID.randomUUID().toString().length());
-		}
-	}*/
 }
 
