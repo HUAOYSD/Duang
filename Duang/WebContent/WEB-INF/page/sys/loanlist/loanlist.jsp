@@ -102,6 +102,7 @@
 							<td colspan="2">&nbsp;&nbsp;</td>
 						</tr>
 					  </table>
+					  <input type="hidden" name="customerId" value="${customerId}">
 				</form>
 		    </div>
 		    <span class="openOrClose" id="loanlist_open_close">&nbsp;&nbsp;</span>
@@ -118,4 +119,7 @@
 	  	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path %>/ui/sys/loanlist/loanlist.js"></script>
+	<script type="text/javascript">
+		var customerId = "${customerId}";
+	</script>
 </body>

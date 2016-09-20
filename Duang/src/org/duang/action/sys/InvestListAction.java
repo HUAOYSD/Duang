@@ -18,6 +18,8 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.common.system.SessionTools;
+import org.duang.entity.CustomerManager;
 import org.duang.entity.InvestList;
 import org.duang.entity.MemberInfo;
 import org.duang.entity.Scale;
@@ -26,6 +28,7 @@ import org.duang.enums.Platform;
 import org.duang.enums.invest.Status;
 import org.duang.enums.invest.TurnStatus;
 import org.duang.enums.invest.UseTicket;
+import org.duang.service.CustomerManagerService;
 import org.duang.service.InvestListService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -57,11 +60,16 @@ public class InvestListAction extends BaseAction<InvestList> {
 
 	private InvestListService service;
 
-	@Resource()
+	@Resource(name="investlistserviceimpl")
 	public void setService(InvestListService service) {
 		this.service = service;
 	}
 
+	private CustomerManagerService customerManagerService;
+	@Resource(name = "customermanagerserviceimpl")
+	public void setService(CustomerManagerService customerManagerService) {
+		this.customerManagerService = customerManagerService;
+	}
 
 	/**   
 	 * 根据分页查询
@@ -75,8 +83,8 @@ public class InvestListAction extends BaseAction<InvestList> {
 	 */  
 	public void queryByPage() {
 		try {
-			condsUtils.addProperties(true, "memberInfo", "scale", "order");
-			condsUtils.addValues(true, new Object[]{"memberAlias","as"}, new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
+			condsUtils.addProperties(true, "memberInfo","memberAlias.customerManager", "scale", "order");
+			condsUtils.addValues(true, new Object[]{"memberAlias","as"},new Object[]{"customerManagerAlias","as"}, new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
 			if (DataUtils.notEmpty(getRequest().getParameter("memberName"))) {
 				condsUtils.concat("memberAlias.realName", URLDecoder.decode(getRequest().getParameter("memberName"),"UTF-8"));
 			}
@@ -88,6 +96,9 @@ public class InvestListAction extends BaseAction<InvestList> {
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("memberIdcard"))) {
 				condsUtils.concat("memberAlias.idCard", URLDecoder.decode(getRequest().getParameter("memberIdcard"),"UTF-8"));
+			}
+			if (DataUtils.notEmpty(getRequest().getParameter("customerId"))) {
+				condsUtils.concat("customerManagerAlias.id", URLDecoder.decode(getRequest().getParameter("customerId"),"UTF-8"));
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("scaleName"))) {
 				condsUtils.concat("scaleAlias.name", new Object[]{URLDecoder.decode(getRequest().getParameter("scaleName"),"UTF-8"), "like"});
@@ -151,9 +162,9 @@ public class InvestListAction extends BaseAction<InvestList> {
 			for(Object temp : list) {
 				if (temp instanceof Object[]) {
 					Map<String,Object> resultMap = new HashMap<String,Object>();
-					InvestList pk = (InvestList)((Object[])temp)[2];
+					InvestList pk = (InvestList)((Object[])temp)[3];
 					MemberInfo fk = (MemberInfo)((Object[])temp)[0];
-					Scale fk2 = (Scale)((Object[])temp)[1];
+					Scale fk2 = (Scale)((Object[])temp)[2];
 					if (pk != null) {
 						resultMap.put("id", pk.getId());
 						resultMap.put("money", pk.getMoney());
@@ -214,12 +225,20 @@ public class InvestListAction extends BaseAction<InvestList> {
 	 */  
 	public String openDialog() {
 		try {
-			//			String path = getRequest().getParameter("path");
-			//			if(ResultPath.ADD.equals(path)) {
-			//				return ResultPath.ADD;
-			//			} else if(ResultPath.EDIT.equals(path)) {
-			//				return ResultPath.EDIT;
-			//			}
+			//判断是否是客户经理查看会员理财列表
+			String isCustomer = getRequest().getParameter("isCustomer");
+			if(isCustomer.equals("1")){ //==1说明是客户经理查看信息
+				String loginId = SessionTools.getSessionSysUser().getId();
+				CustomerManager customerManager = customerManagerService.findEntity("sysUser.id", loginId);
+				if(customerManager != null){
+					getRequest().setAttribute("customerId", customerManager.getId());
+				}else{
+					//说明其不是客户经理
+					getRequest().setAttribute("customerId", "404");
+				}
+			}else{
+				getRequest().setAttribute("customerId", "");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("理财记录ACTION方法openDialog错误："+e.getMessage(), this.getClass());

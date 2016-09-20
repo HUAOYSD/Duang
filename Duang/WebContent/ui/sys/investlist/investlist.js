@@ -6,7 +6,12 @@ $(function() {
 		$('#investlist_conditon').toggle(80);
 		setTimeout(domresize,100);//条件隐藏，改变表格高度
 	});	
-	loadinvestlist("investlist!queryByPage.do");
+	//如果isCustomer ==1 说明是客户经理查看会员信息
+	if(customerId != ""){
+		loadinvestlist("investlist!queryByPage.do?customerId="+customerId);
+	}else{
+		loadinvestlist("investlist!queryByPage.do");
+	}
 });
 
 

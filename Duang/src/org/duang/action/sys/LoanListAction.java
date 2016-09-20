@@ -20,6 +20,7 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.common.system.SessionTools;
 import org.duang.entity.CustomerManager;
 import org.duang.entity.LoanList;
 import org.duang.entity.MemberInfo;
@@ -31,6 +32,7 @@ import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Poundage;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
+import org.duang.service.CustomerManagerService;
 import org.duang.service.LoanListService;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
@@ -75,8 +77,12 @@ public class LoanListAction extends BaseAction<LoanList> {
 	public void setScaleService(ScaleService scaleService) {
 		this.scaleService = scaleService;
 	}
-
-
+	
+	private CustomerManagerService customerManagerService;
+	@Resource(name = "customermanagerserviceimpl")
+	public void setService(CustomerManagerService customerManagerService) {
+		this.customerManagerService = customerManagerService;
+	}
 
 	/**   
 	 * 根据id获取借贷信息
@@ -150,6 +156,11 @@ public class LoanListAction extends BaseAction<LoanList> {
 			if (DataUtils.notEmpty(getRequest().getParameter("loanMemberIdcard"))) {
 				condsUtils.concat("memberAlias.idCard", URLDecoder.decode(getRequest().getParameter("loanMemberIdcard"),"UTF-8"));
 			}
+			
+			if (DataUtils.notEmpty(getRequest().getParameter("customerId"))) {
+				condsUtils.concat("customerAlias.id", URLDecoder.decode(getRequest().getParameter("customerId"),"UTF-8"));
+			}
+			
 			if (DataUtils.notEmpty(getRequest().getParameter("customerManagerName"))) {
 				condsUtils.concat("customerAlias.name", URLDecoder.decode(getRequest().getParameter("customerManagerName"),"UTF-8"));
 			}
@@ -330,6 +341,22 @@ public class LoanListAction extends BaseAction<LoanList> {
 				entity = service.findById(entity.getId());
 				return "review";
 			}
+			
+			//判断是否是客户经理查看会员理财列表
+			String isCustomer = getRequest().getParameter("isCustomer");
+			if(isCustomer.equals("1")){ //==1说明是客户经理查看信息
+				String loginId = SessionTools.getSessionSysUser().getId();
+				CustomerManager customerManager = customerManagerService.findEntity("sysUser.id", loginId);
+				if(customerManager != null){
+					getRequest().setAttribute("customerId", customerManager.getId());
+				}else{
+					//说明其不是客户经理
+					getRequest().setAttribute("customerId", "404");
+				}
+			}else{
+				getRequest().setAttribute("customerId", "");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("借贷记录ACTION方法openDialog错误："+e.getMessage(), this.getClass());
