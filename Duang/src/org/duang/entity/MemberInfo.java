@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -64,6 +66,75 @@ public class MemberInfo implements java.io.Serializable {
 	private Set<MemberInvestTicket> memberInvestTickets = new HashSet<MemberInvestTicket>(0);
 	private Set<InvestList> investLists = new HashSet<InvestList>(0);
 	private Set<LoanList> loanLists = new HashSet<LoanList>(0);
+	
+	private CustomerManager customerManager;
+	private MemberInfo memberInfo;
+	private String cusmembername;
+	private Set<MemberInfo> memberInfos = new HashSet<MemberInfo>(0);
+	
+	private Set<NotificationReaded> notificationReadeds = new HashSet<NotificationReaded>(0);
+	private Set<BillLoan> billLoans = new HashSet<BillLoan>(0);
+	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
+	
+	public MemberInfo(String id, CustomerManager customerManager, MemberInfo memberInfo, String loginName, String realName, String nickname, String email, String age, String sex, String phone, String idCard, 
+			String idCardImg1, String idCardImg2, String miDescribe, String isdelete, Date createTime, Date modifyTime, String createuser, String modifyuser, String userImg, Integer isEliteAccount, String level, String price, String password, String payPassword, String handPassword, Integer isFreeze, String myQr, Integer registerStyle, String cusmembername, Set<MemberInvestTicket> memberInvestTickets, Set<InvestMember> investMembers, Set<LoanMember> loanMembers, Set<Message> messagesForReceiver, Set<InvestList> investLists, Set<ScoreList> scoreLists, Set<Message> messagesForSender, Set<Friends> friendsesForTarget, Set<MemberExtraInfo> memberExtraInfos, Set<BillLoan> billLoans, Set<BillInvest> billInvests, Set<Friends> friendsesForSelf, Set<NotificationReaded> notificationReadeds, Set<BindCard> bindCards, Set<MemberInfo> memberInfos, Set<LoanList> loanLists) {
+		this.id = id;
+		this.customerManager = customerManager;
+		this.memberInfo = memberInfo;
+		this.loginName = loginName;
+		this.realName = realName;
+		this.nickname = nickname;
+		this.email = email;
+		this.age = age;
+		this.sex = sex;
+		this.phone = phone;
+		this.idCard = idCard;
+		this.idCardImg1 = idCardImg1;
+		this.idCardImg2 = idCardImg2;
+		this.miDescribe = miDescribe;
+		this.isdelete = isdelete;
+		this.createTime = createTime;
+		this.modifyTime = modifyTime;
+		this.createuser = createuser;
+		this.modifyuser = modifyuser;
+		this.userImg = userImg;
+		this.isEliteAccount = isEliteAccount;
+		this.level = level;
+		this.price = price;
+		this.password = password;
+		this.payPassword = payPassword;
+		this.handPassword = handPassword;
+		this.isFreeze = isFreeze;
+		this.myQr = myQr;
+		this.registerStyle = registerStyle;
+		this.cusmembername = cusmembername;
+		this.memberInvestTickets = memberInvestTickets;
+		this.investMembers = investMembers;
+		this.loanMembers = loanMembers;
+		this.messagesForReceiver = messagesForReceiver;
+		this.investLists = investLists;
+		this.scoreLists = scoreLists;
+		this.messagesForSender = messagesForSender;
+		this.friendsesForTarget = friendsesForTarget;
+		this.memberExtraInfos = memberExtraInfos;
+		this.billLoans = billLoans;
+		this.billInvests = billInvests;
+		this.friendsesForSelf = friendsesForSelf;
+		this.notificationReadeds = notificationReadeds;
+		this.bindCards = bindCards;
+		this.memberInfos = memberInfos;
+		this.loanLists = loanLists;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// Constructors
 
 	/** default constructor */
@@ -486,5 +557,58 @@ public class MemberInfo implements java.io.Serializable {
 
 	public void setRegisterStyle(int registerStyle) {
 		this.registerStyle = registerStyle;
+	}
+	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "customer_id")
+	public CustomerManager getCustomerManager() {
+		return this.customerManager;
+	}
+	public void setCustomerManager(CustomerManager customerManager) {
+		this.customerManager = customerManager;
+	}
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cusmemberid")
+	public MemberInfo getMemberInfo() {
+		return this.memberInfo;
+	}
+	public void setMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
+	}
+	@Column(name = "cusmembername", length = 355)
+	public String getCusmembername() {
+		return this.cusmembername;
+	}
+	public void setCusmembername(String cusmembername) {
+		this.cusmembername = cusmembername;
+	}
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberInfo")
+	public Set<MemberInfo> getMemberInfos() {
+		return this.memberInfos;
+	}
+	public void setMemberInfos(Set<MemberInfo> memberInfos) {
+		this.memberInfos = memberInfos;
+	}
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberInfo")
+	public Set<BillLoan> getBillLoans() {
+		return this.billLoans;
+	}
+	public void setBillLoans(Set<BillLoan> billLoans) {
+		this.billLoans = billLoans;
+	}
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberInfo")
+	public Set<BillInvest> getBillInvests() {
+		return this.billInvests;
+	}
+	public void setBillInvests(Set<BillInvest> billInvests) {
+		this.billInvests = billInvests;
+	}
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberInfo")
+	public Set<NotificationReaded> getNotificationReadeds() {
+		return this.notificationReadeds;
+	}
+	public void setNotificationReadeds(Set<NotificationReaded> notificationReadeds) {
+		this.notificationReadeds = notificationReadeds;
 	}
 }
