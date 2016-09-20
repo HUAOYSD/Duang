@@ -79,20 +79,6 @@ public class DES {
 	}
 
 
-	/*public static void main(String[] args) throws Exception{
-		String key = "o!20&^/@";  //我的密钥，只能是8位字节的倍数，我这JAVA
-		String plaintext = "华澳融信huao123.,!@#$%^&*()[]{}";//我要加密的字符串
-		String ciphertext = DES.encryptDES(plaintext, key);
-		System.out.println("明文：" + plaintext);
-		System.out.println("密文：" + ciphertext);
-		System.out.println("解密后：" + DES.decryptDES(ciphertext, key));
-	}*/
-
-
-
-	
-	
-	
 	/*  
 	private static final byte[] DES_KEY = { 21, 1, -110, 82, -32, -85, -128, -65 };  //DES算法密钥 
 
