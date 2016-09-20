@@ -44,6 +44,7 @@ public class CustomerManager implements java.io.Serializable {
 	private Date createtime;
 	private int isDelete;
 	private Set<LoanList> loanLists = new HashSet<LoanList>(0);
+	private Set<MemberInfo> memberInfos = new HashSet<MemberInfo>(0);
 
 	// Constructors
 
@@ -60,7 +61,7 @@ public class CustomerManager implements java.io.Serializable {
 	public CustomerManager(String id, SysUser sysUser, String name,
 			String workNumber, String sex, String idcard, String email,
 			String phone, String photo, String qr, String remark,Date createtime,int isDelete,
-			Set<LoanList> loanLists) {
+			Set<LoanList> loanLists, Set<MemberInfo> memberInfos) {
 		this.id = id;
 		this.sysUser = sysUser;
 		this.name = name;
@@ -75,6 +76,7 @@ public class CustomerManager implements java.io.Serializable {
 		this.remark = remark;
 		this.isDelete = isDelete;
 		this.loanLists = loanLists;
+		this.memberInfos = memberInfos;
 	}
 	
 
@@ -209,5 +211,13 @@ public class CustomerManager implements java.io.Serializable {
 		this.loanLists = loanLists;
 	}
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customerManager")
+	public Set<MemberInfo> getMemberInfos() {
+		return memberInfos;
+	}
+
+	public void setMemberInfos(Set<MemberInfo> memberInfos) {
+		this.memberInfos = memberInfos;
+	}
 	
 }
