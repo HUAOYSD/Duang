@@ -22,7 +22,7 @@ $(function(){
 		sortOrder:'desc',
 		toolbar:'',
 		columns:[[
-				{field:'id',hidden:true},
+				{field:'id',title:'ID',halign:"center", align:"center",width:200},
 				{field:'name',title:'名称',halign:"center", align:"center",width:200,
 					formatter:function(value,row,index){
 						return '<a href="contract!downContract.do?id='+row.id+'">'+value+'</a>';
