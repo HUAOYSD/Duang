@@ -110,6 +110,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 				if (DataUtils.notEmpty(pd)) {
 					if (pwd.equals(pd)) {
 						entity = service.findById(MemberCollection.getInstance().getMainField(token));
+						success = true;
 						if (entity != null) {
 							fillMemberInfo(token);
 							JSONObject resultjson = new JSONObject();
@@ -117,7 +118,6 @@ public class LoginAction extends BaseAction<MemberInfo>{
 							resultjson.put("token", jsonObject.optString("token"));
 							resultjson.put("id", jsonObject.optString("id"));
 							MemberCollection.getInstance().putJsonObject(token, resultjson);
-							success = true;
 						}else {
 							msg = "未获取到该用户";
 						}

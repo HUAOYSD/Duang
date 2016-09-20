@@ -148,11 +148,12 @@ public class InvestListAction extends BaseAction<InvestList>{
 				condsUtils.addValues(false, id);
 				@SuppressWarnings("rawtypes")
 				List list = investListService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+				success = true;
 				if (list == null || list.size()==0) {
 					msg = "已经到最后了";
+					jsonObject.put("result", listMap);
 				}else{
 					jsonObject.put("result", fillDatagridCons(list));
-					success = true;
 				} 
 			}else{
 				msg = "token失效";
@@ -185,11 +186,12 @@ public class InvestListAction extends BaseAction<InvestList>{
 			//判断参数是否为空
 			if(entity != null && DataUtils.notEmpty(entity.getId())){
 				InvestList invest = investListService.findById(entity.getId());
+				success = true;
 				if (invest == null) {
-					msg = "服务器超时，请稍后重试";
+					msg = "数据过期，请刷新重试";
+					jsonObject.put("result", null);
 				}else{
 					jsonObject.put("result", fillDatagridObejct(invest));
-					success = true;
 				} 
 			}else{
 				msg = "参数为空";

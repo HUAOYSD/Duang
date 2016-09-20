@@ -77,6 +77,8 @@ public class BillLoanAction extends BaseAction<BillLoan>{
 				}else {
 					msg = "无记录";
 				}
+				success = true;
+				jsonObject.put("result", listMap);
 			}else {
 				msg = "登录失效";
 			}
@@ -88,7 +90,6 @@ public class BillLoanAction extends BaseAction<BillLoan>{
 		}
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
-		jsonObject.put("result", listMap);
 		printJsonResult();
 	}
 	

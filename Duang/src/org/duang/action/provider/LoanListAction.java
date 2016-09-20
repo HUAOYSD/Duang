@@ -76,11 +76,11 @@ public class LoanListAction extends BaseAction<LoanList>{
 				int count = DataUtils.str2int(getRequest().getParameter("count"));
 				if (num != 0 && count != 0) {
 					List<LoanList> loanLists = service.queryEntity("memberInfo.id", id, setPageUtil(new PageUtil<LoanList>(num, count)), Order.desc("createTime"));
+					success = true;
 					if (DataUtils.notEmpty(loanLists)) {
 						for (LoanList loanlist : loanLists) {
 							jsonArray.add(fillData(new JSONObject(), loanlist));
 						}
-						success = true;
 					}else{
 						msg = "你没有借贷记录";
 					}
@@ -124,9 +124,9 @@ public class LoanListAction extends BaseAction<LoanList>{
 				map.put("id", loanid);
 				map.put("memberInfo.id", id);
 				entity = service.findEntity(map);
+				success = true;
 				if (entity == null) {
-					fillData(jsonObject, entity);
-					success = true;
+					jsonObject.put("result", fillData(jsonObject, entity));
 				}else{
 					msg = "未找到记录";
 				}

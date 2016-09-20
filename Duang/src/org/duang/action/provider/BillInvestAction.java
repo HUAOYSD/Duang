@@ -61,6 +61,7 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 			String id = null;
 			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
 				List<BillInvest> list = service.queryEntity("memberInfo.id", id, null, Order.desc("optTime"));
+				success = true;
 				if (DataUtils.notEmpty(list)) {
 					for (BillInvest bill : list) {
 						Map<String, Object> map = new HashMap<String, Object>();
@@ -77,6 +78,7 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 				}else {
 					msg = "无记录";
 				}
+				jsonObject.put("result", listMap);
 			}else {
 				msg = "登录失效";
 			}
@@ -88,7 +90,6 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 		}
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
-		jsonObject.put("result", listMap);
 		printJsonResult();
 	}
 
