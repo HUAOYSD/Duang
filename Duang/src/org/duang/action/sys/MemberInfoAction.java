@@ -28,6 +28,7 @@ import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -44,6 +45,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value="memberinfo")
 @ParentPackage("sys")
 @Results(value={
+		@Result(name="levelmember", type="dispatcher", location="WEB-INF/page/sys/memberinfo/levelMemberInfoList.jsp"),
 		@Result(name="memberInfoList", type="dispatcher", location="WEB-INF/page/sys/memberinfo/memberInfoList.jsp"),
 		@Result(name="uploadMemberInfoImg", type="dispatcher", location="WEB-INF/page/sys/memberinfo/uploadMemberInfoImg.jsp"),
 		@Result(name="showMemberInfoInvestOrLoan", type="dispatcher", location="WEB-INF/page/sys/memberinfo/investOrLoanInfo.jsp"),
@@ -75,10 +77,73 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 		return "memberInfoList";
 	}
 	
+	
+	/**   
+	 * 去查询用户的推荐关系列表
+	 * @Title: gotoLevelMebmer   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 白攀    
+	 * @date 2016年9月21日 上午10:01:37
+	 * @return: String      
+	 * @throws   
+	 */  
+	public String gotoLevelMebmer(){
+		return "levelmember";
+	}
+	
+	
+	/**   
+	 * 查询用户的推荐关系
+	 * @Title: queryLevelMebmer   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年9月21日 上午9:57:27
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void queryLevelMebmer(){
+		try {
+			String where = "";
+			if (entity!=null) {
+				if (DataUtils.notEmpty(entity.getLoginName())) {
+					where += " AND LOGIN_NAME LIKE '%"+entity.getLoginName()+"%' ";
+				}
+				if (DataUtils.notEmpty(entity.getRealName())) {
+					where += " AND REAL_NAME LIKE '%"+entity.getRealName()+"%' ";
+				}
+				if (DataUtils.notEmpty(entity.getPhone())) {
+					where += " AND PHONE = '"+entity.getPhone()+"' ";
+				}
+				if (DataUtils.notEmpty(entity.getId())) {
+					where += " AND ID_CARD = '"+entity.getId()+"' ";
+				}
+			}
+			List<Map<String, Object>> list = sysMemberInfoService.queryLevelMemberInfo(where, getPageUtil());
+			if (list != null && list.size() > 0) {
+				jsonObject.put("result", true);
+				jsonObject.put("rows", list);
+				jsonObject.put("total", getPageUtil().getCountRecords());
+			} else {
+				jsonObject.put("rows", new JSONArray());
+				jsonObject.put("total", 0);
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "没有符合条件的数据！");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("客户管理ACTION查询queryLevelMebmer方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("客户管理ACTION查询queryLevelMebmer方法错误：" + e.getLocalizedMessage(), this.getClass());
+		} finally {
+			printJsonResult();
+		}
+	}
+	
 	public void queryAllMember() {
 		try {
-			condsUtils.addProperties(false, "isdelete");
-			condsUtils.addValues(false, "0");
+			condsUtils.addProperties(false, "isdelete", "order");
+			condsUtils.addValues(false, "0", Order.desc("createTime"));
 			List<MemberInfo> list = sysMemberInfoService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);

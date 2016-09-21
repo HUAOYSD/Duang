@@ -1,5 +1,6 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.MemberInfoDao;
 import org.duang.entity.MemberInfo;
 import org.duang.service.MemberInfoService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -284,6 +286,7 @@ public class MemberInfoServiceImpl implements MemberInfoService{
 		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
 
+	
 	/**
 	 * 获总投资、借贷数据
 	 * <p>Title: queryLoanAndInvestInfo</p>   
@@ -315,9 +318,48 @@ public class MemberInfoServiceImpl implements MemberInfoService{
 		map.put("carInvest",loanCarlist==null?0:investCarlist.get(0));
 		map.put("houseInvest",loanCarlist==null?0:investHouselist.get(0));
 		map.put("creditInvest",loanCarlist==null?0:creditInvestlist.get(0));
-		
 		return map;
-	
 	}
+	
+	/**   
+	 * 查询用户推荐关系
+	 * @Title: queryLevelMemberInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 白攀    
+	 * @date 2016年9月21日 上午10:41:36
+	 * @return: List<Map<String,Object>>      
+	 * @throws   
+	 */  
+	public List<Map<String, Object>> queryLevelMemberInfo(String where, PageUtil<MemberInfo> page) throws Exception{
+		List<Map<String, Object>> listmap = new ArrayList<Map<String,Object>>();
+		String sql = "SELECT CUSMEMBERID, REAL_NAME FROM MEMBER_INFO WHERE ISDELETE = 0 " + where + " ORDER BY CREATETIME DESC";
+		String countSql = "SELECT COUNT(*) FROM MEMBER_INFO WHERE ISDELETE = 0" + where;
+		List<?> list = dao.queryBySQL(sql, countSql, page, false);
+		if (DataUtils.notEmpty(list)) {
+			for (Object object : list) {
+				if (object instanceof Object[]) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("firtname", ((Object[])object)[1].toString());
+					List<?> templist = dao.queryBySQL("SELECT CUSMEMBERID, REAL_NAME FROM MEMBER_INFO WHERE ID = '"+((Object[])object)[0].toString()+"'", null, null, false);
+					if (DataUtils.isEmpty(templist)) {
+						map.put("secondname", "--");
+						map.put("thirdname", "--");
+					}else {
+						map.put("secondname", ((Object[])templist.get(0))[1].toString());
+						templist = dao.queryBySQL("SELECT REAL_NAME FROM MEMBER_INFO WHERE ID = '"+((Object[])templist.get(0))[0].toString()+"'", null, null, false);
+						if (DataUtils.isEmpty(templist)) {
+							map.put("thirdname", "--");
+						}else {
+							map.put("thirdname", templist.get(0).toString());
+						}
+					}
+					listmap.add(map);
+				}
+			}
+		}
+		return listmap;
+	};
 
 }
