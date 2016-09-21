@@ -80,9 +80,6 @@ public class InvestMember implements java.io.Serializable {
 	public void setMemberInfo(MemberInfo memberInfo) {
 		this.memberInfo = memberInfo;
 	}
-
-
-
 	@Column(name = "is_contract")
 	public int getIsContract() {
 		return this.isContract;
