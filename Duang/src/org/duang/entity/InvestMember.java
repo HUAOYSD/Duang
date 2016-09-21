@@ -23,7 +23,6 @@ public class InvestMember implements java.io.Serializable {
 
 	private String id;
 	private MemberInfo memberInfo;
-	private String managerName;
 	private int isContract;
 	private double balance;
 	private double investing;
@@ -46,13 +45,12 @@ public class InvestMember implements java.io.Serializable {
 
 	/** full constructor */
 	public InvestMember(String id, MemberInfo memberInfo,
-			 String managerName,double currentIncome,
+			 double currentIncome,
 			int isContract, double balance, double investing,
 			double totalIncome, double totalMoney, int useableScore,
 			int registerStyle) {
 		this.id = id;
 		this.memberInfo = memberInfo;
-		this.managerName = managerName;
 		this.isContract = isContract;
 		this.balance = balance;
 		this.investing = investing;
@@ -82,16 +80,6 @@ public class InvestMember implements java.io.Serializable {
 
 	public void setMemberInfo(MemberInfo memberInfo) {
 		this.memberInfo = memberInfo;
-	}
-
-
-	@Column(name = "manager_name")
-	public String getManagerName() {
-		return this.managerName;
-	}
-
-	public void setManagerName(String managerName) {
-		this.managerName = managerName;
 	}
 
 	@Column(name = "is_contract")

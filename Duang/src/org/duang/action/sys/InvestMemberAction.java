@@ -218,9 +218,9 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				condsUtils.addProperties(false, "infoAlias.phone");
 				condsUtils.concatValue(new String[] { entity.getMemberInfo().getPhone(), "like" });
 			}
-			if (DataUtils.notEmpty(entity.getManagerName())) {
+			if (DataUtils.notEmpty(getRequest().getParameter("managerName"))) {
 				condsUtils.addProperties(false, "managerName");
-				condsUtils.concatValue(new String[] { entity.getManagerName(), "like" });
+				condsUtils.concatValue(new String[] {getRequest().getParameter("managerName"), "like" });
 			}
 			if (ConstantCode.NOSELECTED!=entity.getIsContract()) {
 				condsUtils.addProperties(false, "isContract");

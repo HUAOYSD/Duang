@@ -19,11 +19,14 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.common.system.SessionTools;
+import org.duang.entity.CustomerManager;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.IDCard;
 import org.duang.enums.If;
+import org.duang.service.CustomerManagerService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
@@ -47,6 +50,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Results(value={
 		@Result(name="levelmember", type="dispatcher", location="WEB-INF/page/sys/memberinfo/levelMemberInfoList.jsp"),
 		@Result(name="memberInfoList", type="dispatcher", location="WEB-INF/page/sys/memberinfo/memberInfoList.jsp"),
+		@Result(name="myMemberInfoList", type="dispatcher", location="WEB-INF/page/sys/memberinfo/myMemberInfoList.jsp"),
 		@Result(name="uploadMemberInfoImg", type="dispatcher", location="WEB-INF/page/sys/memberinfo/uploadMemberInfoImg.jsp"),
 		@Result(name="showMemberInfoInvestOrLoan", type="dispatcher", location="WEB-INF/page/sys/memberinfo/investOrLoanInfo.jsp"),
 		@Result(name=com.opensymphony.xwork2.Action.ERROR, type="dispatcher", location="error.jsp")
@@ -63,6 +67,11 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 		this.sysMemberInfoService = sysMemberInfoService;
 	}
 	
+	private CustomerManagerService customerManagerService;
+	@Resource(name = "customermanagerserviceimpl")
+	public void setService(CustomerManagerService customerManagerService) {
+		this.customerManagerService = customerManagerService;
+	}
 	/**
 	 * 页面跳转 ---客户管理页面
 	 * @Title: gotoMemberInfoList   
@@ -77,6 +86,20 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 		return "memberInfoList";
 	}
 	
+	
+	/**
+	 * 页面跳转 ---我的客户
+	 * @Title: gotoMyMemberInfoList   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年9月21日 下午3:37:56
+	 * @return: String      
+	 * @throws
+	 */
+	public String gotoMyMemberInfoList(){
+		return "myMemberInfoList";
+	}
 	
 	/**   
 	 * 去查询用户的推荐关系列表
@@ -240,6 +263,84 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 	}
 	
 	/**
+	 * 封装客户信息（理财客户、借贷客户）
+	 * @Title: fillDataObject   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param list
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年9月21日 下午3:54:10
+	 * @return: List<Map<String,Object>>      
+	 * @throws
+	 */
+	private List<Map<String, Object>> fillDataObject(@SuppressWarnings("rawtypes") List list) {
+		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+		try {
+			for(Object temp : list) {
+				if (temp instanceof Object[]) {
+					MemberInfo memberInfo = (MemberInfo)((Object[])temp)[1];
+					Map<String, Object> map = new HashMap<String, Object>();
+					//客户的基本信息
+					map.put("id", memberInfo.getId());
+					map.put("loginName", memberInfo.getLoginName());
+					map.put("realName", memberInfo.getRealName());
+					map.put("nickname", memberInfo.getNickname());
+					map.put("email", memberInfo.getEmail());
+					map.put("age", memberInfo.getAge());
+					map.put("sex", memberInfo.getSex());
+					map.put("phone", memberInfo.getPhone());
+					map.put("isDelete", memberInfo.getIsdelete());
+					map.put("createTime", DateUtils.getTimeStamp(memberInfo.getCreateTime()));
+					map.put("modifyTime", DateUtils.getTimeStamp(memberInfo.getModifyTime()));
+					map.put("createuser", memberInfo.getCreateuser());
+					map.put("modifyuser", memberInfo.getModifyuser());
+					map.put("userImg", memberInfo.getUserImg());
+					map.put("isEliteAccount", memberInfo.getIsEliteAccount());
+					map.put("level", memberInfo.getLevel());
+					map.put("price", memberInfo.getPrice());
+					map.put("password", memberInfo.getPassword());
+					map.put("payPassword", memberInfo.getPayPassword());
+					map.put("handPassword", memberInfo.getHandPassword());
+					map.put("isFreeze", memberInfo.getIsFreeze());
+					map.put("idCard", memberInfo.getIdCard());
+					map.put("miDescribe", memberInfo.getMiDescribe());
+					map.put("idCardImg1", memberInfo.getIdCardImg1());
+					map.put("idCardImg2", memberInfo.getIdCardImg2());
+					map.put("myQr", memberInfo.getMyQr());
+					map.put("registerStyle", memberInfo.getRegisterStyle());
+					//封装理财用户信息
+					Set<InvestMember> investMembers =  memberInfo.getInvestMembers();
+					for(InvestMember investMember : investMembers){
+						map.put("investMember_id", investMember.getId());
+						map.put("isContract", investMember.getIsContract());
+						map.put("balance", investMember.getBalance());
+						map.put("investing", investMember.getInvesting());
+						map.put("totalIncome", investMember.getInvesting());
+						map.put("totalMoney", investMember.getTotalMoney());
+						map.put("useableScore", investMember.getUseableScore());
+						map.put("currentIncome", investMember.getCurrentIncome());
+					}
+					//封装借贷客户信息
+					Set<LoanMember> loanMembers =  memberInfo.getLoanMembers();
+					for(LoanMember loanMember : loanMembers){
+						map.put("loanMember_id", loanMember.getId());
+						map.put("backMoney", loanMember.getBackMoney());
+						map.put("expectMoney", loanMember.getExpectMoney());
+						map.put("lendMoney", loanMember.getLendMoney());
+						map.put("residueMoney", loanMember.getResidueMoney());
+					}
+					listMap.add(map);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("封装理财用户错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("封装理财用户错误：" + e.getLocalizedMessage(), this.getClass());
+		}
+		return listMap;
+	}
+	
+	/**
 	 * @Title: freezeMemberInfo   
 	 * @Description: TODO(冻结或者解冻操作)   
 	 * @param:   
@@ -392,6 +493,73 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectArray(list));
+				jsonObject.put("total", getPageUtil().getCountRecords());
+			} else {
+				jsonObject.put("rows", new JSONArray());
+				jsonObject.put("total", 0);
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "没有符合条件的数据！");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("客户ACTION查询错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("客户ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
+		} finally {
+			printJsonResult();
+		}
+	}
+	
+	
+	/**
+	 * 客户经理查询本下的所有客户
+	 * @Title: queryMemberInfoByCustomer
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param:
+	 * @author LiYonghui
+	 * @date 2016年9月21日 下午2:27:37
+	 * @return: void
+	 * @throws
+	 */
+	public void queryMemberInfoByCustomer() {
+		try {
+			String customerId = "";
+			//获取登录人（客户经理）的id
+			String loginId = SessionTools.getSessionSysUser().getId();
+			CustomerManager customerManager = customerManagerService.findEntity("sysUser.id", loginId);
+			if(customerManager != null){
+				customerId = customerManager.getId();
+			}else{
+				//说明其不是客户经理
+				customerId = "404";
+			}
+		
+            condsUtils.addProperties(true, "customerManager");
+			condsUtils.concatValue(new String[] { "customerManagerAlias", "as" });
+			condsUtils.addProperties(false, "customerManagerAlias.id");
+			condsUtils.addValues(false, customerId);
+			condsUtils.addProperties(false, "customerManagerAlias.isDelete");
+			condsUtils.addValues(false, 0);
+			condsUtils.addProperties(false, "isdelete", "order");
+			condsUtils.addValues(false, "0", Order.desc("createTime"));
+			
+			if (DataUtils.notEmpty(entity.getLoginName())) {
+				condsUtils.addProperties(false, "loginName");
+				condsUtils.concatValue(new String[] { entity.getLoginName(), "like" });
+			}
+			if (DataUtils.notEmpty(entity.getRealName())) {
+				condsUtils.addProperties(false, "realName");
+				condsUtils.concatValue(new String[] { entity.getRealName(), "like" });
+			}
+			if (DataUtils.notEmpty(entity.getPhone())) {
+				condsUtils.addProperties(false, "phone");
+				condsUtils.concatValue(new String[] { entity.getPhone(), "like" });
+			}
+			
+			@SuppressWarnings("rawtypes")
+			List list = sysMemberInfoService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+			if (list != null && list.size() > 0) {
+				jsonObject.put("result", true);
+				jsonObject.put("rows", fillDataObject(list));
 				jsonObject.put("total", getPageUtil().getCountRecords());
 			} else {
 				jsonObject.put("rows", new JSONArray());
