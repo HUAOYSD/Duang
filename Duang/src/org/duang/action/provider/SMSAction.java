@@ -28,6 +28,16 @@ import org.springframework.context.annotation.ScopedProxyMode;
 public class SMSAction extends BaseAction<SMS>{
 
 	
+	/**   
+	 * 发送短信
+	 * @Title: sendSMS   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 白攀    
+	 * @date 2016年9月21日 下午4:40:33
+	 * @return: void      
+	 * @throws   
+	 */  
 	public void sendSMS(){
 		boolean success = false;
 		try {

@@ -342,16 +342,16 @@ public class MemberInfoServiceImpl implements MemberInfoService{
 				if (object instanceof Object[]) {
 					Map<String, Object> map = new HashMap<String, Object>();
 					map.put("firtname", ((Object[])object)[1].toString());
-					List<?> templist = dao.queryBySQL("SELECT CUSMEMBERID, REAL_NAME FROM MEMBER_INFO WHERE ID = '"+((Object[])object)[0].toString()+"'", null, null, false);
-					if (DataUtils.isEmpty(templist)) {
+					if (((Object[])object)[0] == null) {
 						map.put("secondname", "--");
 						map.put("thirdname", "--");
 					}else {
+						List<?> templist = dao.queryBySQL("SELECT CUSMEMBERID, REAL_NAME FROM MEMBER_INFO WHERE ID = '"+((Object[])object)[0].toString()+"'", null, null, false);
 						map.put("secondname", ((Object[])templist.get(0))[1].toString());
-						templist = dao.queryBySQL("SELECT REAL_NAME FROM MEMBER_INFO WHERE ID = '"+((Object[])templist.get(0))[0].toString()+"'", null, null, false);
-						if (DataUtils.isEmpty(templist)) {
+						if (((Object[])templist.get(0))[0] == null) {
 							map.put("thirdname", "--");
 						}else {
+							templist = dao.queryBySQL("SELECT REAL_NAME FROM MEMBER_INFO WHERE ID = '"+((Object[])templist.get(0))[0].toString()+"'", null, null, false);
 							map.put("thirdname", templist.get(0).toString());
 						}
 					}

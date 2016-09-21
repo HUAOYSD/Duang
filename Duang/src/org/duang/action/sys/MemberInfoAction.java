@@ -107,9 +107,6 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 		try {
 			String where = "";
 			if (entity!=null) {
-				if (DataUtils.notEmpty(entity.getLoginName())) {
-					where += " AND LOGIN_NAME LIKE '%"+entity.getLoginName()+"%' ";
-				}
 				if (DataUtils.notEmpty(entity.getRealName())) {
 					where += " AND REAL_NAME LIKE '%"+entity.getRealName()+"%' ";
 				}

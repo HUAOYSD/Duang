@@ -19,9 +19,14 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.common.system.SessionTools;
 import org.duang.entity.CustomerManager;
+import org.duang.entity.InvestMember;
+import org.duang.entity.LoanMember;
+import org.duang.entity.MemberInfo;
 import org.duang.entity.SysUser;
 import org.duang.enums.If;
+import org.duang.enums.Platform;
 import org.duang.service.CustomerManagerService;
 import org.duang.service.SysUserService;
 import org.duang.util.DES;
@@ -214,6 +219,32 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 				entity.getSysUser().setCreateTime(new Date());
 				entity.getSysUser().setPassword(DES.encryptDES(entity.getSysUser().getName()+"12345"));
 				entity.getSysUser().setRemark("客户经理账号");
+
+				//增加会员
+				MemberInfo memberInfo = new MemberInfo(DataUtils.randomUUID());
+				memberInfo.setLoginName(entity.getSysUser().getName());
+				memberInfo.setRealName(entity.getName());
+				memberInfo.setEmail(entity.getEmail());
+				memberInfo.setSex(entity.getSex());
+				memberInfo.setPhone(entity.getPhone());
+				memberInfo.setIdCard(entity.getIdcard());
+				memberInfo.setMiDescribe("客户经理角色");
+				memberInfo.setIsdelete("0");
+				memberInfo.setCreateTime(new Date());
+				memberInfo.setCreateuser(SessionTools.getSessionSysUserName());
+				memberInfo.setIsEliteAccount(0);
+				memberInfo.setPassword(DES.encryptDES(entity.getSysUser().getName()+"12345"));
+				memberInfo.setRegisterStyle(Platform.P4.getVal());
+				memberInfo.setCustomerManager(entity);
+				
+				//理财会员
+				InvestMember investMember = new InvestMember(DataUtils.randomUUID(), memberInfo, 0, 0, 0, 0, 0, 0, 0);
+				memberInfo.getInvestMembers().add(investMember);
+				//投资会员
+				LoanMember loanMember = new LoanMember(DataUtils.randomUUID(), memberInfo, 0, 0, 0, 0);
+				memberInfo.getLoanMembers().add(loanMember);
+				entity.getMemberInfos().add(memberInfo);
+				
 				if (service.saveEntity(entity)) {
 					jsonObject.put("success", true);
 				}else{

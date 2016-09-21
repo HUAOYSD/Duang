@@ -3,6 +3,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.junit.Test;
+
 /**
  * DES加密解密
  */
@@ -78,7 +80,21 @@ public class DES {
 		return sb.toString();  
 	}
 
+	@Test
+	public void Test(){
 
+	}
+
+	public static void main(String[] args) {
+		try {
+			//System.out.println(encryptDES("1590060455622"));
+			System.out.println(decryptDES("TmnW/VByEOrQcuH4IprC9gmmuKCrkpcfOKA1W4b0gGYZD2NWA2b5RA=="));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
 	/*  
 	private static final byte[] DES_KEY = { 21, 1, -110, 82, -32, -85, -128, -65 };  //DES算法密钥 
 

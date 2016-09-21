@@ -17,8 +17,6 @@
 					  	<td><input  name="memberInfo.phone"/></td>
 					</tr>
 					<tr height="35px">
-						<td>&nbsp;&nbsp;<span class="investPro-search">客户经理姓名：</span></td>
-					  	<td><input  name="managerName"/></td>
 					  	<td>&nbsp;<span class="investPro-search">契约用户：</span></td>
 					  	<td>
 						       	<select  class="easyui-combobox" name="isContract" data-options="panelHeight:'auto'">
@@ -34,6 +32,12 @@
 						<td>
 							&nbsp;&nbsp;
 							  <a  onclick="javascript:$('#queryInvestMemberListForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true" >重置</a>
+						</td>
+						<td>
+							&nbsp;&nbsp;
+						</td>
+						<td>
+							&nbsp;&nbsp;
 						</td>
 					</tr>
 				  </table>

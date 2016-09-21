@@ -218,15 +218,10 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				condsUtils.addProperties(false, "infoAlias.phone");
 				condsUtils.concatValue(new String[] { entity.getMemberInfo().getPhone(), "like" });
 			}
-			if (DataUtils.notEmpty(entity.getManagerName())) {
-				condsUtils.addProperties(false, "managerName");
-				condsUtils.concatValue(new String[] { entity.getManagerName(), "like" });
-			}
 			if (ConstantCode.NOSELECTED!=entity.getIsContract()) {
 				condsUtils.addProperties(false, "isContract");
 				condsUtils.addValues(false, entity.getIsContract());
 			}
-
 			@SuppressWarnings("rawtypes")
 			List list = investMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			if (list != null && list.size() > 0) {

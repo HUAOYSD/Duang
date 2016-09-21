@@ -9,13 +9,11 @@
 				<form id="memberinfoQueryForm" method="post">
 					  <table border="0">
 						<tr height="35px">
-						  	<td class="showRight"><span class="investPro-search">登录名：</span></td>
-						  	<td><input name="loginName"/></td>
-						 	<td class="showRight"><span class="investPro-search">真实姓名：</span></td>
+						 	<td class="showRight"><span class="investPro-search">姓名：</span></td>
 						  	<td><input name="realName"/></td>
-						 	<td class="showRight"><span class="investPro-search">手机号码：</span></td>
+						 	<td class="showRight">&nbsp;&nbsp;<span class="investPro-search">手机号码：</span></td>
 						  	<td><input name="phone"/></td>
-						 	<td class="showRight"><span class="investPro-search">身份证号：</span></td>
+						 	<td class="showRight">&nbsp;&nbsp;<span class="investPro-search">身份证号：</span></td>
 						  	<td><input name="idCard"/></td>
 						  	<td colspan="2">&nbsp;&nbsp;
 								<a id="memberinfoQueryForm_Btn" class="easyui-linkbutton my-search-button" iconCls="icon-2012092109942" plain="true">查询</a>&nbsp;&nbsp;

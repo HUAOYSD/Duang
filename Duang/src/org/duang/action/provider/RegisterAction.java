@@ -1,4 +1,7 @@
 package org.duang.action.provider;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.annotation.Resource;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -89,6 +92,10 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 	 * @throws   
 	 */  
 	public void sendValidateCode(){
+		Map<String, String[]> map = getRequest().getParameterMap();
+		for (Entry<String, String[]> obj : map.entrySet()) {
+			System.out.println(obj.getValue().length+"\t"+obj.getKey()+"\t"+obj.getValue()[0].toString()+"\t");
+		}
 		boolean success = false;
 		try {
 			String phone = getRequest().getParameter("phoneNum");
@@ -102,6 +109,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 					if ("IOS".equals(platform) && SMSUtils.IOS_SIGNATURE.equals(signature)) {
 						jsonObject.put("vc", vc);
 						//success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P3.getVal());
+						success = true;
 					}else if ("Android".equals(platform) && SMSUtils.ANDORID_SIGNATURE.equals(signature)) {
 						jsonObject.put("vc", vc);
 						//success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P2.getVal());
