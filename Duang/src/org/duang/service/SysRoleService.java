@@ -10,7 +10,7 @@ import org.duang.entity.SysRolePower;
  * 系统角色业务接口
  * @ClassName:  SysRoleService   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月25日 下午2:55:17      
  */  
 public interface SysRoleService extends CommonInterface<SysRole>{
@@ -23,7 +23,7 @@ public interface SysRoleService extends CommonInterface<SysRole>{
 	 * @param: @param roleId
 	 * @param: @param powerIds
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午2:35:52
 	 * @return: boolean      
 	 * @throws   
@@ -39,7 +39,7 @@ public interface SysRoleService extends CommonInterface<SysRole>{
 	 * @param: @param roleid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午3:02:24
 	 * @return: boolean      
 	 * @throws   

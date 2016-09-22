@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 /**
  * 定义一个Logger全局类
- * @author 白攀
+ * @author 5y
  */
 public class LoggerUtils {
 
@@ -20,7 +20,7 @@ public class LoggerUtils {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param clazz
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 上午11:17:13
 	 * @return: Logger      
 	 * @throws   
@@ -42,7 +42,7 @@ public class LoggerUtils {
 	 * @Description: TODO
 	 * @param @param message    
 	 * @return void    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-16下午4:52:13
 	 * @throws
 	 */
@@ -58,7 +58,7 @@ public class LoggerUtils {
 	 * @Description: TODO
 	 * @param @param message    
 	 * @return void    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-16 下午4:52:13
 	 * @throws
 	 */
@@ -74,7 +74,7 @@ public class LoggerUtils {
 	 * @Description: TODO
 	 * @param @param message    
 	 * @return void    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-16 下午4:52:13
 	 * @throws
 	 */
@@ -90,7 +90,7 @@ public class LoggerUtils {
 	 * @Description: TODO
 	 * @param @param message    
 	 * @return void    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-16 下午4:52:13
 	 * @throws
 	 */
@@ -106,7 +106,7 @@ public class LoggerUtils {
 	 * @Description: TODO
 	 * @param @param message    
 	 * @return void    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-16 下午4:52:13
 	 * @throws
 	 */

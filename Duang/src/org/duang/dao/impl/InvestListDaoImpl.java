@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
  * 理财记录dao实现类
  * @ClassName:  InvestListDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月12日 下午4:29:05      
  */  
 @Repository("investlistdaoimpl")

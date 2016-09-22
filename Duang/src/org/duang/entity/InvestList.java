@@ -26,7 +26,6 @@ import org.hibernate.annotations.DynamicInsert;
 public class InvestList implements java.io.Serializable {
 
 	// Fields
-
 	private String id;
 	private Scale scale;
 	private InvestTicket investTicket;

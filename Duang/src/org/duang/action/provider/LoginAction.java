@@ -25,7 +25,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————登录Action
  * @ClassName:  LoginAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -48,7 +48,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 	 * @Title: checkPhone   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 上午11:03:34
 	 * @return: void      
 	 * @throws   
@@ -96,7 +96,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 	 * @Title: findInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月6日 上午11:42:25
 	 * @return: void      
 	 * @throws   
@@ -147,7 +147,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 	 * @Title: loginout   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月6日 下午2:53:05
 	 * @return: void      
 	 * @throws   
@@ -182,7 +182,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 	 * @Title: fillMemberInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param memberInfo  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月6日 上午11:38:00
 	 * @return: void      
 	 * @throws   

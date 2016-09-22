@@ -71,7 +71,7 @@ public class ScaleAction extends BaseAction<Scale> {
 	 * @Title: queryScaleByPage   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午10:30:46
 	 * @return: void      
 	 * @throws   
@@ -132,7 +132,7 @@ public class ScaleAction extends BaseAction<Scale> {
 	 * @Title: fillDatagridCons   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param list  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午5:08:47
 	 * @return: void      
 	 * @throws   
@@ -195,7 +195,7 @@ public class ScaleAction extends BaseAction<Scale> {
 	 * @Title: saveScale   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:05:01
 	 * @return: void      
 	 * @throws   
@@ -228,7 +228,7 @@ public class ScaleAction extends BaseAction<Scale> {
 	 * @Title: updateScale   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:39:48
 	 * @return: void      
 	 * @throws   
@@ -259,7 +259,7 @@ public class ScaleAction extends BaseAction<Scale> {
 	 * @Title: openDialog   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 下午2:49:25
 	 * @return: String      
 	 * @throws   

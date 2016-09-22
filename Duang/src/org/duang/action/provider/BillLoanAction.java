@@ -27,7 +27,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————借贷账单记录Action
  * @ClassName:  BillLoanAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月9日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -50,7 +50,7 @@ public class BillLoanAction extends BaseAction<BillLoan>{
 	 * @Title: queryBillList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月12日 下午4:29:05
 	 * @return: void      
 	 * @throws   

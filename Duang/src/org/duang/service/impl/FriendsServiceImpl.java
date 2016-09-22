@@ -297,7 +297,7 @@ public class FriendsServiceImpl implements FriendsService{
 	 * @param: @param targetid 如果对方事先有关注你，需要更新对方的关注你的状态为互相关注
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月12日 上午10:20:28
 	 * @return: boolean      
 	 * @throws   
@@ -331,7 +331,7 @@ public class FriendsServiceImpl implements FriendsService{
 	 * @param: @param targetid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月12日 上午10:23:04
 	 * @return: boolean      
 	 * @throws   

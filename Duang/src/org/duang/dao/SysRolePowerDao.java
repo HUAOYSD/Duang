@@ -9,7 +9,7 @@ import org.duang.entity.SysRolePower;
  * 系统用户权限多对多参照表dao接口
  * @ClassName:  SysRolePowerDao   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月25日 下午4:24:24      
  */  
 public interface SysRolePowerDao extends CommonInterface<SysRolePower>  {
@@ -21,7 +21,7 @@ public interface SysRolePowerDao extends CommonInterface<SysRolePower>  {
 	 * @param: @param rps
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午2:49:30
 	 * @return: boolean      
 	 * @throws   

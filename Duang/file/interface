@@ -1,5 +1,5 @@
-----前面带*号的是需要DES加密传参的，两个*号表示需要MD5加密传参，有备注nullable表示参数可以为空
-	返回结果中的msg通常为错误提示信息，接口文档中的msg值只是为结果示范，并非真实场景提示，且msg错误提示值并非唯一
+----前面带*号的是需要DES加密传参的，有备注nullable表示参数可以为空，无nullable备注的参数为必要参数
+    返回结果中的msg通常为错误提示信息，接口文档中的msg值只是为结果示范，并非真实场景提示，且msg错误提示值并非唯一
 
 一：注册
 	1、检查手机号码是否存在√
@@ -578,7 +578,7 @@
 			poundagePrivilege转让优惠手续费
 			turnStatus转让状态
 
-	3、支付理财金额 
+	3、支付理财金额成功回调 
 		URL：http://192.168.11.56:8080/Duang/provider_wallet!payInvest.do
 		发送参数说明：
 			token登录会员token
@@ -588,7 +588,7 @@
 			成功：{'success':true}
 			
 		
-	5、赎回理财
+	5、赎回理财成功回调 
 		URL：http://192.168.11.56:8080/Duang/provider_wallet!redemptiveInvest.do
 		发送参数说明：
 			token登录会员token
@@ -646,7 +646,7 @@
 	9、查询转让记录...
 			
 九：充值、提现
-	1、充值
+	1、充值成功回调 
 		URL：http://192.168.11.56:8080/Duang/provider_wallet!deposit.do
 		发送参数说明：
 			token登录会员token
@@ -657,7 +657,7 @@
 			成功：{'success':true}
 			
 		
-	2、提现
+	2、提现成功回调 
 		URL：http://192.168.11.56:8080/Duang/provider_wallet!withdrawals.do
 		发送参数说明：
 			token登录会员token

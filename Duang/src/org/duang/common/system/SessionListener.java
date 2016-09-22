@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSessionListener;
  * session监听器
  * ClassName: SessionListener 
  * date: 2016年7月15日 下午3:13:11 
- * @author 白攀
+ * @author 5y
  */
 public class SessionListener implements HttpSessionListener {  
       

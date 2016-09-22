@@ -26,7 +26,7 @@ import org.duang.util.DataUtils;
  * 短信签名值
  * @ClassName:  SMS   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月6日 上午10:20:34      
  */  
 public class SMSUtils {
@@ -102,7 +102,7 @@ public class SMSUtils {
 	 * @param: @param mobile
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月19日 上午10:48:55
 	 * @return: boolean      
 	 * @throws   
@@ -157,7 +157,7 @@ public class SMSUtils {
 	 * @param: @param mobiles
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月19日 上午11:05:16
 	 * @return: boolean      
 	 * @throws   
@@ -207,7 +207,7 @@ public class SMSUtils {
 	 * @param: @param result
 	 * @param: @param sms
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月19日 下午3:16:44
 	 * @return: void      
 	 * @throws   

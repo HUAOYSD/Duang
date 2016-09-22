@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
  * 系统角色dao实现类
  * @ClassName:  SysRoleDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月25日 下午2:52:59      
  */  
 @Repository("sysroledao")

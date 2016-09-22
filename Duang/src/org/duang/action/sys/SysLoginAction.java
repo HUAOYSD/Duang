@@ -34,7 +34,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 系统用户登录控制类 
  * @ClassName: SysUserAction 
  * @Description: TODO(这里用一句话描述这个类的作用) 
- * @author 白攀
+ * @author 5y
  * @date 2016-7-17 下午2:07:35 
  */ 
 @Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
@@ -81,7 +81,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 	 * @Title: login   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月28日 下午8:58:26
 	 * @return: String      
 	 * @throws   
@@ -116,7 +116,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 	 * @Title: checkCode   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月28日 下午10:59:26
 	 * @return: String      
 	 * @throws   
@@ -139,7 +139,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 	 * @Title: checkValidateCode   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月29日 上午9:53:23
 	 * @return: void      
 	 * @throws   
@@ -173,7 +173,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 	 * @Title: logout   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月28日 下午9:26:47
 	 * @return: String      
 	 * @throws   
@@ -193,7 +193,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 	 * @Title: goLeft   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月28日 下午9:44:50
 	 * @return: String      
 	 * @throws   
@@ -233,7 +233,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 	 * @Title: getSubMenu   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月28日 下午10:11:38
 	 * @return: List<Map<String, Object>>      
 	 * @throws   

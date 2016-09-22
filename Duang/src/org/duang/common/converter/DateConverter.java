@@ -11,7 +11,7 @@ import org.duang.util.DateUtils;
  * Struts2 Date类型转换
  * @ClassName:  DateConverter   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月10日 上午11:06:28      
  */  
 public class DateConverter extends StrutsTypeConverter {

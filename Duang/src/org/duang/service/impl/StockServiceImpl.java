@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * 库存业务接口实现类
  * @ClassName:  StockServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月17日 下午3:37:07      
  */  
 @ServiceLog(ModelName="理财库存管理")

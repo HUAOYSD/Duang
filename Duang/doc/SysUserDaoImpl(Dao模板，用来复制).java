@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  * 系统用户dao实现类
  * @ClassName:  SysUserDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月17日 上午11:38:51      
  */  
 @Repository("sysuserdao")

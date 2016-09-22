@@ -15,7 +15,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * 专用于跳转的action
  * @ClassName:  JumpAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月18日 下午10:05:36      
  */  
 @Scope(value="singleton", proxyMode=ScopedProxyMode.NO)
@@ -38,7 +38,7 @@ public class JumpAction extends ActionSupport{
 	 * @Title: toTestAdd   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月18日 下午10:06:46
 	 * @return: String      
 	 * @throws   
@@ -53,7 +53,7 @@ public class JumpAction extends ActionSupport{
 	 * @Title: goSys   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月1日 上午11:38:29
 	 * @return: String      
 	 * @throws   

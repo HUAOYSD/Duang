@@ -37,7 +37,7 @@ public class Contract {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param list
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月18日 下午3:25:52
 	 * @return: void      
 	 * @throws   

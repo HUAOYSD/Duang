@@ -13,7 +13,7 @@ import org.duang.util.DateUtils;
  * 日志拦截器
  * @ClassName: LogController 
  * @Description: TODO(这里用一句话描述这个类的作用) 
- * @author 白攀
+ * @author 5y
  * @date 2016-7-15 上午11:08:43 
  */ 
 public class LogController {
@@ -26,7 +26,7 @@ public class LogController {
 	 * @param joinPoint
 	 * @throws Throwable
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-15 下午1:37:08
 	 */ 
 	public Object methodCacheHold(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -49,7 +49,7 @@ public class LogController {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return String[]    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-15 下午2:21:28
 	 * @throws
 	 */

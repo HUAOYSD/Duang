@@ -8,7 +8,7 @@ import org.duang.entity.ScaleLoanList;
  * 借贷记录与理财标关联业务接口
  * @ClassName:  ScaleLoanListService   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月17日 下午3:36:24      
  */  
 public interface ScaleLoanListService extends CommonInterface<ScaleLoanList>{
@@ -20,7 +20,7 @@ public interface ScaleLoanListService extends CommonInterface<ScaleLoanList>{
 	 * @param: @param scaleId
 	 * @param: @param loanListIds
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月17日 下午3:14:19
 	 * @return: boolean      
 	 * @throws   

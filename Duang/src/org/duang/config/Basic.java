@@ -4,7 +4,7 @@ package org.duang.config;
  * 基础配置
  * @ClassName:  Basic   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月18日 上午11:36:35      
  */  
 public class Basic {

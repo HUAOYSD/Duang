@@ -9,7 +9,7 @@ import org.duang.entity.SysPower;
  * 系统权限dao接口
  * @ClassName:  SysPowerDao   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月25日 下午3:22:35      
  */  
 public interface SysPowerDao extends CommonInterface<SysPower>  {
@@ -22,7 +22,7 @@ public interface SysPowerDao extends CommonInterface<SysPower>  {
 	 * @param: @param parentid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月28日 下午9:56:52
 	 * @return: List<SysPower>      
 	 * @throws   
@@ -37,7 +37,7 @@ public interface SysPowerDao extends CommonInterface<SysPower>  {
 	 * @param: @param userid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月29日 下午3:41:27
 	 * @return: List<SysPower>      
 	 * @throws   

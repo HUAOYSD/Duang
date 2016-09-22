@@ -31,7 +31,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 系统用户权限Action类
  * @ClassName:  PowerAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月25日 下午2:50:11      
  */  
 @Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
@@ -63,7 +63,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: getPowerTreeCheckbox   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 上午11:22:53
 	 * @return: void      
 	 * @throws   
@@ -100,7 +100,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param powerId
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午12:57:09
 	 * @return: JSONArray      
 	 * @throws   
@@ -127,7 +127,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: showPower   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午3:42:14
 	 * @return: String      
 	 * @throws   
@@ -142,7 +142,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: openDialog   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午3:48:47
 	 * @return: String      
 	 * @throws   
@@ -163,7 +163,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: queryPoweTreeList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午5:05:16
 	 * @return: void      
 	 * @throws   
@@ -200,7 +200,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: makePowerTree   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param id  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午4:09:29
 	 * @return: void      
 	 * @throws   
@@ -228,7 +228,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: queryPowerList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午3:38:00
 	 * @return: void      
 	 * @throws   
@@ -261,7 +261,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: getPowerInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午4:20:42
 	 * @return: void      
 	 * @throws   
@@ -296,7 +296,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: savePower   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午5:03:05
 	 * @return: void      
 	 * @throws   
@@ -323,7 +323,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: updatePower   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午5:05:02
 	 * @return: void      
 	 * @throws   
@@ -349,7 +349,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: deletePower   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午4:39:21
 	 * @return: void      
 	 * @throws   
@@ -392,7 +392,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @param: @param powerId
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午4:42:28
 	 * @return: List<SysPower>      
 	 * @throws   
@@ -413,7 +413,7 @@ public class SysPowerAction extends BaseAction<SysPower>{
 	 * @Title: checkPowerName   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午4:29:56
 	 * @return: void      
 	 * @throws   

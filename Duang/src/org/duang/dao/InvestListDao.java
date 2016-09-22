@@ -6,7 +6,7 @@ import org.duang.entity.InvestList;
  * 理财记录Dao接口
  * @ClassName:  InvestListDao   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月12日 下午4:27:57      
  */  
 public interface InvestListDao extends CommonInterface<InvestList>  {

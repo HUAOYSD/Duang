@@ -28,7 +28,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————消息Action
  * @ClassName:  MessageAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -49,7 +49,7 @@ public class MessageAction extends BaseAction<Message>{
 	 * @Title: queryMessage   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午4:44:10
 	 * @return: void      
 	 * @throws   
@@ -92,7 +92,7 @@ public class MessageAction extends BaseAction<Message>{
 	 * @Title: findMessage   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午4:57:41
 	 * @return: void      
 	 * @throws   
@@ -130,7 +130,7 @@ public class MessageAction extends BaseAction<Message>{
 	 * @Title: insertMessage   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午4:44:43
 	 * @return: void      
 	 * @throws   
@@ -182,7 +182,7 @@ public class MessageAction extends BaseAction<Message>{
 	 * @Title: updateAllReaded   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午4:45:10
 	 * @return: void      
 	 * @throws   
@@ -218,7 +218,7 @@ public class MessageAction extends BaseAction<Message>{
 	 * @Title: updateReaded   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午4:45:36
 	 * @return: void      
 	 * @throws   

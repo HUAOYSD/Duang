@@ -290,7 +290,7 @@ public class BillInvestServiceImpl implements BillInvestService{
 	 * @param: @param memberid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月12日 下午2:48:36
 	 * @return: List<BillInvest>      
 	 * @throws   
@@ -312,7 +312,7 @@ public class BillInvestServiceImpl implements BillInvestService{
 	 * @param: @param tm
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月12日 下午2:51:36
 	 * @return: List<BillInvest>      
 	 * @throws   

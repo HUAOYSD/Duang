@@ -45,7 +45,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 借贷记录Action
  * @ClassName:  LoanListAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月10日 下午5:21:02      
  */  
 @Scope(value = "prototype", proxyMode = ScopedProxyMode.NO)
@@ -89,7 +89,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 * @Title: queryLoanListInfoByIds   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月1日 上午10:16:06
 	 * @return: String      
 	 * @throws   
@@ -138,7 +138,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 * @Title: queryCustomerManagerByPage   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午10:30:46
 	 * @return: void      
 	 * @throws   
@@ -213,7 +213,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 * @Title: fillDatagridCons   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param list  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午5:08:47
 	 * @return: void      
 	 * @throws   
@@ -287,7 +287,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 * @Title: queryPassLoanRecords   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月18日 下午2:47:07
 	 * @return: void      
 	 * @throws   
@@ -326,7 +326,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 * @Title: openDialog   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月11日 下午5:30:38
 	 * @return: String      
 	 * @throws   
@@ -371,7 +371,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 * @Title: updateCustomerManager   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月12日 下午3:37:24
 	 * @return: void      
 	 * @throws   

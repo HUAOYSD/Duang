@@ -36,7 +36,7 @@ public class BaseDao<M> {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return
 	 * @return Session    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-8-21 下午2:00:36
 	 */ 
 	public Session getSession(){
@@ -70,7 +70,7 @@ public class BaseDao<M> {
 	 * @param conds
 	 * @return
 	 * @return Integer    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-27 下午3:22:18
 	 */
 	public int count() throws Exception{
@@ -84,7 +84,7 @@ public class BaseDao<M> {
 	 * 统计
 	 * @Title: count 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-3 下午3:53:09
 	 * @param sql
 	 * @return 
@@ -104,7 +104,7 @@ public class BaseDao<M> {
 	 * @param conds
 	 * @return
 	 * @return Integer    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-27 下午3:22:18
 	 */
 	public int count(String property,Object value) throws Exception{
@@ -121,7 +121,7 @@ public class BaseDao<M> {
 	 * @param conds
 	 * @return
 	 * @return Integer    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-27 下午3:22:18
 	 */
 	public int count(Map<String, Object> conds) throws Exception{
@@ -158,7 +158,7 @@ public class BaseDao<M> {
 	 * @param dt
 	 * @return
 	 * @return int    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-29 上午10:24:26
 	 */ 
 	public int countByDetachedCriteria(DetachedCriteria dt) throws Exception{
@@ -174,7 +174,7 @@ public class BaseDao<M> {
 	/** 
 	 * @Title: countBySql 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-10 下午2:43:01
 	 * @param sql
 	 * @param params:“?”对应的值列表
@@ -194,7 +194,7 @@ public class BaseDao<M> {
 	/** 
 	 * @Title: countByHql 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-10 下午2:43:01
 	 * @param hql
 	 * @param params:“?”对应的值列表
@@ -223,7 +223,7 @@ public class BaseDao<M> {
 	 * @param id
 	 * @return
 	 * @return T    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-24 下午5:35:41
 	 */
 	@SuppressWarnings("unchecked")
@@ -241,7 +241,7 @@ public class BaseDao<M> {
 	 * @param id
 	 * @return
 	 * @return T    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-24 下午5:35:41
 	 */
 	@SuppressWarnings("unchecked")
@@ -268,7 +268,7 @@ public class BaseDao<M> {
 	 * @param id
 	 * @return
 	 * @return T    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-24 下午5:35:41
 	 */
 	public M find(String property,Object value) throws Exception{
@@ -285,7 +285,7 @@ public class BaseDao<M> {
 	/** 
 	 * @Title: query 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-4 上午10:54:05
 	 * @param sql
 	 * @param convert 代表是否转换为业务实体
@@ -333,7 +333,7 @@ public class BaseDao<M> {
 	 * @param pageSize
 	 * @return
 	 * @return List<M>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午9:30:12
 	 */
 	@SuppressWarnings("unchecked")
@@ -387,7 +387,7 @@ public class BaseDao<M> {
 	 * @param pageSize
 	 * @return
 	 * @return List<M>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午9:29:39
 	 */
 	public List<M> query(String property,Object value,PageUtil<M> page) throws Exception{
@@ -406,7 +406,7 @@ public class BaseDao<M> {
 	 * @param param
 	 * @return
 	 * @return List<M>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午8:39:27
 	 */
 	@SuppressWarnings("unchecked")
@@ -428,7 +428,7 @@ public class BaseDao<M> {
 	 * @param pageSize
 	 * @return
 	 * @return List<M>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午9:29:39
 	 */
 	@SuppressWarnings("unchecked")
@@ -461,7 +461,7 @@ public class BaseDao<M> {
 	 * @param pageSize
 	 * @return
 	 * @return List<M>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午9:29:39
 	 */
 	@SuppressWarnings("unchecked")
@@ -496,7 +496,7 @@ public class BaseDao<M> {
 	 * @param value
 	 * @return
 	 * @return List<M>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午8:48:31
 	 */
 	public List<M> query(String property,Object value) throws Exception{
@@ -512,7 +512,7 @@ public class BaseDao<M> {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return
 	 * @return List<M>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-2 下午1:42:52
 	 */
 	@SuppressWarnings("unchecked")
@@ -530,7 +530,7 @@ public class BaseDao<M> {
 	 * @param convert 代表是否转换为业务实体
 	 * @return
 	 * @return List    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午8:59:15
 	 */
 	@SuppressWarnings("unchecked")
@@ -561,7 +561,7 @@ public class BaseDao<M> {
 	 * 根据sql语句查询
 	 * @Title: queryBySQL 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-31 下午4:31:21
 	 * @param SQL
 	 * @param convert 代表是否转换为业务实体
@@ -613,7 +613,7 @@ public class BaseDao<M> {
 	 * @param HQL
 	 * @return
 	 * @return List    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午8:59:25
 	 */
 	@SuppressWarnings("unchecked")
@@ -638,7 +638,7 @@ public class BaseDao<M> {
 	/** 
 	 * @Title: queryByHQL 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-31 下午4:31:21
 	 * @param HQL
 	 * @param params 的写法只有一种；A:"张三，男，24岁"、   没有：B:"Object[]{'name','张三'}，Object[]{'sex','男'}"
@@ -674,7 +674,7 @@ public class BaseDao<M> {
 	 * @param dt
 	 * @return
 	 * @return List    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-25 下午05:11:49
 	 */ 
 	@SuppressWarnings("unchecked")
@@ -697,7 +697,7 @@ public class BaseDao<M> {
 	 * @param pageSize
 	 * @return
 	 * @return List<M>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午9:29:39
 	 */
 	@SuppressWarnings("unchecked")
@@ -731,7 +731,7 @@ public class BaseDao<M> {
 	 * @param dt
 	 * @return
 	 * @return List    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-25 下午05:11:49
 	 */ 
 	@SuppressWarnings("unchecked")
@@ -747,7 +747,7 @@ public class BaseDao<M> {
 	 * @param dt
 	 * @return
 	 * @return List    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-25 下午05:11:49
 	 */ 
 	@SuppressWarnings("unchecked")
@@ -780,7 +780,7 @@ public class BaseDao<M> {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @param entity
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-8-25 上午9:14:56
 	 */ 
 	public void saveOrUpdate(M entity) throws Exception{
@@ -793,7 +793,7 @@ public class BaseDao<M> {
 	 * 根据对象添加
 	 * @Title: save 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-8-25 上午9:16:41
 	 * @param entity 
 	 * @see org.com.sh.dao.BaseDao#save(java.lang.Object) 
@@ -812,7 +812,7 @@ public class BaseDao<M> {
 	 * 根据对象修改
 	 * @Title: update 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-8-25 上午9:16:52
 	 * @param entity 
 	 * @see org.com.sh.dao.BaseDao#update(java.lang.Object) 
@@ -834,7 +834,7 @@ public class BaseDao<M> {
 	 * @param value
 	 * @return
 	 * @return Integer    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午8:56:49
 	 */
 	public int update(Map<String, Object> data, String property, Object value) throws Exception{
@@ -855,7 +855,7 @@ public class BaseDao<M> {
 	 * @param conds
 	 * @return
 	 * @return Integer    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午8:55:12
 	 */
 	public int update(Map<String, Object> data, Map<String, Object> conds) throws Exception{
@@ -907,7 +907,7 @@ public class BaseDao<M> {
 	 * 根据对象删除
 	 * @Title: delete 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-8-25 上午9:17:08
 	 * @param entity 
 	 * @see org.com.sh.dao.BaseDao#delete(java.lang.Object) 
@@ -925,7 +925,7 @@ public class BaseDao<M> {
 	 * @param id
 	 * @return
 	 * @return Integer    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午8:50:05
 	 */
 	public void delete(Serializable Id) throws Exception{
@@ -944,7 +944,7 @@ public class BaseDao<M> {
 	 * @param conds
 	 * @return
 	 * @return Integer    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午8:53:05
 	 */
 	public int delete(String property,Object value) throws Exception{
@@ -962,7 +962,7 @@ public class BaseDao<M> {
 	 * @param conds
 	 * @return
 	 * @return Integer    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午8:53:05
 	 */
 	public int delete(Map<String, Object> conds) throws Exception{
@@ -996,7 +996,7 @@ public class BaseDao<M> {
 	/** 
 	 * @Title: isExist 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-31 上午10:37:10
 	 * @param id
 	 * @return 
@@ -1010,7 +1010,7 @@ public class BaseDao<M> {
 	/** 
 	 * @Title: isExist 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-11 上午11:56:50
 	 * @param property
 	 * @param value
@@ -1026,7 +1026,7 @@ public class BaseDao<M> {
 	 * 执行sql语句
 	 * @Title: executeBySql 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-31 下午12:00:07
 	 * @param sql
 	 * @return 
@@ -1042,7 +1042,7 @@ public class BaseDao<M> {
 	 * 执行sql语句
 	 * @Title: executeBySql 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-31 下午12:00:07
 	 * @param sql
 	 * @param params 的写法只有一种；A:"张三，男，24岁"、   没有：B:"Object[]{'name','张三'}，Object[]{'sex','男'}"
@@ -1062,7 +1062,7 @@ public class BaseDao<M> {
 	 * 执行hql语句
 	 * @Title: executeByHql 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-31 下午12:00:07
 	 * @param hql
 	 * @return 
@@ -1078,7 +1078,7 @@ public class BaseDao<M> {
 	 * 执行hql语句
 	 * @Title: executeByHql 
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-31 下午2:19:00
 	 * @param hql
 	 * @param params 的写法只有一种；A:"张三，男，24岁"、   没有：B:"Object[]{'name','张三'}，Object[]{'sex','男'}"
@@ -1102,7 +1102,7 @@ public class BaseDao<M> {
 	 * @param params:“?”对应的值列表
 	 * @return
 	 * @return Integer    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-5-27 上午9:40:23
 	 */ 
 	public int executeByHql(String hql, List<Object> params) throws Exception{
@@ -1123,7 +1123,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1145,7 +1145,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1168,7 +1168,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1191,7 +1191,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1212,7 +1212,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1234,7 +1234,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1257,7 +1257,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1280,7 +1280,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1301,7 +1301,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1323,7 +1323,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1346,7 +1346,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1369,7 +1369,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1390,7 +1390,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1412,7 +1412,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1435,7 +1435,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1458,7 +1458,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1479,7 +1479,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1501,7 +1501,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1524,7 +1524,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1547,7 +1547,7 @@ public class BaseDao<M> {
 	 * @param @return
 	 * @param @throws Exception    
 	 * @return int    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-2-29 上午11:31:12
 	 * @throws
 	 */
@@ -1565,7 +1565,7 @@ public class BaseDao<M> {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return
 	 * @return Criteria    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-3-25 上午11:38:40
 	 */
 	public Criteria getCriteria(){
@@ -1581,7 +1581,7 @@ public class BaseDao<M> {
 	 * @param propertys       条件集合
 	 * @param values          条件值集合
 	 * @return DetachedCriteria    有了添加的dt
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-4-29 上午10:05:51
 	 */ 
 	public DetachedCriteria fillDtCriteria(List<String> properties,List<Object> values) throws Exception{

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
  * 系统权限dao实现类
  * @ClassName:  SysPowerDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月25日 下午3:23:04      
  */  
 @Repository("syspowerdao")
@@ -69,7 +69,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param: @param parentid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月28日 下午9:56:52
 	 * @return: List<SysPower>      
 	 * @throws   
@@ -96,7 +96,7 @@ public class SysPowerDaoImpl extends BaseDao<SysPower> implements SysPowerDao{
 	 * @param: @param userid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月29日 下午3:41:27
 	 * @return: List<SysPower>      
 	 * @throws   

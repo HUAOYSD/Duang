@@ -6,7 +6,7 @@ import org.duang.util.DataUtils;
  * 可以和不可以的枚举类
  * @ClassName:  If   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月9日 上午11:22:24      
  */  
 public enum May {
@@ -86,7 +86,7 @@ public enum May {
 	 * @Title: getVal   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:24:09
 	 * @return: int      
 	 * @throws   
@@ -99,7 +99,7 @@ public enum May {
 	 * @Title: getDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:24:24
 	 * @return: String      
 	 * @throws   
@@ -112,7 +112,7 @@ public enum May {
 	 * @Title: setDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param desc  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:29:14
 	 * @return: void      
 	 * @throws   
@@ -125,7 +125,7 @@ public enum May {
 	 * @Title: setDefaultDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:33:56
 	 * @return: Object      
 	 * @throws   

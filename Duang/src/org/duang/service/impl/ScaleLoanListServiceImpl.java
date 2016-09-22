@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
  * 借贷记录与理财标关联业务接口实现类
  * @ClassName:  ScaleLoanListServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月17日 下午3:37:07      
  */  
 @ServiceLog(ModelName="借贷记录与理财标关联管理")
@@ -71,7 +71,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	 * @param: @param scaleId
 	 * @param: @param loanListIds
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月17日 下午3:14:19
 	 * @return: boolean      
 	 * @throws   

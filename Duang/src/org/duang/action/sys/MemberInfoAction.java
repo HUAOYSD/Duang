@@ -106,7 +106,7 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 	 * @Title: gotoLevelMebmer   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月21日 上午10:01:37
 	 * @return: String      
 	 * @throws   
@@ -121,7 +121,7 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 	 * @Title: queryLevelMebmer   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月21日 上午9:57:27
 	 * @return: void      
 	 * @throws   

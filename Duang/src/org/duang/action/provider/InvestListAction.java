@@ -33,7 +33,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————投资记录Action
  * @ClassName:  InvestListAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月9日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -54,7 +54,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 * @Title: addInvestList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 上午10:55:47
 	 * @return: void      
 	 * @throws  
@@ -69,12 +69,11 @@ public class InvestListAction extends BaseAction<InvestList>{
 			String p_useTicket = getRequest().getParameter("p_useTicket");
 			String p_ticketBonus = getRequest().getParameter("p_ticketBonus");
 			String p_income = getRequest().getParameter("p_income");
-			
 			String p_totalMoney = getRequest().getParameter("p_totalMoney");
 			String investStyle = getRequest().getParameter("investStyle");
+			String id = "";
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance().getMainField(token))){
-				
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
 				InvestList investList = new InvestList();
 				investList.setId(DataUtils.randomUUID());
 				investList.setPactNumber(DES.decryptDES(p_pactNumber));
@@ -84,14 +83,12 @@ public class InvestListAction extends BaseAction<InvestList>{
 				investList.setIncome(Double.parseDouble(DES.decryptDES(p_income)));
 				investList.setTotalMoney(Double.parseDouble(DES.decryptDES(p_totalMoney)));
 				investList.setInvestStyle(Integer.parseInt(DES.decryptDES(investStyle)));
-				
-				Scale scale = new Scale();
-				scale.setId(p_scaleId);
-				investList.setScale(scale);
+				investList.setScale(new Scale(p_scaleId));
+				investList.setMemberInfo(new MemberInfo(id));
 				success = investListService.saveEntity(investList);
 				if(!success){
 					msg = "服务器超时，请稍后重试";
-				}else {
+				}else{
 					jsonObject.put("id", investList.getId());
 				}
 			}else{
@@ -114,7 +111,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 * @Title: queryInvestList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午4:25:24
 	 * @return: void      
 	 * @throws   
@@ -175,7 +172,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 * @Title: findInvestInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 上午11:33:23
 	 * @return: void      
 	 * @throws   

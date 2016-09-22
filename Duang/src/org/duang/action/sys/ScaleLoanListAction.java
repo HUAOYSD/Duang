@@ -64,7 +64,7 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 	 * @Title: confirmAllotLoanList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月18日 下午5:19:56
 	 * @return: void      
 	 * @throws   
@@ -102,7 +102,7 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param scaleid
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月22日 下午2:14:37
 	 * @return: Object      
 	 * @throws   
@@ -139,7 +139,7 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 	 * @Title: fillDatagridCons   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param list  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午5:08:47
 	 * @return: void      
 	 * @throws   

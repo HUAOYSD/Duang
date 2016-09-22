@@ -7,7 +7,7 @@ import java.util.List;
  * 页码工具类
  * @ClassName: PageUtil 
  * @Description: TODO 
- * @author 白攀 
+ * @author 5y 
  * @date 2016-7-17 下午1:52:53 
  */
 public class PageUtil<T>{
@@ -210,7 +210,7 @@ public class PageUtil<T>{
 	 * @Description: TODO
 	 * @param     
 	 * @return void    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-17 下午3:55:03
 	 * @throws
 	 */

@@ -68,7 +68,7 @@ public class InvestProductAction extends BaseAction<Product>{
 	 * @Title: queryProductByCombobox   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月16日 下午2:57:54
 	 * @return: void      
 	 * @throws   

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————支付Action
  * @ClassName:  PayAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -28,7 +28,7 @@ public class PayAction extends BaseAction<Object>{
 	 * @Title: deposit   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午3:39:54
 	 * @return: void      
 	 * @throws   
@@ -42,7 +42,7 @@ public class PayAction extends BaseAction<Object>{
 	 * @Title: withdrawals   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午3:40:45
 	 * @return: void      
 	 * @throws   
@@ -56,7 +56,7 @@ public class PayAction extends BaseAction<Object>{
 	 * @Title: payInvest   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午3:41:36
 	 * @return: void      
 	 * @throws   
@@ -71,7 +71,7 @@ public class PayAction extends BaseAction<Object>{
 	 * @Title: redemptiveInvest   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午3:42:33
 	 * @return: void      
 	 * @throws   

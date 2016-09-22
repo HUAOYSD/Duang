@@ -20,7 +20,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————交易数据Action
  * @ClassName:  TransactionAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @Scope(value = "prototype", proxyMode = ScopedProxyMode.NO)
@@ -42,7 +42,7 @@ private static final long serialVersionUID = 1L;
 	 * @Title: getLoanAndInvestData   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月7日 下午4:44:27
 	 * @return: void      
 	 * @throws 

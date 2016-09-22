@@ -6,7 +6,7 @@ import org.duang.util.DataUtils;
  * 理财标状态的枚举类
  * @ClassName:  useTicket   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月12日 下午4:18:33      
  */  
 public enum Status {
@@ -148,7 +148,7 @@ public enum Status {
 	 * @Title: getVal   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:24:09
 	 * @return: int      
 	 * @throws   
@@ -161,7 +161,7 @@ public enum Status {
 	 * @Title: getDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:24:24
 	 * @return: String      
 	 * @throws   
@@ -174,7 +174,7 @@ public enum Status {
 	 * @Title: setDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param desc  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:29:14
 	 * @return: void      
 	 * @throws   
@@ -187,7 +187,7 @@ public enum Status {
 	 * @Title: setDefaultDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:33:56
 	 * @return: Object      
 	 * @throws   

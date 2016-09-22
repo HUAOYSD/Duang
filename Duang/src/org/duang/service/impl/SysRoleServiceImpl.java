@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
  * 系统角色业务接口实现类
  * @ClassName:  SysRoleServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月25日 下午2:56:21      
  */  
 @ServiceLog(ModelName="系统角色服务管理")
@@ -62,7 +62,7 @@ public class SysRoleServiceImpl implements SysRoleService{
 	 * @param: @param roleid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午3:02:24
 	 * @return: boolean      
 	 * @throws   
@@ -87,7 +87,7 @@ public class SysRoleServiceImpl implements SysRoleService{
 	 * @param: @param roleId
 	 * @param: @param powerIds
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午2:35:52
 	 * @return: boolean      
 	 * @throws   

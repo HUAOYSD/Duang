@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
  * Class转为具体类对象共计类
  * @ClassName: CastToClass 
  * @Description: TODO 
- * @author 白攀 
+ * @author 5y 
  * @date 2016-7-17 下午2:41:57 
  */
 public class CastToClass {

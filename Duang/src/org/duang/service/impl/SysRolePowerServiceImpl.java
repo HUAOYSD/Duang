@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * 系统用户权限多对多参照表业务接口实现类
  * @ClassName:  SysRolePowerServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月25日 下午4:28:41      
  */  
 @ServiceLog(ModelName="系统用户服务管理")

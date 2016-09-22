@@ -37,7 +37,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————借贷记录Action
  * @ClassName:  LoanListAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月9日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -60,7 +60,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 	 * @Title: queryLoanList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午4:25:24
 	 * @return: void      
 	 * @throws   
@@ -108,7 +108,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 	 * @Title: findLoanInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月9日 下午4:30:13
 	 * @return: void      
 	 * @throws   
@@ -150,7 +150,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 	 * @Title: fillData   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param loanlist  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月14日 上午9:50:08
 	 * @return: void      
 	 * @throws   

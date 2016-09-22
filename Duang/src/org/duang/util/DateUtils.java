@@ -11,7 +11,7 @@ import java.util.Date;
  * 日期工具类
  * @ClassName: DateUtil 
  * @Description: TODO 
- * @author 白攀 
+ * @author 5y 
  * @date 2016-7-17 上午11:52:40 
  */
 public class DateUtils {
@@ -446,7 +446,7 @@ public class DateUtils {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param date
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月27日 上午11:06:18
 	 * @return: long      
 	 * @throws   
@@ -487,7 +487,7 @@ public class DateUtils {
 	 * @Description: TODO
 	 * @param @return    
 	 * @return Date    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-17 上午11:59:15
 	 * @throws
 	 */
@@ -507,7 +507,7 @@ public class DateUtils {
 	 * @Description: TODO
 	 * @param @return    
 	 * @return Date    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-17 上午11:59:32
 	 * @throws
 	 */
@@ -525,7 +525,7 @@ public class DateUtils {
 	 * @Title: getMinAtToday   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月18日 下午3:00:41
 	 * @return: Date      
 	 * @throws   
@@ -546,7 +546,7 @@ public class DateUtils {
 	 * @Title: getMaxAtToday   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月18日 下午3:09:41
 	 * @return: Date      
 	 * @throws   

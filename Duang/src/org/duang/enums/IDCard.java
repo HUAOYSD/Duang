@@ -50,7 +50,7 @@ public enum IDCard {
 	 * @Title: getVal   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:24:09
 	 * @return: int      
 	 * @throws   

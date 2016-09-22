@@ -24,7 +24,7 @@ import com.opensymphony.xwork2.ModelDriven;
  *
  * @ClassName:  BaseAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月18日 上午9:48:13   
  * @param <T>   
  */  
@@ -114,7 +114,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * @Title: printJsonResult 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-15 下午4:31:26
 	 */ 
 	protected void printJsonResult(){
@@ -139,7 +139,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * @Title: printJsonResult 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-15 下午4:31:26
 	 */ 
 	protected void printJsonResult(JSONArray jsonArray){
@@ -164,7 +164,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * @Title: printJsonResult 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-15 下午4:31:26
 	 */ 
 	protected void printJsonResult(String jsonStr){

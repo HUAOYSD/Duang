@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
  * 自定义Session上下文
  * ClassName: MySessionContext 
  * date: 2016年7月15日 下午3:15:00 
- * @author 白攀
+ * @author 5y
  */
 public class MySessionContext {  
 	

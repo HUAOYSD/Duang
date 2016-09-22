@@ -15,6 +15,7 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.Ad;
 import org.duang.enums.If;
 import org.duang.service.AdService;
+import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -24,7 +25,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————广告Action
  * @ClassName:  AdAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -45,7 +46,7 @@ public class AdAction extends BaseAction<Ad>{
 	 * @Title: getHomeAd   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 下午3:54:30
 	 * @return: void      
 	 * @throws   
@@ -53,16 +54,20 @@ public class AdAction extends BaseAction<Ad>{
 	public void getHomeAd(){
 		boolean success = false;
 		try {
-			condsUtils.addProperties(true, "isUse");
-			condsUtils.addValues(true, If.If1.getVal());
-			String num = getRequest().getParameter("num");
-			getPageUtil().setPageRecords(Integer.valueOf(num));
-			List<Ad> list = adService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(),getPageUtil());
-			if (list != null && list.size() > 0) {
-				success = true;
-				jsonObject.put("result", fillDataObjectList(list));
-			} else {
-				msg = "未找到可使用广告！";
+			if(DataUtils.isEmpty(getRequest().getParameter("num"))){
+				msg = "缺少参数";
+			}else {
+				condsUtils.addProperties(true, "isUse");
+				condsUtils.addValues(true, If.If1.getVal());
+				String num = getRequest().getParameter("num");
+				getPageUtil().setPageRecords(Integer.valueOf(num));
+				List<Ad> list = adService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(),getPageUtil());
+				if (list != null && list.size() > 0) {
+					jsonObject.put("result", fillDataObjectList(list));
+					success = true;
+				} else {
+					msg = "未找到可使用广告！";
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

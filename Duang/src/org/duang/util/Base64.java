@@ -7,7 +7,7 @@ import java.io.OutputStream;
  * 自定义Base64编码与解码
  * @ClassName:  Base64   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月8日 上午9:51:09      
  */  
 public class Base64 {
@@ -20,7 +20,7 @@ public class Base64 {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param data
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 上午9:52:38
 	 * @return: String      
 	 * @throws   
@@ -66,7 +66,7 @@ public class Base64 {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param s
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 上午9:53:03
 	 * @return: byte[]      
 	 * @throws   
@@ -92,7 +92,7 @@ public class Base64 {
 	 * @param: @param s
 	 * @param: @param os
 	 * @param: @throws IOException  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 上午9:53:37
 	 * @return: void      
 	 * @throws   
@@ -124,7 +124,7 @@ public class Base64 {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param c
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 上午9:54:06
 	 * @return: int      
 	 * @throws   

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * 理财记录业务接口实现类
  * @ClassName:  InvestListServiceImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月10日 下午5:19:26      
  */  
 @ServiceLog(ModelName="理财记录管理")

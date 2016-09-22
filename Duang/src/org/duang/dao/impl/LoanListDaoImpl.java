@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
  * 借贷列表dao实现类
  * @ClassName:  LoanListDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月10日 下午5:00:48      
  */  
 @Repository("loanlistdaoimpl")

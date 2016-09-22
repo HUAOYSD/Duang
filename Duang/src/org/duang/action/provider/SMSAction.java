@@ -17,7 +17,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————短信Action
  * @ClassName:  SMSAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月20日 上午10:43:30      
  */  
 @SuppressWarnings("serial")
@@ -33,7 +33,7 @@ public class SMSAction extends BaseAction<SMS>{
 	 * @Title: sendSMS   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月21日 下午4:40:33
 	 * @return: void      
 	 * @throws   

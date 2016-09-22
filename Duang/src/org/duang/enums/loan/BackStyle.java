@@ -6,7 +6,7 @@ import org.duang.util.DataUtils;
  * 贷款记录中还款方式的枚举类
  * @ClassName:  Scale   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月11日 上午10:12:28      
  */  
 public enum BackStyle {
@@ -113,7 +113,7 @@ public enum BackStyle {
 	 * @Title: getVal   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:24:09
 	 * @return: int      
 	 * @throws   
@@ -126,7 +126,7 @@ public enum BackStyle {
 	 * @Title: getDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:24:24
 	 * @return: String      
 	 * @throws   
@@ -139,7 +139,7 @@ public enum BackStyle {
 	 * @Title: setDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param desc  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:29:14
 	 * @return: void      
 	 * @throws   
@@ -152,7 +152,7 @@ public enum BackStyle {
 	 * @Title: setDefaultDesc   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:33:56
 	 * @return: Object      
 	 * @throws   

@@ -6,7 +6,7 @@ package org.duang.common;
  * 只放常用返回常量，以及com.opensymphony.xwork2.Action包不带的常量
  * ClassName: ResultStr 
  * date: 2016年7月15日 下午5:16:27 
- * @author 白攀
+ * @author 5y
  */
 public class ResultPath {
 

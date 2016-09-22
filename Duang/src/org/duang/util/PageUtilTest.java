@@ -2,7 +2,7 @@
  * @Title: PageUtil.java 
  * @Package org.cms.system.update.util 
  * @Description: TODO(用一句话描述该文件做什么) 
- * @author 白攀
+ * @author 5y
  * @date 2013-12-30 下午2:18:20 
  * @version V5.0   
  */ 
@@ -16,7 +16,7 @@ import java.util.List;
  * 分页参考
  * @ClassName: PageUtilTest 
  * @Description: TODO(分页工具包) 
- * @author 白攀
+ * @author 5y
  * @date 2016-7-17 下午2:18:20 
  */
 public class PageUtilTest {
@@ -47,7 +47,7 @@ public class PageUtilTest {
 	 * @Description: 构造函数
 	 * @param countRecords 总记录数
 	 * @param pageRecords 每页记录数 默认为20
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午2:37:38
 	 */
 	public PageUtilTest(int currentPageNum,Integer countRecords,Integer pageRecords){
@@ -86,7 +86,7 @@ public class PageUtilTest {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @param countPages
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午2:43:13
 	 */
 	private void setCountPages() {
@@ -110,7 +110,7 @@ public class PageUtilTest {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @param currentPageNum
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午3:12:34
 	 */
 	public void setCurrentPageNum(int currentPageNum) {
@@ -132,7 +132,7 @@ public class PageUtilTest {
 	 * @param currentPageNum
 	 * @param easyui
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午03:49:28
 	 */ 
 	public void setCurrentPageNum(int currentPageNum,Boolean isEasyui){
@@ -152,7 +152,7 @@ public class PageUtilTest {
 	 * @Title: setPrevPageNum 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午4:06:44
 	 */
 	public void setPrevPageNum() {
@@ -168,7 +168,7 @@ public class PageUtilTest {
 	 * @Title: setNextPageNum 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午3:16:30
 	 */
 	public void setNextPageNum() {
@@ -191,7 +191,7 @@ public class PageUtilTest {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return
 	 * @return List<Integer>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午3:27:21
 	 */
 	public void setListPages() {
@@ -222,7 +222,7 @@ public class PageUtilTest {
 	 * @Title: setRecordStartIndex 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午3:59:37
 	 */
 	private void setRecordStartIndex() {

@@ -32,7 +32,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 系统用户控制类 
  * @ClassName: SysUserAction 
  * @Description: TODO(这里用一句话描述这个类的作用) 
- * @author 白攀
+ * @author 5y
  * @date 2016-7-17 下午2:07:35 
  */ 
 @Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
@@ -66,7 +66,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: showUser   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午2:24:02
 	 * @return: String      
 	 * @throws   
@@ -81,7 +81,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: queryUserList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月27日 下午4:31:30
 	 * @return: void      
 	 * @throws   
@@ -105,7 +105,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: fillDatagridCons   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param list  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月27日 下午4:31:43
 	 * @return: void      
 	 * @throws   
@@ -142,7 +142,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: getUserInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月27日 下午5:02:21
 	 * @return: void      
 	 * @throws   
@@ -181,7 +181,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: openDialog   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月27日 下午5:02:12
 	 * @return: String      
 	 * @throws   
@@ -204,7 +204,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: saveSysUser 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2014-6-3 上午10:05:13
 	 */
 	public void saveSysUser() {
@@ -234,7 +234,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: updateSysUser   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月27日 下午5:12:22
 	 * @return: void      
 	 * @throws   
@@ -265,7 +265,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: deleteUser   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月27日 下午5:23:26
 	 * @return: void      
 	 * @throws   
@@ -294,7 +294,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: updatePassword   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月27日 下午5:25:10
 	 * @return: void      
 	 * @throws   
@@ -329,7 +329,7 @@ public class SysUserAction extends BaseAction<SysUser>{
 	 * @Title: checkSysUserName   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月27日 下午5:24:57
 	 * @return: void      
 	 * @throws   

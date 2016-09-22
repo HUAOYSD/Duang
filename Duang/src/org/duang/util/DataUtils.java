@@ -11,7 +11,7 @@ import java.util.UUID;
  * 数据工具类
  * @ClassName: DataUtils 
  * @Description: TODO 
- * @author 白攀 
+ * @author 5y 
  * @date 2016-7-17 下午3:28:12 
  */
 public class DataUtils {
@@ -106,7 +106,7 @@ public class DataUtils {
 	 * @param string
 	 * @return
 	 * @return int    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午3:52:49
 	 */ 
 	public static int str2int(String string){
@@ -128,7 +128,7 @@ public class DataUtils {
 	 * @param: @param string
 	 * @param: @param scale
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月12日 下午3:09:43
 	 * @return: double      
 	 * @throws   
@@ -152,7 +152,7 @@ public class DataUtils {
 	 * @Description: TODO
 	 * @param @return    
 	 * @return String    返回类型
-	 * @author 白攀 
+	 * @author 5y 
 	 * @date 2016-7-17 下午3:46:49
 	 * @throws
 	 */
@@ -167,7 +167,7 @@ public class DataUtils {
 	 * @Title: sixNumber   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月19日 上午11:48:33
 	 * @return: String      
 	 * @throws   

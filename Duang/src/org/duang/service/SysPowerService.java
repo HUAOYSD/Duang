@@ -10,7 +10,7 @@ import org.duang.entity.SysPower;
  * 系统权限业务接口   
  * @ClassName:  EnglishService   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月17日 下午12:20:17      
  */  
 public interface SysPowerService extends CommonInterface<SysPower>{
@@ -23,7 +23,7 @@ public interface SysPowerService extends CommonInterface<SysPower>{
 	 * @param: @param list
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午4:54:50
 	 * @return: boolean      
 	 * @throws   
@@ -39,7 +39,7 @@ public interface SysPowerService extends CommonInterface<SysPower>{
 	 * @param: @param parentid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月28日 下午9:56:52
 	 * @return: List<SysPower>      
 	 * @throws   
@@ -55,7 +55,7 @@ public interface SysPowerService extends CommonInterface<SysPower>{
 	 * @param: @param userid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月29日 下午3:41:27
 	 * @return: List<SysPower>      
 	 * @throws   

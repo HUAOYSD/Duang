@@ -26,7 +26,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————财友Action
  * @ClassName:  FriendsAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月10日 上午10:54:16      
  */ 
 @SuppressWarnings("serial")
@@ -52,7 +52,7 @@ public class FriendsAction extends BaseAction<Friends>{
 	 * @Title: queryMyStars   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 下午4:20:35
 	 * @return: void      
 	 * @throws   
@@ -99,7 +99,7 @@ public class FriendsAction extends BaseAction<Friends>{
 	 * @Title: queryStarMes   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 下午4:20:35
 	 * @return: void      
 	 * @throws   
@@ -146,7 +146,7 @@ public class FriendsAction extends BaseAction<Friends>{
 	 * @Title: getMyQR   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 下午4:20:35
 	 * @return: void      
 	 * @throws   
@@ -162,7 +162,7 @@ public class FriendsAction extends BaseAction<Friends>{
 	 * @Title: getFairlysMember   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 下午4:20:35
 	 * @return: void      
 	 * @throws   
@@ -218,7 +218,7 @@ public class FriendsAction extends BaseAction<Friends>{
 	 * @Title: addFriends   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 下午4:20:35
 	 * @return: void      
 	 * @throws   
@@ -260,7 +260,7 @@ public class FriendsAction extends BaseAction<Friends>{
 	 * @Title: removeFriends   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月12日 上午10:14:33
 	 * @return: void      
 	 * @throws   

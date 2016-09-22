@@ -36,7 +36,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 系统用户角色Action类
  * @ClassName:  PowerAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月25日 下午2:50:11      
  */  
 @Scope(value="prototype",proxyMode=ScopedProxyMode.NO)
@@ -77,7 +77,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: showRole   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午3:35:19
 	 * @return: String      
 	 * @throws   
@@ -92,7 +92,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: queryRoleList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月28日 下午1:54:00
 	 * @return: void      
 	 * @throws   
@@ -121,7 +121,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: openDialog   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 上午10:44:12
 	 * @return: String      
 	 * @throws   
@@ -144,7 +144,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: queryRolePageList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午5:01:07
 	 * @return: void      
 	 * @throws   
@@ -173,7 +173,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: fillDatagridCons   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param list  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午5:08:47
 	 * @return: void      
 	 * @throws   
@@ -212,7 +212,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: saveRole   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午1:42:28
 	 * @return: void      
 	 * @throws   
@@ -258,7 +258,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: getRoleInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午3:49:27
 	 * @return: void      
 	 * @throws   
@@ -289,7 +289,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: updateRole   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午3:55:43
 	 * @return: void      
 	 * @throws   
@@ -320,7 +320,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: deleteRole   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午3:59:41
 	 * @return: void      
 	 * @throws   
@@ -359,7 +359,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: checkRoleName   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午1:30:58
 	 * @return: void      
 	 * @throws   
@@ -403,7 +403,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: updateRolePower   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午2:14:21
 	 * @return: void      
 	 * @throws   
@@ -437,7 +437,7 @@ public class SysRoleAction extends BaseAction<SysRole>{
 	 * @Title: getRolePowerInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月26日 下午2:59:30
 	 * @return: void      
 	 * @throws   

@@ -36,7 +36,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 借贷理财库存记录Action
  * @ClassName:  StockAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月10日 下午5:21:02      
  */  
 @Scope(value = "prototype", proxyMode = ScopedProxyMode.NO)
@@ -68,7 +68,7 @@ public class StockAction extends BaseAction<Stock> {
 	 * @Title: queryCustomerManagerByPage   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午10:30:46
 	 * @return: void      
 	 * @throws   
@@ -120,7 +120,7 @@ public class StockAction extends BaseAction<Stock> {
 	 * @Title: fillDatagridCons   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param list  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午5:08:47
 	 * @return: void      
 	 * @throws   
@@ -187,7 +187,7 @@ public class StockAction extends BaseAction<Stock> {
 	 * @Title: openDialog   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月11日 下午5:30:38
 	 * @return: String      
 	 * @throws   

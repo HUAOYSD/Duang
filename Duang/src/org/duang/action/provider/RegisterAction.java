@@ -1,7 +1,4 @@
 package org.duang.action.provider;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.annotation.Resource;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -25,7 +22,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————注册Action
  * @ClassName:  RegisterAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -48,7 +45,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 	 * @Title: checkPhone   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 上午11:03:34
 	 * @return: void      
 	 * @throws   
@@ -86,16 +83,16 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 	 * @Title: sendValidateCode   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 上午11:16:39
 	 * @return: void      
 	 * @throws   
 	 */  
 	public void sendValidateCode(){
-		Map<String, String[]> map = getRequest().getParameterMap();
+		/*Map<String, String[]> map = getRequest().getParameterMap();
 		for (Entry<String, String[]> obj : map.entrySet()) {
 			System.out.println(obj.getValue().length+"\t"+obj.getKey()+"\t"+obj.getValue()[0].toString()+"\t");
-		}
+		}*/
 		boolean success = false;
 		try {
 			String phone = getRequest().getParameter("phoneNum");
@@ -140,7 +137,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 	 * @Title: register   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 上午11:27:36
 	 * @return: void      
 	 * @throws   

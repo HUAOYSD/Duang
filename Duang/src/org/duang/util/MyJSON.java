@@ -12,7 +12,7 @@ package org.duang.util;
  * Json自定义转换  有bug暂不用，有需要再参考
  * ClassName: MyJSON 
  * date: 2016年7月15日 下午3:10:03 
- * @author 白攀
+ * @author 5y
  */
 public class MyJSON {
 	//

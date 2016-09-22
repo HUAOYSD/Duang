@@ -11,7 +11,7 @@ import org.duang.entity.SysUser;
  * Session工具类
  * ClassName: SessionTools 
  * date: 2016年7月15日 下午3:15:53 
- * @author 白攀
+ * @author 5y
  */
 public class SessionTools {
 
@@ -24,7 +24,7 @@ public class SessionTools {
 	 * @Title: getSession 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return Map<String,Object>    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-16 下午2:07:29
 	 */ 
 	public static Map<String,Object> getSession(){
@@ -40,7 +40,7 @@ public class SessionTools {
 	 * @param key
 	 * @param value
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-16 下午2:07:53
 	 */ 
 	public static boolean setSessionValue(String key,Object value){
@@ -60,7 +60,7 @@ public class SessionTools {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @param key
 	 * @return Object    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2013-12-19 上午10:28:44
 	 */
 	public static Object getSessionValue(String key){
@@ -74,7 +74,7 @@ public class SessionTools {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @param key
 	 * @return boolean    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-16 下午2:13:15
 	 */ 
 	public static boolean removeSession(String key){
@@ -93,7 +93,7 @@ public class SessionTools {
 	 * @Title: getSessionSysUserName 
 	 * @return
 	 * @return String    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-16 上午10:04:43
 	 */
 	public static String getSessionSysUserName(){
@@ -109,7 +109,7 @@ public class SessionTools {
 	 * 获取系统当前的登陆的系统用户
 	 * @Title: getSessionSysUser 
 	 * @return SysUser  返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-16 上午9:58:08
 	 */
 	public static SysUser getSessionSysUser(){
@@ -123,7 +123,7 @@ public class SessionTools {
 	 * @Title: setSessionSysUser 
 	 * @param sysUser
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-16 上午10:01:08
 	 */
 	public static void setSessionSysUser(SysUser sysUser){
@@ -137,7 +137,7 @@ public class SessionTools {
 	 * @Title: removeSessionSysUser 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-16 上午8:45:24
 	 */
 	public static void removeSessionSysUser(){
@@ -151,7 +151,7 @@ public class SessionTools {
 	 * @Title: getSessionMemberName   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 上午10:42:55
 	 * @return: String      
 	 * @throws   
@@ -170,7 +170,7 @@ public class SessionTools {
 	 * @Title: getSessionMember   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 上午10:43:58
 	 * @return: MemberInfo      
 	 * @throws   
@@ -186,7 +186,7 @@ public class SessionTools {
 	 * @Title: setSessionMember   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param memberinfo  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 上午10:45:42
 	 * @return: void      
 	 * @throws   
@@ -202,7 +202,7 @@ public class SessionTools {
 	 * @Title: removeSessionMember   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 上午10:47:10
 	 * @return: void      
 	 * @throws   

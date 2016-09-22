@@ -10,7 +10,7 @@ import org.hibernate.criterion.Order;
 /**
  * 通用的接口(同时适用于Service层和dao层)
  * @date 2016-7-15 下午2:55：45
- * @author 白攀
+ * @author 5y
  */
 public interface CommonInterface<T> {
 	

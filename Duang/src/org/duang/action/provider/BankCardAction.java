@@ -29,7 +29,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————银行卡Action
  * @ClassName:  BankCardAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -56,7 +56,7 @@ public class BankCardAction extends BaseAction<BindCard>{
 	 * @Title: queryCardList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 下午3:04:04
 	 * @return: void      
 	 * @throws   
@@ -94,7 +94,7 @@ public class BankCardAction extends BaseAction<BindCard>{
 	 * @Title: insertBindCard   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 下午3:36:34
 	 * @return: void      
 	 * @throws   
@@ -148,7 +148,7 @@ public class BankCardAction extends BaseAction<BindCard>{
 	 * @Title: unwrapCard   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 下午3:45:08
 	 * @return: void      
 	 * @throws   

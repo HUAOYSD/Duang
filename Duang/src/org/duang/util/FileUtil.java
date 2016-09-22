@@ -26,7 +26,7 @@ import org.duang.common.logger.LoggerUtils;
  * File工具类
  * ClassName: FileUtil 
  * date: 2016年7月15日 下午3:19:21 
- * @author 白攀
+ * @author 5y
  */
 public class FileUtil {
 
@@ -37,7 +37,7 @@ public class FileUtil {
 	 * @param fileurl
 	 * @return
 	 * @return String 返回类型
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 上午10:46:54
 	 */
 	public static String getUrlCallBackInfo(String fileurl, String charset) {
@@ -84,7 +84,7 @@ public class FileUtil {
 	 * @Title: wireStringToFile 
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return void    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 上午11:07:18
 	 */
 	public static String  wireStringToFile(String content,String filePath,String fileName){
@@ -125,7 +125,7 @@ public class FileUtil {
 	 * @param file 上传的文件
 	 * @param uploadPath 上传的文件路径
 	 * @param fileName 双传的文件名称
-	 * @author 白攀
+	 * @author 5y
 	 */
 	public static void uploadFile(File file,String uploadPath,String fileName){
 		try {
@@ -151,7 +151,7 @@ public class FileUtil {
 	/**
 	 * 获取文件后缀
 	 * @param fileName 文件的名称
-	 * @author 白攀
+	 * @author 5y
 	 * @return 文件的后缀名(即格式名称)
 	 */
 	public static String getSuffix(String fileName){
@@ -171,7 +171,7 @@ public class FileUtil {
 	 * @Description: TODO(这里用一句话描述这个方法的作用) 
 	 * @return String    返回类型 
 	 * @date 2016-7-17 上午9:58:03
-	 * @author 白攀
+	 * @author 5y
 	 */
 	public static String getPrefix(String fileName){
 		if(fileName==null || "".equals(fileName)){
@@ -347,7 +347,7 @@ public class FileUtil {
 	 * @return
 	 * @throws Exception
 	 * @return long    返回类型 
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016-7-17 下午2:52:09
 	 */
 	@SuppressWarnings("resource")
@@ -377,7 +377,7 @@ public class FileUtil {
 		//        	System.err.println(file.getParentFile());
 		//        	Map<String, Object> map=new HashMap<String, Object>();        	
 		//        	map.put("name", "haopeng");
-		//        	map.put("xingming", "白攀");
+		//        	map.put("xingming", "5y");
 		//        	File file=new File("D:\\gg\\test.properties");
 		//System.out.println(FileUtil.getPropertyValueByKey("xingming", "D:\\gg\\test.properties"));
 		//FileUtil.writeObject("D:\\gg\\test.properties", map);

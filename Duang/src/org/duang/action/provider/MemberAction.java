@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————会员Action
  * @ClassName:  MemberAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -41,7 +41,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @Title: checkLoginPassword   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月14日 下午2:25:13
 	 * @return: void      
 	 * @throws   
@@ -80,7 +80,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @Title: modifyLoginPassword   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月14日 下午2:25:13
 	 * @return: void      
 	 * @throws   
@@ -119,7 +119,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @Title: checkPayPassword   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月14日 下午2:25:13
 	 * @return: void      
 	 * @throws   
@@ -158,7 +158,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @Title: modifyPayPassword   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月14日 下午2:25:13
 	 * @return: void      
 	 * @throws   
@@ -198,7 +198,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @Title: modifyNickName   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月14日 下午2:25:13
 	 * @return: void      
 	 * @throws   
@@ -246,7 +246,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @Title: modifyNameAndIdcard   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月14日 下午2:25:13
 	 * @return: void      
 	 * @throws   

@@ -9,7 +9,7 @@ import java.util.Random;
  * 验证码
  * ClassName: ValidateCode 
  * date: 2016年7月15日 下午3:11:19 
- * @author 白攀
+ * @author 5y
  */
 public class ValidateCode {
 	public  String[] CHARS = {"0","1","2","3","4","5","6","7","8","9","A","B","c","d","e","f","g","h","j","k","L","m","n","p","q","r","S","T","U","V","W","X","Y","Z"}; 

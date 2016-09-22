@@ -79,7 +79,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @Title: queryCustomerManagerByPage   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午10:30:46
 	 * @return: void      
 	 * @throws   
@@ -133,7 +133,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @Title: fillDatagridCons   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param list  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月25日 下午5:08:47
 	 * @return: void      
 	 * @throws   
@@ -180,7 +180,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @Title: getCustomerManagerInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午10:57:10
 	 * @return: void      
 	 * @throws   
@@ -205,7 +205,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @Title: saveCustomerManager   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:05:01
 	 * @return: void      
 	 * @throws   
@@ -269,7 +269,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @Title: updateCustomerManager   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:39:48
 	 * @return: void      
 	 * @throws   
@@ -299,7 +299,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @Title: deleteCustomerManager   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 上午11:41:02
 	 * @return: void      
 	 * @throws   
@@ -333,7 +333,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @Title: restoreCustomerManager   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月10日 下午3:12:27
 	 * @return: void      
 	 * @throws   
@@ -367,7 +367,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 	 * @Title: openDialog   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月9日 下午2:49:25
 	 * @return: String      
 	 * @throws   

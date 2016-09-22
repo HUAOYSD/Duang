@@ -7,7 +7,7 @@ import net.sf.json.JSONObject;
  * App登录的会员用户集合
  * @ClassName:  MemberCollection   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月6日 上午11:04:58      
  */  
 public class MemberCollection {  

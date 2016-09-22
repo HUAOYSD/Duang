@@ -23,7 +23,7 @@ public class DES {
 	 * @param: @param encryptString
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 上午9:58:15
 	 * @return: String      
 	 * @throws   
@@ -45,7 +45,7 @@ public class DES {
 	 * @param: @param decryptString
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 上午9:58:36
 	 * @return: String      
 	 * @throws   
@@ -53,6 +53,9 @@ public class DES {
 	public static String decryptDES(String decryptString) throws Exception {
 		if (DataUtils.isEmpty(decryptString)) {
 			return "";
+		}
+		if (decryptString.startsWith("\"") && decryptString.endsWith("\"")) {
+			decryptString = decryptString.substring(1, decryptString.length()-1);
 		}
 		byte[] byteMi = Base64.decode(decryptString);
 		IvParameterSpec zeroIv = new IvParameterSpec(IV);
@@ -88,7 +91,8 @@ public class DES {
 	public static void main(String[] args) {
 		try {
 			//System.out.println(encryptDES("1590060455622"));
-			System.out.println(decryptDES("TmnW/VByEOrQcuH4IprC9gmmuKCrkpcfOKA1W4b0gGYZD2NWA2b5RA=="));
+			//System.out.println(decryptDES("/TmnW/VByEOrQcuH4IprC9gmmuKCrkpcfOKA1W4b0gGYZD2NWA2b5RA"));
+			System.out.println(decryptDES("\"fKd7bnlvQDkheG1r8sJITQ==\""));
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

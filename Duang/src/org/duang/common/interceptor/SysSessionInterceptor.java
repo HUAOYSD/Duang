@@ -14,7 +14,7 @@ import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
  * Session拦截器  系统后台使用
  * @ClassName:  SessionInterceptor   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年7月17日 上午10:32:35      
  */  
 public class SysSessionInterceptor extends MethodFilterInterceptor {
@@ -28,7 +28,7 @@ public class SysSessionInterceptor extends MethodFilterInterceptor {
 	 * 做登录拦截的地方
 	 * <p>Title: doIntercept</p>   
 	 * <p>Description: </p>  
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016年7月17日 上午10:32:57
 	 * @param arg0
 	 * @return

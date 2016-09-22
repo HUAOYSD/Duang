@@ -24,7 +24,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————标类Action
  * @ClassName:  ScaleAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -45,7 +45,7 @@ public class ScaleAction extends BaseAction<Scale>{
 	 * @Title: queryHouseScale   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 下午4:38:04
 	 * @return: void      
 	 * @throws   
@@ -89,7 +89,7 @@ public class ScaleAction extends BaseAction<Scale>{
 	 * @Title: queryCarScale   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 下午4:38:04
 	 * @return: void      
 	 * @throws   
@@ -133,7 +133,7 @@ public class ScaleAction extends BaseAction<Scale>{
 	 * @Title: queryHouseScale   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月5日 下午4:38:04
 	 * @return: void      
 	 * @throws   
@@ -177,7 +177,7 @@ public class ScaleAction extends BaseAction<Scale>{
 	 * @Title: fillDatagridCons   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param list  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月7日 下午5:08:47
 	 * @return: void  
 	 * @throws   

@@ -4,7 +4,7 @@ package org.duang.common.logger;
  * 日志行为行为
  * @ClassName: Opration 
  * @Description: TODO(这里用一句话描述这个类的作用) 
- * @author 白攀
+ * @author 5y
  * @date 2016-7-16 下午1:36:23 
  *  
  */ 

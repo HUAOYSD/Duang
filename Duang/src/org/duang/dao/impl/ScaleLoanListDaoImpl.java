@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
  * 借贷记录与理财标关联Dao接口实现类
  * @ClassName:  ScaleLoanListDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年8月17日 下午3:35:17      
  */  
 @Repository("scaleloanlistdaoimpl")

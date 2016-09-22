@@ -14,7 +14,7 @@ import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
  * 接口端使用的用户登录验证
  * @ClassName:  ProviderSessionInterceptor   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:39:58      
  */  
 public class ProviderSessionInterceptor extends MethodFilterInterceptor {
@@ -30,7 +30,7 @@ public class ProviderSessionInterceptor extends MethodFilterInterceptor {
 	 * 登录拦截
 	 * <p>Title: doIntercept</p>   
 	 * <p>Description: </p>  
-	 * @author 白攀
+	 * @author 5y
 	 * @date 2016年9月5日 上午10:40:53
 	 * @param arg0
 	 * @return

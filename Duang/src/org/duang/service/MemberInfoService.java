@@ -40,7 +40,7 @@ public interface MemberInfoService extends CommonInterface<MemberInfo>{
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月21日 上午10:41:36
 	 * @return: List<Map<String,Object>>      
 	 * @throws   

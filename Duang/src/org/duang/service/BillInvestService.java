@@ -21,7 +21,7 @@ public interface BillInvestService extends CommonInterface<BillInvest>{
 	 * @param: @param memberid
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月12日 下午2:48:36
 	 * @return: List<BillInvest>      
 	 * @throws   
@@ -38,7 +38,7 @@ public interface BillInvestService extends CommonInterface<BillInvest>{
 	 * @param: @param tm
 	 * @param: @return
 	 * @param: @throws Exception  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月12日 下午2:51:36
 	 * @return: List<BillInvest>      
 	 * @throws   

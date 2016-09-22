@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * 定义一个条件列表全局类
- * @author 白攀
+ * @author 5y
  */
 public class CondsUtils {
 
@@ -66,7 +66,7 @@ public class CondsUtils {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param arg
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月18日 下午9:54:43
 	 * @return: List<Object>      
 	 * @throws   
@@ -83,7 +83,7 @@ public class CondsUtils {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param arg
 	 * @param: @return  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年7月18日 下午9:54:43
 	 * @return: List<Object>      
 	 * @throws   
@@ -100,7 +100,7 @@ public class CondsUtils {
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param property
 	 * @param: @param val  
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年8月10日 下午2:18:06
 	 * @return: void      
 	 * @throws   

@@ -11,6 +11,11 @@ import org.duang.common.system.MemberCollection;
 import org.duang.entity.ApplyLoanInfo;
 import org.duang.entity.LoanList;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.loan.Apply;
+import org.duang.enums.loan.BackMoney;
+import org.duang.enums.loan.Poundage;
+import org.duang.enums.loan.Scale;
+import org.duang.enums.loan.TakeMoney;
 import org.duang.service.ApplyLoanInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -22,7 +27,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * 接口开发————普通和急速模式贷款的申请信息Action
  * @ClassName:  ApplyLoanInfoAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
- * @author 白攀
+ * @author 5y
  * @date 2016年9月5日 上午10:54:16      
  */  
 @SuppressWarnings("serial")
@@ -53,6 +58,11 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		ApplyLoanInfo applyLoanInfo = new ApplyLoanInfo(DataUtils.randomUUID());
 		
 		LoanList loanList = new LoanList(DataUtils.randomUUID());
+		loanList.setIsSell(Scale.S1.getVal());
+		loanList.setPoundageState(Poundage.P1.getVal());
+		loanList.setReturnStatus(BackMoney.B1.getVal());
+		loanList.setLoanState(TakeMoney.T1.getVal());
+		loanList.setApplyState(Apply.A1.getVal());
 		if(DataUtils.notEmpty(getRequest().getParameter("p_days"))){
 			loanList.setDays(DataUtils.str2int((DES.decryptDES(getRequest().getParameter("p_days")))));
 		}
@@ -75,7 +85,6 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		}
 		
 		applyLoanInfo.setLoanList(loanList);
-		
 		
 		if(DataUtils.notEmpty(getRequest().getParameter("p_money"))){
 			applyLoanInfo.setMoney(DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_money")), 6));
@@ -171,7 +180,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 	 * @Title: insertApplyLoanInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 白攀    
+	 * @author 5y    
 	 * @date 2016年9月8日 上午10:46:49
 	 * @return: void      
 	 * @throws
