@@ -46,7 +46,7 @@
 			成功：{'success':true}
 			失败：{'success':false,'msg':'发送失败'}
 			
-	5、完善注册信息
+	5、完善注册信息√
 		URL：http://192.168.11.56:8080/Duang/provider_register!fullInfo.do
 		发送参数说明：
 			*p_id：会员id
