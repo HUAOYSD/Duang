@@ -679,18 +679,19 @@
 			失败：{'success':false,'msg':'服务器异常'}	
 			成功：{'success':true}
 			
-	2、提现
+	2、提现√
 		URL：http://192.168.11.56:8080/Duang/provider_wallet!withdrawals.do
 		发送参数说明：
 			token登录会员token
 			*p_fetchMany提现金额
 			*p_bankid使用的银行卡id
+			p_platform平台，传参为整数类型（2Android，3IOS）
 		返回结果：Json
 			失败：{'success':false,'msg':'提现失败、余额不足'}	
 			成功：{'success':true}		
 					
 		
-	2、提现成功回调 
+	2、提现成功回调 √
 		URL：http://192.168.11.56:8080/Duang/provider_wallet!withdrawalsCallBack.do
 		发送参数说明：
 			token登录会员token
