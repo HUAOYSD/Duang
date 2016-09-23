@@ -165,6 +165,39 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws   
 	 */  
 	public void withdrawals(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String p_fetchMany = getRequest().getParameter("p_fetchMany");
+			String bankid = getRequest().getParameter("p_bankid");
+			String platform = getRequest().getParameter("p_platform");
+			String pk = DataUtils.randomUUID();
+			String id = "";
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+				double fetchManyVal = DataUtils.str2double(p_fetchMany, 6);
+				if (fetchManyVal > 0) {
+					entity = new BillInvest(pk, new MemberInfo(id), null, new BindCard(bankid), UseType.UT2.getVal(), fetchManyVal, 0, 0, BillStatus.BS1.getVal(), new Date(), "提现", DataUtils.str2int(platform));
+					if (service.saveEntity(entity)) {
+						jsonObject.put("id", pk);
+						success = true;
+					}else {
+						msg = "添加失败";
+					}
+				}else{
+					msg = "提现金额需为正数";
+				}
+			}else{
+				msg = "登录失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("PayAction——withdrawals方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("PayAction——withdrawals方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
 	}
 
 	
@@ -179,7 +212,49 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws   
 	 */  
 	public void withdrawalsCallBack(){
-		
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String pkid = getRequest().getParameter("p_id");
+			String id = "";
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+				final InvestMember investMember = investMemberService.findEntity("memberInfo.id", id);
+				String sql = "SELECT BALANCE,ASSET  FROM BILL_INVEST WHERE MEMBER_INFO = '"+id+"' AND STATUS = "+BillStatus.BS2.getVal()+" ORDER BY OPT_TIME DESC";
+				List<?> list = service.queryBySQL(sql, null, null, false);
+				if (investMember == null || DataUtils.isEmpty(list)) {
+					msg = "记录未找到";
+				}else {
+					double balance = DataUtils.str2double(investMember.getBalance()+"", 6);
+					double asset = DataUtils.str2double(investMember.getTotalMoney()+"", 6);
+					if (balance == DataUtils.str2double(((Object[])list.get(0))[0].toString(), 6) && asset == DataUtils.str2double(((Object[])list.get(0))[1].toString(), 6)) {
+						entity = service.findById(pkid);
+						entity.setBalance(balance - entity.getMoney());
+						entity.setAsset(asset - entity.getMoney());
+						entity.setStatus(BillStatus.BS2.getVal());
+						entity.setOptTime(new Date());
+						investMember.setBalance(entity.getBalance());
+						investMember.setTotalMoney(entity.getAsset());
+						synchronized(this){
+							if (service.updateBill(entity, investMember)) {
+								success = true;
+							}
+						}
+					}else {
+						msg = "资金未同步";
+					}
+				}
+			}else{
+				msg = "登录失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("PayAction——withdrawalsCallBack方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("PayAction——withdrawalsCallBack方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
 	}
 
 	
