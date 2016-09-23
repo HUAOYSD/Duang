@@ -179,4 +179,6 @@
 	</aop:config>
   	<!-- 事务配置结束 -->
     
+    <!-- 定时任务 -->
+    <import resource="classpath:queryexpirescaletask.xml"/>
 </beans>
