@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.duang.baseInterface.CommonInterface;
 import org.duang.entity.BillInvest;
+import org.duang.entity.InvestMember;
 
 /**   
  * 理财资金记录业务接口
@@ -44,5 +45,21 @@ public interface BillInvestService extends CommonInterface<BillInvest>{
 	 * @throws   
 	 */  
 	public abstract List<BillInvest> queryFairlysMemberCostInfo(String memberid, double tm) throws Exception;
+	
+	
+	/**   
+	 * 充值成功更新资产
+	 * @Title: updateBill   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param billInvest
+	 * @param: @param investMember
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 5y    
+	 * @date 2016年9月23日 下午1:52:32
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public abstract boolean updateBill(BillInvest billInvest, InvestMember investMember) throws Exception;
 
 }

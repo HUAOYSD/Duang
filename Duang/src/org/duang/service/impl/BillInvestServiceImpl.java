@@ -8,7 +8,9 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.BillInvestDao;
+import org.duang.dao.InvestMemberDao;
 import org.duang.entity.BillInvest;
+import org.duang.entity.InvestMember;
 import org.duang.service.BillInvestService;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -26,6 +28,12 @@ import org.springframework.stereotype.Service;
 public class BillInvestServiceImpl implements BillInvestService{
 
 	private BillInvestDao dao;
+	private InvestMemberDao investMemberDao;
+
+	@Resource
+	public void setInvestMemberDao(InvestMemberDao investMemberDao) {
+		this.investMemberDao = investMemberDao;
+	}
 
 	@Resource(name="billinvestdaoimpl")
 	public void setDao(BillInvestDao dao) {
@@ -35,7 +43,7 @@ public class BillInvestServiceImpl implements BillInvestService{
 	public BillInvestServiceImpl(){
 		LoggerUtils.info("注入BillInvestServiceImpl服务层", this.getClass());
 	}
-	
+
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
@@ -149,7 +157,7 @@ public class BillInvestServiceImpl implements BillInvestService{
 		return dao.deleteEntity(id);
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
@@ -158,7 +166,7 @@ public class BillInvestServiceImpl implements BillInvestService{
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
 		return dao.deleteEntity(map);
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -247,7 +255,7 @@ public class BillInvestServiceImpl implements BillInvestService{
 		return dao.findEntity(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -281,7 +289,7 @@ public class BillInvestServiceImpl implements BillInvestService{
 	public boolean deleteEntity(BillInvest t) throws Exception {
 		return dao.deleteEntity(t);
 	}
-	
+
 
 	/**   
 	 * 查询累计投资次数与金额
@@ -301,8 +309,8 @@ public class BillInvestServiceImpl implements BillInvestService{
 		List<BillInvest> list = dao.queryBySQL(sb.toString(), null, null, false);
 		return list;
 	}
-	
-	
+
+
 	/**   
 	 * 获取和我差不多投资额度的会员
 	 * 投资额度和该会员投资额度相差不过5万的前20人
@@ -334,5 +342,27 @@ public class BillInvestServiceImpl implements BillInvestService{
 		sb.append("LIMIT 0, 20 ");
 		List<BillInvest> list = dao.queryBySQL(sb.toString(), null, null, false);
 		return list;
+	}
+
+
+	/**   
+	 * 充值成功更新资产
+	 * @Title: updateBill   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param billInvest
+	 * @param: @param investMember
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author 5y    
+	 * @date 2016年9月23日 下午1:52:32
+	 * @return: boolean      
+	 * @throws   
+	 */  
+	public boolean updateBill(BillInvest billInvest, InvestMember investMember) throws Exception{
+		if (investMemberDao.updateEntity(investMember) && dao.updateEntity(billInvest)) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 }

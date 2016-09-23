@@ -32,7 +32,7 @@
 	
 	<!-- Root Logger -->
 	<root>
-		<priority value="ERROR" />
+		<priority value="INFO" />
 		<appender-ref ref="CONSOLE.ERR" />
 		<appender-ref ref="CONSOLE.OUT" />
 	</root>

@@ -29,8 +29,9 @@
 			*pwd：密码
 			registerStyle：注册来源，Android设值2，IOS设值3
 		返回结果：Json
-			成功：{'success':true}
+			成功：{'success':true, 'id':'fdsfsdfsdfsd'}
 			失败：{'success':false,'msg':'注册失败'}
+		说明：id是加密完了的id
 			
 	4、发送短信√
 		URL：http://192.168.11.56:8080/Duang/provider_sms!sendSMS.do
@@ -44,6 +45,17 @@
 		返回结果：Json
 			成功：{'success':true}
 			失败：{'success':false,'msg':'发送失败'}
+			
+	5、完善注册信息
+		URL：http://192.168.11.56:8080/Duang/provider_register!fullInfo.do
+		发送参数说明：
+			*p_id：会员id
+			*p_name：名字
+			*p_idcard：身份证
+			*p_email：邮箱
+		返回结果：Json
+			成功：{'success':true}
+			失败：{'success':false,'msg':'服务器异常'}
 
 二：登录
 	1、登录方法√
@@ -646,25 +658,46 @@
 	9、查询转让记录...
 			
 九：充值、提现
-	1、充值成功回调 
+	1、添加充值记录 √
 		URL：http://192.168.11.56:8080/Duang/provider_wallet!deposit.do
 		发送参数说明：
 			token登录会员token
 			*p_pushMany充值金额
 			*p_bankid使用的银行卡id
+			p_platform平台，传参为整数类型（2Android，3IOS）
 		返回结果：Json
 			失败：{'success':false,'msg':'充值失败、token无效'}	
+			成功：{'success':true,'id':'fsdfdsfds44f6sd4f65ds'}
+		说明：id为添加的充值记录的id
+			
+	1、充值成功回调 √
+		URL：http://192.168.11.56:8080/Duang/provider_wallet!depositCallBack.do
+		发送参数说明：
+			token登录会员token
+			*p_id充值记录id
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器异常'}	
 			成功：{'success':true}
 			
-		
-	2、提现成功回调 
+	2、提现
 		URL：http://192.168.11.56:8080/Duang/provider_wallet!withdrawals.do
 		发送参数说明：
 			token登录会员token
-			*p_fetchMany充值金额
+			*p_fetchMany提现金额
 			*p_bankid使用的银行卡id
 		返回结果：Json
 			失败：{'success':false,'msg':'提现失败、余额不足'}	
+			成功：{'success':true}		
+					
+		
+	2、提现成功回调 
+		URL：http://192.168.11.56:8080/Duang/provider_wallet!withdrawalsCallBack.do
+		发送参数说明：
+			token登录会员token
+			*p_fetchMany提现金额
+			*p_bankid使用的银行卡id
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器异常'}	
 			成功：{'success':true}		
 			
 	3、理财账单记录√

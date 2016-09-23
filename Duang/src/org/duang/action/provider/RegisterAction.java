@@ -150,9 +150,10 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 				phone = DES.decryptDES(phone);
 				String password = getRequest().getParameter("pwd");
 				if (DataUtils.notEmpty(password)) {
+					String id = DataUtils.randomUUID();
 					entity.setPhone(password);
 					entity.setPassword(DES.encryptDES(password));
-					entity.setId(DataUtils.randomUUID());
+					entity.setId(id);
 					entity.setNickname("手机用户"+phone);
 					//附加投资用户身份
 					LoanMember loanMember = new LoanMember();
@@ -165,6 +166,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 					entity.getInvestMembers().add(investMember);
 					if (service.saveEntity(entity)) {
 						success = true;
+						jsonObject.put("id", DES.encryptDES(id));
 					}else {
 						msg = "注册失败";
 					}
@@ -178,6 +180,52 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 			e.printStackTrace();
 			LoggerUtils.error("RegisterAction——sendValidateCode方法错误：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("RegisterAction——sendValidateCode方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	
+	/**   
+	 * 完善注册信息
+	 * @Title: fullInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 5y    
+	 * @date 2016年9月23日 下午4:08:08
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void fullInfo() {
+		boolean success = false;
+		try {
+			String id = getRequest().getParameter("p_id");
+			String idcard = getRequest().getParameter("p_idcard");
+			String email = getRequest().getParameter("p_email");
+			String name = getRequest().getParameter("p_name");
+			if (DataUtils.notEmpty(id) && DataUtils.notEmpty(idcard) && DataUtils.notEmpty(email)) {
+				id = DES.decryptDES(id);
+				idcard = DES.decryptDES(idcard);
+				email = DES.decryptDES(email);
+				name = DES.decryptDES(name);
+				entity = service.findById(id);
+				entity.setRealName(name);
+				entity.setIdCard(idcard);
+				entity.setEmail(email);
+				if (service.updateEntity(entity)) {
+					success = true;
+				}else {
+					msg = "请稍后再试";
+				}
+			}else {
+				msg = "参数不能为空";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("RegisterAction——fullInfo方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("RegisterAction——fullInfo方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
