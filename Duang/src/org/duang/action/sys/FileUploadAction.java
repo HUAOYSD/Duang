@@ -286,34 +286,6 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 		}
 		return result;
 	}
-	
-	/**
-	 * 根据时间创建文件路径，适用于流水文件
-	 * 
-	 * @Title: reSetFilePathByTime
-	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @param: @return
-	 * @author LiYonghui
-	 * @date 2016年8月9日 上午10:11:16
-	 * @return: boolean
-	 * @throws
-	 *//*
-	private boolean reSetFilePathByTime() {
-		boolean result = false;
-		try {
-			String date = DateUtils.getCurrentDate("yyyyMMdd");
-			String path = getRequest().getSession().getServletContext().getRealPath("/") + "resources\\file\\flow\\" + date+"\\";
-			entity.setPath(path);
-			result = true;
-		} catch (Exception e) {
-			result = false;
-			e.printStackTrace();
-			LoggerUtils.error("上传文件，获取文件名称错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("上传文件，获取文件名称错误：" + e.getLocalizedMessage(), this.getClass());
-		}
-		return result;
-	}
-	  */
 	/**
 	 * 上传文件
 	 * 
@@ -335,7 +307,7 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 					savefile.getParentFile().mkdirs();
 				}
 				// 复制文件
-				FileUtils.copyFile(entity.getFile()[0], savefile);
+				FileUtils.copyFile(entity.getFile(), savefile);
 				result = true;
 			}
 		} catch (IOException e) {

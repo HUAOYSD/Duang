@@ -1,21 +1,22 @@
 package org.duang.action.provider;
 import java.io.File;
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
+
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
+import org.duang.common.logger.LoggerUtils;
+import org.duang.common.system.MemberCollection;
 import org.duang.entity.FileUpload;
+import org.duang.enums.UploadFile;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -34,7 +35,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("provider")
 @Action(value = "provider_upload")
 public class UploadAction extends BaseAction<FileUpload>{
-
+	
+	
 
 	/**   
 	 * ios上传
@@ -47,29 +49,214 @@ public class UploadAction extends BaseAction<FileUpload>{
 	 * @throws   
 	 */  
 	public void uploadFileByIOS(){
-		System.out.println(entity);
-		org.apache.commons.fileupload.FileUpload fileUpload= null;
-		File[] file = entity.getFile();
-		if (file!=null) {
+		
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String id = "";
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+				int num = Integer.parseInt(getRequest().getParameter("num"));
+				//现将文件放到缓冲区
+				ServletFileUpload upload = initUpload(num);
+				//获取文件
+				@SuppressWarnings("unchecked")
+				List<FileUpload> list = (List<FileUpload>)upload.parseRequest(getRequest());
+				for(FileUpload fileUpload : list){
+					entity = fileUpload;
+				    //设置文件名称
+					reSetFileName();
+					//设置文件路径
+					setUploadPathByType(id);
+				    success = upload();
+				    if(success){
+						Map<String,Object>  pathMap = new HashMap<String,Object>();
+						pathMap.put("house", UploadFile.PATH.getVal(UploadFile.HOUSE.getVal(id)));
+						pathMap.put("idcard", UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(id)));
+						pathMap.put("car", UploadFile.PATH.getVal(UploadFile.CAR.getVal(id)));
+						jsonObject.put("path", pathMap);
+				    }
+				}
+			}else{
+				msg = "token失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("UploadAction——uploadFileByIOS方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("UploadAction——uploadFileByIOS方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
 		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	/**   
+	 * android上传
+	 * @Title: uploadFileByAndroid   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 5y    
+	 * @date 2016年9月26日 上午9:59:52
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void uploadFileByAndroid(){
+		
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String id = "";
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+				int num = Integer.parseInt(getRequest().getParameter("num"));
+				//现将文件放到缓冲区
+				ServletFileUpload upload = initUpload(num);
+				//获取文件
+				@SuppressWarnings("unchecked")
+				List<FileUpload> list = (List<FileUpload>)upload.parseRequest(getRequest());
+				for(FileUpload fileUpload : list){
+					entity = fileUpload;
+				    //设置文件名称
+					reSetFileName();
+					//设置文件路径
+					setUploadPathByType(id);
+				    success = upload();
+				    if(success){
+						Map<String,Object>  pathMap = new HashMap<String,Object>();
+						pathMap.put("house", UploadFile.PATH.getVal(UploadFile.HOUSE.getVal(id)));
+						pathMap.put("idcard", UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(id)));
+						pathMap.put("car", UploadFile.PATH.getVal(UploadFile.CAR.getVal(id)));
+						jsonObject.put("path", pathMap);
+				    }
+				}
+			}else{
+				msg = "token失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("UploadAction——uploadFileByAndroid方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("UploadAction——uploadFileByAndroid方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	/**
+	 * 初始化上传文件，将文件上传到缓冲区
+	 * @Title: initUpload   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param num
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年9月26日 下午3:28:49
+	 * @return: ServletFileUpload      
+	 * @throws
+	 */
+	private ServletFileUpload initUpload(int num){
+		//上传路径
+		String temPath = getRequest().getSession().getServletContext().getRealPath("/")+UploadFile.TEM.getVal();
+		
 		//创建一个临时文件存放要上传的文件，第一个参数为上传文件大小，第二个参数为存放的临时目录  
-		DiskFileItemFactory factory = new DiskFileItemFactory(1024*1024*5,new File("D:\\temp1"));  
+		DiskFileItemFactory factory = new DiskFileItemFactory();  
 		// 设置缓冲区大小为 5M  
-		factory.setSizeThreshold(1024 * 1024 * 5);  
+		factory.setSizeThreshold(1024 * 1024 * 5 * num);  
+		factory.setRepository(new File(temPath)); 
 		// 创建一个文件上传的句柄  
 		ServletFileUpload upload = new ServletFileUpload(factory);  
-		//设置上传文件的整个大小和上传的单个文件大小  
-		upload.setSizeMax(1024*1024*50);  
-		upload.setFileSizeMax(1024*1024*5);  
-		String[] fileExts = {"doc","zip","rar","jpg","txt", "png"};  
-//		try { 
-//		} catch (FileUploadBase.SizeLimitExceededException e) {   
-//			System.out.println("整个请求的大小超过了规定的大小...");   
-//		} catch (FileUploadBase.FileSizeLimitExceededException e) {   
-//			System.out.println("请求中一个上传文件的大小超过了规定的大小...");   
-//		} catch (FileUploadException e) {  
-//			e.printStackTrace();   
-//		}  
+		return upload;
+	}
+	
+	/**
+	 * 获取上传路径path
+	 * @Title: getUploadPathByType   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param id
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年9月26日 下午3:15:51
+	 * @return: String      
+	 * @throws
+	 */
+	private void setUploadPathByType(String id){
+		String temPath = getRequest().getSession().getServletContext().getRealPath("/");
+		String type = getRequest().getParameter("type");
+		if(type.equals("idcard")){
+			temPath = temPath+UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(id));
+		}else if(type.equals("house")){
+			temPath = temPath+UploadFile.PATH.getVal(UploadFile.HOUSE.getVal(id));
+		}else if(type.equals("car")){
+			temPath = temPath+UploadFile.PATH.getVal(UploadFile.CAR.getVal(id));
+		}
+		entity.setPath(temPath);
+		
+	}
+	
+	
+	/**
+	 * 重新命名文件名称,防止上传文件重名现象
+	 * 
+	 * @Title: getFileName
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param: @param userId
+	 * @param: @return
+	 * @author LiYonghui
+	 * @date 2016年8月9日 上午9:54:00
+	 * @return: boolean
+	 * @throws
+	 */
+	private boolean reSetFileName() {
+		boolean result = false;
+		try {
+			if (entity.getFile() != null) {
+				// 文件的后缀
+				String suffix = entity.getFileFileName().substring(entity.getFileFileName().lastIndexOf("."));
+				if (entity.getFileFileName().lastIndexOf(".") == -1) {
+					result = false;
+				}
+				// 上传以后,会重命名文件的名称,将其命名为全部是数字的文件名,防止可能出现的乱码.
+				// 当然, 只是为了防止出现乱码,一般不会出现乱码
+				entity.setNewFileName(DataUtils.randomUUID() + suffix);
+				result = true;
+			}
+		} catch (Exception e) {
+			result = false;
+			e.printStackTrace();
+			LoggerUtils.error("上传文件，获取文件名称错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("上传文件，获取文件名称错误：" + e.getLocalizedMessage(), this.getClass());
+		}
+		return result;
+	}
+	
+	/**
+	 * 上传文件
+	 * 
+	 * @Title: upload
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param: @return
+	 * @author LiYonghui
+	 * @date 2016年8月9日 上午10:12:35
+	 * @return: boolean
+	 * @throws
+	 */
+	private boolean upload() {
+		boolean result = false;
+		try {
+			if (entity.getFile() != null) {
+				File savefile = new File(new File(entity.getPath()), entity.getNewFileName());
+				// 如果保存的路径不存在,则新建
+				if (!savefile.getParentFile().exists()) {
+					savefile.getParentFile().mkdirs();
+				}
+				// 复制文件
+				FileUtils.copyFile(entity.getFile(), savefile);
+				result = true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			result = false;
+		}
+		return result;
 	}
 
 }

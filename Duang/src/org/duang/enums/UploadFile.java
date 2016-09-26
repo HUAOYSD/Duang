@@ -30,6 +30,26 @@ public enum UploadFile {
 			}
 		}
 	},
+	TEM{ //临时
+		@Override
+		public String getVal() {
+			return "resources\\tem\\";
+		}
+
+		@Override
+		public String toString() {
+			return "上传路径";
+		}
+
+		@Override
+		public String getVal(String path) {
+			if(DataUtils.notEmpty(path)){
+				return "resources\\tem\\" + path+"\\";
+			}else{
+				return "resources\\tem\\";
+			}
+		}
+	},
 	CONTRACT{
 		@Override
 		public String getVal() {
@@ -90,6 +110,50 @@ public enum UploadFile {
 		@Override
 		public String getVal() {
 			return "\\idcard";
+		}
+
+	},
+	//身份证
+	HOUSE{
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\house";
+			}else{
+				return "\\house";
+			}
+		}
+
+		@Override
+		public String toString() {
+			return "房子";
+		}
+
+		@Override
+		public String getVal() {
+			return "\\house";
+		}
+
+	},
+	//身份证
+	CAR{
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\car";
+			}else{
+				return "\\car";
+			}
+		}
+
+		@Override
+		public String toString() {
+			return "车产";
+		}
+
+		@Override
+		public String getVal() {
+			return "\\car";
 		}
 
 	},

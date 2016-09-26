@@ -339,14 +339,18 @@
 	
 	    找个方法就不要了，你新加俩吧
 	
-		URL：http://192.168.11.56:8080/Duang/provider_applyUpload!uploadApplyInfo.do
+		URL：http://192.168.11.56:8080/Duang/provider_applyUpload!uploadFileByIOS.do
+		URL：http://192.168.11.56:8080/Duang/provider_applyUpload!uploadFileByAndroid.do
 		发送参数说明：
 			token：登录token值
+			type:idcard(身份证信息),house(房产证信息),car(车子信息)
+			num:文件个数
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
 			成功：{'success':true,'path':[
-					{'salarycheck':'xxxx/ggg'},
-					{'personcheck':'xxxx/ggg'},
+					{'house':'xxxx/ggg'},
+					{'idcard':'xxxx/ggg'},
+					{'car':'xxxx/ggg'},
 			]}
 		结果列说明：
 			整个上传操作由APP端完成，后台负责提供上传路径，文件命名规则，时间戳加一个千位随机数
