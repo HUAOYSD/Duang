@@ -23,11 +23,13 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 public class BaseDao<M> {
-	private SessionFactory sessionFactory;
+	private static SessionFactory sessionFactory;
 	@Resource(name="sessionFactory")
 	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-		LoggerUtils.info("BaseDao注入SessionFactory", this.getClass());
+		if (BaseDao.sessionFactory == null) {
+			BaseDao.sessionFactory = sessionFactory;
+			LoggerUtils.info("BaseDao注入SessionFactory", this.getClass());
+		}
 	}
 
 	/** 

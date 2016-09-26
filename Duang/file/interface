@@ -332,7 +332,13 @@
 				houseLoan房产借贷
 				carLoan车产借贷
 
-	2、上传申请信息√
+	2、上传申请信息
+	
+		重新写俩方法，在org.duang.action.provider.UploadAction里面，一个为了IOS上传的，一个为了android上传的，
+		也给他们加参数区分，是上传工资收入还是身份信息证明，或者房产证，或者车产证的，然后我们再新写的找个方法中就真的存入硬盘就好了
+	
+	    找个方法就不要了，你新加俩吧
+	
 		URL：http://192.168.11.56:8080/Duang/provider_applyUpload!uploadApplyInfo.do
 		发送参数说明：
 			token：登录token值

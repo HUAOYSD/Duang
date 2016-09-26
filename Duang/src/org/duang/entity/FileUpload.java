@@ -4,15 +4,15 @@ import java.io.File;
 
 public class FileUpload {
 	//文件上传
-	private File file;
+	private File[] file;
 	private String fileFileName;
 	private String fileContentType;
 	private String newFileName;
 	private String path;
-	public File getFile() {
+	public File[] getFile() {
 		return file;
 	}
-	public void setFile(File file) {
+	public void setFile(File[] file) {
 		this.file = file;
 	}
 	public String getFileFileName() {

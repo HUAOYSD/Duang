@@ -335,7 +335,7 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 					savefile.getParentFile().mkdirs();
 				}
 				// 复制文件
-				FileUtils.copyFile(entity.getFile(), savefile);
+				FileUtils.copyFile(entity.getFile()[0], savefile);
 				result = true;
 			}
 		} catch (IOException e) {
