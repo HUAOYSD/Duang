@@ -151,16 +151,19 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 				String password = getRequest().getParameter("pwd");
 				if (DataUtils.notEmpty(password)) {
 					String id = DataUtils.randomUUID();
+					entity.setId(id);
 					entity.setPhone(password);
 					entity.setPassword(DES.encryptDES(password));
-					entity.setId(id);
 					entity.setNickname("手机用户"+phone);
+					entity.setLoginName(getRequest().getParameter("phoneNum"));
 					//附加投资用户身份
 					LoanMember loanMember = new LoanMember();
 					loanMember.setId(DataUtils.randomUUID());
+					loanMember.setMemberInfo(entity);
 					entity.getLoanMembers().add(loanMember);
 					//附加理财用户身份
 					InvestMember investMember = new InvestMember();
+					investMember.setMemberInfo(entity);
 					investMember.setId(DataUtils.randomUUID());
 					investMember.setIsContract(0);//非契约用户
 					entity.getInvestMembers().add(investMember);
