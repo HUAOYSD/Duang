@@ -181,8 +181,8 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("RegisterAction——sendValidateCode方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("RegisterAction——sendValidateCode方法错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("RegisterAction——register方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("RegisterAction——register方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
