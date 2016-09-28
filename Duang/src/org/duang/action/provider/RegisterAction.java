@@ -1,5 +1,6 @@
 package org.duang.action.provider;
 import javax.annotation.Resource;
+import javax.xml.crypto.Data;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -149,13 +150,15 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 			if (DataUtils.notEmpty(phone)) {
 				phone = DES.decryptDES(phone);
 				String password = getRequest().getParameter("pwd");
-				if (DataUtils.notEmpty(password)) {
+				String registerStyle = getRequest().getParameter("registerStyle");
+				if (DataUtils.notEmpty(password) && DataUtils.notEmpty(registerStyle)) {
 					String id = DataUtils.randomUUID();
 					entity.setId(id);
 					entity.setPhone(password);
 					entity.setPassword(DES.encryptDES(password));
 					entity.setNickname("手机用户"+phone);
 					entity.setLoginName(getRequest().getParameter("phoneNum"));
+					entity.setRegisterStyle(Integer.parseInt(registerStyle));
 					//附加投资用户身份
 					LoanMember loanMember = new LoanMember();
 					loanMember.setId(DataUtils.randomUUID());
