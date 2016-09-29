@@ -1,6 +1,7 @@
 package org.duang.action.provider;
+import java.util.Date;
+
 import javax.annotation.Resource;
-import javax.xml.crypto.Data;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -76,9 +77,8 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-
-
-
+	
+	
 	/**   
 	 * 发送注册验证码
 	 * @Title: sendValidateCode   
@@ -132,7 +132,26 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 		printJsonResult();
 	}
 
-
+	/**
+	 * @throws Exception    
+	 * 检查手机号码是否存在
+	 * @Title: checkPhone   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 5y    
+	 * @date 2016年9月5日 上午11:03:34
+	 * @return: boolean       已经注册就返回true,否则false(没有注册)
+	 * @throws   
+	 */  
+	private boolean registeredPhone(String phone) throws Exception{
+		boolean success = false;
+		MemberInfo memberInfo = service.findEntity("phone", phone.trim());
+		if (memberInfo != null) {
+			success = true;
+		}
+		return success;
+	}
+	
 	/**   
 	 * 注册
 	 * @Title: register   
@@ -149,35 +168,41 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 			String phone = getRequest().getParameter("phoneNum");
 			if (DataUtils.notEmpty(phone)) {
 				phone = DES.decryptDES(phone);
-				String password = getRequest().getParameter("pwd");
-				String registerStyle = getRequest().getParameter("registerStyle");
-				if (DataUtils.notEmpty(password) && DataUtils.notEmpty(registerStyle)) {
-					String id = DataUtils.randomUUID();
-					entity.setId(id);
-					entity.setPhone(password);
-					entity.setPassword(DES.encryptDES(password));
-					entity.setNickname("手机用户"+phone);
-					entity.setLoginName(getRequest().getParameter("phoneNum"));
-					entity.setRegisterStyle(Integer.parseInt(registerStyle));
-					//附加投资用户身份
-					LoanMember loanMember = new LoanMember();
-					loanMember.setId(DataUtils.randomUUID());
-					loanMember.setMemberInfo(entity);
-					entity.getLoanMembers().add(loanMember);
-					//附加理财用户身份
-					InvestMember investMember = new InvestMember();
-					investMember.setMemberInfo(entity);
-					investMember.setId(DataUtils.randomUUID());
-					investMember.setIsContract(0);//非契约用户
-					entity.getInvestMembers().add(investMember);
-					if (service.saveEntity(entity)) {
-						success = true;
-						jsonObject.put("id", DES.encryptDES(id));
-					}else {
-						msg = "注册失败";
-					}
+				//检测手机号是否已经注册
+				if(registeredPhone(phone)){
+					msg="手机号已经注册";
 				}else{
-					msg = "密码不能为空";
+					String password = getRequest().getParameter("pwd");
+					String registerStyle = getRequest().getParameter("registerStyle");
+					if (DataUtils.notEmpty(password) && DataUtils.notEmpty(registerStyle)) {
+						String id = DataUtils.randomUUID();
+						entity.setId(id);
+						entity.setPhone(phone);
+						entity.setPassword(password);
+						entity.setNickname("手机用户"+phone);
+						entity.setLoginName(phone);
+						entity.setRegisterStyle(Integer.parseInt(registerStyle));
+						entity.setCreateTime(new Date());
+						//附加投资用户身份
+						LoanMember loanMember = new LoanMember();
+						loanMember.setId(DataUtils.randomUUID());
+						loanMember.setMemberInfo(entity);
+						entity.getLoanMembers().add(loanMember);
+						//附加理财用户身份
+						InvestMember investMember = new InvestMember();
+						investMember.setMemberInfo(entity);
+						investMember.setId(DataUtils.randomUUID());
+						investMember.setIsContract(0);//非契约用户
+						entity.getInvestMembers().add(investMember);
+						if (service.saveEntity(entity)) {
+							success = true;
+							jsonObject.put("id", DES.encryptDES(id));
+						}else {
+							msg = "注册失败";
+						}
+					}else{
+						msg = "密码不能为空";
+					}
 				}
 			}else {
 				msg = "手机号码为空";
@@ -211,8 +236,8 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 			String idcard = getRequest().getParameter("p_idcard");
 			String email = getRequest().getParameter("p_email");
 			String name = getRequest().getParameter("p_name");
-			if (DataUtils.notEmpty(id) && DataUtils.notEmpty(idcard) && DataUtils.notEmpty(email)) {
-				id = DES.decryptDES(id);
+			if (DataUtils.notEmpty(id) && DataUtils.notEmpty(idcard) && DataUtils.notEmpty(email)&&DataUtils.notEmpty(name)) {
+				id=DES.decryptDES(id);
 				idcard = DES.decryptDES(idcard);
 				email = DES.decryptDES(email);
 				name = DES.decryptDES(name);
