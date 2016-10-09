@@ -967,4 +967,11 @@
 		URL：http://192.168.11.56:8080/Duang/provider_friends!querytops.do
 		发送参数说明：
 			token登录会员的token
+			
+			
+十二：首页推荐
+	1、获取首页推荐标信息
+		URL：http://192.168.11.56:8080/Duang/provider_investlist!getHomeRecommendScale.do
+		发送参数说明：
+	
 				

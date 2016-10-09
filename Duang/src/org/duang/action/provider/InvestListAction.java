@@ -49,6 +49,22 @@ public class InvestListAction extends BaseAction<InvestList>{
 		this.investListService = investListService;
 	}
 	
+	
+	/**   
+	 * 获取首页推荐标信息
+	 * @Title: getHomeRecommendScale   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 5y    
+	 * @date 2016年10月9日 下午4:56:10
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void getHomeRecommendScale(){
+		
+	}
+	
+	
 	/**   
 	 * 增加投资记录
 	 * @Title: addInvestList   
