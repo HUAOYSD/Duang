@@ -54,7 +54,34 @@ public class LoanListAction extends BaseAction<LoanList>{
 		this.service = service;
 	}
 
-
+	/**   
+	 * 查询申请中的借款记录
+	 * @Title: queryAppling   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 5y    
+	 * @date 2016年10月9日 上午11:08:50
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void queryAppling(){
+	}
+	
+	
+	/**   
+	 * 查询申请完成的借款记录
+	 * @Title: queryApplied   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 5y    
+	 * @date 2016年10月9日 上午11:08:50
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void queryApplied(){
+	}
+	
+	
 	/**   
 	 * 查询借贷记录列表
 	 * @Title: queryLoanList   

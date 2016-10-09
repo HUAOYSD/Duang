@@ -551,6 +551,18 @@
 			days天数
 			passTime审核通过时间
 			
+	8、查找登录人的借款中的记录
+		URL：http://192.168.11.56:8080/Duang/provider_loanlist!queryAppling.do
+		发送参数说明：
+			token登录会员token
+			
+	9、查询申请完成的借款记录
+		URL：http://192.168.11.56:8080/Duang/provider_loanlist!queryApplied.do
+		发送参数说明：
+			token登录会员token
+			
+	
+			
 八：理财
 	1、增加理财记录 √
 		URL：http://192.168.11.56:8080/Duang/provider_investlist!addInvestList.do
