@@ -294,5 +294,20 @@ public class FriendsAction extends BaseAction<Friends>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
+	
+	
+	
+	/**   
+	 * 获取好友累计收益排行
+	 * @Title: querytops   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 5y    
+	 * @date 2016年10月9日 下午4:46:41
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void querytops(){
+	}
 
 }

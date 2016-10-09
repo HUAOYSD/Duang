@@ -325,6 +325,11 @@
 		属性说明：
 			同车标
 			
+	4、根据标id获取标详情
+		URL：http://192.168.11.56:8080/Duang/provider_scale!findScaleInfo.do
+		发送参数说明：
+			*id:标id
+			
 
 七：借款申请
 	1、获总投资、借贷数据√   信用借款（急速模式和普通模式的好像不太符合（原型上没有标注【年化收益率】和【投资天数】），需要重新写方法）
@@ -613,18 +618,7 @@
 			backStyle还款方式，等额本息|到期一次性还款
 			days天数
 			passTime审核通过时间
-			
-	8、查找登录人的借款中的记录
-		URL：http://192.168.11.56:8080/Duang/provider_loanlist!queryAppling.do
-		发送参数说明：
-			token登录会员token
-			
-	9、查询申请完成的借款记录
-		URL：http://192.168.11.56:8080/Duang/provider_loanlist!queryApplied.do
-		发送参数说明：
-			token登录会员token
-			
-	
+
 			
 八：理财
 	1、增加理财记录 √
@@ -827,6 +821,11 @@
 			optTime操作时间
 			remark操作说明
 			
+	5、获取账户余额
+		URL：http://192.168.11.56:8080/Duang/provider_billloan!getbalance.do
+		发送参数说明：
+			token登录会员的token
+			
 十：消息
 	1、增加消息记录√
 		URL：http://192.168.11.56:8080/Duang/provider_message!insertMessage.do
@@ -962,4 +961,10 @@
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
 			成功：{'success':true}
+			
+			
+	7、获取好友累计收益排行
+		URL：http://192.168.11.56:8080/Duang/provider_friends!querytops.do
+		发送参数说明：
+			token登录会员的token
 				
