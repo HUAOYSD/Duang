@@ -171,6 +171,44 @@ public class ScaleAction extends BaseAction<Scale>{
 		printJsonResult();
 	}
 
+	/**   
+	 * 根据标id获取标详情
+	 * @Title: findScaleInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月9日 下午4:38:04
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void findScaleInfo(){
+		boolean success = false;
+		try {
+			String id = getRequest().getParameter("id");
+			if(DataUtils.notEmpty(id)){
+				StringBuffer sql = new StringBuffer();
+				sql.append(" SELECT SCA.* FROM SCALE where id="+id);
+				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
+				success = true;
+				jsonObject.put("result", fillDatagridCons(list));
+				if (list == null || list.size() == 0) {
+					msg = "没有更多了";
+				}
+			}else{
+				msg = "参数为空";
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("ScaleAction——findScaleInfo方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ScaleAction——findScaleInfo方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+
 
 	/**   
 	 * 填充List数据
