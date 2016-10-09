@@ -157,7 +157,17 @@
 		返回结果：Json
 			成功：{'success':true}
 			失败：{'success':false,'msg':'身份证信息已被占用，请检查'}
-			
+	7、查找会员信息
+		URL：http://192.168.11.56:8080/Duang/provider_member!findMemberById.do?
+			发送参数说明：
+				token：token：登录token值
+			返回结果：Json
+				成功：{'success':true,'result':[{"createTime":0,"phone":"15600465150","sex":"1","isFreeze":0,"password":null,"isDelete":"0","id":"songjiang","createuser":null,"level":null,"age":"42","myQr":null,"modifyTime":0,
+				"userImg":null,"loginName":"15895594965","idCard":"510821144495515151","payPassword":null,"nickname":"及时雨","isEliteAccount":0,"modifyuser":null,
+				"idCardImg2":null,"price":null,"idCardImg1":"78dbd842027b40ab81d95c2687dee078.jpg","email":"songjiang@sina.com","miDescribe":null,"realName":"宋江",
+				"registerStyle":1,"handPassword":null}]}
+				失败：{'success':false,'msg':'服务器维护，请稍后再试'}
+		
 
 四：绑定银行卡列表
 	1、获取银行卡列表√
@@ -316,8 +326,8 @@
 			同车标
 			
 
-七：借贷
-	1、获总投资、借贷数据√
+七：借款申请
+	1、获总投资、借贷数据√   信用借款（急速模式和普通模式的好像不太符合（原型上没有标注【年化收益率】和【投资天数】），需要重新写方法）
 		URL：http://192.168.11.56:8080/Duang/provider_transaction!getLoanAndInvestData.do
 		发送参数说明：
 			token：登录token值
@@ -332,7 +342,7 @@
 				houseLoan房产借贷
 				carLoan车产借贷
 
-	2、上传申请信息
+	2、上传申请信息√  普通模式下的资料上传
 	
 		重新写俩方法，在org.duang.action.provider.UploadAction里面，一个为了IOS上传的，一个为了android上传的，
 		也给他们加参数区分，是上传工资收入还是身份信息证明，或者房产证，或者车产证的，然后我们再新写的找个方法中就真的存入硬盘就好了
@@ -358,7 +368,7 @@
 			personcheck上传身份信息证明的路径
 			'ggg'后面无‘/’符号
 				
-	3、增加申请普通和急速模式贷款的申请信息记录√
+	3、增加申请普通和急速模式贷款的申请信息记录√   普通借款、急速借款、信用借款的申请操作
 		URL：http://192.168.11.56:8080/Duang/provider_applyLoanInfo!insertApplyLoanInfo.do
 		发送参数说明：
 			token登录会员token
@@ -403,7 +413,7 @@
 			成功：{'success':true}
 			
 			
-	4、增加房产贷款的申请信息记录√
+	4、增加房产贷款的申请信息记录√  房产贷款申请
 		URL：http://192.168.11.56:8080/Duang/provider_applyHouseLoanInfo!insertApplyHouseLoanInfo.do
 		发送参数说明：
 			token登录会员token
@@ -429,7 +439,7 @@
 			成功：{'success':true}
 			
 
-	5、增加车产贷款的申请信息记录√
+	5、增加车产贷款的申请信息记录√  车产贷款的申请
 		URL：http://192.168.11.56:8080/Duang/provider_applyCarLoanInfo!insertApplyCarLoanInfo.do
 		发送参数说明：
 			token登录会员token
@@ -456,6 +466,59 @@
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
 			成功：{'success':true}
+	
+	6、根据状态查询借贷列表√  申请中，通过审核
+		URL：http://192.168.11.56:8080/Duang/provider_loanlist!queryLoanListByApplyState.do
+		发送参数说明：
+			token登录会员token
+			num：单次获取标个数
+			count：下拉次数（首次打开次数累计1次）
+			applyState：申请状态,1待审核,2审核通过,3审核驳回,4已取消
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
+			成功：{'success':true,'result':[
+				{'memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
+				'realMoney':'4500','poundage':'250','getMoney':'4500','yetMoney':'4500','returnMoney':'5500','agoMoney':'250','yetReturnMoney':'2000','returnStatus':'产生逾期',
+				'loanState':'放款完成','applyStateint':'审核通过','loanType':'普通模式','loanUse':'抢了王二狗的钱了，打着要我还','loanInterest':'250','createTime':'2016-5-6',
+				'signDate':'2016-9-9','beginReturnDate':'2015-9-9','endReturnDate':'2016-9-7','doneReturnDate':'2019-9-9','backStyle':'等额本息','days':'365','passTime':'2015-9-9'},
+				{'memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
+				'realMoney':'4500','poundage':'250','getMoney':'4500','yetMoney':'4500','returnMoney':'5500','agoMoney':'250','yetReturnMoney':'2000','returnStatus':'产生逾期',
+				'loanState':'放款完成','applyStateint':'审核通过','loanType':'普通模式','loanUse':'抢了王二狗的钱了，打着要我还','loanInterest':'250','createTime':'2016-5-6',
+				'signDate':'2016-9-9','beginReturnDate':'2015-9-9','endReturnDate':'2016-9-7','doneReturnDate':'2019-9-9','backStyle':'等额本息','days':'365','passTime':'2015-9-9'},
+				{'memberid':'fdsfdsf4f56sd4f5sd4f','membername':'王麻子','pactNumber':'IUGO160254OP','isSell':'标满','poundageState':'已扣手续费','money':'5000',
+				'realMoney':'4500','poundage':'250','getMoney':'4500','yetMoney':'4500','returnMoney':'5500','agoMoney':'250','yetReturnMoney':'2000','returnStatus':'产生逾期',
+				'loanState':'放款完成','applyStateint':'审核通过','loanType':'普通模式','loanUse':'抢了王二狗的钱了，打着要我还','loanInterest':'250','createTime':'2016-5-6',
+				'signDate':'2016-9-9','beginReturnDate':'2015-9-9','endReturnDate':'2016-9-7','doneReturnDate':'2019-9-9','backStyle':'等额本息','days':'365','passTime':'2015-9-9'}
+			]}
+		结果列说明：
+			memberid借贷用户id
+			membername借贷用户姓名	
+			pactNumber合同编号		
+			isSell是否起售,未起标|起标|标满
+			poundageState手续费状态,未扣手续费|已扣手续费
+			money申请借款金额
+			realMoney实际审核金额
+			poundage手续费
+			getMoney应该放款金额
+			yetMoney已经放款金额
+			returnMoney实际应该还款金额
+			agoMoney逾期费
+			yetReturnMoney实际已经还款金额
+			returnStatus还款状态,未还款|未还尽|产生逾期|完成还款
+			loanState放款状态,未开始放款|放款中|放款完成
+			applyStateint申请状态,待审核|审核通过|审核驳回|已取消
+			loanType借款类型,普通模式|产权模式|信用模式|急速模式
+			loanUse借款用途
+			loanInterest借款利息
+			createTime创建时间
+			signDate签约日
+			beginReturnDate应该开始还款日
+			endReturnDate截止还款日
+			doneReturnDate实际完成还款日
+			backStyle还款方式，等额本息|到期一次性还款
+			days天数
+			passTime审核通过时间
+		说明：不是所有结果列都需要展示哈，有得列可能只是需要用来做记录，便于后期操作
 			
 			
 	6、查询借贷列表√
