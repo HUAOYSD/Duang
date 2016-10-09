@@ -83,11 +83,11 @@ public class LoanListAction extends BaseAction<LoanList>{
 	
 	
 	/**   
-	 * 查询借贷记录列表
+	 * 查询借款信息
 	 * @Title: queryLoanList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
-	 * @author 5y    
+	 * @author LiYonghui    
 	 * @date 2016年9月9日 下午4:25:24
 	 * @return: void      
 	 * @throws   
@@ -109,13 +109,69 @@ public class LoanListAction extends BaseAction<LoanList>{
 							jsonArray.add(fillData(new JSONObject(), loanlist));
 						}
 					}else{
-						msg = "你没有借贷记录";
+						msg = "还没有借款中的记录";
 					}
 				}else {
 					msg = "参数无效";
 				}
 			}else {
 				msg = "登录失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		jsonObject.put("result", jsonArray);
+		printJsonResult();
+	}
+	
+	/**
+	 * 根据审核状况查询借贷列表
+	 * @Title: queryInApplyLoan   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年9月30日 下午2:44:32
+	 * @return: void      
+	 * @throws
+	 */
+	public void queryLoanListByApplyState(){
+		boolean success = false;
+		JSONArray jsonArray = new JSONArray();
+		try {
+			String token = getRequest().getParameter("token");
+			String applyState = getRequest().getParameter("applyState");
+			String id = null;
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))&& DataUtils.notEmpty(applyState)) {
+				//单次获取标个数
+				int num = DataUtils.str2int(getRequest().getParameter("num"));
+				//下拉次数（首次打开次数累计1次）
+				int count = DataUtils.str2int(getRequest().getParameter("count"));
+				if (num != 0 && count != 0) {
+					condsUtils.addProperties(true, "memberInfo.id");
+					condsUtils.concatValue(id);
+					condsUtils.addProperties(false, "applyState");
+					condsUtils.addValues(false, DataUtils.str2int(applyState));
+					condsUtils.addProperties(false, "order");
+					condsUtils.addValues(false, Order.desc("createTime"));
+					List<LoanList> loanLists = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), setPageUtil(new PageUtil<LoanList>(num, count)));
+					success = true;
+					if (DataUtils.notEmpty(loanLists)) {
+						for (LoanList loanlist : loanLists) {
+							jsonArray.add(fillData(new JSONObject(), loanlist));
+						}
+					}else{
+						msg = "你没有借贷记录";
+					}
+				}else {
+					msg = "参数无效";
+				}
+			}else {
+				msg = "登录失效或者参数为空";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

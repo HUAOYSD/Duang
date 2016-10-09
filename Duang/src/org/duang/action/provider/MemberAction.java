@@ -1,4 +1,10 @@
 package org.duang.action.provider;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.annotation.Resource;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -7,10 +13,13 @@ import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.entity.InvestMember;
+import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
+import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -287,5 +296,122 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
 		printJsonResult();
+	}
+	
+	/**
+	 * 根据id查找用户的具体信息
+	 * @Title: findMemberById   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年9月30日 下午3:25:03
+	 * @return: void      
+	 * @throws
+	 */
+	public void findMemberById() {
+		boolean success = false;
+		List<MemberInfo> list = new ArrayList<MemberInfo>();
+		try {
+			String token = getRequest().getParameter("token");
+			String id = token;
+			if (DataUtils.notEmpty(token)) {
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("id", id);
+				MemberInfo memberInfo = service.findEntity(params);
+				if (memberInfo != null) {
+					list.add(memberInfo);
+					jsonObject.put("result", fillDataObjectArray(list));
+				}else {
+					msg="未查到记录";
+				}
+				success = true;
+			}else{
+				msg="数据丢失，请重新登录";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction——findMemberById方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction——findMemberById方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		} finally {
+			jsonObject.put("msg", msg);
+			jsonObject.put("success", success);
+			printJsonResult();
+		}
+	}
+	
+	/**
+	 * 封装客户信息（理财客户、借贷客户）
+	 * @Title: fillDataObjectArray   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param list
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年8月11日 下午3:54:10
+	 * @return: List<Map<String,Object>>      
+	 * @throws
+	 */
+	private List<Map<String, Object>> fillDataObjectArray(List<MemberInfo> list) {
+		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+		try {
+			for (MemberInfo memberInfo : list) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				//客户的基本信息
+				map.put("id", memberInfo.getId());
+				map.put("loginName", memberInfo.getLoginName());
+				map.put("realName", memberInfo.getRealName());
+				map.put("nickname", memberInfo.getNickname());
+				map.put("email", memberInfo.getEmail());
+				map.put("age", memberInfo.getAge());
+				map.put("sex", memberInfo.getSex());
+				map.put("phone", memberInfo.getPhone());
+				map.put("isDelete", memberInfo.getIsdelete());
+				map.put("createTime", DateUtils.getTimeStamp(memberInfo.getCreateTime()));
+				map.put("modifyTime", DateUtils.getTimeStamp(memberInfo.getModifyTime()));
+				map.put("createuser", memberInfo.getCreateuser());
+				map.put("modifyuser", memberInfo.getModifyuser());
+				map.put("userImg", memberInfo.getUserImg());
+				map.put("isEliteAccount", memberInfo.getIsEliteAccount());
+				map.put("level", memberInfo.getLevel());
+				map.put("price", memberInfo.getPrice());
+				map.put("password", memberInfo.getPassword());
+				map.put("payPassword", memberInfo.getPayPassword());
+				map.put("handPassword", memberInfo.getHandPassword());
+				map.put("isFreeze", memberInfo.getIsFreeze());
+				map.put("idCard", memberInfo.getIdCard());
+				map.put("miDescribe", memberInfo.getMiDescribe());
+				map.put("idCardImg1", memberInfo.getIdCardImg1());
+				map.put("idCardImg2", memberInfo.getIdCardImg2());
+				map.put("myQr", memberInfo.getMyQr());
+				map.put("registerStyle", memberInfo.getRegisterStyle());
+				//封装理财用户信息
+				Set<InvestMember> investMembers =  memberInfo.getInvestMembers();
+				for(InvestMember investMember : investMembers){
+					map.put("investMember_id", investMember.getId());
+					map.put("isContract", investMember.getIsContract());
+					map.put("balance", investMember.getBalance());
+					map.put("investing", investMember.getInvesting());
+					map.put("totalIncome", investMember.getInvesting());
+					map.put("totalMoney", investMember.getTotalMoney());
+					map.put("useableScore", investMember.getUseableScore());
+					map.put("currentIncome", investMember.getCurrentIncome());
+				}
+				//封装借贷客户信息
+				Set<LoanMember> loanMembers =  memberInfo.getLoanMembers();
+				for(LoanMember loanMember : loanMembers){
+					map.put("loanMember_id", loanMember.getId());
+					map.put("backMoney", loanMember.getBackMoney());
+					map.put("expectMoney", loanMember.getExpectMoney());
+					map.put("lendMoney", loanMember.getLendMoney());
+					map.put("residueMoney", loanMember.getResidueMoney());
+				}
+				listMap.add(map);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("封装理财用户错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("封装理财用户错误：" + e.getLocalizedMessage(), this.getClass());
+		}
+		return listMap;
 	}
 }
