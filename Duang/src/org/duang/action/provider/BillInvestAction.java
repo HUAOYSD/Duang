@@ -13,9 +13,11 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.BillInvest;
+import org.duang.entity.InvestMember;
 import org.duang.enums.billinvest.BillStatus;
 import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
+import org.duang.service.InvestMemberService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
@@ -43,6 +45,11 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 		this.service = service;
 	}
 
+	private InvestMemberService investMemberService;
+	@Resource(name = "sysinvestmemberserviceimpl")
+	public void setService(InvestMemberService investMemberService) {
+		this.investMemberService = investMemberService;
+	}
 
 	/**   
 	 * 查询账单记录
@@ -93,4 +100,45 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 		printJsonResult();
 	}
 
+	/**
+	 * 获取账户余额
+	 * @Title: getbalance   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月10日 下午2:26:41
+	 * @return: void      
+	 * @throws
+	 */
+	public void getbalance(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String id = null;
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+				condsUtils.addProperties(true, "memberInfo");
+				condsUtils.concatValue(new String[] { "infoAlias", "as" });
+				condsUtils.addProperties(false, "infoAlias.id");
+				condsUtils.concatValue(id);
+				List<InvestMember> list = investMemberService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+				success = true;
+				if(list!=null && list.size()>0){
+					jsonObject.put("balance", list.get(0).getBalance());
+				}else {
+					jsonObject.put("balance", 0);
+				}
+			}else {
+				msg = "登录失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("BillInvestAction——getbalance方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("BillInvestAction——getbalance方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
 }

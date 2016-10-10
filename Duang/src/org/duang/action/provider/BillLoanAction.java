@@ -92,5 +92,4 @@ public class BillLoanAction extends BaseAction<BillLoan>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
 }

@@ -1,5 +1,6 @@
 package org.duang.action.provider;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,7 +153,7 @@ public class FriendsAction extends BaseAction<Friends>{
 	 * @throws   
 	 */  
 	public void getMyQR(){
-
+		
 	}
 
 
@@ -308,6 +309,41 @@ public class FriendsAction extends BaseAction<Friends>{
 	 * @throws   
 	 */  
 	public void querytops(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String id = null;
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+				String sql = "select im.total_income,mi.real_name,mi.user_img from friends fri LEFT JOIN invest_member im on im.memberinfo_id=fri.target "+
+							 " LEFT JOIN member_info mi on mi.id=im.memberinfo_id "+
+							 " where fri.self='"+id+"' order by im.total_income desc";
+				List<?> list = service.queryBySQL(sql, null, null, false);
+				List<Map<String, Object>> listMap = new ArrayList<Map<String,Object>>();
+				if(list==null || list.size()==0){
+					msg="目前还没有好友";
+				}else {
+					for(int i=0;i<list.size();i++){
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("total_income",  DataUtils.str2double((((Object[])list.get(i))[0])+"",2));
+						map.put("real_name", ((Object[])list.get(i))[1]);
+						map.put("user_img", ((Object[])list.get(i))[2]);
+						listMap.add(map);
+					}
+				}
+				success = true;
+				jsonObject.put("result", listMap);
+			}else {
+				msg = "登录失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("FriendsAction——querytops方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("FriendsAction——querytops方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
 	}
 
 }

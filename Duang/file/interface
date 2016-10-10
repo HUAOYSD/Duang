@@ -157,7 +157,7 @@
 		返回结果：Json
 			成功：{'success':true}
 			失败：{'success':false,'msg':'身份证信息已被占用，请检查'}
-	7、查找会员信息
+	7、查找会员信息√
 		URL：http://192.168.11.56:8080/Duang/provider_member!findMemberById.do?
 			发送参数说明：
 				token：token：登录token值
@@ -325,7 +325,7 @@
 		属性说明：
 			同车标
 			
-	4、根据标id获取标详情
+	4、根据标id获取标详情√
 		URL：http://192.168.11.56:8080/Duang/provider_scale!findScaleInfo.do
 		发送参数说明：
 			*id:标id
@@ -821,10 +821,17 @@
 			optTime操作时间
 			remark操作说明
 			
+<<<<<<< HEAD
 	5、获取账户余额
+=======
+	5、获取账户余额√
+>>>>>>> branch 'liyonghui' of https://github.com/HUAOYSD/Duang.git
 		URL：http://192.168.11.56:8080/Duang/provider_billinvest!getbalance.do
 		发送参数说明：
 			token登录会员的token
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器异常'}	
+			成功：{'success':true,'balance':1023.50}
 			
 十：消息
 	1、增加消息记录√
@@ -963,10 +970,17 @@
 			成功：{'success':true}
 			
 			
-	7、获取好友累计收益排行
+	7、获取好友累计收益排行√
 		URL：http://192.168.11.56:8080/Duang/provider_friends!querytops.do
 		发送参数说明：
 			token登录会员的token
+		返回结果：Json
+		失败：{'success':false,'msg':'服务器维护，请稍后再试'}	
+		成功：{'success':true,'result':[
+				{'total_income':'2000.00','real_name':'刘备','user_img':'***/adf.jsp'},
+				{'total_income':'54645.00','real_name':'张飞','user_img':'***/adf.jsp'},
+				{'total_income':'234234.00','real_name':'关羽','user_img':'***/adf.jsp'}
+			]}
 			
 			
 十二：首页推荐
