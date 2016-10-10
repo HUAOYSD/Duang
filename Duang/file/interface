@@ -822,7 +822,7 @@
 			remark操作说明
 			
 	5、获取账户余额
-		URL：http://192.168.11.56:8080/Duang/provider_billloan!getbalance.do
+		URL：http://192.168.11.56:8080/Duang/provider_billinvest!getbalance.do
 		发送参数说明：
 			token登录会员的token
 			
@@ -972,6 +972,19 @@
 十二：首页推荐
 	1、获取首页推荐标信息
 		URL：http://192.168.11.56:8080/Duang/provider_investlist!getHomeRecommendScale.do
-		发送参数说明：
-	
-				
+		返回结果：Json
+			失败：{'success':false,'msg':'暂无推荐产品'}	
+			成功：{'success':true,'id':'dsfsfsdfsdf112321312','day':'90','min':'500','revenue':'0.99','revenueAdd':'0.01',
+			'yetmoney':'555555','residuemoney':'111111','totalmoney':'321312321','productcategory':'信贷产品','productname':'年年余','scalename':'年年余01号'}
+		列说明：
+			id理财标的唯一标识
+			day投资周期
+			min起投金额
+			revenue收益率
+			revenueAdd附加收益率
+			yetmoney已投金额
+			residuemoney剩余金额	
+			totalmoney总金额
+			productcategory产品类型
+			productname产品名称
+			scalename标名称

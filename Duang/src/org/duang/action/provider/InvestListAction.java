@@ -14,13 +14,16 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.InvestList;
 import org.duang.entity.MemberInfo;
+import org.duang.entity.Product;
 import org.duang.entity.Scale;
 import org.duang.enums.If;
 import org.duang.enums.Platform;
 import org.duang.enums.invest.Status;
 import org.duang.enums.invest.TurnStatus;
 import org.duang.enums.invest.UseTicket;
+import org.duang.enums.product.Category;
 import org.duang.service.InvestListService;
+import org.duang.service.ScaleService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -44,12 +47,18 @@ import org.springframework.context.annotation.ScopedProxyMode;
 public class InvestListAction extends BaseAction<InvestList>{
 	
 	private InvestListService investListService;
-	@Resource()
+	private ScaleService scaleService;
+	@Resource
 	public void setService(InvestListService investListService) {
 		this.investListService = investListService;
 	}
-	
-	
+	@Resource
+	public void setScaleService(ScaleService scaleService) {
+		this.scaleService = scaleService;
+	}
+
+
+
 	/**   
 	 * 获取首页推荐标信息
 	 * @Title: getHomeRecommendScale   
@@ -61,7 +70,39 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 * @throws   
 	 */  
 	public void getHomeRecommendScale(){
-		
+		boolean success = false;
+		try {
+			condsUtils.addProperties(true, "product", "myAlias.isRecommend", "myAlias.isSell", "status", "order");
+			condsUtils.addValues(true, new Object[]{"myAlias","as"}, 1, 1, new Object[]{1, 2, "or"}, Order.desc("beginTime"));
+			List<?> list = scaleService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+			if (DataUtils.notEmpty(list)) {
+				Product product = (Product) ((Object[])list.get(0))[0];
+				Scale scale = (Scale) ((Object[])list.get(0))[1];
+				//时长、起投、预期收益率、附加预期收益率、已投金额、剩余可投金额、标总额、产品类型、产品名称、标名称
+				jsonObject.put("id", scale.getId());
+				jsonObject.put("day", product.getDays());
+				jsonObject.put("min", 500);
+				jsonObject.put("revenue", scale.getRevenue());
+				jsonObject.put("revenueAdd", scale.getRevenueAdd());
+				jsonObject.put("yetmoney", scale.getYetMoney());
+				jsonObject.put("residuemoney", scale.getResidueMoney());
+				jsonObject.put("totalmoney", scale.getTotalMoney());
+				jsonObject.put("productcategory", Category.valueOf("C"+product.getCategory()).toString());
+				jsonObject.put("productname", product.getNameZh());
+				jsonObject.put("scalename", scale.getName());
+				success = true;
+			}else {
+				msg = "暂无推荐";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("InvestListAction——addInvestList方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("InvestListAction——addInvestList方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
 	}
 	
 	
