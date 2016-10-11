@@ -676,7 +676,7 @@
 			*p_investListId理财记录id
 		返回结果：Json
 			失败：{'success':false,'msg':'支付失败、token无效'}	
-			成功：{'success':true}
+			成功：{'success':true}	
 			
 		
 	5、赎回理财成功回调 
