@@ -361,10 +361,16 @@ public class InvestListAction extends BaseAction<InvestList>{
 			resultMap.put("memberNickName", fk.getNickname());
 			resultMap.put("memberPhone", fk.getPhone());
 			resultMap.put("memberIdcard", fk.getIdCard());
+			resultMap.put("memberEmail", fk.getEmail());
+			resultMap.put("memberSex", fk.getSex());
 		}
 		if (fk2 != null) {
 			resultMap.put("name", fk2.getName());
+			resultMap.put("calcBeginTime", fk2.getCalcBeginTime());
+			resultMap.put("calcEndTime", fk2.getCalcEndTime());
 			resultMap.put("productName", fk2.getProduct().getName());
+			resultMap.put("productDetails", fk2.getProduct().getDetails());
+			resultMap.put("profitMoney", (fk2.getRevenue()+fk2.getRevenueAdd())*pk.getMoney());
 		}
 		return resultMap;
 	}

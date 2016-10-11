@@ -644,26 +644,36 @@
 			*id记录id
 		返回结果：Json
 			失败：{'success':false,'msg':'服务器超时，请稍后重试'}	
-			成功：{'success':true,'membername':'张三','productName':'年年余','name':'年年余-160911号','days':'90','calcBegin':'2016-5-6','calcEnd':'2017-5-6',
-				'money':'50000','useTicke':'是|否','income':'500','ticketBonus':'20','totalMoney':'50520','status':'投资收益中',
-				'pactNumber':'HJH160591GS','openDate':'2016-5-5','backIncome':'520','backMoney':'50520','backDate':'2017-5-6',
-				'isTurn':'是','poundageTurn':'250','poundagePrivilege':'50','turnStatus':'转让中'}
+			成功：封装属性的JSON
 		属性说明：
-			productName产品名称
+			memberName 客户真实姓名
+			memberNickName 客户昵称
+			memberPhone 电话
+			memberIdcard 身份证号码
+			memberEmail 邮箱
+			memberSex 年龄
+			
 			name理财标名称
+			productName产品名称 
+			productDetails产品详情
+			
+			money投资本金总额
+			profitMoney 收益金额
+			calcBeginTime 开始日期
+			calcEndTime   结束日期
+			
+			openDate创建日期  
+			backDate实际回款到账日期
 			calcBegin开始计息日	
 			calcEnd回款日
-			money投资本金总额
-			useTicke是否使用了理财券，取值是|否
 			income实际收益（不含理财券奖励）
+			useTicke是否使用了理财券，取值是|否
 			ticketBonus实际理财奖励发放
 			totalMoney账面总金额(投资金额+收益+理财券)
 			status理财状态
 			pactNumber合同编号
-			openDate创建日期
 			backIncome实际赎回收益
 			backMoney实际赎回(本金)
-			backDate实际回款到账日期
 			isTurn是否已经转让
 			poundageTurn转让手续费
 			poundagePrivilege转让优惠手续费

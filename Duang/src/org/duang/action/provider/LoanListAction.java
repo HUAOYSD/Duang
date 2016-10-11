@@ -151,7 +151,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 				int num = DataUtils.str2int(getRequest().getParameter("num"));
 				//下拉次数（首次打开次数累计1次）
 				int count = DataUtils.str2int(getRequest().getParameter("count"));
-				if (num != 0 && count != 0) {
+				if (num > 0 && count > 0) {
 					condsUtils.addProperties(true, "memberInfo.id");
 					condsUtils.concatValue(id);
 					condsUtils.addProperties(false, "applyState");
