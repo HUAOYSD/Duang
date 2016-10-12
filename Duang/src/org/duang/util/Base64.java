@@ -12,7 +12,7 @@ import java.io.OutputStream;
  */  
 public class Base64 {
 
-	private static final char[] legalChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789A/".toCharArray();
+	private static final char[] legalChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 
 	/**   
 	 * 编码

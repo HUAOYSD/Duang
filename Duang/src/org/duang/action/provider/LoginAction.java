@@ -1,4 +1,6 @@
 package org.duang.action.provider;
+import java.util.Set;
+
 import javax.annotation.Resource;
 
 import net.sf.json.JSONObject;
@@ -202,17 +204,22 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		jsonObject.put("photo", entity.getUserImg());
 		jsonObject.put("isEliteAccount", If.valueOf("If"+entity.getIsEliteAccount()).toString());
 
-		InvestMember investMember = entity.getInvestMembers().iterator().next();
-		jsonObject.put("money", investMember.getTotalMoney());
-		jsonObject.put("investing", investMember.getInvesting());
-		jsonObject.put("balance", investMember.getBalance());
-		jsonObject.put("totalEarnings", investMember.getTotalIncome());
-		jsonObject.put("currentEarnings", investMember.getCurrentIncome());
-
-		LoanMember loanMember = entity.getLoanMembers().iterator().next();
-		jsonObject.put("loanMoney", loanMember.getLendMoney());
-		jsonObject.put("overdue", loanMember.getExpectMoney());
-		jsonObject.put("residue", loanMember.getResidueMoney());
+		Set<InvestMember> investMembers = entity.getInvestMembers();
+		if(investMembers!=null && investMembers.size()>0){
+			InvestMember investMember = investMembers.iterator().next();
+			jsonObject.put("money", investMember.getTotalMoney());
+			jsonObject.put("investing", investMember.getInvesting());
+			jsonObject.put("balance", investMember.getBalance());
+			jsonObject.put("totalEarnings", investMember.getTotalIncome());
+			jsonObject.put("currentEarnings", investMember.getCurrentIncome());
+		}
+		Set<LoanMember> loanMembers = entity.getLoanMembers();
+		if(loanMembers!=null && loanMembers.size()>0){
+			LoanMember loanMember = loanMembers.iterator().next();
+			jsonObject.put("loanMoney", loanMember.getLendMoney());
+			jsonObject.put("overdue", loanMember.getExpectMoney());
+			jsonObject.put("residue", loanMember.getResidueMoney());
+		}
 	}
 
 

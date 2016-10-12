@@ -14,7 +14,7 @@ public class DES {
 	}
 
 	private static final byte[] IV = {9, 3, 1, 2, 7, 0, 8, 6};
-	private static final String DES_KEY = "bj1011oz";
+	private static final String DES_KEY = "o!20&^/@";
 
 	/**   
 	 * 加密
