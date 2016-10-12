@@ -47,17 +47,6 @@
 		    }    
 		});
 	});
-	$(function(){
-		$.ajax({
-			type:'POST',
-			url:"provider_transaction!getLoanAndInvestData.do",
-			data:"",
-			dataType:'json',
-			success:function(msg) {
-				
-			}
-		});
-	});
 	$("#ad_add_form_submitbtn").on("click", function(){
 		if(!$("#ad_add_form").form('validate')){
 			return false;

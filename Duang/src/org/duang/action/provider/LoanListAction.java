@@ -119,8 +119,8 @@ public class LoanListAction extends BaseAction<LoanList>{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("LoanListAction——queryLoanList方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("LoanListAction——queryLoanList方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
@@ -146,7 +146,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 			String token = getRequest().getParameter("token");
 			String applyState = getRequest().getParameter("applyState");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))&& DataUtils.notEmpty(applyState)) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token)) &&  DataUtils.notEmpty(applyState)) {
 				//单次获取标个数
 				int num = DataUtils.str2int(getRequest().getParameter("num"));
 				//下拉次数（首次打开次数累计1次）
@@ -175,8 +175,8 @@ public class LoanListAction extends BaseAction<LoanList>{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("LoanListAction——queryLoanListByApplyState方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("LoanListAction——queryLoanListByApplyState方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
