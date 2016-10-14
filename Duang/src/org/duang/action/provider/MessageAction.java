@@ -19,6 +19,7 @@ import org.duang.entity.Message;
 import org.duang.enums.If;
 import org.duang.service.MessageService;
 import org.duang.util.DataUtils;
+import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -87,6 +88,51 @@ public class MessageAction extends BaseAction<Message>{
 	}
 
 
+	/**
+	 * 查询接受者消息列表 
+	 * @Title: queryMessageByReceiver   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月14日 上午10:54:47
+	 * @return: void      
+	 * @throws
+	 */
+	public void queryMessageByReceiver(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String count = getRequest().getParameter("count");
+			String id = "";
+			//判断参数是否为空
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+				int queryCount = 20;
+				if(DataUtils.notEmpty(count)){
+					queryCount = Integer.parseInt(count);
+				}
+				getPageUtil().setCountRecords(queryCount);
+				String sql = "select * from message where receiver='"+id+"' ORDER BY time";
+				List<Message> messages = messageService.queryBySQL(sql, null,null,true);
+				if (messages == null || messages.size()==0) {
+					msg = "未查到消息";
+				}
+				jsonObject.put("result", fillDataObjectArray(messages));
+				success = true;
+			}else{
+				msg = "参数不正确";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MessageAction——queryMessage方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MessageAction——queryMessage方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	
 	/**   
 	 * 查询单条消息记录详情
 	 * @Title: findMessage   
@@ -272,7 +318,7 @@ public class MessageAction extends BaseAction<Message>{
 				map.put("id", message.getId());
 				map.put("content", message.getContent());
 				map.put("title", message.getTitle());
-				map.put("time", message.getTime());
+				map.put("time",DateUtils.date2Str(message.getTime(),"yyyy-MM-dd HH:mm:ss"));
 				map.put("read", message.getReaded());
 				MemberInfo memberinfo_receiver = message.getMemberInfoByReceiver();
 				map.put("receiver", memberinfo_receiver.getRealName());
@@ -305,7 +351,7 @@ public class MessageAction extends BaseAction<Message>{
 				map.put("id", message.getId());
 				map.put("content", message.getContent());
 				map.put("title", message.getTitle());
-				map.put("time", message.getTime());
+				map.put("time", DateUtils.date2Str(message.getTime(),"yyyy-MM-dd HH:mm:ss"));
 				map.put("read", message.getReaded());
 				MemberInfo memberinfo_receiver = message.getMemberInfoByReceiver();
 				map.put("receiver", memberinfo_receiver.getRealName());
