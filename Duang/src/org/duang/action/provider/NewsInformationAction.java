@@ -99,6 +99,7 @@ public class NewsInformationAction extends BaseAction<NewsInformation>{
 				map.put("id", news.getId());
 				map.put("createtime", DateUtils.date2Str(news.getCreatetime()));
 				map.put("content", news.getContent());
+				map.put("img", news.getImg());
 				listMap.add(map);
 			}
 		} catch (Exception e) {
