@@ -1,6 +1,6 @@
 package org.duang.entity;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -25,8 +25,8 @@ public class FriendsNews implements java.io.Serializable {
 	private String id;
 	private MemberInfo memberInfo;
 	private String content;
-	private Timestamp createtime;
-	private Integer state;
+	private Date createtime;
+	private int state;
 	private Set<FriendsNewsImg> friendsNewsImgs = new HashSet<FriendsNewsImg>(0);
 
 	// Constructors
@@ -42,7 +42,7 @@ public class FriendsNews implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public FriendsNews(String id, MemberInfo memberInfo, String content, Timestamp createtime, Integer state, Set<FriendsNewsImg> friendsNewsImgs) {
+	public FriendsNews(String id, MemberInfo memberInfo, String content, Date createtime, int state, Set<FriendsNewsImg> friendsNewsImgs) {
 		this.id = id;
 		this.memberInfo = memberInfo;
 		this.content = content;
@@ -82,20 +82,20 @@ public class FriendsNews implements java.io.Serializable {
 	}
 
 	@Column(name = "createtime", length = 19)
-	public Timestamp getCreatetime() {
+	public Date getCreatetime() {
 		return this.createtime;
 	}
 
-	public void setCreatetime(Timestamp createtime) {
+	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
 
 	@Column(name = "state")
-	public Integer getState() {
+	public int getState() {
 		return this.state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 

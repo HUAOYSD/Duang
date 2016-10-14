@@ -1,6 +1,6 @@
 package org.duang.entity;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,7 +18,7 @@ public class NewsInformation implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id;
 	private String content;
-	private Timestamp createtime;
+	private Date createtime;
 	private String spare1;
 	private String spare2;
 
@@ -29,14 +29,14 @@ public class NewsInformation implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public NewsInformation(String id, String content, Timestamp createtime) {
+	public NewsInformation(String id, String content, Date createtime) {
 		this.id = id;
 		this.content = content;
 		this.createtime = createtime;
 	}
 
 	/** full constructor */
-	public NewsInformation(String id, String content, Timestamp createtime, String spare1, String spare2) {
+	public NewsInformation(String id, String content, Date createtime, String spare1, String spare2) {
 		this.id = id;
 		this.content = content;
 		this.createtime = createtime;
@@ -65,11 +65,11 @@ public class NewsInformation implements java.io.Serializable {
 	}
 
 	@Column(name = "createtime", nullable = false, length = 19)
-	public Timestamp getCreatetime() {
+	public Date getCreatetime() {
 		return this.createtime;
 	}
 
-	public void setCreatetime(Timestamp createtime) {
+	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
 

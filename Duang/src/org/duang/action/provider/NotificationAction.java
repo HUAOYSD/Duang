@@ -121,6 +121,9 @@ public class NotificationAction extends BaseAction<Notification>{
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("title", Notification.getTitle());
 				map.put("content", Notification.getContent());
+				map.put("publishTime", Notification.getPublishTime());
+				map.put("beginDate", Notification.getBeginDate());
+				map.put("endDate", Notification.getEndDate());
 				listMap.add(map);
 			}
 		} catch (Exception e) {

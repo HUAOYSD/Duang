@@ -236,10 +236,14 @@
 			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
 			成功：{'success':true,'result':
 				[
-				{'title':'新用户奖励','content':'九月注册的用户有丰厚大礼等你来领，速速来吧'},
-				{'title':'老用户奖励','content':'累计注册时长两年，投资20万以上会员享有投资加息券哟'}
+				{'title':'新用户奖励','content':'九月注册的用户有丰厚大礼等你来领，速速来吧','publishTime':'2016-08-19 11:27:52','beginDate':'2016-08-19 11:27:52','endDate':'2016-08-30 11:27:52'},
 				]
 			}
+			title:标题
+			content：内容
+			pulishTime:发布公告日期
+			beginDate:有效日期始
+			endData:有效日期止
 			
 	2、获取弹窗公告列表√
 		URL：http://192.168.11.56:8080/Duang/provider_notification!getSystemWindowNotifys.do
@@ -857,7 +861,7 @@
 			成功：{'success':true}
 			
 	2、查询消息记录√
-		URL：http://192.168.11.56:8080/Duang/provider_message!insertMessage.do
+		URL：http://192.168.11.56:8080/Duang/provider_message!queryMessage.do
 		发送参数说明：
 			token登录会员的token
 			count查询最近条数（包括已读和未读）
@@ -893,7 +897,17 @@
 		返回结果：Json
 			失败：{'success':false,'msg':'未登录'}	
 			成功：{'success':true}
-			
+	6、查询登录人的消息记录√
+		URL：http://192.168.11.56:8080/Duang/provider_message!queryMessageByReceiver.do
+		发送参数说明：
+			token登录会员的token
+			count查询最近条数（包括已读和未读）
+		返回结果：Json
+			失败：{'success':false,'msg':'未登录'}	
+			成功：{'success':true,'result':[
+				{'id':'fds456f4ds65f4d65456','receiver':'张三','sender':'李四','time':'2016-5-5 08:05:55','title':'你妈有话说','content':'今晚晚上包饺子，早些回家吃饭','read':'未读'},
+				{'id':'fds456f4ds65f4d65456','receiver':'张三','sender':'李四','time':'2016-5-5 08:05:55','title':'你妈有话说','content':'今晚晚上包饺子，早些回家吃饭','read':'未读'}
+			]}		
 十一：财友
 	1、查询我关注的财友√
 		URL：http://192.168.11.56:8080/Duang/provider_friends!queryMyStars.do
@@ -1012,3 +1026,41 @@
 			productcategory产品类型
 			productname产品名称
 			scalename标名称
+			
+			
+十三：财友社区
+    1.新闻资讯√
+    URL：http://192.168.11.58:8080/Duang/provider_news!queryNews.do
+    	发送参数说明：
+			num 每页显示条数
+			count 下拉次数  初始化为1
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器维护，请稍后再试'}	
+			成功：{"result":[{"createtime":"2016-10-13 04:55:52","id":"45687","content":"王宝强"},
+						    {"createtime":"2016-10-13 04:55:33","id":"123456","content":"你说今天发生了什么"}],"success":true}
+		列说明：
+			id理财标的唯一标识
+			createtime 新闻发布时间
+			content  内容
+	 2.好友动态
+	 URL：http://192.168.11.58:8080/Duang/provider_friendsnews!queryFriendsNews.do
+    	发送参数说明：
+			num 每页显示条数
+			count 下拉次数  初始化为1
+			*token
+		返回结果：Json
+			失败：{'success':false,'msg':'服务器维护，请稍后再试'}	
+			成功：{"result":[{"createtime":"2016-10-13 17:25:38","content":"今天的好吃的","id":"1231","nickname":"及时雨","img_0":"asd/asdf/tt.jpg","user_img":null,"img_1":"asdf/jsdf/sdf.jpg","real_name":"宋江"},
+							{"createtime":"2016-10-13 17:26:08","content":"玩的很开心","id":"54678sd","nickname":"小白脸","img_0":"sdfa/sdf/tt.jpg","user_img":null,"real_name":"吕布"}],
+							"success":true}
+		列说明：
+			id 唯一标识
+			createtime 动态的发布时间
+			content  内容
+			nicknake 用户的昵称
+			real_name 用户真实姓名
+			img_0  第一个图片
+			img_1 第二个图片
+			img_* 第*个图片
+			
+			

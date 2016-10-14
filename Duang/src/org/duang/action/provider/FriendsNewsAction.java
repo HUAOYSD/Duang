@@ -1,5 +1,6 @@
 package org.duang.action.provider;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,57 +13,71 @@ import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.NewsInformation;
-import org.duang.service.NewsInformationService;
+import org.duang.common.system.MemberCollection;
+import org.duang.entity.FriendsNews;
+import org.duang.entity.FriendsNewsImg;
+import org.duang.service.FriendsNewsImgService;
+import org.duang.service.FriendsNewsService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
-import org.duang.util.PageUtil;
-import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
 
 /**
- * 接口开发————新闻资讯Action  
- * @ClassName:  NewsInformationAction   
+ * 接口开发————财友动态Action  
+ * @ClassName:  FriendsNewsAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
- * @date 2016年10月13日 下午4:13:57
+ * @date 2016年10月13日 下午5:13:57
  */
 @SuppressWarnings("serial")
 @Scope(value = "prototype", proxyMode = ScopedProxyMode.NO)
 @Namespaces({ @Namespace("/") })
 @ParentPackage("provider")
-@Action(value = "provider_news")
-public class NewsInformationAction extends BaseAction<NewsInformation>{
+@Action(value = "provider_friendsnews")
+public class FriendsNewsAction extends BaseAction<FriendsNews>{
 	
-	private NewsInformationService service;
+	private FriendsNewsService service;
 	@Resource
-	public void setService(NewsInformationService service) {
+	public void setService(FriendsNewsService service) {
 		this.service = service;
 	}
 
+	private FriendsNewsImgService friendsNewsImgService;
+	@Resource
+	public void setFriendsNewsImgService(FriendsNewsImgService friendsNewsImgService) {
+		this.friendsNewsImgService = friendsNewsImgService;
+	}
+	
 	/**
-	 * 查询新闻资讯
-	 * @Title: queryNews   
+	 * 查询财友动态
+	 * @Title: queryFriendsNews   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
 	 * @author LiYonghui    
-	 * @date 2016年10月13日 下午5:21:42
+	 * @date 2016年10月13日 下午5:22:02
 	 * @return: void      
 	 * @throws
 	 */
-	public void queryNews(){
+	public void queryFriendsNews(){
 		boolean success = false;
 		try {
 			//每页显示条数
 			String num = getRequest().getParameter("num");
 			//第几页
 			String count = getRequest().getParameter("count");
-			if(DataUtils.notEmpty(num) && DataUtils.notEmpty(count)){
-				condsUtils.addProperties(false, "order");
-				condsUtils.addValues(false, Order.desc("createtime"));
-				List<NewsInformation> list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), setPageUtil(new PageUtil<NewsInformation>(Integer.parseInt(num), Integer.parseInt(count))));
+			String token = getRequest().getParameter("token");
+			//登录人id
+			String id = "";
+			if(DataUtils.notEmpty(num) && DataUtils.notEmpty(count) && DataUtils.notEmpty(token) && 
+					DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+				int countNumber = DataUtils.str2int(count), numNumber = DataUtils.str2int(num);
+				String sql = "SELECT fn.id, fn.content, fn.createtime, mi.real_name, mi.nickname, mi.user_img "+
+							 " FROM friends_news fn LEFT JOIN member_info mi ON mi.id = fn.member_id WHERE fn.member_id IN ( "+
+							 " SELECT target FROM friends f WHERE f.self = '"+id+"' ) ORDER BY fn.createtime "+
+							 " LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber);
+				List<?> list = service.queryBySQL(sql, null, null, false);
 				success = true;
 				jsonObject.put("result", fillDataObjectList(list));
 			}else {
@@ -90,15 +105,24 @@ public class NewsInformationAction extends BaseAction<NewsInformation>{
 	 * @return: List<Map<String,Object>>      
 	 * @throws
 	 */
-	private List<Map<String, Object>> fillDataObjectList(List<NewsInformation> list) {
+	private List<Map<String, Object>> fillDataObjectList(List<?> list) {
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		try {
-			for (NewsInformation news : list) {
+			for(int i = 0;i<list.size(); i++){
 				Map<String, Object> map = new HashMap<String, Object>();
-				//客户的基本信息
-				map.put("id", news.getId());
-				map.put("createtime", DateUtils.date2Str(news.getCreatetime()));
-				map.put("content", news.getContent());
+				Object[] objArray = (Object[])list.get(i); 
+				map.put("id", objArray[0]);
+				map.put("content", objArray[1]);
+				map.put("createtime", DateUtils.date2Str((Date)objArray[2], "yyyy-MM-dd HH:mm:ss"));
+				map.put("real_name", objArray[3]);
+				map.put("nickname", objArray[4]);
+				map.put("user_img", objArray[5]);
+				String sql = "SELECT * from friends_news_img where friends_news_id='"+objArray[0]+"' order by order_index";
+				List<FriendsNewsImg> friendsNewsImgList = friendsNewsImgService.queryBySQL(sql, null, null, true);
+				for(int j = 0;j<friendsNewsImgList.size(); j++){
+					FriendsNewsImg img = friendsNewsImgList.get(j);
+					map.put("img_"+j, img.getImgPath());	
+				}
 				listMap.add(map);
 			}
 		} catch (Exception e) {

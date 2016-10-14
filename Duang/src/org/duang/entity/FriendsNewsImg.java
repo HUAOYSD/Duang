@@ -22,7 +22,7 @@ public class FriendsNewsImg implements java.io.Serializable {
 	private String id;
 	private FriendsNews friendsNews;
 	private String imgPath;
-	private Integer orderIndex;
+	private int orderIndex;
 
 	// Constructors
 
@@ -36,7 +36,7 @@ public class FriendsNewsImg implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public FriendsNewsImg(String id, FriendsNews friendsNews, String imgPath, Integer orderIndex) {
+	public FriendsNewsImg(String id, FriendsNews friendsNews, String imgPath, int orderIndex) {
 		this.id = id;
 		this.friendsNews = friendsNews;
 		this.imgPath = imgPath;
@@ -74,11 +74,11 @@ public class FriendsNewsImg implements java.io.Serializable {
 	}
 
 	@Column(name = "order_index")
-	public Integer getOrderIndex() {
+	public int getOrderIndex() {
 		return this.orderIndex;
 	}
 
-	public void setOrderIndex(Integer orderIndex) {
+	public void setOrderIndex(int orderIndex) {
 		this.orderIndex = orderIndex;
 	}
 
