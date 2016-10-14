@@ -30,7 +30,7 @@ public class Message implements java.io.Serializable {
 	private String title;
 	private String content;
 	private int readed;
-
+	private int state;
 	// Constructors
 
 	/** default constructor */
@@ -45,7 +45,7 @@ public class Message implements java.io.Serializable {
 	/** full constructor */
 	public Message(String id, MemberInfo memberInfoByReceiver,
 			MemberInfo memberInfoBySender, Date time, String title,
-			String content, int readed) {
+			String content, int readed, int state) {
 		this.id = id;
 		this.memberInfoByReceiver = memberInfoByReceiver;
 		this.memberInfoBySender = memberInfoBySender;
@@ -53,6 +53,7 @@ public class Message implements java.io.Serializable {
 		this.title = title;
 		this.content = content;
 		this.readed = readed;
+		this.state = state;
 	}
 
 	// Property accessors
@@ -122,4 +123,12 @@ public class Message implements java.io.Serializable {
 		this.readed = readed;
 	}
 
+	@Column(name = "state")
+	public int getState() {
+		return this.state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
 }

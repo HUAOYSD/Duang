@@ -36,6 +36,7 @@ public class Notification  implements java.io.Serializable {
      private String content;
      private Date beginDate;
      private Date endDate;
+     private int readed;
      private Set<NotificationReaded> notificationReadeds = new HashSet<NotificationReaded>(0);
 
 
@@ -51,7 +52,8 @@ public class Notification  implements java.io.Serializable {
     }
     
     /** full constructor */
-    public Notification(String id, int status, Date publishTime, String title, String content, Date beginDate, Date endDate, Set<NotificationReaded> notificationReadeds) {
+    public Notification(String id, int status, Date publishTime, String title, String content, 
+    		Date beginDate, Date endDate, Set<NotificationReaded> notificationReadeds,int readed) {
         this.id = id;
         this.status = status;
         this.publishTime = publishTime;
@@ -60,6 +62,7 @@ public class Notification  implements java.io.Serializable {
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.notificationReadeds = notificationReadeds;
+        this.readed = readed;
     }
 
    
@@ -86,7 +89,16 @@ public class Notification  implements java.io.Serializable {
         this.status = status;
     }
     
-    @Column(name="publish_time", length=19)
+    @Column(name="readed")
+    public int getReaded() {
+		return readed;
+	}
+
+	public void setReaded(int readed) {
+		this.readed = readed;
+	}
+
+	@Column(name="publish_time", length=19)
 
     public Date getPublishTime() {
         return this.publishTime;
