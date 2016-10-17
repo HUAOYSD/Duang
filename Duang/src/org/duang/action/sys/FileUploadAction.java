@@ -19,10 +19,12 @@ import org.duang.entity.Ad;
 import org.duang.entity.BindCard;
 import org.duang.entity.FileUpload;
 import org.duang.entity.MemberInfo;
+import org.duang.entity.NewsInformation;
 import org.duang.enums.UploadFile;
 import org.duang.service.AdService;
 import org.duang.service.BindCardService;
 import org.duang.service.MemberInfoService;
+import org.duang.service.NewsInformationService;
 import org.duang.util.ConstantCode;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
@@ -70,6 +72,15 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 	@Resource(name = "adserviceimpl")
 	public void setService(AdService adService) {
 		this.adService = adService;
+	}
+	
+	/**
+	 * 广告
+	 */
+	private NewsInformationService newsInformationService;
+	@Resource(name = "newsinformationserviceimpl")
+	public void setService(NewsInformationService newsInformationService) {
+		this.newsInformationService = newsInformationService;
 	}
 	/**
 	 * 上传用户图像或者身份证照片
@@ -217,6 +228,48 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 			e.printStackTrace();
 			LoggerUtils.error("上传广告图片错误：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("上传广告图片错误：" + e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("result", false);
+			jsonObject.put("msg", "上传失败！");
+		} finally {
+			printJsonResult();
+		}
+	}
+	
+	/**
+	 * 上传广告
+	 * @Title: uploadAdImg
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param:
+	 * @author LiYonghui
+	 * @date 2016年9月5日 上午8:43:24
+	 * @return: void
+	 * @throws
+	 */
+	public void uploadNewsImg() {
+		try {
+			String deleteFilePath = null;
+				// 1.获取文件名称
+				reSetFileName();
+				NewsInformation newsInformation = newsInformationService.findById(getRequest().getParameter("id"));
+				String exPath = UploadFile.NEWS.getVal();
+				deleteFilePath = newsInformation.getImg();
+				newsInformation.setImg(entity.getNewFileName());
+				 
+				reSetFilePathByUserId(exPath);
+				boolean result = newsInformationService.updateEntity(newsInformation);
+				if (result) {
+					result = upload();
+					jsonObject.put("result", true);
+					jsonObject.put("msg", "上传成功！");
+					if (DataUtils.notEmpty(deleteFilePath)) {
+						//上传成功，则需要删除源文件
+						deleteFile(deleteFilePath);
+					}
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("上传新闻资讯图片错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("上传新闻资讯图片错误：" + e.getLocalizedMessage(), this.getClass());
 			jsonObject.put("result", false);
 			jsonObject.put("msg", "上传失败！");
 		} finally {

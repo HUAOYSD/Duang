@@ -1,6 +1,7 @@
 package org.duang.entity;
 
-import java.sql.Date;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,8 +21,8 @@ public class NewsInformation implements java.io.Serializable {
 	private String content;
 	private Date createtime;
 	private String img;
-	private String spare2;
-
+	private String createuser;
+	private int state;
 	// Constructors
 
 	/** default constructor */
@@ -36,12 +37,13 @@ public class NewsInformation implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public NewsInformation(String id, String content, Date createtime, String img, String spare2) {
+	public NewsInformation(String id, String content, Date createtime, String img, String createuser,int state) {
 		this.id = id;
 		this.content = content;
 		this.createtime = createtime;
 		this.img = img;
-		this.spare2 = spare2;
+		this.createuser = createuser;
+		this.state=state;
 	}
 
 	// Property accessors
@@ -82,13 +84,21 @@ public class NewsInformation implements java.io.Serializable {
 		this.img = img;
 	}
 
-	@Column(name = "spare2")
-	public String getSpare2() {
-		return this.spare2;
+	@Column(name = "createuser")
+	public String getCreateuser() {
+		return this.createuser;
 	}
 
-	public void setSpare2(String spare2) {
-		this.spare2 = spare2;
+	public void setCreateuser(String createuser) {
+		this.createuser = createuser;
+	}
+	@Column(name = "state")
+	public int getState() {
+		return this.state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
 	}
 
 }
