@@ -258,7 +258,22 @@
 			}
 		说明：这个消息公告一般就一条
 		
-		
+	3、标记已读
+		URL：http://192.168.11.56:8080/Duang/provider_notification!updateReaded.do
+		发送参数说明：
+			*token：
+			p_id：公告id 删除多个用逗号隔开
+		返回结果：Json
+			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
+			成功：{'success':true}
+	3、标记已读
+		URL：http://192.168.11.56:8080/Duang/provider_notification!delete.do
+		发送参数说明：
+			*token：
+			p_id：公告id 删除多个用逗号隔开
+		返回结果：Json
+			失败：{'success':false,'msg':'获取超时，请稍后重试'}	
+			成功：{'success':true}
 
 七：标列表
 	1、获取车标列表√

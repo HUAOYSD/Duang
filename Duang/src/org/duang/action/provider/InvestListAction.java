@@ -146,7 +146,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 				if(!success){
 					msg = "服务器超时，请稍后重试";
 				}else{
-					jsonObject.put("id", investList.getId());
+					InvestList invest = findInvestById(investList.getId());
+					jsonObject.put("result", fillDatagridObejct(invest));
 				}
 			}else{
 				msg = "token失效！";
@@ -223,6 +224,22 @@ public class InvestListAction extends BaseAction<InvestList>{
 		printJsonResult();
 	}
 	
+	/**
+	 * 根据id获取信息
+	 * @Title: findInvestById   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param id
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年10月17日 下午4:11:25
+	 * @return: InvestList      
+	 * @throws
+	 */
+	private InvestList findInvestById(String id) throws Exception{
+		InvestList invest = investListService.findById(id);
+		return invest;
+	}
 	
 	/**   
 	 * 根据id查询理财记录详情
@@ -310,6 +327,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 					if (fk2 != null) {
 						resultMap.put("name", fk2.getName());
 						resultMap.put("productName", fk2.getProduct().getName());
+						resultMap.put("proCategory", fk2.getProduct().getCategory());
 					}
 					listMap.add(resultMap);
 				}
@@ -332,45 +350,49 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 */
 	private Map<String, Object> fillDatagridObejct(InvestList invest) throws Exception {
 		Map<String,Object> resultMap = new HashMap<String,Object>();
-		InvestList pk = invest;
-		MemberInfo fk = invest.getMemberInfo();
-		Scale fk2 = invest.getScale();
-		if (pk != null) {
-			resultMap.put("money", pk.getMoney());
-			resultMap.put("backIncome", pk.getBackIncome());
-			resultMap.put("backMoney", pk.getBackMoney());
-			resultMap.put("useTicket", UseTicket.valueOf("UT"+pk.getUseTicket()).toString());
-			resultMap.put("totalMoney", pk.getTotalMoney());
-			resultMap.put("income", pk.getIncome());
-			resultMap.put("ticketBonus", pk.getTicketBonus());
-			resultMap.put("status", Status.valueOf("S"+pk.getStatus()).toString());
-			resultMap.put("openDate", DateUtils.getTimeStamp(pk.getOpenDate()));
-			resultMap.put("backDate", DateUtils.getTimeStamp(pk.getBackDate()));
-			resultMap.put("calcBegin", DateUtils.getTimeStamp(pk.getBackDate()));
-			resultMap.put("calcEnd", DateUtils.getTimeStamp(pk.getBackDate()));
-			resultMap.put("pactNumber", pk.getPactNumber());
-			resultMap.put("investStyle", Platform.valueOf("P"+pk.getInvestStyle()).toString());
-			resultMap.put("poundageTurn", pk.getPoundageTurn());
-			resultMap.put("poundagePrivilege", pk.getPoundagePrivilege());
-			resultMap.put("isTurn", If.valueOf("If"+pk.getIsTurn()).toString());
-			resultMap.put("turnStatus", TurnStatus.valueOf("TS"+pk.getTurnStatus()).toString());
-			
-		}
-		if (fk != null) {
-			resultMap.put("memberName", fk.getRealName());
-			resultMap.put("memberNickName", fk.getNickname());
-			resultMap.put("memberPhone", fk.getPhone());
-			resultMap.put("memberIdcard", fk.getIdCard());
-			resultMap.put("memberEmail", fk.getEmail());
-			resultMap.put("memberSex", fk.getSex());
-		}
-		if (fk2 != null) {
-			resultMap.put("name", fk2.getName());
-			resultMap.put("calcBeginTime", fk2.getCalcBeginTime());
-			resultMap.put("calcEndTime", fk2.getCalcEndTime());
-			resultMap.put("productName", fk2.getProduct().getName());
-			resultMap.put("productDetails", fk2.getProduct().getDetails());
-			resultMap.put("profitMoney", (fk2.getRevenue()+fk2.getRevenueAdd())*pk.getMoney());
+		if(invest !=  null){
+			InvestList pk = invest;
+			MemberInfo fk = invest.getMemberInfo();
+			Scale fk2 = invest.getScale();
+			if (pk != null) {
+				resultMap.put("money", pk.getMoney());
+				resultMap.put("backIncome", pk.getBackIncome());
+				resultMap.put("backMoney", pk.getBackMoney());
+				resultMap.put("useTicket", UseTicket.valueOf("UT"+pk.getUseTicket()).toString());
+				resultMap.put("totalMoney", pk.getTotalMoney());
+				resultMap.put("income", pk.getIncome());
+				resultMap.put("ticketBonus", pk.getTicketBonus());
+				resultMap.put("status", Status.valueOf("S"+pk.getStatus()).toString());
+				resultMap.put("openDate", DateUtils.getTimeStamp(pk.getOpenDate()));
+				resultMap.put("backDate", DateUtils.getTimeStamp(pk.getBackDate()));
+				resultMap.put("calcBegin", DateUtils.getTimeStamp(pk.getBackDate()));
+				resultMap.put("calcEnd", DateUtils.getTimeStamp(pk.getBackDate()));
+				resultMap.put("pactNumber", pk.getPactNumber());
+				resultMap.put("investStyle", Platform.valueOf("P"+pk.getInvestStyle()).toString());
+				resultMap.put("poundageTurn", pk.getPoundageTurn());
+				resultMap.put("poundagePrivilege", pk.getPoundagePrivilege());
+				resultMap.put("isTurn", If.valueOf("If"+pk.getIsTurn()).toString());
+				resultMap.put("turnStatus", TurnStatus.valueOf("TS"+pk.getTurnStatus()).toString());
+				
+			}
+			if (fk != null) {
+				resultMap.put("memberName", fk.getRealName());
+				resultMap.put("memberNickName", fk.getNickname());
+				resultMap.put("memberPhone", fk.getPhone());
+				resultMap.put("memberIdcard", fk.getIdCard());
+				resultMap.put("memberEmail", fk.getEmail());
+				resultMap.put("memberSex", fk.getSex());
+			}
+			if (fk2 != null) {
+				resultMap.put("name", fk2.getName());
+				resultMap.put("calcBeginTime", fk2.getCalcBeginTime());
+				resultMap.put("calcEndTime", fk2.getCalcEndTime());
+				resultMap.put("productName", fk2.getProduct().getName());
+				resultMap.put("productDetails", fk2.getProduct().getDetails());
+				resultMap.put("profitMoney", (fk2.getRevenue()+fk2.getRevenueAdd())*pk.getMoney());
+				resultMap.put("proCategory", fk2.getProduct().getCategory());
+				
+			}
 		}
 		return resultMap;
 	}

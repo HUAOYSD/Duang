@@ -15,6 +15,7 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.Notification;
 import org.duang.enums.NotificationStatus;
 import org.duang.service.NotificationService;
+import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -53,8 +54,12 @@ public class NotificationAction extends BaseAction<Notification>{
 	public void getSystemNotifys(){
 		boolean success = false;
 		try {
+			condsUtils.addProperties(true, "status");
+			condsUtils.addValues(true, NotificationStatus.status2.getVal());
+			condsUtils.addProperties(false, "order");
+			condsUtils.addValues(false, Order.desc("publishTime"));
 			//查询数据
-			List<Notification> list = notificationService.queryEntity("status", NotificationStatus.status2.getVal(), null, Order.desc("publishTime"));
+			List<Notification> list = notificationService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 			success = true;
 			jsonObject.put("result", fillDataObjectList(list));
 			if (list == null || list.size() == 0) {
@@ -85,8 +90,12 @@ public class NotificationAction extends BaseAction<Notification>{
 	public void getSystemWindowNotifys(){
 		boolean success = false;
 		try {
+			condsUtils.addProperties(true, "status");
+			condsUtils.addValues(true, NotificationStatus.status1.getVal());
+			condsUtils.addProperties(false, "order");
+			condsUtils.addValues(false, Order.desc("publishTime"));
 			//查询数据
-			List<Notification> list = notificationService.queryEntity("status", NotificationStatus.status1.getVal(), null, Order.desc("publishTime"));
+			List<Notification> list = notificationService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 			success = true;
 			jsonObject.put("result", fillDataObjectList(list));
 			if (list == null || list.size() == 0) {
@@ -117,13 +126,15 @@ public class NotificationAction extends BaseAction<Notification>{
 	private List<Map<String, Object>> fillDataObjectList(List<Notification> list) {
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		try {
-			for (Notification Notification : list) {
+			for (Notification notification : list) {
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("title", Notification.getTitle());
-				map.put("content", Notification.getContent());
-				map.put("publishTime", Notification.getPublishTime());
-				map.put("beginDate", Notification.getBeginDate());
-				map.put("endDate", Notification.getEndDate());
+				map.put("id", notification.getId());
+				map.put("title", notification.getTitle());
+				map.put("content", notification.getContent());
+				map.put("publishTime", DateUtils.date2Str(notification.getPublishTime(),"yyyy-MM-dd HH:mm:ss"));
+				map.put("beginDate", DateUtils.date2Str(notification.getBeginDate(),"yyyy-MM-dd HH:mm:ss"));
+				map.put("endDate", DateUtils.date2Str(notification.getEndDate(),"yyyy-MM-dd HH:mm:ss"));
+				map.put("readed", notification.getReaded());
 				listMap.add(map);
 			}
 		} catch (Exception e) {
@@ -133,5 +144,4 @@ public class NotificationAction extends BaseAction<Notification>{
 		}
 		return listMap;
 	}
-	
 }

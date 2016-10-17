@@ -67,7 +67,11 @@ public class MessageAction extends BaseAction<Message>{
 					queryCount = Integer.parseInt(count);
 				}
 				getPageUtil().setCountRecords(queryCount);
-				List<Message> messages = messageService.queryAllEntity(getPageUtil(), Order.desc("time"));
+				condsUtils.addProperties(false, "state");
+				condsUtils.addValues(false, If.If1.getVal());
+				condsUtils.addProperties(false, "order");
+				condsUtils.addValues(false, Order.desc("time"));
+				List<Message> messages = messageService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 				if (messages == null || messages.size()==0) {
 					msg = "未查到消息";
 				}
@@ -102,17 +106,13 @@ public class MessageAction extends BaseAction<Message>{
 		boolean success = false;
 		try {
 			String token = getRequest().getParameter("token");
-			String count = getRequest().getParameter("count");
 			String id = "";
 			//判断参数是否为空
 			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
-				int queryCount = 20;
-				if(DataUtils.notEmpty(count)){
-					queryCount = Integer.parseInt(count);
-				}
-				getPageUtil().setCountRecords(queryCount);
-				String sql = "select * from message where receiver='"+id+"' ORDER BY time";
-				List<Message> messages = messageService.queryBySQL(sql, null,null,true);
+				
+				condsUtils.addProperties(true, "memberInfoByReceiver","memberInfoByReceiverAlias.id", "state", "order");
+				condsUtils.addValues(true, new Object[]{"memberInfoByReceiverAlias","as"},id, 1, Order.desc("time"));
+				List<Message> messages = messageService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 				if (messages == null || messages.size()==0) {
 					msg = "未查到消息";
 				}
@@ -222,43 +222,6 @@ public class MessageAction extends BaseAction<Message>{
 		printJsonResult();
 	}
 
-
-	/**   
-	 * 标记全部已读
-	 * @Title: updateAllReaded   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author 5y    
-	 * @date 2016年9月9日 下午4:45:10
-	 * @return: void      
-	 * @throws   
-	 */  
-	public void updateAllReaded(){
-		boolean success = false;
-		try {
-			String token = getRequest().getParameter("token");
-			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance().getMainField(token))){
-				String sql = "update message  set readed = 1";
-				success = messageService.executeSql(sql);
-				if (!success) {
-					msg = "未找到消息";
-				}
-			}else{
-				msg = "参数不正确";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("MessageAction——updateAllReaded方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("MessageAction——updateAllReaded方法错误：" + e.getLocalizedMessage(), this.getClass());
-			msg = "服务器维护，请稍后再试";
-		}
-		jsonObject.put("msg", msg);
-		jsonObject.put("success", success);
-		printJsonResult();
-	}
-
-
 	/**   
 	 * 标记已读
 	 * @Title: updateReaded   
@@ -272,14 +235,21 @@ public class MessageAction extends BaseAction<Message>{
 	public void updateReaded(){
 		boolean success = false;
 		try {
-			String token = getRequest().getParameter("token");
-			String p_id = getRequest().getParameter("p_id");
+			//获取修改的信息id
+			String p_ids = getRequest().getParameter("p_ids");
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance().getMainField(token))){
-				
-				Message message = messageService.findById(p_id);
-				message.setReaded(If.If1.getVal());
-				success = messageService.updateEntity(message);
+			if(DataUtils.notEmpty(p_ids)){
+				String ids[] = p_ids.split(",");
+				//定义拼接id
+				StringBuffer idSB = new StringBuffer("");
+				for(int i=0;i<ids.length;i++){
+					idSB.append("'"+ids[i]+"'");
+					if(i<ids.length-1){
+						idSB.append(",");
+					}
+				}
+				String  sql = "update message  set readed=1 WHERE id in ("+idSB.toString()+")";
+				success = messageService.executeSql(sql);
 				if (!success) {
 					msg = "未找到消息";
 				}
@@ -290,6 +260,123 @@ public class MessageAction extends BaseAction<Message>{
 			e.printStackTrace();
 			LoggerUtils.error("MessageAction——updateReaded方法错误：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("MessageAction——updateReaded方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	/**
+	 * 全部标记为已读
+	 * @Title: delete   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月14日 上午11:42:56
+	 * @return: void      
+	 * @throws
+	 */
+	public void updateReadedAll(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			//判断参数是否为空
+			String id ="";
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+				String  sql = "update message  set readed=1 WHERE  receiver = '"+id+"'";
+				success = messageService.executeSql(sql);
+				if (!success) {
+					msg = "未找到消息";
+				}
+			}else{
+				msg = "参数不正确";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MessageAction——updateAll方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MessageAction——updateAll方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	
+	/**
+	 * 删除  
+	 * @Title: delete   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月14日 上午11:42:56
+	 * @return: void      
+	 * @throws
+	 */
+	public void delete(){
+		boolean success = false;
+		try {
+			String p_ids = getRequest().getParameter("p_id");
+			//判断参数是否为空
+			if(DataUtils.notEmpty(p_ids)){
+				String ids[] = p_ids.split(",");
+				//定义拼接id
+				StringBuffer idSB = new StringBuffer("");
+				for(int i=0;i<ids.length;i++){
+					idSB.append("'"+ids[i]+"'");
+					if(i<ids.length-1){
+						idSB.append(",");
+					}
+				}
+				String  sql = "update message  set state=0 WHERE id in ("+idSB.toString()+")";
+				success = messageService.executeSql(sql);
+				if (!success) {
+					msg = "未找到消息";
+				}
+			}else{
+				msg = "参数不正确";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MessageAction——delete方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MessageAction——delete方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	/**
+	 * 删除登录人的所有消息
+	 * @Title: delete   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月14日 上午11:42:56
+	 * @return: void      
+	 * @throws
+	 */
+	public void deleteAll(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			//判断参数是否为空
+			String id ="";
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+				String  sql = "update message  set state=0 WHERE  receiver = '"+id+"'";
+				success = messageService.executeSql(sql);
+				if (!success) {
+					msg = "未找到消息";
+				}
+			}else{
+				msg = "参数不正确";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MessageAction——deleteAll方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MessageAction——deleteAll方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
@@ -319,7 +406,7 @@ public class MessageAction extends BaseAction<Message>{
 				map.put("content", message.getContent());
 				map.put("title", message.getTitle());
 				map.put("time",DateUtils.date2Str(message.getTime(),"yyyy-MM-dd HH:mm:ss"));
-				map.put("read", message.getReaded());
+				map.put("readed", message.getReaded());
 				MemberInfo memberinfo_receiver = message.getMemberInfoByReceiver();
 				map.put("receiver", memberinfo_receiver.getRealName());
 				MemberInfo memberinfo_send = message.getMemberInfoBySender();

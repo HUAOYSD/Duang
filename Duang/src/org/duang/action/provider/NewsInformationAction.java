@@ -13,6 +13,7 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.NewsInformation;
+import org.duang.enums.If;
 import org.duang.service.NewsInformationService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -62,6 +63,8 @@ public class NewsInformationAction extends BaseAction<NewsInformation>{
 			if(DataUtils.notEmpty(num) && DataUtils.notEmpty(count)){
 				condsUtils.addProperties(false, "order");
 				condsUtils.addValues(false, Order.desc("createtime"));
+				condsUtils.addProperties(false, "state");
+				condsUtils.addValues(false, If.If1.getVal());
 				List<NewsInformation> list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), setPageUtil(new PageUtil<NewsInformation>(Integer.parseInt(num), Integer.parseInt(count))));
 				success = true;
 				jsonObject.put("result", fillDataObjectList(list));
@@ -99,6 +102,7 @@ public class NewsInformationAction extends BaseAction<NewsInformation>{
 				map.put("id", news.getId());
 				map.put("createtime", DateUtils.date2Str(news.getCreatetime()));
 				map.put("content", news.getContent());
+				map.put("img", news.getImg());
 				listMap.add(map);
 			}
 		} catch (Exception e) {

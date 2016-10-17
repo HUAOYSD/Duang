@@ -201,6 +201,28 @@ public enum UploadFile {
 		}
 
 	},
+	//新闻资讯
+		NEWS{
+			@Override
+			public String getVal() {
+				return "news";
+			}
+
+			@Override
+			public String toString() {
+				return "新闻资讯";
+			}
+
+			@Override
+			public String getVal(String userId) {
+				if(DataUtils.notEmpty(userId)){
+					return userId+"\\news";
+				}else{
+					return "\\news";
+				}
+			}
+
+		},
 	//银行卡
 	BANK{
 		@Override
