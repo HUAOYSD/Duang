@@ -11,6 +11,7 @@ import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.common.system.MemberCollection;
 import org.duang.entity.Product;
 import org.duang.entity.Scale;
 import org.duang.service.ScaleService;
@@ -187,7 +188,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			String id = getRequest().getParameter("id");
 			if(DataUtils.notEmpty(id)){
 				StringBuffer sql = new StringBuffer();
-				sql.append(" SELECT SCA.* FROM SCALE where id="+id);
+				sql.append(" SELECT SCALE.* FROM SCALE where id="+id);
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
 				jsonObject.put("result", fillDatagridCons(list));
@@ -209,7 +210,76 @@ public class ScaleAction extends BaseAction<Scale>{
 		printJsonResult();
 	}
 
+	/**   
+	 * 根据标id获取标详情（在投资详情页面）
+	 * @Title: findScaleInfoByInvest   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月9日 下午4:38:04
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void findScaleInfoByInvest(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String id = getRequest().getParameter("id");
+			String memeberId ="";
+			if(DataUtils.notEmpty(id) && DataUtils.notEmpty(token) && DataUtils.notEmpty((memeberId = MemberCollection.getInstance().getMainField(token)))){
+				StringBuffer sql = new StringBuffer();
+				sql.append("SELECT product.name_zh, product.days, product.category, il.money, il.total_money,");
+				sql.append(" scale.id, scale.`name`, scale.yet_money, scale.residue_money, scale.revenue, scale.revenue_add, scale.return_style,");
+				sql.append(" member_info.real_name, buyNum.numbers FROM scale LEFT JOIN invest_list il on il.scale_id=scale.id");
+				sql.append(" LEFT JOIN product ON product.id = scale.product_id LEFT JOIN member_info ON member_info.id=il.member_info left JOIN (");
+				sql.append(" select scale_id, count(*) numbers  from invest_list where invest_list.scale_id='"+id+"' and invest_list.`status` in(2,3) ");
+				sql.append(" ) as buyNum  ON buyNum.scale_id=scale.id  where scale.id='"+id+"' and member_info.id='"+memeberId+"'");
+				List<?> list = scaleService.queryBySQL(sql.toString(), null, null, false);
+				success = true;
+				jsonObject.put("result", fillDatagridArray(list));
+				if (list == null || list.size() == 0) {
+					msg = "没有更多了";
+				}
+			}else{
+				msg = "参数为空";
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("ScaleAction——findScaleInfoByInvest方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ScaleAction——findScaleInfoByInvest方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
 
+	private List<Map<String, Object>> fillDatagridArray(List<?> list) throws Exception{
+		if (list !=null && list.size() > 0) {
+			for(int i=0; i<list.size(); i++) {
+				Map<String,Object> resultMap = new HashMap<String,Object>();
+				resultMap.put("productName", ((Object[])list.get(i))[0]);
+				resultMap.put("days", ((Object[])list.get(i))[1]);
+				resultMap.put("proCategory", ((Object[])list.get(i))[2]);
+				resultMap.put("money", ((Object[])list.get(i))[3]);
+				resultMap.put("totalMoney",((Object[])list.get(i))[4]);
+				resultMap.put("id", ((Object[])list.get(i))[5]);
+				resultMap.put("name", ((Object[])list.get(i))[6]);
+				resultMap.put("yetMoney", ((Object[])list.get(i))[7]);
+				resultMap.put("residueMoney", ((Object[])list.get(i))[8]);
+				resultMap.put("revenue", ((Object[])list.get(i))[9]);
+				resultMap.put("revenueAdd", ((Object[])list.get(i))[10]);
+				resultMap.put("calStyle", ((Object[])list.get(i))[11]);
+				resultMap.put("buyName", ((Object[])list.get(i))[12]);
+				resultMap.put("numbers", ((Object[])list.get(i))[13]);
+				resultMap.put("min", 500);
+				listMap.add(resultMap);
+			}
+		}
+		return listMap;
+	}
+	
 	/**   
 	 * 填充List数据
 	 * @Title: fillDatagridCons   
