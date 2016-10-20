@@ -174,6 +174,4 @@ public class DES {
 		}  
 		return decryptedData;  
 	}  */
-
-
 }
