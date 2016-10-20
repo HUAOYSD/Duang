@@ -74,26 +74,30 @@ public class InvestListAction extends BaseAction<InvestList>{
 		try {
 			condsUtils.addProperties(true, "product", "myAlias.isRecommend", "myAlias.isSell", "status", "order");
 			condsUtils.addValues(true, new Object[]{"myAlias","as"}, 1, 1, new Object[]{1, 2, "or"}, Order.desc("beginTime"));
-			List<?> list = scaleService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+			List<Scale> list = scaleService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 			if (DataUtils.notEmpty(list)) {
-				Product product = (Product) ((Object[])list.get(0))[0];
-				Scale scale = (Scale) ((Object[])list.get(0))[1];
-				//时长、起投、预期收益率、附加预期收益率、已投金额、剩余可投金额、标总额、产品类型、产品名称、标名称
-				jsonObject.put("id", scale.getId());
-				jsonObject.put("day", product.getDays());
-				jsonObject.put("min", 500);
-				jsonObject.put("revenue", scale.getRevenue());
-				jsonObject.put("revenueAdd", scale.getRevenueAdd());
-				jsonObject.put("yetmoney", scale.getYetMoney());
-				jsonObject.put("residuemoney", scale.getResidueMoney());
-				jsonObject.put("totalmoney", scale.getTotalMoney());
-				jsonObject.put("productcategory", Category.valueOf("C"+product.getCategory()).toString());
-				jsonObject.put("productname", product.getNameZh());
-				jsonObject.put("scalename", scale.getName());
-				success = true;
+				for(Scale scale : list){
+					Map<String, Object> map = new HashMap<String, Object>();
+					//时长、起投、预期收益率、附加预期收益率、已投金额、剩余可投金额、标总额、产品类型、产品名称、标名称
+					Product product = scale.getProduct();
+					map.put("id", scale.getId());
+					map.put("day", product.getDays());
+					map.put("min", 500);
+					map.put("revenue", scale.getRevenue());
+					map.put("revenueAdd", scale.getRevenueAdd());
+					map.put("yetmoney", scale.getYetMoney());
+					map.put("residuemoney", scale.getResidueMoney());
+					map.put("totalmoney", scale.getTotalMoney());
+					map.put("productcategory", Category.valueOf("C"+product.getCategory()).toString());
+					map.put("productname", product.getNameZh());
+					map.put("scalename", scale.getName());
+					listMap.add(map);
+				}
 			}else {
 				msg = "暂无推荐";
 			}
+			jsonObject.put("result", listMap);
+			success = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("InvestListAction——addInvestList方法错误：" + e.getMessage(), this.getClass());
@@ -120,12 +124,10 @@ public class InvestListAction extends BaseAction<InvestList>{
 		boolean success = false;
 		try {
 			String token = getRequest().getParameter("token");
-			String p_pactNumber = getRequest().getParameter("p_pactNumber");
 			String p_scaleId = getRequest().getParameter("p_scaleId");
 			String p_money = getRequest().getParameter("p_money");
 			String p_useTicket = getRequest().getParameter("p_useTicket");
 			String p_ticketBonus = getRequest().getParameter("p_ticketBonus");
-			String p_income = getRequest().getParameter("p_income");
 			String p_totalMoney = getRequest().getParameter("p_totalMoney");
 			String investStyle = getRequest().getParameter("investStyle");
 			String id = "";
@@ -133,11 +135,9 @@ public class InvestListAction extends BaseAction<InvestList>{
 			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
 				InvestList investList = new InvestList();
 				investList.setId(DataUtils.randomUUID());
-				investList.setPactNumber(DES.decryptDES(p_pactNumber));
 				investList.setMoney(Double.parseDouble(DES.decryptDES(p_money)));
 				investList.setUseTicket(Integer.parseInt(DES.decryptDES(p_useTicket)));
 				investList.setTicketBonus(Double.valueOf(DES.decryptDES(p_ticketBonus)));
-				investList.setIncome(Double.parseDouble(DES.decryptDES(p_income)));
 				investList.setTotalMoney(Double.parseDouble(DES.decryptDES(p_totalMoney)));
 				investList.setInvestStyle(Integer.parseInt(DES.decryptDES(investStyle)));
 				investList.setScale(new Scale(p_scaleId));
@@ -197,10 +197,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 				}
 				getPageUtil().setCountRecords(countRecords);
 				getPageUtil().setCurrentPageNum(currentPageNum);
-				condsUtils.addProperties(true, "memberInfo", "scale", "order");
-				condsUtils.addValues(true, new Object[]{"memberAlias","as"}, new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
-				condsUtils.addProperties(false, "memberAlias.id");
-				condsUtils.addValues(false, id);
+				condsUtils.addProperties(true, "memberInfo","memberAlias.id", "scale", "order");
+				condsUtils.addValues(true, new Object[]{"memberAlias","as"},id,new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
 				@SuppressWarnings("rawtypes")
 				List list = investListService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 				success = true;
@@ -316,7 +314,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 						resultMap.put("poundagePrivilege", pk.getPoundagePrivilege());
 						resultMap.put("isTurn", If.valueOf("If"+pk.getIsTurn()).toString());
 						resultMap.put("turnStatus", TurnStatus.valueOf("TS"+pk.getTurnStatus()).toString());
-						
+						resultMap.put("currentTime", DateUtils.getCurrentDate("yyyy-MM-dd hh:mm:ss"));
 					}
 					if (fk != null) {
 						resultMap.put("memberName", fk.getRealName());
@@ -326,8 +324,12 @@ public class InvestListAction extends BaseAction<InvestList>{
 					}
 					if (fk2 != null) {
 						resultMap.put("name", fk2.getName());
+						resultMap.put("scaleId", fk2.getId());
+						resultMap.put("revenue", fk2.getRevenue());
+						resultMap.put("revenueAdd", fk2.getRevenueAdd());
 						resultMap.put("productName", fk2.getProduct().getName());
 						resultMap.put("proCategory", fk2.getProduct().getCategory());
+						resultMap.put("days", fk2.getProduct().getDays());
 					}
 					listMap.add(resultMap);
 				}
