@@ -212,6 +212,12 @@ public class LoginAction extends BaseAction<MemberInfo>{
 			jsonObject.put("balance", investMember.getBalance());
 			jsonObject.put("totalEarnings", investMember.getTotalIncome());
 			jsonObject.put("currentEarnings", investMember.getCurrentIncome());
+		}else {
+			jsonObject.put("money", 0);
+			jsonObject.put("investing", 0);
+			jsonObject.put("balance", 0);
+			jsonObject.put("totalEarnings", 0);
+			jsonObject.put("currentEarnings", 0);
 		}
 		Set<LoanMember> loanMembers = entity.getLoanMembers();
 		if(loanMembers!=null && loanMembers.size()>0){
@@ -219,6 +225,14 @@ public class LoginAction extends BaseAction<MemberInfo>{
 			jsonObject.put("loanMoney", loanMember.getLendMoney());
 			jsonObject.put("overdue", loanMember.getExpectMoney());
 			jsonObject.put("residue", loanMember.getResidueMoney());
+			jsonObject.put("curMoney", loanMember.getCurMoney());
+			jsonObject.put("backMoney", loanMember.getBackMoney());
+		}else{
+			jsonObject.put("loanMoney", 0);
+			jsonObject.put("overdue", 0);
+			jsonObject.put("residue", 0);
+			jsonObject.put("curMoney", 0);
+			jsonObject.put("backMoney", 0);
 		}
 	}
 

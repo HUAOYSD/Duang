@@ -18,13 +18,10 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 
-/**
- * Scale entity. @author MyEclipse Persistence Tools
- */
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "scale", catalog = "duang")
 @DynamicInsert(true)
+@SuppressWarnings("serial")
 public class Scale implements java.io.Serializable {
 
 	// Fields

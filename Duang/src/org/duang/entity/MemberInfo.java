@@ -54,6 +54,7 @@ public class MemberInfo implements java.io.Serializable {
 	private int isFreeze;
 	private String myQr;
 	private int registerStyle;
+	private int useableScore;
 	private Set<MemberExtraInfo> memberExtraInfos = new HashSet<MemberExtraInfo>(0);
 	private Set<Friends> friendsesForTarget = new HashSet<Friends>(0);
 	private Set<Friends> friendsesForSelf = new HashSet<Friends>(0);
@@ -77,7 +78,13 @@ public class MemberInfo implements java.io.Serializable {
 	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
 	
 	public MemberInfo(String id, CustomerManager customerManager, MemberInfo memberInfo, String loginName, String realName, String nickname, String email, String age, String sex, String phone, String idCard, 
-			String idCardImg1, String idCardImg2, String miDescribe, String isdelete, Date createTime, Date modifyTime, String createuser, String modifyuser, String userImg, Integer isEliteAccount, String level, String price, String password, String payPassword, String handPassword, Integer isFreeze, String myQr, Integer registerStyle, String cusmembername, Set<MemberInvestTicket> memberInvestTickets, Set<InvestMember> investMembers, Set<LoanMember> loanMembers, Set<Message> messagesForReceiver, Set<InvestList> investLists, Set<ScoreList> scoreLists, Set<Message> messagesForSender, Set<Friends> friendsesForTarget, Set<MemberExtraInfo> memberExtraInfos, Set<BillLoan> billLoans, Set<BillInvest> billInvests, Set<Friends> friendsesForSelf, Set<NotificationReaded> notificationReadeds, Set<BindCard> bindCards, Set<MemberInfo> memberInfos, Set<LoanList> loanLists) {
+			String idCardImg1, String idCardImg2, String miDescribe, String isdelete, Date createTime, Date modifyTime, String createuser, String modifyuser, String userImg, 
+			Integer isEliteAccount, String level, String price, String password, String payPassword, String handPassword, Integer isFreeze, String myQr, 
+			Integer registerStyle, String cusmembername, Set<MemberInvestTicket> memberInvestTickets, Set<InvestMember> investMembers, 
+			Set<LoanMember> loanMembers, Set<Message> messagesForReceiver, Set<InvestList> investLists, Set<ScoreList> scoreLists,
+			Set<Message> messagesForSender, Set<Friends> friendsesForTarget, Set<MemberExtraInfo> memberExtraInfos, 
+			Set<BillLoan> billLoans, Set<BillInvest> billInvests, Set<Friends> friendsesForSelf, Set<NotificationReaded> notificationReadeds, 
+			Set<BindCard> bindCards, Set<MemberInfo> memberInfos, Set<LoanList> loanLists, int useableScore) {
 		this.id = id;
 		this.customerManager = customerManager;
 		this.memberInfo = memberInfo;
@@ -124,6 +131,7 @@ public class MemberInfo implements java.io.Serializable {
 		this.bindCards = bindCards;
 		this.memberInfos = memberInfos;
 		this.loanLists = loanLists;
+		this.useableScore = useableScore;
 	}
 	
 	
@@ -559,6 +567,14 @@ public class MemberInfo implements java.io.Serializable {
 		this.registerStyle = registerStyle;
 	}
 	
+	@Column(name = "useable_score")
+	public int getUseableScore() {
+		return this.useableScore;
+	}
+
+	public void setUseableScore(int useableScore) {
+		this.useableScore = useableScore;
+	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id")

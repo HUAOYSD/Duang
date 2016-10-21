@@ -13,6 +13,7 @@ import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.common.system.MemberCollection;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
@@ -341,6 +342,91 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	}
 	
 	/**
+	 * 获取用户的金钱信息
+	 * @Title: findMemberMoneyById   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月21日 下午4:31:20
+	 * @return: void      
+	 * @throws
+	 */
+	public void findMemberMoneyById() {
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String id = "";
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+				MemberInfo memberInfo = service.findById(id);
+				if (memberInfo != null) {
+					fillMemberInfo(memberInfo);
+				}else {
+					msg="未查到记录";
+				}
+				success = true;
+			}else{
+				msg="数据丢失，请重新登录";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction——findMemberMoneyById方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction——findMemberMoneyById方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		} finally {
+			jsonObject.put("msg", msg);
+			jsonObject.put("success", success);
+			printJsonResult();
+		}
+	}
+	
+	/**
+	 * 填充信息
+	 * @Title: fillMemberInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param token  
+	 * @author LiYonghui    
+	 * @date 2016年10月21日 下午4:33:25
+	 * @return: void      
+	 * @throws
+	 */
+	private void fillMemberInfo(MemberInfo memberInfo){
+		jsonObject.put("time", System.currentTimeMillis());
+		jsonObject.put("id", memberInfo.getId());
+		jsonObject.put("name", memberInfo.getRealName());
+
+		Set<InvestMember> investMembers = memberInfo.getInvestMembers();
+		if(investMembers!=null && investMembers.size()>0){
+			InvestMember investMember = investMembers.iterator().next();
+			jsonObject.put("money", investMember.getTotalMoney());
+			jsonObject.put("investing", investMember.getInvesting());
+			jsonObject.put("balance", investMember.getBalance());
+			jsonObject.put("totalEarnings", investMember.getTotalIncome());
+			jsonObject.put("currentEarnings", investMember.getCurrentIncome());
+		}else {
+			jsonObject.put("money", 0);
+			jsonObject.put("investing", 0);
+			jsonObject.put("balance", 0);
+			jsonObject.put("totalEarnings", 0);
+			jsonObject.put("currentEarnings", 0);
+		}
+		Set<LoanMember> loanMembers = memberInfo.getLoanMembers();
+		if(loanMembers!=null && loanMembers.size()>0){
+			LoanMember loanMember = loanMembers.iterator().next();
+			jsonObject.put("loanMoney", loanMember.getLendMoney());
+			jsonObject.put("overdue", loanMember.getExpectMoney());
+			jsonObject.put("residue", loanMember.getResidueMoney());
+			jsonObject.put("curMoney", loanMember.getCurMoney());
+			jsonObject.put("backMoney", loanMember.getBackMoney());
+		}else{
+			jsonObject.put("loanMoney", 0);
+			jsonObject.put("overdue", 0);
+			jsonObject.put("residue", 0);
+			jsonObject.put("curMoney", 0);
+			jsonObject.put("backMoney", 0);
+		}
+	}
+	
+	/**
 	 * 封装客户信息（理财客户、借贷客户）
 	 * @Title: fillDataObjectArray   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -384,6 +470,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				map.put("idCardImg2", memberInfo.getIdCardImg2());
 				map.put("myQr", memberInfo.getMyQr());
 				map.put("registerStyle", memberInfo.getRegisterStyle());
+				map.put("useableScore", memberInfo.getUseableScore());
 				//封装理财用户信息
 				Set<InvestMember> investMembers =  memberInfo.getInvestMembers();
 				for(InvestMember investMember : investMembers){
@@ -393,7 +480,6 @@ public class MemberAction extends BaseAction<MemberInfo>{
 					map.put("investing", investMember.getInvesting());
 					map.put("totalIncome", investMember.getInvesting());
 					map.put("totalMoney", investMember.getTotalMoney());
-					map.put("useableScore", investMember.getUseableScore());
 					map.put("currentIncome", investMember.getCurrentIncome());
 				}
 				//封装借贷客户信息
@@ -414,4 +500,5 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		}
 		return listMap;
 	}
+	
 }

@@ -228,6 +228,7 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 				map.put("idCardImg2", memberInfo.getIdCardImg2());
 				map.put("myQr", memberInfo.getMyQr());
 				map.put("registerStyle", memberInfo.getRegisterStyle());
+				map.put("useableScore", memberInfo.getUseableScore());
 				//封装理财用户信息
 				Set<InvestMember> investMembers =  memberInfo.getInvestMembers();
 				for(InvestMember investMember : investMembers){
@@ -237,7 +238,6 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 					map.put("investing", investMember.getInvesting());
 					map.put("totalIncome", investMember.getInvesting());
 					map.put("totalMoney", investMember.getTotalMoney());
-					map.put("useableScore", investMember.getUseableScore());
 					map.put("currentIncome", investMember.getCurrentIncome());
 				}
 				//封装借贷客户信息
@@ -305,6 +305,7 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 					map.put("idCardImg2", memberInfo.getIdCardImg2());
 					map.put("myQr", memberInfo.getMyQr());
 					map.put("registerStyle", memberInfo.getRegisterStyle());
+					map.put("useableScore", memberInfo.getUseableScore());
 					//封装理财用户信息
 					Set<InvestMember> investMembers =  memberInfo.getInvestMembers();
 					for(InvestMember investMember : investMembers){
@@ -314,7 +315,6 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 						map.put("investing", investMember.getInvesting());
 						map.put("totalIncome", investMember.getInvesting());
 						map.put("totalMoney", investMember.getTotalMoney());
-						map.put("useableScore", investMember.getUseableScore());
 						map.put("currentIncome", investMember.getCurrentIncome());
 					}
 					//封装借贷客户信息

@@ -30,6 +30,10 @@ public class LoanMember implements java.io.Serializable {
 	 */
 	private double lendMoney;
 	/**
+	 * 当前借款
+	 */
+	private double curMoney;
+	/**
 	 * 总还款
 	 */
 	private double backMoney;
@@ -56,11 +60,12 @@ public class LoanMember implements java.io.Serializable {
 
 	/** full constructor */
 	public LoanMember(String id, 
-			MemberInfo memberInfo, double lendMoney, double backMoney,
+			MemberInfo memberInfo, double lendMoney,double curMoney, double backMoney,
 			double residueMoney, double expectMoney) {
 		this.id = id;
 		this.memberInfo = memberInfo;
 		this.lendMoney = lendMoney;
+		this.curMoney = curMoney;
 		this.backMoney = backMoney;
 		this.residueMoney = residueMoney;
 		this.expectMoney = expectMoney;
@@ -98,6 +103,15 @@ public class LoanMember implements java.io.Serializable {
 		this.lendMoney = lendMoney;
 	}
 
+	@Column(name = "cur_money", precision = 22, scale = 0)
+	public double getCurMoney() {
+		return this.curMoney;
+	}
+
+	public void setCurMoney(double curMoney) {
+		this.curMoney = curMoney;
+	}
+	
 	@Column(name = "back_money", precision = 22, scale = 0)
 	public double getBackMoney() {
 		return this.backMoney;

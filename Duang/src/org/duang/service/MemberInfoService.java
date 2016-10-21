@@ -46,5 +46,18 @@ public interface MemberInfoService extends CommonInterface<MemberInfo>{
 	 * @throws   
 	 */  
 	public abstract List<Map<String, Object>> queryLevelMemberInfo(String where, PageUtil<MemberInfo> page) throws Exception;
+	
+	/**
+	 * 更改用户的积分
+	 * @Title: updateMemberInfoScore   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param addScore
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年10月21日 下午2:52:44
+	 * @return: void      
+	 * @throws
+	 */
+	public abstract void updateMemberInfoScore(String memberId,int addScore) throws Exception;
 
 }

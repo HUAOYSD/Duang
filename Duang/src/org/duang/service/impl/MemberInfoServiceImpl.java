@@ -360,6 +360,14 @@ public class MemberInfoServiceImpl implements MemberInfoService{
 			}
 		}
 		return listmap;
+	}
+
+	@Override
+	public void updateMemberInfoScore(String memberId,int addScore) throws Exception {
+		MemberInfo  memberInfo = findById(memberId);
+		int totalScore = memberInfo.getUseableScore()+addScore;
+		memberInfo.setUseableScore(totalScore);
+		updateEntity(memberInfo);
 	};
 
 }

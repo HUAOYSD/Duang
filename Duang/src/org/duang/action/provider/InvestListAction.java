@@ -254,7 +254,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 		try {
 			//判断参数是否为空
 			if(entity != null && DataUtils.notEmpty(entity.getId())){
-				InvestList invest = investListService.findById(entity.getId());
+				InvestList invest = investListService.findById(DES.decryptDES(entity.getId()));
 				success = true;
 				if (invest == null) {
 					msg = "数据过期，请刷新重试";
@@ -296,6 +296,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 					MemberInfo fk = (MemberInfo)((Object[])temp)[0];
 					Scale fk2 = (Scale)((Object[])temp)[1];
 					if (pk != null) {
+						resultMap.put("id", pk.getId());
 						resultMap.put("money", pk.getMoney());
 						resultMap.put("backIncome", pk.getBackIncome());
 						resultMap.put("backMoney", pk.getBackMoney());
@@ -304,10 +305,10 @@ public class InvestListAction extends BaseAction<InvestList>{
 						resultMap.put("income", pk.getIncome());
 						resultMap.put("ticketBonus", pk.getTicketBonus());
 						resultMap.put("status", Status.valueOf("S"+pk.getStatus()).toString());
-						resultMap.put("openDate", DateUtils.getTimeStamp(pk.getOpenDate()));
-						resultMap.put("backDate", DateUtils.getTimeStamp(pk.getBackDate()));
-						resultMap.put("calcBegin", DateUtils.getTimeStamp(pk.getBackDate()));
-						resultMap.put("calcEnd", DateUtils.getTimeStamp(pk.getBackDate()));
+						resultMap.put("openDate", DateUtils.date2Str(pk.getOpenDate()));
+						resultMap.put("backDate", DateUtils.date2Str(pk.getBackDate()));
+						resultMap.put("calcBegin", DateUtils.date2Str(pk.getBackDate()));
+						resultMap.put("calcEnd", DateUtils.date2Str(pk.getBackDate()));
 						resultMap.put("pactNumber", pk.getPactNumber());
 						resultMap.put("investStyle", Platform.valueOf("P"+pk.getInvestStyle()).toString());
 						resultMap.put("poundageTurn", pk.getPoundageTurn());
@@ -357,6 +358,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 			MemberInfo fk = invest.getMemberInfo();
 			Scale fk2 = invest.getScale();
 			if (pk != null) {
+				resultMap.put("id", pk.getId());
 				resultMap.put("money", pk.getMoney());
 				resultMap.put("backIncome", pk.getBackIncome());
 				resultMap.put("backMoney", pk.getBackMoney());
@@ -365,10 +367,10 @@ public class InvestListAction extends BaseAction<InvestList>{
 				resultMap.put("income", pk.getIncome());
 				resultMap.put("ticketBonus", pk.getTicketBonus());
 				resultMap.put("status", Status.valueOf("S"+pk.getStatus()).toString());
-				resultMap.put("openDate", DateUtils.getTimeStamp(pk.getOpenDate()));
-				resultMap.put("backDate", DateUtils.getTimeStamp(pk.getBackDate()));
-				resultMap.put("calcBegin", DateUtils.getTimeStamp(pk.getBackDate()));
-				resultMap.put("calcEnd", DateUtils.getTimeStamp(pk.getBackDate()));
+				resultMap.put("openDate", DateUtils.date2Str(pk.getOpenDate()));
+				resultMap.put("backDate", DateUtils.date2Str(pk.getBackDate()));
+				resultMap.put("calcBegin", DateUtils.date2Str(pk.getBackDate()));
+				resultMap.put("calcEnd", DateUtils.date2Str(pk.getBackDate()));
 				resultMap.put("pactNumber", pk.getPactNumber());
 				resultMap.put("investStyle", Platform.valueOf("P"+pk.getInvestStyle()).toString());
 				resultMap.put("poundageTurn", pk.getPoundageTurn());
@@ -387,8 +389,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 			}
 			if (fk2 != null) {
 				resultMap.put("name", fk2.getName());
-				resultMap.put("calcBeginTime", fk2.getCalcBeginTime());
-				resultMap.put("calcEndTime", fk2.getCalcEndTime());
+				resultMap.put("calcBeginTime", DateUtils.date2Str(fk2.getCalcBeginTime()));
+				resultMap.put("calcEndTime", DateUtils.date2Str(fk2.getCalcEndTime()));
 				resultMap.put("productName", fk2.getProduct().getName());
 				resultMap.put("productDetails", fk2.getProduct().getDetails());
 				resultMap.put("profitMoney", (fk2.getRevenue()+fk2.getRevenueAdd())*pk.getMoney());

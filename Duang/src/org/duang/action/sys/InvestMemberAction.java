@@ -268,7 +268,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 				map.put("investing", im.getInvesting());
 				map.put("totalIncome", im.getInvesting());
 				map.put("totalMoney", im.getTotalMoney());
-				map.put("useableScore", im.getUseableScore());
 				map.put("currentIncome", im.getCurrentIncome());
 				MemberInfo memberInfo = (MemberInfo) array[0];
 				map.put("memberInfoId", memberInfo.getId());
@@ -350,7 +349,6 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					jsonObject.put("investing", im.getInvesting());
 					jsonObject.put("totalIncome", im.getInvesting());
 					jsonObject.put("totalMoney", im.getTotalMoney());
-					jsonObject.put("useableScore", im.getUseableScore());
 					jsonObject.put("currentIncome", im.getCurrentIncome());
 					MemberInfo memberInfo = im.getMemberInfo();
 					jsonObject.put("memberInfoId", memberInfo.getId());
@@ -381,6 +379,7 @@ public class InvestMemberAction extends BaseAction<InvestMember> {
 					jsonObject.put("memberInfo.idCardImg2", memberInfo.getIdCardImg2());
 					jsonObject.put("memberInfo.myQr", memberInfo.getMyQr());
 					jsonObject.put("memberInfo.registerStyle", memberInfo.getRegisterStyle());
+					jsonObject.put("memberInfo.useableScore", memberInfo.getUseableScore());
 				}
 			}
 		} catch (Exception e) {
