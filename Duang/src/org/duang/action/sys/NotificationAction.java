@@ -213,13 +213,13 @@ public class NotificationAction extends BaseAction<Notification> {
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("publishTime"))) {
 				condsUtils.addProperties(false, "publishTime");
-				condsUtils.concatValue(new Object[] {DateUtils.str2Date(getRequest().getParameter("publishTime")+" 00:00:00","yyyy-MM-dd hh:mm:ss"),"gt" });
+				condsUtils.concatValue(new Object[] {DateUtils.str2Date(getRequest().getParameter("publishTime")+" 00:00:00","yyyy-MM-dd HH:mm:ss"),"gt" });
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("endTime"))) {
-				condsUtils.concat("endDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("endTime")+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "lt"});
+				condsUtils.concat("endDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("endTime")+" 59:59:59", "yyyy-MM-dd HH:mm:ss"), "lt"});
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("startTime"))) {
-				condsUtils.concat("beginDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("startTime")+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), "gt"});
+				condsUtils.concat("beginDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("startTime")+" 00:00:00", "yyyy-MM-dd HH:mm:ss"), "gt"});
 			}
 			//查询数据
 			List<Notification> list = notificationService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());

@@ -390,7 +390,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @throws
 	 */
 	private void fillMemberInfo(MemberInfo memberInfo){
-		jsonObject.put("time", System.currentTimeMillis());
+		jsonObject.put("time", DateUtils.getCurrentDate("yyyy-MM-dd HH:mm:ss"));
 		jsonObject.put("id", memberInfo.getId());
 		jsonObject.put("name", memberInfo.getRealName());
 

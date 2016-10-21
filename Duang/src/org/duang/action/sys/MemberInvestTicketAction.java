@@ -221,10 +221,10 @@ public class MemberInvestTicketAction extends BaseAction<MemberInvestTicket> {
 				condsUtils.concatValue(new String[] {entity.getInvestTicket().getName(), "like" });
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("endTime"))) {
-				condsUtils.concat("ticket.endTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("endTime")+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "lt"});
+				condsUtils.concat("ticket.endTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("endTime")+" 59:59:59", "yyyy-MM-dd HH:mm:ss"), "lt"});
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("startTime"))) {
-				condsUtils.concat("ticket.beginTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("startTime")+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), "gt"});
+				condsUtils.concat("ticket.beginTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("startTime")+" 00:00:00", "yyyy-MM-dd HH:mm:ss"), "gt"});
 			}
 			//查询数据
 			@SuppressWarnings("rawtypes")

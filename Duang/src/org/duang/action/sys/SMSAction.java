@@ -88,7 +88,7 @@ public class SMSAction extends BaseAction<SMS> {
 			String startTime = getRequest().getParameter("startTime");
 			String endTime = getRequest().getParameter("endTime");
 			if (DataUtils.notEmpty(startTime) && DataUtils.notEmpty(endTime)) {
-				condsUtils.concat("createTime", new Object[]{DateUtils.str2Date(startTime+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), DateUtils.str2Date(endTime+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "between"});
+				condsUtils.concat("createTime", new Object[]{DateUtils.str2Date(startTime+" 00:00:00", "yyyy-MM-dd HH:mm:ss"), DateUtils.str2Date(endTime+" 59:59:59", "yyyy-MM-dd HH:mm:ss"), "between"});
 			}
 			list = SMSService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			if (list != null && list.size() > 0) {

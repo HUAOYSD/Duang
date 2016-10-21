@@ -201,7 +201,7 @@ public class MemberTicketRecordAction extends BaseAction<MemberTicketRecord> {
 				condsUtils.concatValue(new String[] { entity.getInvestTicket().getName(), "like" });
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("useTime"))) {
-				condsUtils.concat("useTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("useTime")+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), DateUtils.str2Date(getRequest().getParameter("useTime")+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "between"});
+				condsUtils.concat("useTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("useTime")+" 00:00:00", "yyyy-MM-dd HH:mm:ss"), DateUtils.str2Date(getRequest().getParameter("useTime")+" 59:59:59", "yyyy-MM-dd HH:mm:ss"), "between"});
 			}
 			
 			@SuppressWarnings("rawtypes")

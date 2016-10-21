@@ -194,7 +194,7 @@ public class BillLoanAction extends BaseAction<BillLoan> {
 					condsUtils.addValues(false, entity.getStatus());
 				}
 				if (DataUtils.notEmpty(getRequest().getParameter("optTime"))) {
-					condsUtils.concat("optTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("optTime")+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), DateUtils.str2Date(getRequest().getParameter("optTime")+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "between"});
+					condsUtils.concat("optTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("optTime")+" 00:00:00", "yyyy-MM-dd HH:mm:ss"), DateUtils.str2Date(getRequest().getParameter("optTime")+" 59:59:59", "yyyy-MM-dd HH:mm:ss"), "between"});
 				}
 			}
 			@SuppressWarnings("rawtypes")

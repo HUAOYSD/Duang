@@ -345,7 +345,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 						resultMap.put("poundagePrivilege", pk.getPoundagePrivilege());
 						resultMap.put("isTurn", If.valueOf("If"+pk.getIsTurn()).toString());
 						resultMap.put("turnStatus", TurnStatus.valueOf("TS"+pk.getTurnStatus()).toString());
-						resultMap.put("currentTime", DateUtils.getCurrentDate("yyyy-MM-dd hh:mm:ss"));
+						resultMap.put("currentTime", DateUtils.getCurrentDate("yyyy-MM-dd HH:mm:ss"));
 					}
 					if (fk != null) {
 						resultMap.put("memberName", fk.getRealName());

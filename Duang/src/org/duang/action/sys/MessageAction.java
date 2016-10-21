@@ -190,7 +190,7 @@ public class MessageAction extends BaseAction<Message> {
 				condsUtils.concatValue(new String[] {entity.getTitle(), "like" });
 			}
 			if (DataUtils.notEmpty(getRequest().getParameter("startTime")) && DataUtils.notEmpty(getRequest().getParameter("endTime"))) {
-				condsUtils.concat("time", new Object[]{DateUtils.str2Date(getRequest().getParameter("startTime")+" 00:00:00", "yyyy-MM-dd hh:mm:ss"), DateUtils.str2Date(getRequest().getParameter("endTime")+" 59:59:59", "yyyy-MM-dd hh:mm:ss"), "between"});
+				condsUtils.concat("time", new Object[]{DateUtils.str2Date(getRequest().getParameter("startTime")+" 00:00:00", "yyyy-MM-dd HH:mm:ss"), DateUtils.str2Date(getRequest().getParameter("endTime")+" 59:59:59", "yyyy-MM-dd HH:mm:ss"), "between"});
 			}
 			//查询数据
 			@SuppressWarnings("rawtypes")
