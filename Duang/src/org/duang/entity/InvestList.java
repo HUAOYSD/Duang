@@ -55,6 +55,50 @@ public class InvestList implements java.io.Serializable {
 	private Set<Stock> stocksForTurnInvestListId = new HashSet<Stock>(0);
 	private Set<Scale> scales = new HashSet<Scale>(0);
 
+	
+	
+	public InvestList(String id, Scale scale, InvestTicket investTicket,
+			MemberInfo memberInfo, double money, double backIncome,
+			double backMoney, int useTicket, int isTurn, int turnStatus,
+			double totalMoney, double income, double ticketBonus, int status,
+			Date openDate, Date backDate, Date calcBeginDate, Date calcEndDate,
+			String pactNumber, int investStyle, double poundageTurn,
+			double poundagePrivilege, int days,
+			Set<Stock> stocksForInvestListId,
+			Set<MemberTicketRecord> memberTicketRecords,
+			Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId,
+			Set<Scale> scales) {
+		super();
+		this.id = id;
+		this.scale = scale;
+		this.investTicket = investTicket;
+		this.memberInfo = memberInfo;
+		this.money = money;
+		this.backIncome = backIncome;
+		this.backMoney = backMoney;
+		this.useTicket = useTicket;
+		this.isTurn = isTurn;
+		this.turnStatus = turnStatus;
+		this.totalMoney = totalMoney;
+		this.income = income;
+		this.ticketBonus = ticketBonus;
+		this.status = status;
+		this.openDate = openDate;
+		this.backDate = backDate;
+		this.calcBeginDate = calcBeginDate;
+		this.calcEndDate = calcEndDate;
+		this.pactNumber = pactNumber;
+		this.investStyle = investStyle;
+		this.poundageTurn = poundageTurn;
+		this.poundagePrivilege = poundagePrivilege;
+		this.days = days;
+		this.stocksForInvestListId = stocksForInvestListId;
+		this.memberTicketRecords = memberTicketRecords;
+		this.billInvests = billInvests;
+		this.stocksForTurnInvestListId = stocksForTurnInvestListId;
+		this.scales = scales;
+	}
+
 	// Constructors
 
 	/** default constructor */

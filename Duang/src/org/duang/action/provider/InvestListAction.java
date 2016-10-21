@@ -1,4 +1,5 @@
 package org.duang.action.provider;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("provider")
 @Action(value = "provider_investlist")
 public class InvestListAction extends BaseAction<InvestList>{
-	
+
 	private InvestListService investListService;
 	private ScaleService scaleService;
 	@Resource
@@ -100,16 +101,16 @@ public class InvestListAction extends BaseAction<InvestList>{
 			success = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("InvestListAction——addInvestList方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("InvestListAction——addInvestList方法错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("InvestListAction——getHomeRecommendScale方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("InvestListAction——getHomeRecommendScale方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
-	
+
+
 	/**   
 	 * 增加投资记录
 	 * @Title: addInvestList   
@@ -120,19 +121,22 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 * @return: void      
 	 * @throws  
 	 */  
-	public void addInvestList(){
+	public synchronized void addInvestList(){
 		boolean success = false;
 		try {
 			String token = getRequest().getParameter("token");
 			String p_scaleId = getRequest().getParameter("p_scaleId");
 			String p_money = getRequest().getParameter("p_money");
 			String p_useTicket = getRequest().getParameter("p_useTicket");
+
 			String p_ticketBonus = getRequest().getParameter("p_ticketBonus");
 			String p_totalMoney = getRequest().getParameter("p_totalMoney");
+
 			String investStyle = getRequest().getParameter("investStyle");
 			String id = "";
 			//判断参数是否为空
 			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+
 				InvestList investList = new InvestList();
 				investList.setId(DataUtils.randomUUID());
 				investList.setMoney(Double.parseDouble(DES.decryptDES(p_money)));
@@ -143,14 +147,40 @@ public class InvestListAction extends BaseAction<InvestList>{
 				investList.setScale(new Scale(p_scaleId));
 				investList.setMemberInfo(new MemberInfo(id));
 				success = investListService.saveEntity(investList);
+
+				double money = DataUtils.str2double(p_money, 6);
+				if (DataUtils.isEmpty(p_scaleId)) {
+					msg = "理财标主键传值失败";
+				}else if (money <= 0) {
+					msg = "投资金额需大于0";
+				}else if (!("1".equals(p_useTicket) || "2".equals(p_useTicket))) {
+					msg = "理财券使用类型出错";
+				}
+				//根据理财标和投资本金计算本金和预期收益和
+				Scale scale = scaleService.findById(DES.decryptDES(p_scaleId));
+				int day = scale.getProduct().getDays();
+				double income = money * (scale.getRevenue() + scale.getRevenueAdd()) / 365D * day;
+				income = DataUtils.str2double(income+"", 6);
+				//封装实体
+				entity = new InvestList(DataUtils.randomUUID());
+				entity.setScale(scale);
+				entity.setMemberInfo(new MemberInfo(id));
+				entity.setMoney(money);
+				entity.setUseTicket(DataUtils.str2int(p_useTicket));
+				entity.setTotalMoney(income + money);
+				entity.setIncome(income);
+				entity.setStatus(Status.S2.getVal());
+				entity.setOpenDate(new Date());
+				String pactNumber = DateUtils.date2Str(new Date(), "MMDDhhmmss") + DataUtils.sixNumber();
+				entity.setPactNumber(pactNumber);
+				entity.setInvestStyle(DataUtils.str2int(investStyle));
+				entity.setDays(day);
+				success = investListService.saveEntity(entity);
 				if(!success){
 					msg = "服务器超时，请稍后重试";
-				}else{
-					InvestList invest = findInvestById(investList.getId());
-					jsonObject.put("result", fillDatagridObejct(invest));
 				}
 			}else{
-				msg = "token失效！";
+				msg = "token失效！登录失败";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -162,8 +192,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
-	
+
+
 	/**   
 	 * 查询理财记录列表
 	 * @Title: queryInvestList   
@@ -221,7 +251,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
+
 	/**
 	 * 根据id获取信息
 	 * @Title: findInvestById   
@@ -234,11 +264,11 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 * @return: InvestList      
 	 * @throws
 	 */
-	private InvestList findInvestById(String id) throws Exception{
+	public InvestList findInvestById(String id) throws Exception{
 		InvestList invest = investListService.findById(id);
 		return invest;
 	}
-	
+
 	/**   
 	 * 根据id查询理财记录详情
 	 * @Title: findInvestInfo   
@@ -275,7 +305,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
+
 	/**
 	 * @Title: fillDatagridCons   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -338,7 +368,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 		}
 		return listMap;
 	}
-	
+
 	/**
 	 * 封装对象
 	 * @Title: fillDatagridObject   
@@ -377,7 +407,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 				resultMap.put("poundagePrivilege", pk.getPoundagePrivilege());
 				resultMap.put("isTurn", If.valueOf("If"+pk.getIsTurn()).toString());
 				resultMap.put("turnStatus", TurnStatus.valueOf("TS"+pk.getTurnStatus()).toString());
-				
+
 			}
 			if (fk != null) {
 				resultMap.put("memberName", fk.getRealName());
@@ -395,10 +425,10 @@ public class InvestListAction extends BaseAction<InvestList>{
 				resultMap.put("productDetails", fk2.getProduct().getDetails());
 				resultMap.put("profitMoney", (fk2.getRevenue()+fk2.getRevenueAdd())*pk.getMoney());
 				resultMap.put("proCategory", fk2.getProduct().getCategory());
-				
+
 			}
 		}
 		return resultMap;
 	}
-	
+
 }

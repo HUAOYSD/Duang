@@ -1,15 +1,29 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
+import org.duang.common.CondsUtils;
+import org.duang.common.Contract;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.InvestListDao;
+import org.duang.dao.ScaleDao;
+import org.duang.dao.StockDao;
+import org.duang.entity.BillInvest;
 import org.duang.entity.InvestList;
+import org.duang.entity.Scale;
+import org.duang.entity.Stock;
+import org.duang.enums.billinvest.UseType;
+import org.duang.enums.stock.Status;
 import org.duang.service.InvestListService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -27,7 +41,7 @@ public class InvestListServiceImpl implements InvestListService{
 
 	private InvestListDao dao;
 
-	@Resource()
+	@Resource
 	public void setDao(InvestListDao dao) {
 		this.dao = dao;
 	}
@@ -35,7 +49,7 @@ public class InvestListServiceImpl implements InvestListService{
 	public InvestListServiceImpl(){
 		LoggerUtils.info("注入InvestListServiceImpl服务层", this.getClass());
 	}
-	
+
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
@@ -120,13 +134,90 @@ public class InvestListServiceImpl implements InvestListService{
 	}
 
 
+	private StockDao stockDao;
+	private ScaleDao scaleDao;
+	@Resource
+	public void setStockDao(StockDao stockDao) {
+		this.stockDao = stockDao;
+	}
+	@Resource
+	public void setScaleDao(ScaleDao scaleDao) {
+		this.scaleDao = scaleDao;
+	}
+
 	/**
 	 * 通过实体对象增加实体数据
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(InvestList t) throws Exception{
-		return dao.saveEntity(t);
+	public synchronized boolean saveEntity(InvestList t) throws Exception{
+		if (t!=null) {
+			//1、匹配库存
+			CondsUtils condsUtils = new CondsUtils();
+			condsUtils.addProperties(true, "investList", "scale.id");
+			condsUtils.addProperties(true, null, t.getScale().getId());
+			List<Stock> stocks = stockDao.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);//获取该理财标库存中还未分配理财标的记录
+			if (stocks!=null) {
+				//将集合打乱顺序，随机为该投资人分配借贷人
+				Collections.shuffle(stocks);
+				List<Stock> mystock = new ArrayList<Stock>();//存放该理财记录的库存记录的集合
+				double tempMoney = 0;
+				//......
+				for (Stock stock : stocks) {
+					if (tempMoney + stock.getMoney() < t.getMoney()) {
+						stock.setFetch(stock.getMoney());
+						stock.setFetchTime(new Date());
+						stock.setDifference(0);
+						stock.setStatus(Status.S2.getVal());
+						stock.setInvestList(t);
+						mystock.add(stock);
+					}else {
+						break;
+					}
+				}
+				//2、更改分配到的库存的状态
+				for (Stock stock : mystock) {
+					stockDao.updateEntity(stock);
+				}
+				//3、更正理财标
+				Scale scale = scaleDao.findById(t.getScale().getId());
+				scale.setResidueMoney(scale.getResidueMoney() - t.getMoney());
+				scale.setYetMoney(scale.getYetMoney() + t.getMoney());
+				//scale.setStatus(0);
+				//.......
+				scaleDao.updateEntity(scale);
+				//4、产生理财订单
+				//4.1、先获取到此人，最后一次billinvest记录，该条记录含有此人最新的余额、总资产数据，新记录的这俩数据，通过这个数据做加减法即可得到
+				//BillInvest invest = new BillInvest(DataUtils.randomUUID(), t.getMemberInfo(), t, null, UseType.UT3.getVal(), t.getMoney(), balance, asset, status, optTime, remark, style);
+			
+				//5、改变资产，改变invest_member中的值，获取值的方式和上面的第4步骤差不多
+				//6、增加理财记录
+				dao.saveEntity(t);
+				//7、生成合同
+				Thread thread = new Thread(){
+					@Override
+					public void run(){
+						synchronized (this) {
+							//这个loanMembers可以再第1步骤，匹配库存的时候获取到的
+							//Contract.getInstance().createContract(investMember, loanMembers, investList, contractNo, fullPath);
+						}
+					}
+				};
+				thread.start();
+				return true;
+			}
+			//为推荐人增加推荐奖金（暂留...）
+			//理财券使用记录（暂留...）
+			//理财券花销状态（暂留...）
+			//积分累计（暂留...）
+			//这几个暂时不写
+			
+			
+			
+			//***
+			//1.不是在理财成功后再回调增加方法
+		}
+		return false;
 	}
 
 
@@ -149,7 +240,7 @@ public class InvestListServiceImpl implements InvestListService{
 		return dao.deleteEntity(id);
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
@@ -158,7 +249,7 @@ public class InvestListServiceImpl implements InvestListService{
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
 		return dao.deleteEntity(map);
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -247,7 +338,7 @@ public class InvestListServiceImpl implements InvestListService{
 		return dao.findEntity(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
