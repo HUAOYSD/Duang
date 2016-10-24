@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ReadProperties {  
-	private static  Properties props ;
 	
 	/**
 	 * 初始化
@@ -17,11 +16,13 @@ public class ReadProperties {
 	 * @return: void      
 	 * @throws
 	 */
-	public static void initPrperties(String filePath) throws IOException{
+	public static Properties initPrperties(String filePath) throws IOException{
+		Properties props = null;
 		if(props==null){
 			props = new Properties(); 
 			props.load(ReadProperties.class.getClassLoader().getResourceAsStream(filePath));
 		}
+		return props;
 	}
 	
 	/**
@@ -36,7 +37,7 @@ public class ReadProperties {
 	 * @return: String      
 	 * @throws
 	 */
-	public static String getStringValue(String key){
+	public static String getStringValue(Properties props,String key){
         return props.getProperty(key);
 	}
 	

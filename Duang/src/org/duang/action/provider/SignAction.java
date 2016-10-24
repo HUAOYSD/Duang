@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -41,7 +42,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value = "provider_sign")
 public class SignAction extends BaseAction<Sign>{
 
-	private String sign_properties = "config/sign.properties"; 
+	private String sign_properties = "sign.properties"; 
 	
 	private SignService signService;
 	@Resource(name = "signserviceimpl")
@@ -186,41 +187,48 @@ public class SignAction extends BaseAction<Sign>{
 			int score = 0;
 			//判断参数是否为空
 			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(memberId = MemberCollection.getInstance().getMainField(token))){
-				ReadProperties.initPrperties(sign_properties);
-				//获取是否连续签到打开
-				String isSerial = ReadProperties.getStringValue("isSerial");
-				//获取连续签到所加的积分是多少
-				int serialScore = DataUtils.str2int(ReadProperties.getStringValue("serialScore"));
-				//获取基本签到的加积分数
-				int baseScore = DataUtils.str2int(ReadProperties.getStringValue("baseScore"));
+				//判断今天是否已经签到
+				if(isSignToday(memberId)){
+					success = true;
+					msg ="已经签到";
+				}else{
 				
-				//判断昨天是否签到了
-				if(isContinuousSign(memberId)){//签到
-					//计算连续第几次签到
-					Sign yesterdaySign = getYesterdaySign(memberId);
-					signCount = yesterdaySign.getSignCount()+1;
-					//判断是否打开了连续签到奖励
-					if(isSerial.equals("true")){
-						score = serialScore;
-					}else {
+					Properties props = ReadProperties.initPrperties(sign_properties);
+					//获取是否连续签到打开
+					String isSerial = ReadProperties.getStringValue(props,"isSerial");
+					//获取连续签到所加的积分是多少
+					int serialScore = DataUtils.str2int(ReadProperties.getStringValue(props,"serialScore"));
+					//获取基本签到的加积分数
+					int baseScore = DataUtils.str2int(ReadProperties.getStringValue(props,"baseScore"));
+					
+					//判断昨天是否签到了
+					if(isContinuousSign(memberId)){//签到
+						//计算连续第几次签到
+						Sign yesterdaySign = getYesterdaySign(memberId);
+						signCount = yesterdaySign.getSignCount()+1;
+						//判断是否打开了连续签到奖励
+						if(isSerial.equals("true")){
+							score = serialScore;
+						}else {
+							score = baseScore;
+						}
+					}else{ //昨天未签到
 						score = baseScore;
 					}
-				}else{ //昨天未签到
-					score = baseScore;
-				}
-				Sign sign = new Sign();
-				sign.setId(DataUtils.randomUUID());
-				sign.setSignCount(signCount);
-				sign.setSignDate(DataUtils.str2Date(DateUtils.getCurrentDate("yyyy-MM-dd")));
-				sign.setScore(score);
-				MemberInfo memberInfo = new MemberInfo(memberId);
-				sign.setMemberInfo(memberInfo);
-				success = signService.saveEntity(sign);
-				if(success){
-					//修改总积分
-					sysMemberInfoService.updateMemberInfoScore(memberId, score);
-				}else{
-					msg = "服务器超时，请稍后重试";
+					Sign sign = new Sign();
+					sign.setId(DataUtils.randomUUID());
+					sign.setSignCount(signCount);
+					sign.setSignDate(DataUtils.str2Date(DateUtils.getCurrentDate("yyyy-MM-dd HH:mm:ss")));
+					sign.setScore(score);
+					MemberInfo memberInfo = new MemberInfo(memberId);
+					sign.setMemberInfo(memberInfo);
+					success = signService.saveEntity(sign);
+					if(success){
+						//修改总积分
+						sysMemberInfoService.updateMemberInfoScore(memberId, score);
+					}else{
+						msg = "服务器超时，请稍后重试";
+					}
 				}
 			}else{
 				msg = "用户token为空";
@@ -234,6 +242,31 @@ public class SignAction extends BaseAction<Sign>{
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
 		printJsonResult();
+	}
+	
+	/**
+	 * 校验今天是否已经签到
+	 * @Title: isSignToday   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param memberId
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年10月21日 下午5:35:41
+	 * @return: boolean      
+	 * @throws
+	 */
+	private boolean isSignToday(String memberId) throws Exception{
+		boolean result = false;
+		if(DataUtils.notEmpty(memberId)){
+			String today = DateUtils.getCurrentDate("yyyy-MM-dd");
+			String sql = "select  * from sign where member_id='"+memberId+"' and signDate BETWEEN '"+today+" 0:00:00' and '"+today+" 23:59:59'";
+			List<Sign> list = signService.queryBySQL(sql, null, null,true);
+			if(DataUtils.notEmpty(list)){
+				result = true;
+			}
+		}
+		return result;
 	}
 	
 	/**
@@ -275,10 +308,11 @@ public class SignAction extends BaseAction<Sign>{
 		if(DataUtils.notEmpty(memberId)){
 			//昨天的日期
 			String yesterdayStr = getYesterday();
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("signDate", DateUtils.str2Date(yesterdayStr));
-			map.put("memberInfo.id", memberId);
-			sign = signService.findEntity(map);
+			String sql = "select  * from sign where member_id='"+memberId+"' and signDate BETWEEN '"+yesterdayStr+" 0:00:00' and '"+yesterdayStr+" 23:59:59'";
+			List<Sign> list = signService.queryBySQL(sql, null, null,true);
+			if(DataUtils.notEmpty(list)){
+				sign = list.get(0);
+			}
 		}
 		return sign;
 	}
