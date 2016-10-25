@@ -75,7 +75,7 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 	}
 	
 	/**
-	 * 广告
+	 * 新闻
 	 */
 	private NewsInformationService newsInformationService;
 	@Resource(name = "newsinformationserviceimpl")
@@ -236,7 +236,7 @@ public class FileUploadAction extends BaseAction<FileUpload> {
 	}
 	
 	/**
-	 * 上传广告
+	 * 上传新闻
 	 * @Title: uploadAdImg
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param:

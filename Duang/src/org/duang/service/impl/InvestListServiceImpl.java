@@ -7,18 +7,28 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.jws.soap.SOAPBinding.Use;
 
 import org.duang.annotation.ServiceLog;
 import org.duang.common.CondsUtils;
+import org.duang.common.Contract;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.BillInvestDao;
 import org.duang.dao.InvestListDao;
+import org.duang.dao.InvestMemberDao;
 import org.duang.dao.ScaleDao;
 import org.duang.dao.StockDao;
+import org.duang.entity.BillInvest;
 import org.duang.entity.InvestList;
+import org.duang.entity.InvestMember;
+import org.duang.entity.LoanMember;
+import org.duang.entity.MemberInfo;
 import org.duang.entity.Scale;
 import org.duang.entity.Stock;
+import org.duang.enums.billinvest.UseType;
 import org.duang.enums.stock.Status;
 import org.duang.service.InvestListService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -131,6 +141,8 @@ public class InvestListServiceImpl implements InvestListService{
 
 	private StockDao stockDao;
 	private ScaleDao scaleDao;
+	private BillInvestDao billInvestDao;
+	private InvestMemberDao investMemberDao;
 	@Resource
 	public void setStockDao(StockDao stockDao) {
 		this.stockDao = stockDao;
@@ -139,7 +151,14 @@ public class InvestListServiceImpl implements InvestListService{
 	public void setScaleDao(ScaleDao scaleDao) {
 		this.scaleDao = scaleDao;
 	}
-
+	@Resource
+	public void setBillInvestDao(BillInvestDao billInvestDao) {
+		this.billInvestDao = billInvestDao;
+	}
+	@Resource
+	public void setInvestMemberDao(InvestMemberDao investMemberDao) {
+		this.investMemberDao = investMemberDao;
+	}
 	/**
 	 * 通过实体对象增加实体数据
 	 * @param t  实体对象
@@ -149,9 +168,10 @@ public class InvestListServiceImpl implements InvestListService{
 		if (t!=null) {
 			//1、匹配库存
 			CondsUtils condsUtils = new CondsUtils();
-			condsUtils.addProperties(true, "investList", "scale.id");
-			condsUtils.addProperties(true, null, t.getScale().getId());
+			condsUtils.addProperties(true, "investList", "scale.id","status");
+			condsUtils.addValues(true, null, t.getScale().getId(),0);
 			List<Stock> stocks = stockDao.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);//获取该理财标库存中还未分配理财标的记录
+			final List<MemberInfo> loanMembers = new ArrayList<MemberInfo>();
 			if (stocks!=null) {
 				//将集合打乱顺序，随机为该投资人分配借贷人
 				Collections.shuffle(stocks);
@@ -166,6 +186,7 @@ public class InvestListServiceImpl implements InvestListService{
 						stock.setStatus(Status.S2.getVal());
 						stock.setInvestList(t);
 						mystock.add(stock);
+						loanMembers.add(stock.getLoanList().getMemberInfo());
 					}else {
 						break;
 					}
@@ -178,14 +199,35 @@ public class InvestListServiceImpl implements InvestListService{
 				Scale scale = scaleDao.findById(t.getScale().getId());
 				scale.setResidueMoney(scale.getResidueMoney() - t.getMoney());
 				scale.setYetMoney(scale.getYetMoney() + t.getMoney());
+				scale.setStatus(2);
 				//scale.setStatus(0);
 				//.......
 				scaleDao.updateEntity(scale);
 				//4、产生理财订单
 				//4.1、先获取到此人，最后一次billinvest记录，该条记录含有此人最新的余额、总资产数据，新记录的这俩数据，通过这个数据做加减法即可得到
-				//BillInvest invest = new BillInvest(DataUtils.randomUUID(), t.getMemberInfo(), t, null, UseType.UT3.getVal(), t.getMoney(), balance, asset, status, optTime, remark, style);
+				List<BillInvest> billInvestsList = billInvestDao.queryEntity("memberInfo.id", t.getMemberInfo().getId(), null, Order.desc("optTime"));
+				if(DataUtils.notEmpty(billInvestsList)){
+					BillInvest billInvest = billInvestsList.get(0);
+					billInvest.setId(DataUtils.randomUUID());
+					billInvest.setMemberInfo(t.getMemberInfo());
+					billInvest.setInvestList(t);
+					billInvest.setUseType(UseType.UT3.getVal());
+					billInvest.setMoney(t.getMoney());
+					billInvest.setBalance(billInvest.getBalance()-t.getMoney());
+					billInvest.setBalance(billInvest.getAsset()-t.getMoney());
+					billInvestDao.saveEntity(billInvest);
+				}
 			
 				//5、改变资产，改变invest_member中的值，获取值的方式和上面的第4步骤差不多
+				List<InvestMember> investMembers = investMemberDao.queryEntity("memberInfo.id", t.getMemberInfo().getId(), null, null);
+				InvestMember  investMember_c = null;
+				if(DataUtils.notEmpty(investMembers)){
+					InvestMember investMember = investMembers.get(0);
+					investMember.setBalance(investMember.getBalance()-t.getMoney());
+					investMember.setInvesting(investMember.getInvesting()+t.getMoney());
+					investMemberDao.updateEntity(investMember);
+				}
+				
 				//6、增加理财记录
 				dao.saveEntity(t);
 				//7、生成合同
@@ -194,7 +236,7 @@ public class InvestListServiceImpl implements InvestListService{
 					public void run(){
 						synchronized (this) {
 							//这个loanMembers可以再第1步骤，匹配库存的时候获取到的
-							//Contract.getInstance().createContract(investMember, loanMembers, investList, contractNo, fullPath);
+							//Contract.getInstance().createContract(investMember_c, loanMembers, investList, contractNo, fullPath);
 						}
 					}
 				};
@@ -215,6 +257,19 @@ public class InvestListServiceImpl implements InvestListService{
 		return false;
 	}
 
+	private void createContract(final MemberInfo investMember, List<Map<String, String>> loanMembers, InvestList investList, String contractNo, String fullPath){
+		//7、生成合同
+		Thread thread = new Thread(){
+			@Override
+			public void run(){
+				synchronized (this) {
+					//这个loanMembers可以再第1步骤，匹配库存的时候获取到的
+					//Contract.getInstance().createContract(investMember, loanMembers, investList, contractNo, fullPath);
+				}
+			}
+		};
+		thread.start();
+	}
 
 	/**
 	 * 通过实体对象修改实体数据

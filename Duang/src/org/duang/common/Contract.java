@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Map;
+
 import org.duang.entity.InvestList;
 import org.duang.entity.MemberInfo;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+
 import com.lowagie.text.Cell;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -20,17 +22,38 @@ import com.lowagie.text.Table;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfWriter;
 
-public class Contract {
+public class Contract extends Thread{
+	private MemberInfo investMember;
+	private List<Map<String, String>> loanMembers;
+	private InvestList investList;
+	private String contractNo;
+	private String fullPath;
 	private Contract(){
 	}
+	private Contract(MemberInfo investMember, List<Map<String, String>> loanMembers, InvestList investList, String contractNo, String fullPath){
+		this.investMember = investMember;
+		this.loanMembers = loanMembers;
+		this.investList = investList;
+		this.contractNo = contractNo;
+		this.fullPath = fullPath;
+	}
 	private static Contract instance;  
-	public static Contract getInstance(){
+	public static Contract getInstance(MemberInfo investMember, List<Map<String, String>> loanMembers, InvestList investList, String contractNo, String fullPath){
 		if (instance == null) {  
-			instance = new Contract();  
-		}  
+			instance = new Contract(investMember,loanMembers,investList,contractNo,fullPath);  
+		}
 		return instance;
 	}
-
+	
+	public void run() {  
+		try {
+			createContract();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	/**   
 	 * 创建合同
 	 * @Title: createContract   
@@ -42,7 +65,7 @@ public class Contract {
 	 * @return: void      
 	 * @throws   
 	 */  
-	public synchronized void createContract(MemberInfo investMember, List<Map<String, String>> loanMembers, InvestList investList, String contractNo, String fullPath) throws Exception{
+	public synchronized void createContract() throws Exception{
 		//
 		Document document = new Document(PageSize.A4, 60, 60, 20, 0); 
 		document.addTitle("借贷合同");

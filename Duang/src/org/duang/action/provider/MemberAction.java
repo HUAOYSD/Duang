@@ -14,10 +14,13 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
+import org.duang.entity.FileUpload;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.UploadFile;
 import org.duang.service.MemberInfoService;
+import org.duang.util.ConstantCode;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -98,13 +101,19 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	public void modifyLoginPassword(){
 		boolean success = false;
 		try {
-			if (entity != null && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(getRequest().getParameter("pwd"))) {
+			String pwd = getRequest().getParameter("pwd");
+			String old_pwd = getRequest().getParameter("old_pwd");
+			if (entity != null && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(pwd) && DataUtils.notEmpty(old_pwd)) {
 				MemberInfo memberInfo = service.findEntity("id", entity.getId());
 				if (memberInfo != null) {
-					memberInfo.setPassword(getRequest().getParameter("pwd"));
-					success = service.updateEntity(memberInfo);
-					if(!success){
-						msg = "修改登录密码错误，连接超时";
+					if(!memberInfo.getPassword().equals(old_pwd)){
+						msg = "旧密码不匹配，请重新输入！";
+					}else{
+						memberInfo.setPassword(pwd);
+						success = service.updateEntity(memberInfo);
+						if(!success){
+							msg = "修改登录密码错误，连接超时";
+						}
 					}
 				} else {
 					msg = "未查到该用户";
@@ -176,15 +185,24 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	public void modifyPayPassword(){
 		boolean success = false;
 		try {
-			if (entity != null && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(getRequest().getParameter("pwd"))) {
+			String pwd = getRequest().getParameter("pwd");
+			String old_pwd = getRequest().getParameter("old_pwd");
+			if (entity != null && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(pwd) && DataUtils.notEmpty(old_pwd)) {
 				MemberInfo memberInfo = service.findEntity("id", entity.getId());
 				if (memberInfo != null) {
-					memberInfo.setPayPassword(getRequest().getParameter("pwd"));
-					success = service.updateEntity(memberInfo);
-					if(!success){
-						msg = "修改支付密码错误，连接超时";
+					if(DataUtils.notEmpty(memberInfo.getPayPassword())){
+						if(old_pwd.equals(memberInfo.getPayPassword())){
+							memberInfo.setPayPassword(getRequest().getParameter("pwd"));
+							success = service.updateEntity(memberInfo);
+							if(!success){
+								msg = "修改支付密码错误，连接超时";
+							}
+						}else{
+							msg="旧支付密码不匹配，请重新输入";
+						}
+					}else {
+						msg="未设置过支付密码，不能修改";
 					}
-					
 				} else {
 					msg = "未查到该用户";
 				}
@@ -202,6 +220,49 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		printJsonResult();
 	}
 
+	/**
+	 * 设置支付密码
+	 * @Title: setPayPassword   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月24日 下午2:51:16
+	 * @return: void      
+	 * @throws
+	 */
+	public void setPayPassword(){
+		boolean success = false;
+		try {
+			if (entity != null && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(getRequest().getParameter("pwd"))) {
+				MemberInfo memberInfo = service.findEntity("id", entity.getId());
+				if (memberInfo != null) {
+					if(DataUtils.notEmpty(memberInfo.getPayPassword())){
+						msg = "已设置过支付密码，不能重复设置";
+					}else{
+						memberInfo.setPayPassword(getRequest().getParameter("pwd"));
+						success = service.updateEntity(memberInfo);
+						if(!success){
+							msg = "修改支付密码错误，连接超时";
+						}
+					}
+					
+				} else {
+					msg = "未查到该用户";
+				}
+			}else{
+				msg = "密码不能为空";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction——setPayPassword方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction——setPayPassword方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
 	
 	/**   
 	 * 修改用户名
@@ -249,7 +310,6 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
 	
 	/**   
 	 * 验证用户真实名字和身份证号
