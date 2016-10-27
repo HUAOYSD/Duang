@@ -79,6 +79,8 @@ public class SignAction extends BaseAction<Sign>{
 				jsonObject.put("result", fillDataObjectList(signList));
 				if (signList == null || signList.size() == 0) {
 					msg = "没有查到符合条件的数据";
+				}else{
+					jsonObject.put("totalScore", signList.get(0).getMemberInfo().getUseableScore());
 				}
 			}else{
 				msg = "用户token为空";
@@ -118,6 +120,8 @@ public class SignAction extends BaseAction<Sign>{
 					jsonObject.put("result", fillDataObjectList(signList));
 					if (signList == null || signList.size() == 0) {
 						msg = "没有查到符合条件的数据";
+					}else{
+						jsonObject.put("totalScore", signList.get(0).getMemberInfo().getUseableScore());
 					}
 				}else {
 					msg = "参数无效";
@@ -153,7 +157,6 @@ public class SignAction extends BaseAction<Sign>{
 			for (Sign sign : list) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", sign.getId());
-				map.put("totalScore", sign.getMemberInfo().getUseableScore());
 				map.put("score", sign.getScore());
 				map.put("signDate", DateUtils.date2Str(sign.getSignDate(),"yyyy-MM-dd"));
 				listMap.add(map);
@@ -225,7 +228,9 @@ public class SignAction extends BaseAction<Sign>{
 					success = signService.saveEntity(sign);
 					if(success){
 						//修改总积分
-						sysMemberInfoService.updateMemberInfoScore(memberId, score);
+						success = sysMemberInfoService.updateMemberInfoScore(memberId, score);
+						msg="签到成功";
+						jsonObject.put("score", score);
 					}else{
 						msg = "服务器超时，请稍后重试";
 					}

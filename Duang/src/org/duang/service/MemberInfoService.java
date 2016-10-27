@@ -58,6 +58,6 @@ public interface MemberInfoService extends CommonInterface<MemberInfo>{
 	 * @return: void      
 	 * @throws
 	 */
-	public abstract void updateMemberInfoScore(String memberId,int addScore) throws Exception;
+	public abstract boolean updateMemberInfoScore(String memberId,int addScore) throws Exception;
 
 }

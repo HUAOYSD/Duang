@@ -363,11 +363,11 @@ public class MemberInfoServiceImpl implements MemberInfoService{
 	}
 
 	@Override
-	public void updateMemberInfoScore(String memberId,int addScore) throws Exception {
+	public boolean updateMemberInfoScore(String memberId,int addScore) throws Exception {
 		MemberInfo  memberInfo = findById(memberId);
 		int totalScore = memberInfo.getUseableScore()+addScore;
 		memberInfo.setUseableScore(totalScore);
-		updateEntity(memberInfo);
+		return updateEntity(memberInfo);
 	};
 
 }
