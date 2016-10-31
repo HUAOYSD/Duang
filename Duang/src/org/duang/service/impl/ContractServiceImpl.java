@@ -1,5 +1,7 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -287,5 +289,16 @@ public class ContractServiceImpl implements ContractService{
 	@Override
 	public boolean deleteEntity(Contract t) throws Exception {
 		return dao.deleteEntity(t);
+	}
+
+	@Override
+	public int getContractIndexByYear() throws Exception {
+		//获取今年合同第多少份
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		String sql ="select count(*) from contract where createTime between '"+year+"-01-01 0:00:00' and '"+year+"-12-31 23:59:59'";
+		List<?> contractList = dao.queryBySQL(sql, null, null, false);
+		int contractIndex = ((BigInteger)contractList.get(0)).intValue();
+		return contractIndex;
 	}
 }

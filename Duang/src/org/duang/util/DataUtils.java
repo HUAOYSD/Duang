@@ -181,5 +181,21 @@ public class DataUtils {
 		return string;
 	}
 
+	/**   
+	 * 随机六位数字
+	 * @Title: sixNumber   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author 5y    
+	 * @date 2016年9月19日 上午11:48:33
+	 * @return: String      
+	 * @throws   
+	 */  
+	public static String getContractNo(int index){
+		StringBuffer contractNo = new StringBuffer("BJ-DK-");
+		contractNo.append(DateUtils.getCurrentDate("yyyyMMddHHmmss"));
+		contractNo.append("-"+String.format("%04d", index));
+		return contractNo.toString();
+	}
 }
 

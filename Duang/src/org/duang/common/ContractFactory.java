@@ -22,38 +22,42 @@ import com.lowagie.text.Table;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfWriter;
 
-public class Contract extends Thread{
+public class ContractFactory extends Thread{
 	private MemberInfo investMember;
 	private List<Map<String, String>> loanMembers;
 	private InvestList investList;
 	private String contractNo;
 	private String fullPath;
-	private Contract(){
+	
+	private ContractFactory(){
 	}
-	private Contract(MemberInfo investMember, List<Map<String, String>> loanMembers, InvestList investList, String contractNo, String fullPath){
-		this.investMember = investMember;
-		this.loanMembers = loanMembers;
-		this.investList = investList;
-		this.contractNo = contractNo;
-		this.fullPath = fullPath;
-	}
-	private static Contract instance;  
-	public static Contract getInstance(MemberInfo investMember, List<Map<String, String>> loanMembers, InvestList investList, String contractNo, String fullPath){
-		if (instance == null) {  
-			instance = new Contract(investMember,loanMembers,investList,contractNo,fullPath);  
-		}
+	private static ContractFactory instance;  
+	public static ContractFactory getInstance(MemberInfo investMember, List<Map<String, String>> loanMembers, InvestList investList, String contractNo, String fullPath) throws Exception{
+		instance = new ContractFactory();  
+		instance.setInvestMember(investMember);
+		instance.setLoanMembers(loanMembers);
+		instance.setInvestList(investList);
+		instance.setContractNo(contractNo);
+		instance.setFullPath(fullPath);
 		return instance;
 	}
-	
+	/**
+	 * 执行创建合同
+	 * <p>Title: run</p>   
+	 * <p>Description: </p>  
+	 * @author LiYonghui
+	 * @date 2016年10月28日 下午5:19:09   
+	 * @see java.lang.Thread#run()
+	 */
 	public void run() {  
 		try {
-			createContract();
+			synchronized (this) {
+				createContract();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
 	/**   
 	 * 创建合同
 	 * @Title: createContract   
@@ -79,7 +83,7 @@ public class Contract extends Thread{
 		Font boldFont_Small = new Font(bfChinese, 7, Font.BOLD);
 		Font normalFont = new Font(bfChinese, 7, Font.NORMAL);
 		//
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(fullPath)));
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(fullPath+"\\"+contractNo+".pdf")));
 		writer.setViewerPreferences(PdfWriter.HideMenubar);
 		//
 		document.open();
@@ -293,8 +297,37 @@ public class Contract extends Thread{
 			}
 		}
 		document.add(table);
-
-		//
 		document.close();
 	}
+	public MemberInfo getInvestMember() {
+		return investMember;
+	}
+	public void setInvestMember(MemberInfo investMember) {
+		this.investMember = investMember;
+	}
+	public List<Map<String, String>> getLoanMembers() {
+		return loanMembers;
+	}
+	public void setLoanMembers(List<Map<String, String>> loanMembers) {
+		this.loanMembers = loanMembers;
+	}
+	public InvestList getInvestList() {
+		return investList;
+	}
+	public void setInvestList(InvestList investList) {
+		this.investList = investList;
+	}
+	public String getContractNo() {
+		return contractNo;
+	}
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+	public String getFullPath() {
+		return fullPath;
+	}
+	public void setFullPath(String fullPath) {
+		this.fullPath = fullPath;
+	}
+	
 }

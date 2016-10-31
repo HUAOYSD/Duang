@@ -58,8 +58,6 @@ public class InvestListAction extends BaseAction<InvestList>{
 		this.scaleService = scaleService;
 	}
 
-
-
 	/**   
 	 * 获取首页推荐标信息
 	 * @Title: getHomeRecommendScale   
@@ -125,29 +123,25 @@ public class InvestListAction extends BaseAction<InvestList>{
 		boolean success = false;
 		try {
 			String token = getRequest().getParameter("token");
-			String p_scaleId = getRequest().getParameter("p_scaleId");
-			String p_money = getRequest().getParameter("p_money");
-			String p_useTicket = getRequest().getParameter("p_useTicket");
+			String p_scaleId = DES.decryptDES(getRequest().getParameter("p_scaleId"));
+			String p_money = DES.decryptDES(getRequest().getParameter("p_money"));
+			String p_useTicket = DES.decryptDES(getRequest().getParameter("p_useTicket"));
 
-			String p_ticketBonus = getRequest().getParameter("p_ticketBonus");
-			String p_totalMoney = getRequest().getParameter("p_totalMoney");
+			String p_ticketBonus = DES.decryptDES(getRequest().getParameter("p_ticketBonus"));
+			String p_totalMoney = DES.decryptDES(getRequest().getParameter("p_totalMoney"));
 
-			String investStyle = getRequest().getParameter("investStyle");
+			String investStyle = DES.decryptDES(getRequest().getParameter("investStyle"));
+			
+			/*String p_scaleId = "d3f2efe1b4b24b4fa32927dd72859911";
+			String p_money = "5000";
+			String p_useTicket = "1";
+			String p_ticketBonus = "20";
+			String p_totalMoney = "5020";
+			String investStyle = "3";*/
+			
 			String id = "";
 			//判断参数是否为空
 			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
-
-				InvestList investList = new InvestList();
-				investList.setId(DataUtils.randomUUID());
-				investList.setMoney(Double.parseDouble(DES.decryptDES(p_money)));
-				investList.setUseTicket(Integer.parseInt(DES.decryptDES(p_useTicket)));
-				investList.setTicketBonus(Double.valueOf(DES.decryptDES(p_ticketBonus)));
-				investList.setTotalMoney(Double.parseDouble(DES.decryptDES(p_totalMoney)));
-				investList.setInvestStyle(Integer.parseInt(DES.decryptDES(investStyle)));
-				investList.setScale(new Scale(p_scaleId));
-				investList.setMemberInfo(new MemberInfo(id));
-				success = investListService.saveEntity(investList);
-
 				double money = DataUtils.str2double(p_money, 6);
 				if (DataUtils.isEmpty(p_scaleId)) {
 					msg = "理财标主键传值失败";
@@ -155,29 +149,33 @@ public class InvestListAction extends BaseAction<InvestList>{
 					msg = "投资金额需大于0";
 				}else if (!("1".equals(p_useTicket) || "2".equals(p_useTicket))) {
 					msg = "理财券使用类型出错";
-				}
-				//根据理财标和投资本金计算本金和预期收益和
-				Scale scale = scaleService.findById(DES.decryptDES(p_scaleId));
-				int day = scale.getProduct().getDays();
-				double income = money * (scale.getRevenue() + scale.getRevenueAdd()) / 365D * day;
-				income = DataUtils.str2double(income+"", 6);
-				//封装实体
-				entity = new InvestList(DataUtils.randomUUID());
-				entity.setScale(scale);
-				entity.setMemberInfo(new MemberInfo(id));
-				entity.setMoney(money);
-				entity.setUseTicket(DataUtils.str2int(p_useTicket));
-				entity.setTotalMoney(income + money);
-				entity.setIncome(income);
-				entity.setStatus(Status.S2.getVal());
-				entity.setOpenDate(new Date());
-				String pactNumber = DateUtils.date2Str(new Date(), "MMDDhhmmss") + DataUtils.sixNumber();
-				entity.setPactNumber(pactNumber);
-				entity.setInvestStyle(DataUtils.str2int(investStyle));
-				entity.setDays(day);
-				success = investListService.saveEntity(entity);
-				if(!success){
-					msg = "服务器超时，请稍后重试";
+				}else{
+					//封装理财信息
+					InvestList investList = new InvestList();
+					investList.setId(DataUtils.randomUUID());
+					investList.setMoney(money);
+					investList.setUseTicket(DataUtils.str2int(p_useTicket));
+					investList.setTicketBonus(Double.valueOf(p_ticketBonus));
+					investList.setTotalMoney(Double.parseDouble(p_totalMoney));
+					investList.setInvestStyle(Integer.parseInt(investStyle));
+					investList.setMemberInfo(new MemberInfo(id));
+					//根据理财标和投资本金计算本金和预期收益和
+					//查找理财标
+					Scale scale = scaleService.findById(p_scaleId);
+					//理财天数
+					int day = scale.getProduct().getDays();
+					//收益
+					double income = money * (scale.getRevenue() + scale.getRevenueAdd()) / 365D * day;
+					income = DataUtils.str2double(income+"", 6);
+					investList.setScale(scale);
+					investList.setIncome(income);
+					investList.setStatus(Status.S2.getVal());
+					investList.setOpenDate(new Date());
+					String pactNumber = DateUtils.date2Str(new Date(), "MMDDhhmmss") + DataUtils.sixNumber();
+					investList.setPactNumber(pactNumber);
+					investList.setDays(day);
+					success = investListService.saveEntity(investList);
+					jsonObject.put("loanMembers_id", getRequest().getAttribute("loanMembers"));
 				}
 			}else{
 				msg = "token失效！登录失败";
@@ -192,7 +190,6 @@ public class InvestListAction extends BaseAction<InvestList>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-
 
 	/**   
 	 * 查询理财记录列表
@@ -430,5 +427,4 @@ public class InvestListAction extends BaseAction<InvestList>{
 		}
 		return resultMap;
 	}
-
 }

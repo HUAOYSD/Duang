@@ -18,6 +18,7 @@ import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
 import org.duang.service.BindCardService;
 import org.duang.service.InvestMemberService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -50,7 +51,11 @@ public class BankCardAction extends BaseAction<BindCard>{
 	public void setInvestMemberService(InvestMemberService investMemberService) {
 		this.investMemberService = investMemberService;
 	}
-	
+	MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
+	}
 	/**   
 	 * 查询银行卡列表
 	 * @Title: queryCardList   
@@ -112,8 +117,7 @@ public class BankCardAction extends BaseAction<BindCard>{
 			//判断参数是否为空
 			if(DataUtils.notEmpty(memberid) && DataUtils.notEmpty(p_name)&& DataUtils.notEmpty(p_idcard)&& 
 			DataUtils.notEmpty(p_phone)&& DataUtils.notEmpty(p_bankNo)&& DataUtils.notEmpty(p_openBank)&& DataUtils.notEmpty(p_type)){
-				MemberInfo memberInfo = new MemberInfo();
-				memberInfo.setId(memberid);
+				MemberInfo memberInfo = memberInfoService.findById(memberid);
 				BindCard bindCard = new BindCard();
 				bindCard.setId(DataUtils.randomUUID());
 				bindCard.setBankNo(DES.decryptDES(p_bankNo));

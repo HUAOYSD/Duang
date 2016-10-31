@@ -70,10 +70,13 @@ public class UploadAction extends BaseAction<FileUpload>{
 				MemberInfo memberInfo = sysMemberInfoService.findById(userId);
 				memberInfo.setUserImg(entity.getNewFileName());
 				setUploadPathByType(userId);
+				String temPath = getRequest().getSession().getServletContext().getRealPath("/");
+				entity.setPath(temPath+UploadFile.PATH.getVal(UploadFile.HEAD.getVal(userId)));
 				success = sysMemberInfoService.updateEntity(memberInfo);
 				if (success) {
 					success = upload();
 					msg="设置成功";
+					jsonObject.put("path", UploadFile.PATH.getVal(UploadFile.HEAD.getVal(userId))+entity.getNewFileName());
 				}
 			}
 		} catch (Exception e) {
@@ -236,8 +239,6 @@ public class UploadAction extends BaseAction<FileUpload>{
 			temPath = temPath+UploadFile.PATH.getVal(UploadFile.HOUSE.getVal(id));
 		}else if(type.equals("car")){
 			temPath = temPath+UploadFile.PATH.getVal(UploadFile.CAR.getVal(id));
-		}else if(type.equals("head")){
-			temPath = temPath+UploadFile.PATH.getVal(UploadFile.HEAD.getVal(id));
 		}
 		entity.setPath(temPath);
 		

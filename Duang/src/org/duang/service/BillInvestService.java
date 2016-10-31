@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.duang.baseInterface.CommonInterface;
 import org.duang.entity.BillInvest;
+import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
 
 /**   
@@ -61,5 +62,19 @@ public interface BillInvestService extends CommonInterface<BillInvest>{
 	 * @throws   
 	 */  
 	public abstract boolean updateBill(BillInvest billInvest, InvestMember investMember) throws Exception;
+	
+	/**
+	 * 支付成功之后，产生记录
+	 * @Title: createBill   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param investList
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年10月28日 下午2:50:02
+	 * @return: boolean      
+	 * @throws
+	 */
+	public abstract boolean createBill(InvestList investList)throws Exception;
 
 }

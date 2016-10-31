@@ -11,5 +11,16 @@ import org.duang.entity.Contract;
  * @date 2016年9月18日 上午10:30:58
  */
 public interface ContractService extends CommonInterface<Contract>{
-
+	/**
+	 * 获取今年的合同数目
+	 * @Title: getContractIndexByYear   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年10月28日 下午3:09:20
+	 * @return: int      
+	 * @throws
+	 */
+	public abstract int getContractIndexByYear() throws Exception;
 }

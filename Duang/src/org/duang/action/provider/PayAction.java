@@ -13,11 +13,13 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.BillInvest;
 import org.duang.entity.BindCard;
+import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.billinvest.BillStatus;
 import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
+import org.duang.service.InvestListService;
 import org.duang.service.InvestMemberService;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
@@ -41,6 +43,7 @@ public class PayAction extends BaseAction<BillInvest>{
 
 	private BillInvestService service;
 	private InvestMemberService investMemberService;
+	private InvestListService investListService;
 	@Resource
 	public void setService(BillInvestService service) {
 		this.service = service;
@@ -49,7 +52,10 @@ public class PayAction extends BaseAction<BillInvest>{
 	public void setInvestMemberService(InvestMemberService investMemberService) {
 		this.investMemberService = investMemberService;
 	}
-
+	@Resource
+	public void setInvestListService(InvestListService investListService) {
+		this.investListService = investListService;
+	}
 	/**   
 	 * 充值 <成功回调> 
 	 * @Title: deposit   
@@ -269,9 +275,35 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws   
 	 */  
 	public void payInvest(){
-
+		boolean success = false;
+		try {
+			//String investListId = getRequest().getParameter("p_investListId");
+			//String loanMembers_id = getRequest().getParameter("loanMembers_id");
+			String investListId = "eb59ecf13de8458f8bad06dd93a384a7";
+			String loanMembers_id = "lvbu,7c6cdd66bca3437c8384fae952930d2b";
+			if(DataUtils.notEmpty(investListId) && DataUtils.notEmpty(loanMembers_id)){
+				//获取理财单对象
+				InvestList investList = investListService.findById(investListId);
+				if(investList != null){
+					//4、产生理财订单
+					//4.1、先获取到此人，最后一次billinvest记录，该条记录含有此人最新的余额、总资产数据，新记录的这俩数据，通过这个数据做加减法即可得到
+					success = service.createBill(investList);
+				}else{
+					msg="未查到理财信息";
+				}
+			}else {
+				msg="参数为空";
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("PayAction——payInvest方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("PayAction——payInvest方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
 	}
-
 
 	/**   
 	 * 赎回————理财订单 <成功回调>
@@ -284,7 +316,7 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws   
 	 */  
 	public void redemptiveInvest(){
-
+		
 	}
 
 
