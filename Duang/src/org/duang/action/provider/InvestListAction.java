@@ -126,10 +126,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 			String p_scaleId = DES.decryptDES(getRequest().getParameter("p_scaleId"));
 			String p_money = DES.decryptDES(getRequest().getParameter("p_money"));
 			String p_useTicket = DES.decryptDES(getRequest().getParameter("p_useTicket"));
-
 			String p_ticketBonus = DES.decryptDES(getRequest().getParameter("p_ticketBonus"));
 			String p_totalMoney = DES.decryptDES(getRequest().getParameter("p_totalMoney"));
-
 			String investStyle = DES.decryptDES(getRequest().getParameter("investStyle"));
 			
 			/*String p_scaleId = "d3f2efe1b4b24b4fa32927dd72859911";
@@ -175,7 +173,14 @@ public class InvestListAction extends BaseAction<InvestList>{
 					investList.setPactNumber(pactNumber);
 					investList.setDays(day);
 					success = investListService.saveEntity(investList);
-					jsonObject.put("loanMembers_id", getRequest().getAttribute("loanMembers"));
+					jsonObject.put("name", scale.getName());
+					jsonObject.put("productName", scale.getProduct().getName());
+					jsonObject.put("pactNumber", getRequest().getAttribute("contractNo"));
+					jsonObject.put("memberName", getRequest().getAttribute("memberName"));
+					jsonObject.put("calcBeginTime", DateUtils.date2Str(scale.getCalcBeginTime()));
+					jsonObject.put("money", money);
+					jsonObject.put("profitMoney", income);
+					jsonObject.put("memberIdcard", getRequest().getAttribute("memberIdcard"));
 				}
 			}else{
 				msg = "token失效！登录失败";

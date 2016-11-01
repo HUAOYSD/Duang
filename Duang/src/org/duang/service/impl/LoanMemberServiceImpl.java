@@ -1,5 +1,7 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -281,5 +283,39 @@ public class LoanMemberServiceImpl implements LoanMemberService{
 	 */
 	public List<LoanMember> queryBySQL(String sql,String countsql, PageUtil<LoanMember> page, boolean convert, Object... params) throws Exception{
 		return dao.queryBySQL(sql, countsql, page, convert, params);
+	}
+	
+	/**
+	 * 获取贷款人的信息
+	 * @Title: getLoanMemberInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param loanMembers
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年10月28日 下午4:27:38
+	 * @return: List<Map<String,String>>      
+	 * @throws
+	 */
+	public List<Map<String, String>> getLoanMemberInfobyIds(String loanMembers) throws Exception{
+		String[] loanMemberArray = loanMembers.split(",");
+		StringBuffer sql = new StringBuffer("select mi.real_name,mi.id_card,lm.lend_money from loan_member lm LEFT JOIN member_info mi on lm.member_info_id = mi.id where lm.member_info_id in(");
+		for(int i=0;i<loanMemberArray.length;i++){
+			sql.append("'"+loanMemberArray[i]+"'");
+			if(i<loanMemberArray.length-1){
+				sql.append(",");
+			}
+		}
+		sql.append(")");
+		List<?> loanMemberList = dao.queryBySQL(sql.toString(), null, null, false);
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		for(int i = 0;i<loanMemberList.size();i++){
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("name", String.valueOf(((Object[])loanMemberList.get(i))[0]));
+			map.put("idcard", String.valueOf(((Object[])loanMemberList.get(i))[1]));
+			map.put("money", String.valueOf(((Object[])loanMemberList.get(i))[2]));
+			list.add(map);
+		}
+		return list;
 	}
 }

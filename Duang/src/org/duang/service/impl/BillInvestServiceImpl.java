@@ -1,30 +1,20 @@
 package org.duang.service.impl;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.struts2.ServletActionContext;
 import org.duang.annotation.ServiceLog;
-import org.duang.common.ContractFactory;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.BillInvestDao;
 import org.duang.dao.InvestMemberDao;
-import org.duang.dao.LoanMemberDao;
 import org.duang.entity.BillInvest;
-import org.duang.entity.Contract;
 import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
-import org.duang.entity.MemberInfo;
-import org.duang.enums.If;
-import org.duang.enums.UploadFile;
 import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
-import org.duang.service.ContractService;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -43,26 +33,14 @@ public class BillInvestServiceImpl implements BillInvestService{
 
 	private BillInvestDao dao;
 	private InvestMemberDao investMemberDao;
-	private LoanMemberDao loanMemberDao;
-	private ContractService contractService;
-	
 	@Resource(name="sysinvestmemberdao")
 	public void setInvestMemberDao(InvestMemberDao investMemberDao) {
 		this.investMemberDao = investMemberDao;
-	}
-	@Resource(name="loanmemberdaoimpl")
-	public void setLoanMemberDao(LoanMemberDao loanMemberDao) {
-		this.loanMemberDao = loanMemberDao;
 	}
 	@Resource(name="billinvestdaoimpl")
 	public void setDao(BillInvestDao dao) {
 		this.dao = dao;
 	}
-	@Resource
-	public void setContractService(ContractService contractService) {
-		this.contractService = contractService;
-	}
-	
 	public BillInvestServiceImpl(){
 		LoggerUtils.info("注入BillInvestServiceImpl服务层", this.getClass());
 	}
@@ -407,110 +385,8 @@ public class BillInvestServiceImpl implements BillInvestService{
 			nextBillInvest.setOptTime(new Date());
 			nextBillInvest.setRemark(billInvest.getRemark());
 			success = dao.saveEntity(nextBillInvest);
-			//5、改变资产，改变invest_member中的值，获取值的方式和上面的第4步骤差不多
-			MemberInfo memberInfo = modifyInvestMembers(investList);
-			//7、生成合同
-			//获取loanMember信息
-			String loanMembers_id = ServletActionContext.getRequest().getParameter("loanMembers_id");
-			List<Map<String, String>> loanMembers = getLoanMemberInfo(loanMembers_id);
-			//合同单号
-			String contractNo = String.valueOf(contractService.getContractIndexByYear()+1);
-			//保存合同路径
-			//获取合同的编号
-			String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
-			String fullPath = temPath+UploadFile.PATH.getVal(UploadFile.CONTRACT.getVal());
-			//生成合同
-			ContractFactory contractFactory = ContractFactory.getInstance(memberInfo, loanMembers, investList, DataUtils.getContractNo(DataUtils.str2int(contractNo)), fullPath);
-			contractFactory.start();
-			//保存合同信息
-			success = saveContract(contractFactory);
 		}else{
-			/*BillInvest nextBillInvest = new BillInvest();
-			nextBillInvest.setId(DataUtils.randomUUID());
-			nextBillInvest.setMemberInfo(investList.getMemberInfo());
-			nextBillInvest.setInvestList(investList);
-			nextBillInvest.setUseType(UseType.UT3.getVal());
-			nextBillInvest.setMoney(investList.getMoney());
-			nextBillInvest.setBalance(billInvest.getBalance()-investList.getMoney());
-			nextBillInvest.setAsset(billInvest.getAsset()-investList.getMoney());
-			BindCard bindCard = new BindCard();
-			bindCard.set
-			nextBillInvest.setBindCard(investList.getMemberInfo().getIdCard());
-			nextBillInvest.setOptTime(new Date());
-			nextBillInvest.setRemark(billInvest.getRemark());
-			success = billInvestDao.saveEntity(nextBillInvest);*/
 		}
 		return success;
-	}
-	
-	/**
-	 * 订单产生以后，修改理财用户的余额和投资金额等。
-	 * @Title: modifyInvestMembers   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param investList
-	 * @param: @param memberInfo
-	 * @param: @return
-	 * @param: @throws Exception  
-	 * @author LiYonghui    
-	 * @date 2016年10月28日 下午1:52:51
-	 * @return: boolean      
-	 * @throws
-	 */
-	private synchronized MemberInfo modifyInvestMembers(InvestList investList) throws Exception{
-		MemberInfo memberInfo = null;
-		List<InvestMember> investMembers = investMemberDao.queryEntity("memberInfo.id", investList.getMemberInfo().getId(), null, null);
-		if(DataUtils.notEmpty(investMembers)){
-			InvestMember investMember = investMembers.get(0);
-			investMember.setBalance(investMember.getBalance()-investList.getMoney());
-			investMember.setInvesting(investMember.getInvesting()+investList.getMoney());
-			investMemberDao.updateEntity(investMember);
-			memberInfo = investMember.getMemberInfo();
-		}
-		return memberInfo;
-	}
-	
-	/**
-	 * 获取贷款人的信息
-	 * @Title: getLoanMemberInfo   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param loanMembers
-	 * @param: @return
-	 * @param: @throws Exception  
-	 * @author LiYonghui    
-	 * @date 2016年10月28日 下午4:27:38
-	 * @return: List<Map<String,String>>      
-	 * @throws
-	 */
-	private List<Map<String, String>> getLoanMemberInfo(String loanMembers) throws Exception{
-		String[] loanMemberArray = loanMembers.split(",");
-		StringBuffer sql = new StringBuffer("select mi.real_name,mi.id_card,lm.lend_money from loan_member lm LEFT JOIN member_info mi on lm.member_info_id = mi.id where lm.member_info_id in(");
-		for(int i=0;i<loanMemberArray.length;i++){
-			sql.append("'"+loanMemberArray[i]+"'");
-			if(i<loanMemberArray.length-1){
-				sql.append(",");
-			}
-		}
-		sql.append(")");
-		List<?> loanMemberList = loanMemberDao.queryBySQL(sql.toString(), null, null, false);
-		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
-		for(int i = 0;i<loanMemberList.size();i++){
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("name", String.valueOf(((Object[])loanMemberList.get(i))[0]));
-			map.put("idcard", String.valueOf(((Object[])loanMemberList.get(i))[1]));
-			map.put("money", String.valueOf(((Object[])loanMemberList.get(i))[2]));
-			list.add(map);
-		}
-		return list;
-	}
-	
-	private boolean  saveContract(ContractFactory contractFactory) throws Exception{
-		//保存合同
-		Contract contract = new Contract();
-		contract.setId(DataUtils.randomUUID());
-		contract.setName(contractFactory.getContractNo()+".pdf");
-		contract.setConPath(UploadFile.PATH.getVal(UploadFile.CONTRACT.getVal())+"\\"+contractFactory.getContractNo()+".pdf");
-		contract.setCreateTime(new Date());
-		contract.setState(If.If1.getVal());
-		return contractService.saveEntity(contract);
 	}
 }
