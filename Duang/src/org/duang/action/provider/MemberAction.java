@@ -1,8 +1,10 @@
 package org.duang.action.provider;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -17,10 +19,17 @@ import org.duang.common.system.MemberCollection;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.If;
+import org.duang.enums.ResultCode;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.duang.util.MD5Utils;
+import org.duang.util.ReadProperties;
+import org.duang.util.SSLClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -40,7 +49,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 public class MemberAction extends BaseAction<MemberInfo>{
 	
 	private MemberInfoService service;
-
 	@Resource
 	public void setService(MemberInfoService service) {
 		this.service = service;
@@ -556,6 +564,161 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			LoggerUtils.error("封装理财用户错误：" + e.getLocalizedMessage(), this.getClass());
 		}
 		return listMap;
+	}
+	
+	/**
+	 * 实名认证结果
+	 * @Title: realNameCertification   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月2日 上午11:38:10
+	 * @return: void      
+	 * @throws
+	 */
+	public void realNameAuthCallback(){
+		try{
+			boolean success=false;
+			//读取配置文件中
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			String requestId = getRequest().getParameter("requestId");
+			String result = getRequest().getParameter("result");
+			String status = getRequest().getParameter("status");
+			String userName = getRequest().getParameter("userName");
+			String idNumber = getRequest().getParameter("idNumber");
+			String payType = getRequest().getParameter("payType");
+			String merBizRequestId = getRequest().getParameter("merBizRequestId");
+			String signature = getRequest().getParameter("signature");
+			StringBuffer signatureStr = new StringBuffer();
+			signatureStr.append(requestId);
+			signatureStr.append(result);
+			signatureStr.append(status);
+			signatureStr.append(userName);
+			signatureStr.append(idNumber);
+			signatureStr.append(payType);
+			signatureStr.append(merBizRequestId);
+			//获取返回数据的加密数据用于与签名校验
+			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			if(signature.equals(dataSign)){
+				//请求成功
+				if(result.equals(ResultCode.SUCCESS.getVal())){
+					//0表示身份证与姓名一致
+					if(status.equals(If.If0.getVal())){
+						success = true;
+					}else{ //不一致
+						LoggerUtils.error("流程号："+requestId+" 实名制流程，姓名和身份证号不一致",this.getClass());
+					}
+				}else if(result.equals(ResultCode.Doing.getVal())){
+					success = queryRealNameAuth(properties,userName,idNumber);
+				}else{
+					LoggerUtils.error("流程号："+requestId+"------"+ReadProperties.getStringValue(properties, result),this.getClass());
+				}
+			}else {
+				//签名不匹配
+				LoggerUtils.error("流程号："+requestId+" 实名制流程，签名不一致",this.getClass());
+			}
+			
+			if(success){
+				realNameAuthMemberInfo(requestId,userName,idNumber,payType);
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getLocalizedMessage(), this.getClass());
+		}
+		
+	}
+	
+	/**
+	 * 实名认证更新数据库
+	 * @Title: realNameAuthMemberInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param requestId
+	 * @param: @param userName
+	 * @param: @param idNumber
+	 * @param: @param payType
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月3日 下午2:33:54
+	 * @return: void      
+	 * @throws
+	 */
+	private void realNameAuthMemberInfo(String requestId,String userName,String idNumber,String payType) throws Exception{
+		//身份证与姓名一致,进行修改用户表
+		MemberInfo memberInfo = service.findEntity("requestId", requestId);
+		memberInfo.setIdCard(idNumber);
+		memberInfo.setRealName(userName);
+		memberInfo.setPayType(payType);
+		service.updateEntity(memberInfo);
+	}
+	
+	/**
+	 * 判断是否实名认证
+	 * @Title: queryRealNameAuth   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param properties
+	 * @param: @param userName
+	 * @param: @param idNumber
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月3日 下午2:33:10
+	 * @return: boolean      
+	 * @throws
+	 */
+	private boolean  queryRealNameAuth(Properties properties, String userName,String idNumber) throws Exception{
+		boolean success = false;
+		//请求受理成功，正在处理，需要主动查询
+		String urlStr = ReadProperties.getStringValue(properties, "realNameAuthURL");
+		//商户号
+		String merchantCode = ReadProperties.getStringValue(properties, "merchantCode");
+		//秘钥
+		String akey = ReadProperties.getStringValue(properties, "akey");
+		//生成一个流水号
+		String self_requestId = DataUtils.randomUUID();
+		//起始时间和截止时间
+		String eDate = DateUtils.getCurrentDate("yyyyMMdd");
+		String sDate = DateUtils.date2Str(new Date(DateUtils.getTimeStamp(DateUtils.str2Date(eDate))-(29*24*3600*1000)), "yyyyMMdd");
+		//数字签名字符串
+		StringBuffer signatureBuffer = new StringBuffer();
+		signatureBuffer.append(self_requestId+merchantCode+userName+idNumber+1+sDate+eDate);
+		//加密后的数字签名
+		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
+		//封装map参数
+		Map<String,String> map = new HashMap<String, String>();
+		map.put("requestId",self_requestId);
+		map.put("merchantCode",merchantCode);
+		map.put("userName",userName);
+		map.put("idNumber",idNumber);
+		map.put("pageNo","1");
+		map.put("sDate",DateUtils.getCurrentDate("yyyyMMdd"));
+		map.put("eDate",DateUtils.getCurrentDate("yyyyMMdd"));
+		map.put("signature",signature_sign);
+		//获取转换的参数
+		JSONObject jsonObject = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
+		//result 查询结果  00000代表成功
+		String resultCallbace = jsonObject.get("result").toString();
+		if(resultCallbace.equals(ResultCode.SUCCESS)){
+			JSONArray jsonArray = (JSONArray)jsonObject.get("authList");
+			//如果length>0说明查出来人员，否则未查出用户
+			if(jsonArray.length()>0){
+				//有可能存在多个，获取第一个就可以了
+				JSONObject authListObject = (JSONObject)jsonArray.get(0);
+				String authResult = authListObject.get("authResult").toString();
+				//authResult 等于0表示认证成功，1表示认证失败
+				if(authResult.equals(String.valueOf(If.If0.getVal()))){
+					success = true;
+				}else{
+					LoggerUtils.error("流程号："+self_requestId+"------"+"认证失败,原因："+authListObject.get("failReason").toString()+",认证时间："+authListObject.get("authTime").toString(),this.getClass());
+				}
+			}else{
+				LoggerUtils.error("流程号："+self_requestId+"------"+"认证失败,原因：未查出该用户",this.getClass());
+			}
+		}else{
+			LoggerUtils.error("流程号："+self_requestId+"------"+"认证失败,原因："+ReadProperties.getStringValue(properties, resultCallbace),this.getClass());
+		}
+		return success;
 	}
 	
 }

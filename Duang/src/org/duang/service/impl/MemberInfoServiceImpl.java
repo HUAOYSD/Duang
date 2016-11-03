@@ -304,13 +304,19 @@ public class MemberInfoServiceImpl implements MemberInfoService{
 		String investCarSQL ="select sum(il.money) as carInvest from invest_list il left join scale sce on sce.id=il.scale_id left join product prc on prc.id=sce.product_id where prc.category=1 and il.member_info="+id;
 		String investHouseSQL ="select sum(il.money) as houseInvest from invest_list il left join scale sce on sce.id=il.scale_id left join product prc on prc.id=sce.product_id where prc.category=2 and il.member_info="+id;
 		String creditInvestSQL ="select sum(il.money) as creditInvest from invest_list il left join scale sce on sce.id=il.scale_id left join product prc on prc.id=sce.product_id where prc.category=3 and il.member_info="+id;
-	
+		//投资总额
+		String investMoneySQL ="select investing from invest_member where memberinfo_id="+id;
+		//借款总额、逾期总额
+		String loanMoneySQL ="select lend_money,expect_money from loan_member where member_info_id="+id;
+		
 		List<MemberInfo> loanCarlist = dao.queryBySQL(loanCarSQL, null, null, false);
 		List<MemberInfo> loanHouselist = dao.queryBySQL(loanHouseSQL, null, null, false);
 		List<MemberInfo> creditLoanlist = dao.queryBySQL(creditLoanSQL, null, null, false);
 		List<MemberInfo> investCarlist = dao.queryBySQL(investCarSQL, null, null, false);
 		List<MemberInfo> investHouselist = dao.queryBySQL(investHouseSQL, null, null, false);
 		List<MemberInfo> creditInvestlist = dao.queryBySQL(creditInvestSQL, null, null, false);
+		List<MemberInfo> investMoneylist = dao.queryBySQL(investMoneySQL, null, null, false);
+		List<MemberInfo> loanMoneylist = dao.queryBySQL(loanMoneySQL, null, null, false);
 		
 		map.put("carLoan",loanCarlist==null?0:loanCarlist.get(0));
 		map.put("houseLoan",loanCarlist==null?0:loanHouselist.get(0));
@@ -318,6 +324,9 @@ public class MemberInfoServiceImpl implements MemberInfoService{
 		map.put("carInvest",loanCarlist==null?0:investCarlist.get(0));
 		map.put("houseInvest",loanCarlist==null?0:investHouselist.get(0));
 		map.put("creditInvest",loanCarlist==null?0:creditInvestlist.get(0));
+		map.put("investMoney",loanCarlist==null?0:investMoneylist.get(0));
+		map.put("lendMoney",loanCarlist==null?0:loanMoneylist.get(0));
+		map.put("expectMoney",loanCarlist==null?0:loanMoneylist.get(1));
 		return map;
 	}
 	

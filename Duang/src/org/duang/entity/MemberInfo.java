@@ -55,6 +55,12 @@ public class MemberInfo implements java.io.Serializable {
 	private String myQr;
 	private int registerStyle;
 	private int useableScore;
+	
+	private int isAuth;
+	private String payType;
+	private String token;
+	private String requestId;
+	
 	private Set<MemberExtraInfo> memberExtraInfos = new HashSet<MemberExtraInfo>(0);
 	private Set<Friends> friendsesForTarget = new HashSet<Friends>(0);
 	private Set<Friends> friendsesForSelf = new HashSet<Friends>(0);
@@ -571,9 +577,40 @@ public class MemberInfo implements java.io.Serializable {
 	public int getUseableScore() {
 		return this.useableScore;
 	}
-
 	public void setUseableScore(int useableScore) {
 		this.useableScore = useableScore;
+	}
+	
+	@Column(name = "is_auth")
+	public int getIsAuth() {
+		return isAuth;
+	}
+	public void setIsAuth(int isAuth) {
+		this.isAuth = isAuth;
+	}
+
+	@Column(name = "payType")
+	public String getPayType() {
+		return payType;
+	}
+	public void setPayType(String payType) {
+		this.payType = payType;
+	}
+
+	@Column(name = "token",length=50)
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	@Column(name = "requestId",length=50)
+	public String getRequestId() {
+		return requestId;
+	}
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
