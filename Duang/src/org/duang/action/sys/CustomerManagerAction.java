@@ -238,7 +238,7 @@ public class CustomerManagerAction extends BaseAction<CustomerManager> {
 				memberInfo.setCustomerManager(entity);
 				
 				//理财会员
-				InvestMember investMember = new InvestMember(DataUtils.randomUUID(), memberInfo, 0, 0, 0, 0, 0, 0);
+				InvestMember investMember = new InvestMember(DataUtils.randomUUID(), memberInfo, 0, 0, 0, 0, 0, 0,0);
 				memberInfo.getInvestMembers().add(investMember);
 				//投资会员
 				LoanMember loanMember = new LoanMember(DataUtils.randomUUID(), memberInfo, 0, 0, 0, 0, 0);

@@ -603,7 +603,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				//请求成功
 				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//0表示身份证与姓名一致
-					if(status.equals(If.If0.getVal())){
+					if(status.equals(String.valueOf(If.If0.getVal()))){
 						success = true;
 					}else{ //不一致
 						LoggerUtils.error("流程号："+requestId+" 实名制流程，姓名和身份证号不一致",this.getClass());
