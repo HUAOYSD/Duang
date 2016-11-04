@@ -64,7 +64,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 				entity = service.findEntity("phone", phone);
 				if (entity != null) {
 					if (pwd.equals(entity.getPassword())) {
-						String token = DataUtils.randomUUID();
+						String token = entity.getToken();
 						fillMemberInfo(token);
 						JSONObject resultjson = new JSONObject();
 						resultjson.put("pd", jsonObject.optString("pd"));
@@ -111,6 +111,12 @@ public class LoginAction extends BaseAction<MemberInfo>{
 			String token = getRequest().getParameter("token"), pwd = getRequest().getParameter("pwd");
 			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(pwd)) {
 				String pd = MemberCollection.getInstance().getField(token, "pd");
+				if (DataUtils.isEmpty(pd)) {
+					MemberInfo memberInfo = service.findEntity("token", token);
+					if (memberInfo!=null) {
+						pd = memberInfo.getPassword();
+					}
+				}
 				if (DataUtils.notEmpty(pd)) {
 					if (pwd.equals(pd)) {
 						entity = service.findById(MemberCollection.getInstance().getMainField(token));
