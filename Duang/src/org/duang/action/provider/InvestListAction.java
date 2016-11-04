@@ -3,6 +3,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -19,6 +20,7 @@ import org.duang.entity.Product;
 import org.duang.entity.Scale;
 import org.duang.enums.If;
 import org.duang.enums.Platform;
+import org.duang.enums.ResultCode;
 import org.duang.enums.invest.Status;
 import org.duang.enums.invest.TurnStatus;
 import org.duang.enums.invest.UseTicket;
@@ -28,6 +30,8 @@ import org.duang.service.ScaleService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.duang.util.MD5Utils;
+import org.duang.util.ReadProperties;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -432,4 +436,97 @@ public class InvestListAction extends BaseAction<InvestList>{
 		}
 		return resultMap;
 	}
+	
+	/**
+	 * 丰付投标回调
+	 * @Title: investFFCallback   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月3日 下午7:32:03
+	 * @return: void      
+	 * @throws
+	 */
+	public void investFFCallback(){
+		try{
+			boolean success=false;
+			//读取配置文件中
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			String requestId = getRequest().getParameter("requestId");
+			String result = getRequest().getParameter("result");
+			//投标金额
+			String sum = getRequest().getParameter("sum");
+			//第三方用户标识
+			String userIdIdentity = getRequest().getParameter("userIdIdentity");
+			//项目编号
+			String projectCode = getRequest().getParameter("projectCode");
+			//项目投资金额
+			String investmentSum = getRequest().getParameter("investmentSum");
+			//红包金额
+			String giftSum = getRequest().getParameter("giftSum");
+			//项目总额
+			String projectSum = getRequest().getParameter("projectSum");
+			//剩余可投金额
+			String remainInvestmentSum = getRequest().getParameter("remainInvestmentSum");
+			
+			String signature = getRequest().getParameter("signature");
+			
+			LoggerUtils.info(requestId+";"+result+";"+sum+";"+userIdIdentity+";"+projectCode+";"+investmentSum+";"+giftSum+";"+projectSum+";"+remainInvestmentSum, this.getClass());
+			LoggerUtils.info("---------------------------"+signature, this.getClass());
+			StringBuffer signatureStr = new StringBuffer();
+			signatureStr.append(requestId);
+			signatureStr.append(result);
+			signatureStr.append(sum);
+			signatureStr.append(userIdIdentity);
+			//获取返回数据的加密数据用于与签名校验
+			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			LoggerUtils.info("dataSign---------------------------"+dataSign, this.getClass());
+			if(signature.equals(dataSign)){
+				//请求成功
+				if(result.equals(ResultCode.SUCCESS.getVal())){
+					//修改标等信息
+					InvestList investList = new InvestList();
+					investList.setId(DataUtils.randomUUID());
+					investList.setMoney(DataUtils.str2double(sum, 6));
+					investList.setUseTicket(1);
+					investList.setTotalMoney(0);
+					investList.setInvestStyle(4);
+					investList.setGiftSum(DataUtils.str2double(giftSum, 6));
+					investList.setMemberInfo(new MemberInfo(userIdIdentity));
+					//根据理财标和投资本金计算本金和预期收益和
+					//查找理财标
+					Scale scale = scaleService.findById(projectCode);
+					scale.setTotalMoney(DataUtils.str2double(projectSum, 6));
+					scale.setResidueMoney(DataUtils.str2double(remainInvestmentSum, 6));
+					scale.setYetMoney(scale.getYetMoney()+DataUtils.str2double(sum, 6));
+					scaleService.updateEntity(scale);
+					
+					//理财天数
+					int day = scale.getProduct().getDays();
+					//收益
+					double income = DataUtils.str2double(sum, 6) * (scale.getRevenue() + scale.getRevenueAdd()) / 365D * day;
+					income = DataUtils.str2double(income+"", 6);
+					investList.setScale(scale);
+					investList.setIncome(income);
+					investList.setStatus(Status.S2.getVal());
+					investList.setOpenDate(new Date());
+					String pactNumber = DateUtils.date2Str(new Date(), "MMDDhhmmss") + DataUtils.sixNumber();
+					investList.setPactNumber(pactNumber);
+					investList.setDays(day);
+					success = investListService.saveEntity(investList);
+				}else{
+					LoggerUtils.error("流程号："+requestId+"------"+ReadProperties.getStringValue(properties, result),this.getClass());
+				}
+			}else {
+				//签名不匹配
+				LoggerUtils.error("流程号："+requestId+" 实名制流程，签名不一致",this.getClass());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getLocalizedMessage(), this.getClass());
+		}
+		
+	}
+	
 }

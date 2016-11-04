@@ -589,6 +589,8 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String payType = getRequest().getParameter("payType");
 			String merBizRequestId = getRequest().getParameter("merBizRequestId");
 			String signature = getRequest().getParameter("signature");
+			LoggerUtils.info(requestId+";"+result+";"+status+";"+userName+";"+idNumber+";"+payType+";"+merBizRequestId, this.getClass());
+			LoggerUtils.info("---------------------------"+signature, this.getClass());
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
 			signatureStr.append(result);
@@ -599,6 +601,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			signatureStr.append(merBizRequestId);
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			LoggerUtils.info("dataSign---------------------------"+dataSign, this.getClass());
 			if(signature.equals(dataSign)){
 				//请求成功
 				if(result.equals(ResultCode.SUCCESS.getVal())){
@@ -650,6 +653,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		memberInfo.setIdCard(idNumber);
 		memberInfo.setRealName(userName);
 		memberInfo.setPayType(payType);
+		memberInfo.setIsAuth(If.If1.getVal());
 		service.updateEntity(memberInfo);
 	}
 	
