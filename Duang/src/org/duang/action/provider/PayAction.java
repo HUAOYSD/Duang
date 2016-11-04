@@ -327,6 +327,9 @@ public class PayAction extends BaseAction<BillInvest>{
 			String name = getRequest().getParameter("name");
 			String signature = getRequest().getParameter("signature");
 			
+			LoggerUtils.info(requestId+";"+result+";"+sum+";"+userIdIdentity+";"+unsettledBalance+";"+userBalance+";"+withdrawableBalance+";"+frozenBalance+";"+name, this.getClass());
+			LoggerUtils.info("---------------------------"+signature, this.getClass());
+			
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
 			signatureStr.append(result);
@@ -335,6 +338,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			signatureStr.append(userBalance);
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			LoggerUtils.info("---------------------------"+dataSign, this.getClass());
 			if(dataSign.equals(signature)){
 				if(result.equals(ResultCode.SUCCESS)){
 					//修改数据库

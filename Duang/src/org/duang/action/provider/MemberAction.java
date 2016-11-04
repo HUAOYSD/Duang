@@ -1,4 +1,7 @@
 package org.duang.action.provider;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -578,6 +581,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 */
 	public void realNameAuthCallback(){
 		try{
+			//getRequest().setCharacterEncoding("GBK");
 			boolean success=false;
 			//读取配置文件中
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
@@ -585,11 +589,21 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String result = getRequest().getParameter("result");
 			String status = getRequest().getParameter("status");
 			String userName = getRequest().getParameter("userName");
+			LoggerUtils.info("----------new String(getRequest().getParameter(name).getBytes(iso-8859-1),gbk)"+new String(getRequest().getParameter("userName").getBytes("GBK"),"GBK"), this.getClass());
+			LoggerUtils.info("----------new String(getRequest().getParameter(name).getBytes(iso-8859-1),gbk)"+new String(getRequest().getParameter("userName").getBytes("iso-8859-1"),"GBK"), this.getClass());
+			LoggerUtils.info("----------URLEncoder.encode(getRequest().getParameter(userName), gbk)"+URLEncoder.encode(getRequest().getParameter("userName"), "GBK"), this.getClass());
+			LoggerUtils.info("----------URLDecoder.decode(getRequest().getParameter(userName), gbk)"+URLDecoder.decode(getRequest().getParameter("userName"), "GBK"), this.getClass());
+			
+			LoggerUtils.info("----------new String(getRequest().getParameter(userName).getBytes(gbk),utf-8)"+new String(getRequest().getParameter("userName").getBytes("GBK"),"utf-8"), this.getClass());
+			LoggerUtils.info("----------new String(getRequest().getParameter(userName).getBytes(iso-8859-1),utf-8)"+new String(getRequest().getParameter("userName").getBytes("iso-8859-1"),"utf-8"), this.getClass());
+			LoggerUtils.info("----------URLEncoder.encode(getRequest().getParameter(userName), utf-8)"+URLEncoder.encode(getRequest().getParameter("userName"), "utf-8"), this.getClass());
+			LoggerUtils.info("----------URLDecoder.decode(getRequest().getParameter(userName), utf-8)"+URLDecoder.decode(getRequest().getParameter("userName"), "utf-8"), this.getClass());
+			
 			String idNumber = getRequest().getParameter("idNumber");
 			String payType = getRequest().getParameter("payType");
 			String merBizRequestId = getRequest().getParameter("merBizRequestId");
 			String signature = getRequest().getParameter("signature");
-			LoggerUtils.info(requestId+";"+result+";"+status+";"+userName+";"+idNumber+";"+payType+";"+merBizRequestId, this.getClass());
+			LoggerUtils.info("----实名认证"+requestId+";"+result+";"+status+";"+userName+";"+idNumber+";"+payType+";"+merBizRequestId, this.getClass());
 			LoggerUtils.info("---------------------------"+signature, this.getClass());
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
