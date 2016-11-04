@@ -11,5 +11,12 @@ import org.duang.entity.InvestList;
  * @date 2016年8月12日 下午4:29:43      
  */  
 public interface InvestListService extends CommonInterface<InvestList>{
-
+	
+	/**
+	 * 提前赎回成功后的回调
+	 * @param id
+	 * @return
+	 */
+	public abstract boolean ransomed(String id, double income) throws Exception;
+	
 }
