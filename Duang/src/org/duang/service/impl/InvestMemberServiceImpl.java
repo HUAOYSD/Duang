@@ -8,8 +8,11 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.InvestMemberDao;
+import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
+import org.duang.entity.MemberInfo;
 import org.duang.service.InvestMemberService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -281,5 +284,31 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	 */
 	public List<InvestMember> queryBySQL(String sql,String countsql, PageUtil<InvestMember> page, boolean convert, Object... params) throws Exception{
 		return dao.queryBySQL(sql, countsql, page, convert, params);
+	}
+	
+	/**
+	 * 订单产生以后，修改理财用户的余额和投资金额等。
+	 * @Title: modifyInvestMembers   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param investList
+	 * @param: @param memberInfo
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年10月28日 下午1:52:51
+	 * @return: boolean      
+	 * @throws
+	 */
+	public MemberInfo modifyInvestMembersBalance(InvestList investList) throws Exception{
+		MemberInfo memberInfo = null;
+		List<InvestMember> investMembers = dao.queryEntity("memberInfo.id", investList.getMemberInfo().getId(), null, null);
+		if(DataUtils.notEmpty(investMembers)){
+			InvestMember investMember = investMembers.get(0);
+			investMember.setBalance(investMember.getBalance()-investList.getMoney());
+			investMember.setInvesting(investMember.getInvesting()+investList.getMoney());
+			dao.updateEntity(investMember);
+			memberInfo = investMember.getMemberInfo();
+		}
+		return memberInfo;
 	}
 }

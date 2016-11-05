@@ -1,51 +1,42 @@
-package org.duang.service.impl;
+package org.duang.dao.impl; 
+
 import java.io.Serializable;
-import java.math.BigInteger;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.ContractDao;
-import org.duang.entity.Contract;
-import org.duang.entity.InvestMember;
-import org.duang.service.ContractService;
+import org.duang.dao.SMSVerificationCodeDao;
+import org.duang.dao.base.BaseDao;
+import org.duang.entity.SMSVerificationCode;
 import org.duang.util.PageUtil;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
+
 
 /**
- * 合同业务层实现类
- * @ClassName:  ContractServiceImpl   
+ * 短信验证码
+ * @ClassName:  SMSVerificationCodeDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
- * @date 2016年9月18日 上午10:31:52
+ * @date 2016年10月24日 下午4:39:59
  */
-@ServiceLog(ModelName="合同")
-@Service(value="contractserviceimpl")
-public class ContractServiceImpl implements ContractService{
+@Repository("smsverificationcodedaoimpl")
+public class SMSVerificationCodeDaoImpl extends BaseDao<SMSVerificationCode> implements SMSVerificationCodeDao{
 
-	private ContractDao dao;
 
-	@Resource(name="contractdaoimpl")
-	public void setDao(ContractDao dao) {
-		this.dao = dao;
+	public SMSVerificationCodeDaoImpl(){
+		LoggerUtils.info("注入SMSVerificationCodeDaoImpl层", this.getClass());
 	}
 
-	public ContractServiceImpl(){
-		LoggerUtils.info("注入ContractServiceImpl服务层", this.getClass());
-	}
-	
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
 	 */
 	public int count() throws Exception{
-		return dao.count();
+		return super.count();
 	}
+
 
 	/**
 	 * 计数总数全部
@@ -54,7 +45,7 @@ public class ContractServiceImpl implements ContractService{
 	 * @return 			    计数值
 	 */
 	public int count(String properties, Object value) throws Exception{
-		return dao.count(properties, value);
+		return super.count(properties, value);
 	}
 
 
@@ -65,7 +56,8 @@ public class ContractServiceImpl implements ContractService{
 	 * @return 			    计数值
 	 */
 	public int count(List<String> properties,List<Object> values) throws Exception{
-		return dao.count(properties, values);
+		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
+		return super.countByDetachedCriteria(detachedCriteria);
 	}
 
 
@@ -74,8 +66,8 @@ public class ContractServiceImpl implements ContractService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Contract> queryAllEntity(Order order) throws Exception {
-		return dao.queryAllEntity(order);
+	public List<SMSVerificationCode> queryAllEntity(Order order) throws Exception {
+		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
 
@@ -84,8 +76,8 @@ public class ContractServiceImpl implements ContractService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Contract> queryAllEntity(PageUtil<Contract> page, Order order) throws Exception{
-		return dao.queryAllEntity(page, order);
+	public List<SMSVerificationCode> queryAllEntity(PageUtil<SMSVerificationCode> page, Order order) throws Exception{
+		return super.queryAll(page, order);
 	}
 
 
@@ -96,8 +88,8 @@ public class ContractServiceImpl implements ContractService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Contract> queryEntity(String field, Object value, PageUtil<Contract> page, Order order) throws Exception{
-		return dao.queryEntity(field, value, page, order);
+	public List<SMSVerificationCode> queryEntity(String field, Object value, PageUtil<SMSVerificationCode> page, Order order) throws Exception{
+		return super.query(field, value, page, order);
 	}
 
 
@@ -108,8 +100,9 @@ public class ContractServiceImpl implements ContractService{
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<Contract> queryEntity(List<String> properties, List<Object> values, PageUtil<Contract> page) throws Exception{
-		return dao.queryEntity(properties, values, page);
+	public List<SMSVerificationCode> queryEntity(List<String> properties, List<Object> values, PageUtil<SMSVerificationCode> page) throws Exception{
+		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
+		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
 
 
@@ -118,8 +111,8 @@ public class ContractServiceImpl implements ContractService{
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public Contract findById(Serializable id) throws Exception{
-		return dao.findById(id);
+	public SMSVerificationCode findById(Serializable id) throws Exception{
+		return super.find(id);
 	}
 
 
@@ -128,8 +121,9 @@ public class ContractServiceImpl implements ContractService{
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(Contract t) throws Exception{
-		return dao.saveEntity(t);
+	public boolean saveEntity(SMSVerificationCode t) throws Exception{
+		super.save(t);
+		return true;
 	}
 
 
@@ -138,8 +132,9 @@ public class ContractServiceImpl implements ContractService{
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(Contract t) throws Exception{
-		return dao.updateEntity(t);
+	public boolean updateEntity(SMSVerificationCode t) throws Exception{
+		super.update(t);
+		return true;
 	}
 
 
@@ -148,8 +143,9 @@ public class ContractServiceImpl implements ContractService{
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(InvestMember t) throws Exception{
-		return dao.deleteEntity(t);
+	public boolean deleteEntity(SMSVerificationCode t) throws Exception{
+		super.delete(t);
+		return true;
 	}
 
 
@@ -159,19 +155,21 @@ public class ContractServiceImpl implements ContractService{
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Serializable id) throws Exception{
-		return dao.deleteEntity(id);
+		super.delete(id);
+		return true;
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
-		return dao.deleteEntity(map);
+		super.delete(map);
+		return true;
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -179,7 +177,7 @@ public class ContractServiceImpl implements ContractService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql) throws Exception{
-		return dao.executeSql(sql);
+		return super.executeBySql(sql) >= 1;
 	}
 
 
@@ -189,7 +187,7 @@ public class ContractServiceImpl implements ContractService{
 	 * @return     是否执行成功
 	 */
 	public boolean executeSql(String sql,Object... params) throws Exception{
-		return dao.executeSql(sql,params);
+		return super.executeBySql(sql,params) >= 1;
 	}
 
 
@@ -199,8 +197,13 @@ public class ContractServiceImpl implements ContractService{
 	 * @return      是否执行成功
 	 */
 	public boolean executeSql(List<String> sqls) throws Exception{
-		return dao.executeSql(sqls);
-	}	
+		if (sqls!=null && sqls.size()>0) {
+			for (String string : sqls) {
+				super.executeBySql(string);
+			}
+		}
+		return true;
+	}
 
 
 	/**
@@ -209,7 +212,7 @@ public class ContractServiceImpl implements ContractService{
 	 * @return   是否删除成功
 	 */
 	public boolean deleteEntity(String property, Object val) throws Exception{
-		return dao.deleteEntity(property, val);
+		return super.delete(property, val) >= 1;
 	}
 
 
@@ -222,7 +225,7 @@ public class ContractServiceImpl implements ContractService{
 	 * @throws Exception
 	 */
 	public boolean updateEntity(Map<String, Object> datas, String property, Object value) throws Exception{
-		return dao.updateEntity(datas, property, value);
+		return super.update(datas, property, value) >= 1;
 	}
 
 
@@ -234,7 +237,7 @@ public class ContractServiceImpl implements ContractService{
 	 * @throws Exception
 	 */
 	public boolean updateEntity(Map<String, Object> datas, Map<String, Object> conds) throws Exception{
-		return dao.updateEntity(datas, conds);
+		return super.update(datas, conds) >= 1;
 	}
 
 
@@ -245,8 +248,8 @@ public class ContractServiceImpl implements ContractService{
 	 * @return
 	 * @throws Exception
 	 */
-	public Contract findEntity(String property, Object value) throws Exception{
-		return dao.findEntity(property, value);
+	public SMSVerificationCode findEntity(String property, Object value) throws Exception{
+		return super.find(property, value);
 	}
 
 
@@ -256,8 +259,8 @@ public class ContractServiceImpl implements ContractService{
 	 * @return
 	 * @throws Exception
 	 */
-	public Contract findEntity(Map<String, Object> params) throws Exception{
-		return dao.findEntity(params);
+	public SMSVerificationCode findEntity(Map<String, Object> params) throws Exception{
+		return super.find(params);
 	}
 
 	
@@ -269,8 +272,8 @@ public class ContractServiceImpl implements ContractService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Contract> queryByHQL(String hql,String counthql, PageUtil<Contract> page, Object... params) throws Exception{
-		return dao.queryByHQL(hql,counthql, page, params);
+	public List<SMSVerificationCode> queryByHQL(String hql, String countHql, PageUtil<SMSVerificationCode> page, Object... params) throws Exception{
+		return super.queryByHQL(hql, countHql, page, params);
 	}
 
 
@@ -282,23 +285,9 @@ public class ContractServiceImpl implements ContractService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Contract> queryBySQL(String sql,String countsql, PageUtil<Contract> page, boolean convert, Object... params) throws Exception{
-		return dao.queryBySQL(sql, countsql, page, convert, params);
+	public List<SMSVerificationCode> queryBySQL(String sql, String countSql, PageUtil<SMSVerificationCode> page, boolean convert, Object... params) throws Exception{
+		return super.queryBySQL(sql, countSql, convert, page, params);
 	}
 
-	@Override
-	public boolean deleteEntity(Contract t) throws Exception {
-		return dao.deleteEntity(t);
-	}
-
-	@Override
-	public int getContractIndexByYear() throws Exception {
-		//获取今年合同第多少份
-		Calendar cal = Calendar.getInstance();
-		int year = cal.get(Calendar.YEAR);
-		String sql ="select count(*) from contract where createTime between '"+year+"-01-01 0:00:00' and '"+year+"-12-31 23:59:59'";
-		List<?> contractList = dao.queryBySQL(sql, null, null, false);
-		int contractIndex = ((BigInteger)contractList.get(0)).intValue();
-		return contractIndex;
-	}
 }
+

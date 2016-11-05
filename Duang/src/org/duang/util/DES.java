@@ -29,12 +29,16 @@ public class DES {
 	 * @throws   
 	 */  
 	public static String encryptDES(String encryptString) throws Exception {
-		IvParameterSpec zeroIv = new IvParameterSpec(IV);
-		SecretKeySpec key = new SecretKeySpec(DES_KEY.getBytes(), "DES");
-		Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-		cipher.init(Cipher.ENCRYPT_MODE, key, zeroIv);
-		byte[] encryptedData = cipher.doFinal(encryptString.getBytes());
-		return Base64.encode(encryptedData);
+		if(DataUtils.notEmpty(encryptString)){
+			IvParameterSpec zeroIv = new IvParameterSpec(IV);
+			SecretKeySpec key = new SecretKeySpec(DES_KEY.getBytes(), "DES");
+			Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+			cipher.init(Cipher.ENCRYPT_MODE, key, zeroIv);
+			byte[] encryptedData = cipher.doFinal(encryptString.getBytes());
+			return Base64.encode(encryptedData);
+		}else{
+			return null;
+		}
 	}
 
 

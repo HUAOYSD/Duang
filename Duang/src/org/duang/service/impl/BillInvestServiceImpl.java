@@ -1,5 +1,6 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,8 +11,11 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.BillInvestDao;
 import org.duang.dao.InvestMemberDao;
 import org.duang.entity.BillInvest;
+import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
+import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -29,17 +33,14 @@ public class BillInvestServiceImpl implements BillInvestService{
 
 	private BillInvestDao dao;
 	private InvestMemberDao investMemberDao;
-
-	@Resource
+	@Resource(name="sysinvestmemberdao")
 	public void setInvestMemberDao(InvestMemberDao investMemberDao) {
 		this.investMemberDao = investMemberDao;
 	}
-
 	@Resource(name="billinvestdaoimpl")
 	public void setDao(BillInvestDao dao) {
 		this.dao = dao;
 	}
-
 	public BillInvestServiceImpl(){
 		LoggerUtils.info("注入BillInvestServiceImpl服务层", this.getClass());
 	}
@@ -364,5 +365,28 @@ public class BillInvestServiceImpl implements BillInvestService{
 		}else {
 			return false;
 		}
+	}
+
+	@Override
+	public synchronized boolean createBill(InvestList investList) throws Exception {
+		boolean success = false;
+		List<BillInvest> billInvestsList = dao.queryEntity("memberInfo.id", investList.getMemberInfo().getId(), null, Order.desc("optTime"));
+		if(DataUtils.notEmpty(billInvestsList)){
+			BillInvest billInvest = billInvestsList.get(0);
+			BillInvest nextBillInvest = new BillInvest();
+			nextBillInvest.setId(DataUtils.randomUUID());
+			nextBillInvest.setMemberInfo(investList.getMemberInfo());
+			nextBillInvest.setInvestList(investList);
+			nextBillInvest.setUseType(UseType.UT3.getVal());
+			nextBillInvest.setMoney(investList.getMoney());
+			nextBillInvest.setBalance(billInvest.getBalance()-investList.getMoney());
+			nextBillInvest.setAsset(billInvest.getAsset()-investList.getMoney());
+			nextBillInvest.setBindCard(billInvest.getBindCard());
+			nextBillInvest.setOptTime(new Date());
+			nextBillInvest.setRemark(billInvest.getRemark());
+			success = dao.saveEntity(nextBillInvest);
+		}else{
+		}
+		return success;
 	}
 }

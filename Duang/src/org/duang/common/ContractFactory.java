@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Map;
+
 import org.duang.entity.InvestList;
 import org.duang.entity.MemberInfo;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+
 import com.lowagie.text.Cell;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -20,17 +22,42 @@ import com.lowagie.text.Table;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfWriter;
 
-public class Contract {
-	private Contract(){
+public class ContractFactory extends Thread{
+	private MemberInfo investMember;
+	private List<Map<String, String>> loanMembers;
+	private InvestList investList;
+	private String contractNo;
+	private String fullPath;
+	
+	private ContractFactory(){
 	}
-	private static Contract instance;  
-	public static Contract getInstance(){
-		if (instance == null) {  
-			instance = new Contract();  
-		}  
+	private static ContractFactory instance;  
+	public static ContractFactory getInstance(MemberInfo investMember, List<Map<String, String>> loanMembers, InvestList investList, String contractNo, String fullPath) throws Exception{
+		instance = new ContractFactory();  
+		instance.setInvestMember(investMember);
+		instance.setLoanMembers(loanMembers);
+		instance.setInvestList(investList);
+		instance.setContractNo(contractNo);
+		instance.setFullPath(fullPath);
 		return instance;
 	}
-
+	/**
+	 * 执行创建合同
+	 * <p>Title: run</p>   
+	 * <p>Description: </p>  
+	 * @author LiYonghui
+	 * @date 2016年10月28日 下午5:19:09   
+	 * @see java.lang.Thread#run()
+	 */
+	public void run() {  
+		try {
+			synchronized (this) {
+				createContract();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/**   
 	 * 创建合同
 	 * @Title: createContract   
@@ -42,7 +69,7 @@ public class Contract {
 	 * @return: void      
 	 * @throws   
 	 */  
-	public synchronized void createContract(MemberInfo investMember, List<Map<String, String>> loanMembers, InvestList investList, String contractNo, String fullPath) throws Exception{
+	public synchronized void createContract() throws Exception{
 		//
 		Document document = new Document(PageSize.A4, 60, 60, 20, 0); 
 		document.addTitle("借贷合同");
@@ -56,7 +83,7 @@ public class Contract {
 		Font boldFont_Small = new Font(bfChinese, 7, Font.BOLD);
 		Font normalFont = new Font(bfChinese, 7, Font.NORMAL);
 		//
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(fullPath)));
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(fullPath+"\\"+contractNo+".pdf")));
 		writer.setViewerPreferences(PdfWriter.HideMenubar);
 		//
 		document.open();
@@ -270,8 +297,37 @@ public class Contract {
 			}
 		}
 		document.add(table);
-
-		//
 		document.close();
 	}
+	public MemberInfo getInvestMember() {
+		return investMember;
+	}
+	public void setInvestMember(MemberInfo investMember) {
+		this.investMember = investMember;
+	}
+	public List<Map<String, String>> getLoanMembers() {
+		return loanMembers;
+	}
+	public void setLoanMembers(List<Map<String, String>> loanMembers) {
+		this.loanMembers = loanMembers;
+	}
+	public InvestList getInvestList() {
+		return investList;
+	}
+	public void setInvestList(InvestList investList) {
+		this.investList = investList;
+	}
+	public String getContractNo() {
+		return contractNo;
+	}
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
+	public String getFullPath() {
+		return fullPath;
+	}
+	public void setFullPath(String fullPath) {
+		this.fullPath = fullPath;
+	}
+	
 }

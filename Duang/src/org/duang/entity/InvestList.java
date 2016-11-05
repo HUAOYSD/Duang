@@ -48,6 +48,8 @@ public class InvestList implements java.io.Serializable {
 	private int investStyle;
 	private double poundageTurn;
 	private double poundagePrivilege;
+	//红包
+	private double giftSum;
 	private int  days;
 	private Set<Stock> stocksForInvestListId = new HashSet<Stock>(0);
 	private Set<MemberTicketRecord> memberTicketRecords = new HashSet<MemberTicketRecord>(0);
@@ -194,6 +196,15 @@ public class InvestList implements java.io.Serializable {
 		this.money = money;
 	}
 
+	@Column(name = "giftSum", precision = 22, scale = 0)
+	public double getGiftSum() {
+		return this.giftSum;
+	}
+
+	public void setGiftSum(double giftSum) {
+		this.giftSum = giftSum;
+	}
+	
 	@Column(name = "back_income", precision = 22, scale = 0)
 	public double getBackIncome() {
 		return this.backIncome;

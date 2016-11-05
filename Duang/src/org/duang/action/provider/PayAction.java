@@ -1,6 +1,7 @@
 package org.duang.action.provider;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -15,11 +16,15 @@ import org.duang.entity.BillInvest;
 import org.duang.entity.BindCard;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.If;
+import org.duang.enums.ResultCode;
 import org.duang.enums.billinvest.BillStatus;
 import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
 import org.duang.service.InvestMemberService;
 import org.duang.util.DataUtils;
+import org.duang.util.MD5Utils;
+import org.duang.util.ReadProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -49,7 +54,6 @@ public class PayAction extends BaseAction<BillInvest>{
 	public void setInvestMemberService(InvestMemberService investMemberService) {
 		this.investMemberService = investMemberService;
 	}
-
 	/**   
 	 * 充值 <成功回调> 
 	 * @Title: deposit   
@@ -269,9 +273,7 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws   
 	 */  
 	public void payInvest(){
-
 	}
-
 
 	/**   
 	 * 赎回————理财订单 <成功回调>
@@ -284,8 +286,186 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws   
 	 */  
 	public void redemptiveInvest(){
-
+		
 	}
 
+	/**
+	 * 丰付充值回调
+	 * @Title: depositFFCallBack   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月3日 下午4:08:14
+	 * @return: void      
+	 * @throws
+	 */
+	public void depositFFCallBack(){
+		try{
+			//读取配置文件
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			
+			String requestId = getRequest().getParameter("requestId");
+			//String noticeType = getRequest().getParameter("noticeType");
+			String result = getRequest().getParameter("result");
+			//充值金额
+			String sum = getRequest().getParameter("sum");
+			String userIdIdentity = getRequest().getParameter("userIdIdentity");
+			
+			//未结金额
+			String unsettledBalance = getRequest().getParameter("unsettledBalance");
+			//账户总额
+			String userBalance = getRequest().getParameter("userBalance");
+			//可用余额
+			String withdrawableBalance = getRequest().getParameter("withdrawableBalance");
+			//冻结余额
+			String frozenBalance = getRequest().getParameter("frozenBalance");
+			/*String payType = getRequest().getParameter("payType");
+			String mainAccountType = getRequest().getParameter("mainAccountType");
+			String mainAccountCode = getRequest().getParameter("mainAccountCode");
+			String bankAccount = getRequest().getParameter("bankAccount");
+			String bankName = getRequest().getParameter("bankName");*/
+			String name = getRequest().getParameter("name");
+			String signature = getRequest().getParameter("signature");
+			
+			LoggerUtils.info(requestId+";"+result+";"+sum+";"+userIdIdentity+";"+unsettledBalance+";"+userBalance+";"+withdrawableBalance+";"+frozenBalance+";"+name, this.getClass());
+			LoggerUtils.info("---------------------------"+signature, this.getClass());
+			
+			StringBuffer signatureStr = new StringBuffer();
+			signatureStr.append(requestId);
+			signatureStr.append(result);
+			signatureStr.append(sum);
+			signatureStr.append(userIdIdentity);
+			signatureStr.append(userBalance);
+			//获取返回数据的加密数据用于与签名校验
+			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			LoggerUtils.info("---------------------------"+dataSign, this.getClass());
+			if(dataSign.equals(signature)){
+				if(result.equals(ResultCode.SUCCESS)){
+					//修改数据库
+					updateMemberInfoBalance(userIdIdentity,withdrawableBalance,userBalance,frozenBalance,unsettledBalance);
+				}else{
+					LoggerUtils.error(name+"提现,错误，原因："+ReadProperties.getStringValue(properties, result), this.getClass());
+				}
+			}else{
+				LoggerUtils.error(name+"提现,原因：秘钥校验错误", this.getClass());
+			}
+		
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("PayAction——depositFFCallBack方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("PayAction——depositFFCallBack方法错误：" + e.getLocalizedMessage(), this.getClass());
+		}
+	}
+	
+	/**
+	 * 丰付提现，回调
+	 * @Title: withdrawalsFFCallBack   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月3日 下午3:19:56
+	 * @return: void      
+	 * @throws
+	 */
+	public void withdrawalsFFCallBack(){
+		try{
+			//读取配置文件
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			String requestId = getRequest().getParameter("requestId");
+			String noticeType = getRequest().getParameter("noticeType");
+			String result = getRequest().getParameter("result");
+			String sum = getRequest().getParameter("sum");
+			String userIdIdentity = getRequest().getParameter("userIdIdentity");
+			String failReason = getRequest().getParameter("failReason");
+			String userBalance = getRequest().getParameter("userBalance");
+			String withdrawableBalance = getRequest().getParameter("withdrawableBalance");
+			String frozenBalance = getRequest().getParameter("frozenBalance");
+			/*String payType = getRequest().getParameter("payType");
+			String mainAccountType = getRequest().getParameter("mainAccountType");
+			String mainAccountCode = getRequest().getParameter("mainAccountCode");
+			String bankAccount = getRequest().getParameter("bankAccount");
+			String bankName = getRequest().getParameter("bankName");*/
+			String name = getRequest().getParameter("name");
+			/*String requestTime = getRequest().getParameter("requestTime");
+			String dealTime = getRequest().getParameter("dealTime");*/
+			String signature = getRequest().getParameter("signature");
+			
+			StringBuffer signatureStr = new StringBuffer();
+			signatureStr.append(requestId);
+			signatureStr.append(result);
+			signatureStr.append(sum);
+			signatureStr.append(userIdIdentity);
+			signatureStr.append(userBalance);
+			//获取返回数据的加密数据用于与签名校验
+			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			if(dataSign.equals(signature)){
+				if((noticeType.equals(String.valueOf(If.If0.getVal()))|| noticeType.equals(String.valueOf(If.If1.getVal()))) && result.equals(ResultCode.SUCCESS)){
+					//修改数据库
+					updateMemberInfoBalance(userIdIdentity,withdrawableBalance,userBalance,frozenBalance);
+				}else{
+					LoggerUtils.error(name+"提现,错误，原因："+ReadProperties.getStringValue(properties, result)+"---"+failReason, this.getClass());
+				}
+			}else{
+				LoggerUtils.error(name+"提现,原因：秘钥校验错误", this.getClass());
+			}
+		
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("PayAction——depositFFCallBack方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("PayAction——depositFFCallBack方法错误：" + e.getLocalizedMessage(), this.getClass());
+		}
+	}
 
+	/**
+	 * 提现，修改理财用户的数据
+	 * @Title: updateMemberInfoBalance   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param memberInfoId   用户id
+	 * @param: @param balance    余额
+	 * @param: @param totalMoney 总金额
+	 * @param: @param frozenBalance 投资中的金额
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月3日 下午3:59:47
+	 * @return: void      
+	 * @throws
+	 */
+	private void  updateMemberInfoBalance(String memberInfoId,String balance,String totalMoney,String frozenBalance) throws Exception{
+		InvestMember investMember = investMemberService.findEntity("memberInfo.id", memberInfoId);
+		if(investMember != null){
+			investMember.setBalance(DataUtils.str2double(balance,6));
+			investMember.setInvesting(DataUtils.str2double(frozenBalance,6));
+			investMember.setTotalMoney(DataUtils.str2double(totalMoney,6));
+			investMemberService.updateEntity(investMember);
+		}else{
+			LoggerUtils.error("提现错误,原因：未查找到该用户", this.getClass());
+		}
+	}
+	
+	/**
+	 * 提现，修改理财用户的数据
+	 * @Title: updateMemberInfoBalance   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param memberInfoId   用户id
+	 * @param: @param balance    余额
+	 * @param: @param totalMoney 总金额
+	 * @param: @param frozenBalance 投资中的金额
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月3日 下午3:59:47
+	 * @return: void      
+	 * @throws
+	 */
+	private void  updateMemberInfoBalance(String memberInfoId,String balance,String totalMoney,String frozenBalance,String unsettledBalance) throws Exception{
+		InvestMember investMember = investMemberService.findEntity("memberInfo.id", memberInfoId);
+		if(investMember != null){
+			investMember.setBalance(DataUtils.str2double(balance,6));
+			investMember.setInvesting(DataUtils.str2double(frozenBalance,6));
+			investMember.setTotalMoney(DataUtils.str2double(totalMoney,6));
+			investMember.setUnsettledBalance(DataUtils.str2double(unsettledBalance,6));
+			investMemberService.updateEntity(investMember);
+		}else{
+			LoggerUtils.error("提现错误,原因：未查找到该用户", this.getClass());
+		}
+	}
 }

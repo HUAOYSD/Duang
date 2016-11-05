@@ -64,12 +64,14 @@ public class LoginAction extends BaseAction<MemberInfo>{
 				entity = service.findEntity("phone", phone);
 				if (entity != null) {
 					if (pwd.equals(entity.getPassword())) {
-						String token = DataUtils.randomUUID();
+						String token = entity.getToken();
 						fillMemberInfo(token);
 						JSONObject resultjson = new JSONObject();
 						resultjson.put("pd", jsonObject.optString("pd"));
 						resultjson.put("token", jsonObject.optString("token"));
 						resultjson.put("id", jsonObject.optString("id"));
+						resultjson.put("isAuth", jsonObject.optString("isAuth"));
+						resultjson.put("idcard", jsonObject.optString("idcard"));
 						MemberCollection.getInstance().putJsonObject(token, resultjson);
 						success = true;
 					} else {
@@ -109,6 +111,12 @@ public class LoginAction extends BaseAction<MemberInfo>{
 			String token = getRequest().getParameter("token"), pwd = getRequest().getParameter("pwd");
 			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(pwd)) {
 				String pd = MemberCollection.getInstance().getField(token, "pd");
+				if (DataUtils.isEmpty(pd)) {
+					MemberInfo memberInfo = service.findEntity("token", token);
+					if (memberInfo!=null) {
+						pd = memberInfo.getPassword();
+					}
+				}
 				if (DataUtils.notEmpty(pd)) {
 					if (pwd.equals(pd)) {
 						entity = service.findById(MemberCollection.getInstance().getMainField(token));
@@ -179,7 +187,8 @@ public class LoginAction extends BaseAction<MemberInfo>{
 	}
 
 
-	/**   
+	/**
+	 * @throws Exception    
 	 * 填充需要信息
 	 * @Title: fillMemberInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -189,10 +198,11 @@ public class LoginAction extends BaseAction<MemberInfo>{
 	 * @return: void      
 	 * @throws   
 	 */  
-	private void fillMemberInfo(String token){
+	private void fillMemberInfo(String token) throws Exception{
 		jsonObject.put("time", System.currentTimeMillis());
 		jsonObject.put("pd", entity.getPassword());
 		jsonObject.put("token", token);
+		jsonObject.put("requestId", entity.getRequestId());
 		jsonObject.put("id", entity.getId());
 		jsonObject.put("name", entity.getRealName());
 		jsonObject.put("nickname", entity.getNickname());
@@ -202,6 +212,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		jsonObject.put("age", entity.getAge());
 		jsonObject.put("sex", entity.getSex());
 		jsonObject.put("photo", entity.getUserImg());
+		jsonObject.put("isAuth", String.valueOf(entity.getIsAuth()));
 		jsonObject.put("isEliteAccount", If.valueOf("If"+entity.getIsEliteAccount()).toString());
 
 		Set<InvestMember> investMembers = entity.getInvestMembers();

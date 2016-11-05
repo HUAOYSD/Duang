@@ -24,7 +24,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String path) {
 			if(DataUtils.notEmpty(path)){
-				return "resources\\file\\basic\\" + path+"\\";
+				return "resources\\file\\basic" + path;
 			}else{
 				return "resources\\file\\basic\\";
 			}
@@ -64,7 +64,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String path) {
 			if(DataUtils.notEmpty(path)){
-				return path+"\\contract";
+				return "\\"+path+"\\contract";
 			}else{
 				return "\\contract";
 			}
@@ -84,7 +84,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String path) {
 			if(DataUtils.notEmpty(path)){
-				return path+"\\salary";
+				return "\\"+path+"\\salary";
 			}else{
 				return "\\salary";
 			}
@@ -96,7 +96,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String userId) {
 			if(DataUtils.notEmpty(userId)){
-				return userId+"\\idcard";
+				return "\\"+userId+"\\idcard";
 			}else{
 				return "\\idcard";
 			}
@@ -118,7 +118,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String userId) {
 			if(DataUtils.notEmpty(userId)){
-				return userId+"\\house";
+				return "\\"+userId+"\\house";
 			}else{
 				return "\\house";
 			}
@@ -140,7 +140,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String userId) {
 			if(DataUtils.notEmpty(userId)){
-				return userId+"\\car";
+				return "\\"+userId+"\\car";
 			}else{
 				return "\\car";
 			}
@@ -172,7 +172,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String userId) {
 			if(DataUtils.notEmpty(userId)){
-				return userId+"\\head";
+				return "\\"+userId+"\\head";
 			}else{
 				return "\\head";
 			}
@@ -194,7 +194,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String userId) {
 			if(DataUtils.notEmpty(userId)){
-				return userId+"\\ad";
+				return "\\"+userId+"\\ad";
 			}else{
 				return "\\ad";
 			}
@@ -216,7 +216,7 @@ public enum UploadFile {
 			@Override
 			public String getVal(String userId) {
 				if(DataUtils.notEmpty(userId)){
-					return userId+"\\news";
+					return "\\"+userId+"\\news";
 				}else{
 					return "\\news";
 				}
@@ -238,7 +238,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String userId) {
 			if(DataUtils.notEmpty(userId)){
-				return userId+"\\bindcard";
+				return "\\"+userId+"\\bindcard";
 			}else{
 				return "\\bindcard";
 			}

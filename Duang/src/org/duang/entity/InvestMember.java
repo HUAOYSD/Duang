@@ -29,7 +29,7 @@ public class InvestMember implements java.io.Serializable {
 	private double totalIncome;
 	private double totalMoney;
 	private double currentIncome;
-
+	private double unsettledBalance;
 	// Constructors
 
 	/** default constructor */
@@ -46,7 +46,7 @@ public class InvestMember implements java.io.Serializable {
 	public InvestMember(String id, MemberInfo memberInfo,
 			 double currentIncome,
 			int isContract, double balance, double investing,
-			double totalIncome, double totalMoney) {
+			double totalIncome, double totalMoney, double unsettledBalance) {
 		this.id = id;
 		this.memberInfo = memberInfo;
 		this.isContract = isContract;
@@ -55,6 +55,7 @@ public class InvestMember implements java.io.Serializable {
 		this.totalIncome = totalIncome;
 		this.totalMoney = totalMoney;
 		this.currentIncome = currentIncome;
+		this.unsettledBalance = unsettledBalance;
 		//this.stocks = stocks;
 	}
 
@@ -131,5 +132,14 @@ public class InvestMember implements java.io.Serializable {
 	public void setCurrentIncome(double currentIncome) {
 		this.currentIncome = currentIncome;
 	}
-
+	
+	@Column(name = "unsettledBalance", precision = 22, scale = 0)
+	public double getUnsettledBalance() {
+		return unsettledBalance;
+	}
+	public void setUnsettledBalance(double unsettledBalance) {
+		this.unsettledBalance = unsettledBalance;
+	}
+	
+	
 }

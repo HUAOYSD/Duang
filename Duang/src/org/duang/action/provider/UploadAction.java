@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
@@ -16,7 +18,9 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.FileUpload;
+import org.duang.entity.MemberInfo;
 import org.duang.enums.UploadFile;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -36,7 +40,55 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value = "provider_upload")
 public class UploadAction extends BaseAction<FileUpload>{
 	
+	/**
+	 * 客户基本信息
+	 */
+	private MemberInfoService sysMemberInfoService;
+
+	@Resource(name = "sysmemberinfoserviceimpl")
+	public void setService(MemberInfoService sysMemberInfoService) {
+		this.sysMemberInfoService = sysMemberInfoService;
+	}
 	
+	/**
+	 * 上传文件头像
+	 * @Title: uploadMemberHeadImg   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年10月24日 下午6:05:12
+	 * @return: void      
+	 * @throws
+	 */
+	public void uploadMemberHeadImg(){
+		boolean success = false;
+		try {
+			String userId = getRequest().getParameter("id");
+			if (DataUtils.notEmpty(userId)) {
+				// 1.获取文件名称
+				reSetFileName();
+				MemberInfo memberInfo = sysMemberInfoService.findById(userId);
+				memberInfo.setUserImg(entity.getNewFileName());
+				setUploadPathByType(userId);
+				String temPath = getRequest().getSession().getServletContext().getRealPath("/");
+				entity.setPath(temPath+UploadFile.PATH.getVal(UploadFile.HEAD.getVal(userId)));
+				success = sysMemberInfoService.updateEntity(memberInfo);
+				if (success) {
+					success = upload();
+					msg="设置成功";
+					jsonObject.put("path", UploadFile.PATH.getVal(UploadFile.HEAD.getVal(userId))+entity.getNewFileName());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("UploadAction——uploadMemberHeadImg方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("UploadAction——uploadMemberHeadImg方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
 
 	/**   
 	 * ios上传

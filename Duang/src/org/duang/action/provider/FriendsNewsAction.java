@@ -119,10 +119,12 @@ public class FriendsNewsAction extends BaseAction<FriendsNews>{
 				map.put("user_img", objArray[5]);
 				String sql = "SELECT * from friends_news_img where friends_news_id='"+objArray[0]+"' order by order_index";
 				List<FriendsNewsImg> friendsNewsImgList = friendsNewsImgService.queryBySQL(sql, null, null, true);
+				List<String> imgList = new ArrayList<String>();
 				for(int j = 0;j<friendsNewsImgList.size(); j++){
 					FriendsNewsImg img = friendsNewsImgList.get(j);
-					map.put("img_"+j, img.getImgPath());	
+					imgList.add(img.getImgPath());
 				}
+				map.put("imgs", imgList);
 				listMap.add(map);
 			}
 		} catch (Exception e) {

@@ -183,6 +183,9 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 						entity.setLoginName(phone);
 						entity.setRegisterStyle(Integer.parseInt(registerStyle));
 						entity.setCreateTime(new Date());
+						entity.setRequestId(DataUtils.randomUUID());
+						entity.setToken(entity.getRequestId());
+						entity.setToken(DataUtils.randomUUID());
 						//附加投资用户身份
 						LoanMember loanMember = new LoanMember();
 						loanMember.setId(DataUtils.randomUUID());
@@ -197,6 +200,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 						if (service.saveEntity(entity)) {
 							success = true;
 							jsonObject.put("id", DES.encryptDES(id));
+							jsonObject.put("requestId", DES.encryptDES(entity.getRequestId()));
 						}else {
 							msg = "注册失败";
 						}
@@ -217,7 +221,6 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
 	
 	/**   
 	 * 完善注册信息
@@ -263,5 +266,4 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-
 }
