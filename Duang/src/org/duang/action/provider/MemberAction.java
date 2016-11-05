@@ -1,5 +1,4 @@
 package org.duang.action.provider;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -737,6 +736,268 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			LoggerUtils.error("流程号："+self_requestId+"------"+"认证失败,原因："+ReadProperties.getStringValue(properties, resultCallbace),this.getClass());
 		}
 		return success;
+	}
+	
+	/**
+	 * 查询用户的账户信息
+	 * @Title: queryMemberAccount   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return
+	 * @author LiYonghui    
+	 * @date 2016年11月5日 下午2:33:10
+	 * @throws
+	 */
+	public void queryMemberAccount() {
+		boolean success = false;
+		try {
+			String id = getRequest().getParameter("id");
+			if (DataUtils.notEmpty(id)) {
+				MemberInfo memberInfo = service.findById(id);
+				if (memberInfo != null) {
+					if(DataUtils.notEmpty(memberInfo.getRealName())&& DataUtils.notEmpty(memberInfo.getIdCard())){
+						Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+						jsonObject = queryMemberAccount(properties,memberInfo.getId(),memberInfo.getRealName(),memberInfo.getIdCard());
+						if(jsonObject.get("result").equals(ResultCode.SUCCESS.getVal())){
+							success=true;
+						}
+					}else{
+						msg="您未实名制,账户上没有相关信息，请先进行实名制";
+					}
+				}else {
+					msg="未查到记录";
+				}
+			}else{
+				msg="数据丢失，请重新登录";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction——queryMemberAccount方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction——queryMemberAccount方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		} finally {
+			jsonObject.put("msg", msg);
+			jsonObject.put("success", success);
+			printJsonResult();
+		}
+	}
+	
+	/**
+	 * 查询用户的账户信息
+	 * @Title: queryMemberAccount   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: properties  读取文件信息
+	 * @param: userIdIdentity  id
+	 * @param: userName  姓名
+	 * @param: idNumber  身份证信息
+	 * @author LiYonghui    
+	 * @date 2016年11月5日 下午2:33:10
+	 * @throws
+	 */
+	private net.sf.json.JSONObject queryMemberAccount(Properties properties,String userIdIdentity, String userName,String idNumber) throws Exception{
+		//请求受理成功，正在处理，需要主动查询
+		String urlStr = ReadProperties.getStringValue(properties, "queryMemberAccountURL");
+		//商户号
+		String merchantCode = ReadProperties.getStringValue(properties, "merchantCode");
+		//秘钥
+		String akey = ReadProperties.getStringValue(properties, "akey");
+		//生成一个流水号
+		String requestId = DataUtils.randomUUID();
+		//数字签名字符串
+		StringBuffer signatureBuffer = new StringBuffer();
+		signatureBuffer.append(requestId+merchantCode+userIdIdentity+userName+idNumber);
+		System.out.println(signatureBuffer.toString());
+		//加密后的数字签名
+		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
+		//封装map参数
+		Map<String,String> map = new HashMap<String, String>();
+		map.put("requestId",requestId);
+		map.put("merchantCode",merchantCode);
+		map.put("userIdIdentity",userIdIdentity);
+		map.put("userName",userName);
+		map.put("idNumber",idNumber);
+		map.put("signature",signature_sign);
+		//获取转换的参数
+		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
+		//result 查询结果  00000代表成功
+		String resultCallbace = jsonObjectData.get("result").toString();
+		if(resultCallbace.equals(ResultCode.SUCCESS.getVal())){
+			String back_userIdIdentity = jsonObjectData.get("userIdIdentity").toString();
+			String back_userName = jsonObjectData.get("userName").toString();
+			String back_idNumber = jsonObjectData.get("idNumber").toString();
+			String back_result = jsonObjectData.get("result").toString();
+			String back_balance = jsonObjectData.get("balance").toString();
+			String back_withdrawAbleBalance = jsonObjectData.get("withdrawAbleBalance").toString();
+			String back_frozenBalance = jsonObjectData.get("frozenBalance").toString();
+			String back_signature = jsonObjectData.get("signature").toString();
+			
+			StringBuffer back_signatureBuffer = new StringBuffer(back_userIdIdentity+back_userName+back_idNumber+
+					back_result+back_balance+back_withdrawAbleBalance+back_frozenBalance);
+			
+			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), akey);
+			if(back_signature_sign.equals(back_signature)){
+				jsonObject.put("userIdIdentity", back_userIdIdentity);
+				jsonObject.put("userName", back_userName);
+				jsonObject.put("idNumber", back_idNumber);
+				jsonObject.put("mobileNo", jsonObjectData.get("mobileNo"));
+				jsonObject.put("email", jsonObjectData.get("email"));
+				jsonObject.put("result", back_result);
+				jsonObject.put("balance", back_balance);
+				jsonObject.put("withdrawAbleBalance", back_withdrawAbleBalance);
+				jsonObject.put("frozenBalance", back_frozenBalance);
+				jsonObject.put("signature", back_signature);
+			}else{
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "签名不一致");
+			}
+		}else{
+			jsonObject.put("result", false);
+			jsonObject.put("msg", ReadProperties.getStringValue(properties, resultCallbace));
+			LoggerUtils.error("流程号："+requestId+"------"+"认证失败,原因："+ReadProperties.getStringValue(properties, resultCallbace),this.getClass());
+		}
+		return jsonObject;
+	}
+	
+	/**
+	 * 查询用户的银行卡信息
+	 * @Title: queryMemberAccount   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return
+	 * @author LiYonghui    
+	 * @date 2016年11月5日 下午2:33:10
+	 * @throws
+	 */
+	public void queryMemberSignBankCard() {
+		boolean success = false;
+		try {
+			String id = getRequest().getParameter("id");
+			String queryType = getRequest().getParameter("queryType");
+			if (DataUtils.notEmpty(id)) {
+					Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+					jsonObject = queryMemberSignBankCard(properties,id,queryType);
+					if(jsonObject.get("result").equals(ResultCode.SUCCESS.getVal())){
+						success=true;
+					}
+			}else{
+				msg="数据丢失，请重新登录";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction——queryMemberAccount方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction——queryMemberAccount方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		} finally {
+			jsonObject.put("msg", msg);
+			jsonObject.put("success", success);
+			printJsonResult();
+		}
+	}
+	
+	/**
+	 * 查询用户的账户绑定银行卡信息
+	 * @Title: queryMemberSignBankCard   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: properties  读取文件信息 
+	 * @param: userIdIdentity  id
+	 * @param: queryType  查询类型 0：全部    1：用户提现    2：一键充值    3：协议还款
+	 * @author LiYonghui    
+	 * @date 2016年11月5日 下午2:33:10
+	 * @throws
+	 */
+	private net.sf.json.JSONObject queryMemberSignBankCard(Properties properties,String userIdIdentity, String queryType) throws Exception{
+		//请求受理成功，正在处理，需要主动查询
+		String urlStr = ReadProperties.getStringValue(properties, "queryMemberSignBankCardURL");
+		//商户号
+		String merchantCode = ReadProperties.getStringValue(properties, "merchantCode");
+		//秘钥
+		String akey = ReadProperties.getStringValue(properties, "akey");
+		//生成一个流水号
+		String requestId = DataUtils.randomUUID();
+		//数字签名字符串
+		StringBuffer signatureBuffer = new StringBuffer();
+		signatureBuffer.append(requestId+merchantCode+userIdIdentity+queryType);
+		System.out.println(signatureBuffer.toString());
+		//加密后的数字签名
+		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
+		//封装map参数
+		Map<String,String> map = new HashMap<String, String>();
+		map.put("requestId",requestId);
+		map.put("merchantCode",merchantCode);
+		map.put("userIdIdentity",userIdIdentity);
+		map.put("queryType",queryType);
+		map.put("signature",signature_sign);
+		//获取转换的参数
+		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
+		//result 查询结果  00000代表成功
+		String resultCallbace = jsonObjectData.get("result").toString();
+		if(resultCallbace.equals(ResultCode.SUCCESS.getVal())){
+			String back_requestId = jsonObjectData.get("requestId").toString();
+			String back_userIdIdentity = jsonObjectData.get("userIdIdentity").toString();
+			String back_result = jsonObjectData.get("result").toString();
+			String back_signature = jsonObjectData.get("signature").toString();
+			StringBuffer back_signatureBuffer = new StringBuffer(back_requestId+back_result+back_userIdIdentity);
+			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), akey);
+			if(back_signature_sign.equals(back_signature)){
+				jsonObject.put("userIdIdentity", back_userIdIdentity);
+				jsonObject.put("result", back_result);
+				jsonObject.put("signature", back_signature);
+				//用户提现卡列表
+				if(queryType.equals("0") || queryType.equals("1")){
+					JSONArray withdrawBankJSONArray = jsonObjectData.getJSONArray("withdrawBankList");
+					if(withdrawBankJSONArray != null){
+						List<Map<String,String>> withdrawBankList = new ArrayList<Map<String,String>>();
+						for(int i=0;i<withdrawBankJSONArray.length();i++){
+							Map<String,String> withdrawBank = new HashMap<String, String>();
+							JSONObject withdrawBankObject = (JSONObject)withdrawBankJSONArray.get(i);
+							withdrawBank.put("bankName", withdrawBankObject.getString("bankName"));
+							withdrawBank.put("bankAccount", withdrawBankObject.getString("bankAccount"));
+							withdrawBank.put("bindId", withdrawBankObject.getString("bindId"));
+							withdrawBankList.add(withdrawBank);
+						}
+						jsonObject.put("withdrawBankList", withdrawBankList);
+					}
+				}
+				//一键充值卡列表
+				else if(queryType.equals("0") || queryType.equals("2")){
+					JSONArray rechargeProtocolJSONArray = jsonObjectData.getJSONArray("rechargeProtocolList");
+					if(rechargeProtocolJSONArray != null){
+						List<Map<String,String>> rechargeProtocolList = new ArrayList<Map<String,String>>();
+						for(int i=0;i<rechargeProtocolJSONArray.length();i++){
+							Map<String,String> rechargeProtocol = new HashMap<String, String>();
+							JSONObject rechargeProtocolObject = (JSONObject)rechargeProtocolJSONArray.get(i);
+							rechargeProtocol.put("bankName", rechargeProtocolObject.getString("bankName"));
+							rechargeProtocol.put("bankAccount", rechargeProtocolObject.getString("bankAccount"));
+							rechargeProtocol.put("protocolNo", rechargeProtocolObject.getString("protocolNo"));
+							rechargeProtocolList.add(rechargeProtocol);
+						}
+						jsonObject.put("rechargeProtocolList", rechargeProtocolList);
+					}
+				}
+				//协议还款卡列表
+				else if(queryType.equals("0") || queryType.equals("3")){
+					JSONArray repayProtocolJSONArray = jsonObjectData.getJSONArray("repayProtocolList");
+					if(repayProtocolJSONArray != null){
+						List<Map<String,String>> repayProtocolList = new ArrayList<Map<String,String>>();
+						for(int i=0;i<repayProtocolJSONArray.length();i++){
+							Map<String,String> repayProtocol = new HashMap<String, String>();
+							JSONObject repayProtocolObject = (JSONObject)repayProtocolJSONArray.get(i);
+							repayProtocol.put("bankName", repayProtocolObject.getString("bankName"));
+							repayProtocol.put("bankAccount", repayProtocolObject.getString("bankAccount"));
+							repayProtocol.put("protocolNo", repayProtocolObject.getString("protocolNo"));
+							repayProtocolList.add(repayProtocol);
+						}
+						jsonObject.put("repayProtocolList", repayProtocolList);
+					}
+				}
+			}else{
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "签名不一致");
+			}
+		}else{
+			jsonObject.put("result", false);
+			jsonObject.put("msg", ReadProperties.getStringValue(properties, resultCallbace));
+			LoggerUtils.error("流程号："+requestId+"------"+"认证失败,原因："+ReadProperties.getStringValue(properties, resultCallbace),this.getClass());
+		}
+		return jsonObject;
 	}
 	
 }
