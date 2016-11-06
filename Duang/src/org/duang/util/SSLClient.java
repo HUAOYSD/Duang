@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
@@ -18,6 +19,9 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
+import org.duang.common.logger.LoggerUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class SSLClient{
@@ -92,7 +96,7 @@ public class SSLClient{
 		// 刷新、关闭
         outputStream.flush();
         outputStream.close();
-        String result = null; 
+        String result = ""; 
 		//取得该连接的输入流，以读取响应内容
 		InputStream is = httpsConn.getInputStream();
 		JSONObject jsonObject = null;
@@ -102,12 +106,12 @@ public class SSLClient{
             while(null != (line=br.readLine())){
                 result += line;
             }
-            System.out.println(result);
+            LoggerUtils.info(result,new SSLClient().getClass());
 			jsonObject = new JSONObject(result);
 		}
 		return jsonObject;	
 	}
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		try {
 			String requestId=DataUtils.randomUUID();
 			String md5=requestId+"fbm000004韩玉昆51070919840824824812016100920161102";
@@ -122,15 +126,9 @@ public class SSLClient{
 	        map.put("sDate", "20161009");
 	        map.put("eDate", "20161102");
 	        map.put("signature", md52);
-			
-			JSONObject jon = getJsonObjectByUrl("https://fbtest.sumapay.com/main/UserForFT_authQuery",map,"gbk");
-			JSONArray jSONArray = (JSONArray)jon.get("authList");
-			JSONObject jos = (JSONObject) jSONArray.get(0);
-			String s2 = new String(jos.get("userName").toString().getBytes("GBK"),"GBK");
-			System.out.println(s2);
+			getJsonObjectByUrl("https://fbtest.sumapay.com/main/UserForFT_authQuery",map,"gbk");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}*/
+	}
 }
