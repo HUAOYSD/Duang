@@ -237,7 +237,8 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 							//推荐人信息
 							MemberInfo EntityMemberInfo = getMemberInfoByEntityCode(entityCode);
 							if(EntityMemberInfo!=null){
-								entity.setMemberInfo(new MemberInfo(EntityMemberInfo.getId()));
+								entity.setMemberInfo(EntityMemberInfo);
+								entity.setCusmembername(EntityMemberInfo.getRealName());
 							}
 						}
 						//附加投资用户身份
