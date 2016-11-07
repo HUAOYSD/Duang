@@ -1,6 +1,13 @@
 package org.duang.common.system;
 
 import java.util.HashMap;
+
+import javax.annotation.Resource;
+
+import org.duang.entity.MemberInfo;
+import org.duang.service.MemberInfoService;
+import org.duang.util.DataUtils;
+
 import net.sf.json.JSONObject;
 
 /**   
@@ -11,16 +18,36 @@ import net.sf.json.JSONObject;
  * @date 2016年9月6日 上午11:04:58      
  */  
 public class MemberCollection {  
+	
+	private MemberInfoService service;
+	@Resource
+	public void setService(MemberInfoService service) {
+		this.service = service;
+	}
+	public MemberInfoService getService() {
+		return service;
+	}
 
 	private static MemberCollection instance;  
 	private MemberCollection() {  
 		members = new HashMap<String, JSONObject>();  
 		id_token = new HashMap<String, String>();  
 	}  
-	public static MemberCollection getInstance() {  
+	public static MemberCollection getInstance(String token) throws Exception{  
 		if (instance == null) {  
 			instance = new MemberCollection();  
 		}  
+		if (DataUtils.notEmpty(token)) {
+			JSONObject jsonObject = instance.optJsonObject(token);
+			if (jsonObject == null || jsonObject.size() == 0) {
+				jsonObject = new JSONObject();
+				MemberInfo entity = instance.getService().findEntity("token", token);
+				jsonObject.put("pd", entity.getPassword());
+				jsonObject.put("token", token);
+				jsonObject.put("id", entity.getId());
+				instance.putJsonObject(token, jsonObject);
+			}
+		}
 		return instance;  
 	}  
 
@@ -54,4 +81,5 @@ public class MemberCollection {
 	public synchronized String getField(String token, String field) throws Exception{
 		return optJsonObject(token).optString(field, "");
 	}
+	
 }  

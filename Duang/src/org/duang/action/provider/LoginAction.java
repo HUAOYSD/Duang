@@ -70,7 +70,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 						resultjson.put("pd", jsonObject.optString("pd"));
 						resultjson.put("token", jsonObject.optString("token"));
 						resultjson.put("id", jsonObject.optString("id"));
-						MemberCollection.getInstance().putJsonObject(token, resultjson);
+						MemberCollection.getInstance(token).putJsonObject(token, resultjson);
 						success = true;
 					} else {
 						msg = "密码错误";
@@ -108,16 +108,16 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		try {
 			String token = getRequest().getParameter("token"), pwd = getRequest().getParameter("pwd");
 			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(pwd)) {
-				String pd = MemberCollection.getInstance().getField(token, "pd");
-				if (DataUtils.isEmpty(pd)) {
-					MemberInfo memberInfo = service.findEntity("token", token);
-					if (memberInfo!=null) {
-						pd = memberInfo.getPassword();
-					}
-				}
+				String pd = MemberCollection.getInstance(token).getField(token, "pd");
+				//				if (DataUtils.isEmpty(pd)) {
+				//					MemberInfo memberInfo = service.findEntity("token", token);
+				//					if (memberInfo!=null) {
+				//						pd = memberInfo.getPassword();
+				//					}
+				//				}
 				if (DataUtils.notEmpty(pd)) {
 					if (pwd.equals(pd)) {
-						entity = service.findById(MemberCollection.getInstance().getMainField(token));
+						entity = service.findById(MemberCollection.getInstance(token).getMainField(token));
 						success = true;
 						if (entity != null) {
 							fillMemberInfo(token);
@@ -125,7 +125,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 							resultjson.put("pd", jsonObject.optString("pd"));
 							resultjson.put("token", jsonObject.optString("token"));
 							resultjson.put("id", jsonObject.optString("id"));
-							MemberCollection.getInstance().putJsonObject(token, resultjson);
+							MemberCollection.getInstance(token).putJsonObject(token, resultjson);
 						}else {
 							msg = "未获取到该用户";
 						}
@@ -165,9 +165,9 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		try {
 			String token = getRequest().getParameter("token");
 			if (DataUtils.notEmpty(token)) {
-				String id = MemberCollection.getInstance().getMainField(token);
+				String id = MemberCollection.getInstance(token).getMainField(token);
 				if (DataUtils.notEmpty(id)) {
-					MemberCollection.getInstance().removeJsonObject(token, id);
+					MemberCollection.getInstance(token).removeJsonObject(token, id);
 				}
 				success = true;
 			}else{
