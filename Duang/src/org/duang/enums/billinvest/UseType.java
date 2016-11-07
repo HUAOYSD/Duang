@@ -281,6 +281,41 @@ public enum UseType {
 			return "转让手续费";
 		}
 
+	},
+	UT8 {
+		private String desc = "推荐奖励";
+		
+		@Override
+		public int getVal() {
+			return 8;
+		}
+
+		@Override
+		public String getDesc() {
+			return desc;
+		}
+
+		@Override
+		public Object setDesc(String desc) {
+			if (DataUtils.notEmpty(desc)) {
+				this.desc = desc;
+				return this;
+			}else {
+				return setDefaultDesc();
+			}
+		}
+
+		@Override
+		public Object setDefaultDesc() {
+			this.desc = "推荐奖励";
+			return this;
+		}
+		
+		@Override
+		public String toString() {
+			return "推荐奖励";
+		}
+
 	};
 	
 	

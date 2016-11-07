@@ -16,6 +16,8 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.Friends;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.billinvest.BillStatus;
+import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
 import org.duang.service.FriendsService;
 import org.duang.service.MemberInfoService;
@@ -349,6 +351,52 @@ public class FriendsAction extends BaseAction<Friends>{
 			e.printStackTrace();
 			LoggerUtils.error("FriendsAction——querytops方法错误：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("FriendsAction——querytops方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	
+	/**
+	 * 获取好友累计推荐收益排行
+	 */
+	public void querytopsByRecommend(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String id = null;
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
+				StringBuffer sb = new StringBuffer();
+				sb.append("SELECT SUM(MONEY) AS MYMONEY, MEMBER_INFO.REAL_NAME, MEMBER_INFO.NICKNAME,MEMBER_INFO.USER_IMG FROM FRIENDS ");
+				sb.append("INNER JOIN BILL_INVEST ON BILL_INVEST.MEMBER_INFO = FRIENDS.SELF ");
+				sb.append("INNER JOIN MEMBER_INFO ON MEMBER_INFO.ID = BILL_INVEST.MEMBER_INFO ");
+				sb.append("WHERE SELF = '"+id+"' AND BILL_INVEST.USE_TYPE = "+UseType.UT8.getVal()+" AND BILL_INVEST.STATUS = "+BillStatus.BS2.getVal());
+				sb.append(" ORDER BY MYMONEY LIMIT 0,1000");
+				List<?> list = service.queryBySQL(sb.toString(), null, null, false);
+				List<Map<String, Object>> listMap = new ArrayList<Map<String,Object>>();
+				if(list==null || list.size()==0){
+					msg="目前还没有好友或者好友无推荐收益";
+				}else {
+					for(int i=0;i<list.size();i++){
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("total_income",  DataUtils.str2double((((Object[])list.get(i))[0])+"",2));
+						map.put("real_name", ((Object[])list.get(i))[1]);
+						map.put("nick_name", ((Object[])list.get(i))[2]);
+						map.put("user_img", ((Object[])list.get(i))[3]);
+						listMap.add(map);
+					}
+				}
+				success = true;
+				jsonObject.put("result", listMap);
+			}else {
+				msg = "登录失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("FriendsAction——querytopsByRecommend方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("FriendsAction——querytopsByRecommend方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
