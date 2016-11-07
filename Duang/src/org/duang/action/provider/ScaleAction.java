@@ -14,6 +14,7 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.Product;
 import org.duang.entity.Scale;
+import org.duang.service.InvestListService;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -280,6 +281,11 @@ public class ScaleAction extends BaseAction<Scale>{
 		return listMap;
 	}
 	
+	private InvestListService investListService;
+	@Resource
+	public void setService(InvestListService investListService) {
+		this.investListService = investListService;
+	}
 	/**   
 	 * 填充List数据
 	 * @Title: fillDatagridCons   
@@ -311,6 +317,9 @@ public class ScaleAction extends BaseAction<Scale>{
 					resultMap.put("useTicket", s.getUseTicket());
 					resultMap.put("transfer", s.getTransfer());
 					resultMap.put("status", s.getStatus());
+					//标的购买人数
+					int investMemberNum = investListService.count("scale.id", s.getId());
+					resultMap.put("investMemberNum", investMemberNum);
 				}
 				Product p = s.getProduct();
 				if (p != null) {

@@ -449,7 +449,6 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 */
 	public void investFFCallback(){
 		try{
-			boolean success=false;
 			//读取配置文件中
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String requestId = getRequest().getParameter("requestId");
@@ -513,9 +512,9 @@ public class InvestListAction extends BaseAction<InvestList>{
 					String pactNumber = DateUtils.date2Str(new Date(), "MMDDhhmmss") + DataUtils.sixNumber();
 					investList.setPactNumber(pactNumber);
 					investList.setDays(day);
-					success = investListService.saveEntity(investList);
+					investListService.saveEntity(investList);
 				}else{
-					LoggerUtils.error("流程号："+requestId+"------"+ReadProperties.getStringValue(properties, result),this.getClass());
+					LoggerUtils.error("流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
 			}else {
 				//签名不匹配
