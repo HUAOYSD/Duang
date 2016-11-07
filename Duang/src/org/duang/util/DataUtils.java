@@ -200,7 +200,7 @@ public class DataUtils {
 	}
 	
 	public static String ISO2UTF8(String str) throws UnsupportedEncodingException{
-		return new String(str.getBytes("ISO-5988-1"),"UTF-8");
+		return new String(str.getBytes("ISO-8859-1"),"UTF-8");
 	}
 	
 }

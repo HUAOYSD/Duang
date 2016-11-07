@@ -111,24 +111,24 @@ public class SSLClient{
 		}
 		return jsonObject;	
 	}
-	public static void main(String[] args) {
-		try {
-			String requestId=DataUtils.randomUUID();
-			String md5=requestId+"fbm000004韩玉昆51070919840824824812016100920161102";
-			String md52=MD5Utils.hmacSign(md5, "RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF");
-			
-			Map<String, String> map = new HashMap<String, String>();
-	        map.put("requestId", requestId);
-	        map.put("merchantCode", "fbm000004");
-	        map.put("userName", "韩玉昆");
-	        map.put("idNumber", "510709198408248248");
-	        map.put("pageNo", "1");
-	        map.put("sDate", "20161009");
-	        map.put("eDate", "20161102");
-	        map.put("signature", md52);
-			getJsonObjectByUrl("https://fbtest.sumapay.com/main/UserForFT_authQuery",map,"gbk");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+//			String requestId=DataUtils.randomUUID();
+//			String md5=requestId+"fbm000004韩玉昆51070919840824824812016100920161102";
+//			String md52=MD5Utils.hmacSign(md5, "RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF");
+//			
+//			Map<String, String> map = new HashMap<String, String>();
+//	        map.put("requestId", requestId);
+//	        map.put("merchantCode", "fbm000004");
+//	        map.put("userName", "韩玉昆");
+//	        map.put("idNumber", "510709198408248248");
+//	        map.put("pageNo", "1");
+//	        map.put("sDate", "20161009");
+//	        map.put("eDate", "20161102");
+//	        map.put("signature", md52);
+//			getJsonObjectByUrl("https://fbtest.sumapay.com/main/UserForFT_authQuery",map,"gbk");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 }

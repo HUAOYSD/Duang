@@ -791,10 +791,15 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		String requestId = DataUtils.randomUUID();
 		//数字签名字符串
 		StringBuffer signatureBuffer = new StringBuffer();
-		signatureBuffer.append(requestId+merchantCode+userIdIdentity+userName+idNumber);
-		System.out.println(signatureBuffer.toString());
+		signatureBuffer.append(requestId);
+		signatureBuffer.append(merchantCode);
+		signatureBuffer.append(userIdIdentity);
+		signatureBuffer.append(userName);
+		signatureBuffer.append(idNumber);
+		System.out.println("-------------数字签名字符串：signature:"+signatureBuffer.toString());
 		//加密后的数字签名
 		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
+		System.out.println("-------------加密后的数字签名：signature_sign:"+signature_sign);
 		//封装map参数
 		Map<String,String> map = new HashMap<String, String>();
 		map.put("requestId",requestId);
@@ -813,13 +818,21 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String back_idNumber = jsonObjectData.get("idNumber").toString();
 			String back_result = jsonObjectData.get("result").toString();
 			String back_balance = jsonObjectData.get("balance").toString();
+			if(!DataUtils.notEmpty(back_balance) && !back_balance.equals("null")){
+				back_balance="0";
+			}
 			String back_withdrawAbleBalance = jsonObjectData.get("withdrawAbleBalance").toString();
+			if(!DataUtils.notEmpty(back_withdrawAbleBalance) && !back_withdrawAbleBalance.equals("null")){
+				back_withdrawAbleBalance="0";
+			}
 			String back_frozenBalance = jsonObjectData.get("frozenBalance").toString();
+			if(!DataUtils.notEmpty(back_frozenBalance) && !back_frozenBalance.equals("null")){
+				back_frozenBalance="0";
+			}
 			String back_signature = jsonObjectData.get("signature").toString();
 			
 			StringBuffer back_signatureBuffer = new StringBuffer(back_userIdIdentity+back_userName+back_idNumber+
 					back_result+back_balance+back_withdrawAbleBalance+back_frozenBalance);
-			
 			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), akey);
 			if(back_signature_sign.equals(back_signature)){
 				jsonObject.put("userIdIdentity", back_userIdIdentity);

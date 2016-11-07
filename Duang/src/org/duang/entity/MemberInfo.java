@@ -60,7 +60,7 @@ public class MemberInfo implements java.io.Serializable {
 	private String payType;
 	private String token;
 	private String requestId;
-	
+	private String entityCode;
 	private Set<MemberExtraInfo> memberExtraInfos = new HashSet<MemberExtraInfo>(0);
 	private Set<Friends> friendsesForTarget = new HashSet<Friends>(0);
 	private Set<Friends> friendsesForSelf = new HashSet<Friends>(0);
@@ -613,6 +613,14 @@ public class MemberInfo implements java.io.Serializable {
 		this.requestId = requestId;
 	}
 
+	@Column(name = "entity_code",length=50)
+	public String getEntityCode() {
+		return entityCode;
+	}
+	public void setEntityCode(String entityCode) {
+		this.entityCode = entityCode;
+	}
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
 	public CustomerManager getCustomerManager() {
