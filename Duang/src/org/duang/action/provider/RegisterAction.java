@@ -152,6 +152,49 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 		return success;
 	}
 	
+	/**
+	 * 生成一个6位数字的邀请码
+	 * @Title: getSelfEntityCode   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param entityCode
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月7日 下午2:14:01
+	 * @return: String      
+	 * @throws
+	 */
+	private String getSelfEntityCode() throws Exception{
+		String entityCode = DataUtils.sixNumber();
+		MemberInfo memberInfo = service.findEntity("entityCode", entityCode);
+		if (memberInfo == null) {
+			return entityCode;
+		}else{
+			return getSelfEntityCode();
+		}
+	}
+	
+	/**
+	 * 生成一个6位数字的邀请码
+	 * @Title: getSelfEntityCode   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param entityCode
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月7日 下午2:14:01
+	 * @return: String      
+	 * @throws
+	 */
+	private MemberInfo getMemberInfoByEntityCode(String entityCode) throws Exception{
+		MemberInfo memberInfo = service.findEntity("entityCode", entityCode);
+		if (memberInfo != null) {
+			return memberInfo;
+		}else{
+			return null;
+		}
+	}
+	
 	/**   
 	 * 注册
 	 * @Title: register   
@@ -174,6 +217,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 				}else{
 					String password = getRequest().getParameter("pwd");
 					String registerStyle = getRequest().getParameter("registerStyle");
+					String entityCode = getRequest().getParameter("entity_code");
 					if (DataUtils.notEmpty(password) && DataUtils.notEmpty(registerStyle)) {
 						String id = DataUtils.randomUUID();
 						entity.setId(id);
@@ -185,6 +229,17 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 						entity.setCreateTime(new Date());
 						entity.setRequestId(DataUtils.randomUUID());
 						entity.setToken(DataUtils.randomUUID());
+						
+						//生成自己的邀请码
+						entity.setEntityCode(getSelfEntityCode());
+						//推荐会员信息
+						if(DataUtils.notEmpty(entityCode)){
+							//推荐人信息
+							MemberInfo EntityMemberInfo = getMemberInfoByEntityCode(entityCode);
+							if(EntityMemberInfo!=null){
+								entity.setMemberInfo(new MemberInfo(EntityMemberInfo.getId()));
+							}
+						}
 						//附加投资用户身份
 						LoanMember loanMember = new LoanMember();
 						loanMember.setId(DataUtils.randomUUID());

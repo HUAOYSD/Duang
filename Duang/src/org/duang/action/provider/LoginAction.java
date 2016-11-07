@@ -72,6 +72,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 						resultjson.put("id", jsonObject.optString("id"));
 						resultjson.put("isAuth", jsonObject.optString("isAuth"));
 						resultjson.put("idcard", jsonObject.optString("idcard"));
+						resultjson.put("entityCode", jsonObject.optString("entityCode"));
 						MemberCollection.getInstance(token,service).putJsonObject(token, resultjson);
 						success = true;
 					} else {
@@ -213,6 +214,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		jsonObject.put("sex", entity.getSex());
 		jsonObject.put("photo", entity.getUserImg());
 		jsonObject.put("isAuth", String.valueOf(entity.getIsAuth()));
+		jsonObject.put("entityCode", entity.getEntityCode());
 		jsonObject.put("isEliteAccount", If.valueOf("If"+entity.getIsEliteAccount()).toString());
 
 		Set<InvestMember> investMembers = entity.getInvestMembers();

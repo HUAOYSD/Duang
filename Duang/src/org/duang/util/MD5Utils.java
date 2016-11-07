@@ -41,7 +41,7 @@ public class MD5Utils {
 		byte value[];  
 		try {  
 		     keyb = aKey.getBytes("utf-8");  
-		     value = aValue.getBytes("uft-8");  
+		     value = aValue.getBytes("utf-8");  
 		} catch (UnsupportedEncodingException e) {  
 		     keyb = aKey.getBytes();  
 		     value = aValue.getBytes();  
@@ -82,6 +82,6 @@ public class MD5Utils {
 	}  
 	
 	public static void main(String[] args) {
-		System.out.println(hmacSign("1234234fbm000004韩玉昆510709198408248248102016010120161102","RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF"));
+		System.out.println(hmacSign("4edc84b9db1c4264b322b30258b21f8afbm000004da5d2a3f259c4a2994ba22ab8b9d2d5f韩玉昆510709198408248248","RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF"));
 	}
 }

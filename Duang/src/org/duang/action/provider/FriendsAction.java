@@ -355,5 +355,4 @@ public class FriendsAction extends BaseAction<Friends>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-
 }
