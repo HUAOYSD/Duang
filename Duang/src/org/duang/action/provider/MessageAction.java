@@ -17,6 +17,7 @@ import org.duang.common.system.MemberCollection;
 import org.duang.entity.MemberInfo;
 import org.duang.entity.Message;
 import org.duang.enums.If;
+import org.duang.service.MemberInfoService;
 import org.duang.service.MessageService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -45,6 +46,12 @@ public class MessageAction extends BaseAction<Message>{
 		this.messageService = messageService;
 	}
 
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
+	}
+	
 	/**   
 	 * 查询消息列表
 	 * @Title: queryMessage   
@@ -61,7 +68,7 @@ public class MessageAction extends BaseAction<Message>{
 			String token = getRequest().getParameter("token");
 			String count = getRequest().getParameter("count");
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance(token).getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance(token,memberInfoService).getMainField(token))){
 				int queryCount = 20;
 				if(DataUtils.notEmpty(count)){
 					queryCount = Integer.parseInt(count);
@@ -108,7 +115,7 @@ public class MessageAction extends BaseAction<Message>{
 			String token = getRequest().getParameter("token");
 			String id = "";
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,memberInfoService).getMainField(token))){
 				
 				condsUtils.addProperties(true, "memberInfoByReceiver","memberInfoByReceiverAlias.id", "state", "order");
 				condsUtils.addValues(true, new Object[]{"memberInfoByReceiverAlias","as"},id, 1, Order.desc("time"));
@@ -149,7 +156,7 @@ public class MessageAction extends BaseAction<Message>{
 			String token = getRequest().getParameter("token");
 			String p_id = getRequest().getParameter("p_id");
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance(token).getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance(token,memberInfoService).getMainField(token))){
 				Message message = messageService.findById(p_id);
 				if (message == null) {
 					msg = "未找到消息";
@@ -190,7 +197,7 @@ public class MessageAction extends BaseAction<Message>{
 			String title = getRequest().getParameter("title");
 			String content = getRequest().getParameter("content");
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance(token).getMainField(token)) && 
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(MemberCollection.getInstance(token,memberInfoService).getMainField(token)) && 
 				DataUtils.notEmpty(p_senderid) && DataUtils.notEmpty(p_receiver)&& DataUtils.notEmpty(title)&& DataUtils.notEmpty(content)){
 				Message message = new Message();
 				message.setId(DataUtils.randomUUID());
@@ -283,7 +290,7 @@ public class MessageAction extends BaseAction<Message>{
 			String token = getRequest().getParameter("token");
 			//判断参数是否为空
 			String id ="";
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,memberInfoService).getMainField(token))){
 				String  sql = "update message  set readed=1 WHERE  receiver = '"+id+"'";
 				success = messageService.executeSql(sql);
 				if (!success) {
@@ -364,7 +371,7 @@ public class MessageAction extends BaseAction<Message>{
 			String token = getRequest().getParameter("token");
 			//判断参数是否为空
 			String id ="";
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,memberInfoService).getMainField(token))){
 				String  sql = "update message  set state=0 WHERE  receiver = '"+id+"'";
 				success = messageService.executeSql(sql);
 				if (!success) {

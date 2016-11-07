@@ -16,6 +16,7 @@ import org.duang.entity.BillLoan;
 import org.duang.enums.billloan.BillStatus;
 import org.duang.enums.billloan.UseType;
 import org.duang.service.BillLoanService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
@@ -43,7 +44,15 @@ public class BillLoanAction extends BaseAction<BillLoan>{
 	public void setService(BillLoanService service) {
 		this.service = service;
 	}
+	/**
+	 * 客户基本信息
+	 */
+	private MemberInfoService sysMemberInfoService;
 
+	@Resource(name = "sysmemberinfoserviceimpl")
+	public void setService(MemberInfoService sysMemberInfoService) {
+		this.sysMemberInfoService = sysMemberInfoService;
+	}
 
 	/**   
 	 * 查询账单记录
@@ -60,7 +69,7 @@ public class BillLoanAction extends BaseAction<BillLoan>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				List<BillLoan> list = service.queryEntity("memberInfo.id", id, null, Order.desc("optTime"));
 				if (DataUtils.notEmpty(list)) {
 					for (BillLoan bill : list) {

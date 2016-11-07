@@ -17,6 +17,7 @@ import org.duang.entity.Ad;
 import org.duang.entity.InvestList;
 import org.duang.enums.invest.Status;
 import org.duang.service.InvestListService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -41,7 +42,15 @@ public class RansomAction extends BaseAction<Ad>{
 	public void setService(InvestListService investListService) {
 		this.service = investListService;
 	}
-	
+	/**
+	 * 客户基本信息
+	 */
+	private MemberInfoService sysMemberInfoService;
+
+	@Resource(name = "sysmemberinfoserviceimpl")
+	public void setService(MemberInfoService sysMemberInfoService) {
+		this.sysMemberInfoService = sysMemberInfoService;
+	}
 	
 	/**
 	 * 获取可提前赎回的列表
@@ -54,7 +63,7 @@ public class RansomAction extends BaseAction<Ad>{
 		try {
 			String token = getRequest().getParameter("token");
 			if (DataUtils.notEmpty(token)) {
-				String id = MemberCollection.getInstance(token).getMainField(token);
+				String id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token);
 				if(DataUtils.notEmpty(id)){
 					List<InvestList> list = service.queryEntity("status", Status.S2.getVal(), null, org.hibernate.criterion.Order.desc("openDate"));
 					if (DataUtils.notEmpty(list)) {

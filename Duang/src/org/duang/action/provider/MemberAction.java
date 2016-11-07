@@ -421,7 +421,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,service).getMainField(token))) {
 				MemberInfo memberInfo = service.findById(id);
 				if (memberInfo != null) {
 					fillMemberInfo(memberInfo);

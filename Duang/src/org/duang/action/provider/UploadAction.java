@@ -106,7 +106,7 @@ public class UploadAction extends BaseAction<FileUpload>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = "";
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))){
 				int num = Integer.parseInt(getRequest().getParameter("num"));
 				//现将文件放到缓冲区
 				ServletFileUpload upload = initUpload(num);
@@ -158,7 +158,7 @@ public class UploadAction extends BaseAction<FileUpload>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = "";
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))){
 				int num = Integer.parseInt(getRequest().getParameter("num"));
 				//现将文件放到缓冲区
 				ServletFileUpload upload = initUpload(num);

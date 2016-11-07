@@ -17,6 +17,7 @@ import org.duang.enums.loan.Poundage;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
 import org.duang.service.ApplyLoanHouseService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
@@ -42,7 +43,11 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 	public void setService(ApplyLoanHouseService applyLoanHouseService) {
 		this.applyLoanHouseService = applyLoanHouseService;
 	}
-	
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
+	}
 	/**
 	 * 封装参数
 	 * @Title: getApplyLoanInfo   
@@ -77,7 +82,7 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("token"))){
 			MemberInfo memberInfo = new MemberInfo();
-			memberInfo.setId(MemberCollection.getInstance(getRequest().getParameter("token")).getMainField(getRequest().getParameter("token")));
+			memberInfo.setId(MemberCollection.getInstance(getRequest().getParameter("token"),memberInfoService).getMainField(getRequest().getParameter("token")));
 			loanList.setMemberInfo(memberInfo);
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_money"))){

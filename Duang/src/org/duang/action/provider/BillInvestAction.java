@@ -18,6 +18,7 @@ import org.duang.enums.billinvest.BillStatus;
 import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
 import org.duang.service.InvestMemberService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
@@ -51,6 +52,15 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 		this.investMemberService = investMemberService;
 	}
 
+	/**
+	 * 客户基本信息
+	 */
+	private MemberInfoService sysMemberInfoService;
+
+	@Resource(name = "sysmemberinfoserviceimpl")
+	public void setService(MemberInfoService sysMemberInfoService) {
+		this.sysMemberInfoService = sysMemberInfoService;
+	}
 	/**   
 	 * 查询账单记录
 	 * @Title: queryBillList   
@@ -66,7 +76,7 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				List<BillInvest> list = service.queryEntity("memberInfo.id", id, null, Order.desc("optTime"));
 				success = true;
 				if (DataUtils.notEmpty(list)) {
@@ -115,7 +125,7 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				condsUtils.addProperties(true, "memberInfo");
 				condsUtils.concatValue(new String[] { "infoAlias", "as" });
 				condsUtils.addProperties(false, "infoAlias.id");
