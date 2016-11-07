@@ -71,7 +71,7 @@ public class FriendsNewsAction extends BaseAction<FriendsNews>{
 			//登录人id
 			String id = "";
 			if(DataUtils.notEmpty(num) && DataUtils.notEmpty(count) && DataUtils.notEmpty(token) && 
-					DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+					DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))){
 				int countNumber = DataUtils.str2int(count), numNumber = DataUtils.str2int(num);
 				String sql = "SELECT fn.id, fn.content, fn.createtime, mi.real_name, mi.nickname, mi.user_img "+
 							 " FROM friends_news fn LEFT JOIN member_info mi ON mi.id = fn.member_id WHERE fn.member_id IN ( "+

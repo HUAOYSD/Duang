@@ -98,7 +98,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))) {
 				int num = DataUtils.str2int(getRequest().getParameter("num"));
 				int count = DataUtils.str2int(getRequest().getParameter("count"));
 				if (num != 0 && count != 0) {
@@ -146,7 +146,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 			String token = getRequest().getParameter("token");
 			String applyState = getRequest().getParameter("applyState");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token)) &&  DataUtils.notEmpty(applyState)) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token)) &&  DataUtils.notEmpty(applyState)) {
 				//单次获取标个数
 				int num = DataUtils.str2int(getRequest().getParameter("num"));
 				//下拉次数（首次打开次数累计1次）
@@ -201,7 +201,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))) {
 				String loanid = DES.decryptDES(getRequest().getParameter("p_id"));
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", loanid);

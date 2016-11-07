@@ -60,7 +60,7 @@ public class BillLoanAction extends BaseAction<BillLoan>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))) {
 				List<BillLoan> list = service.queryEntity("memberInfo.id", id, null, Order.desc("optTime"));
 				if (DataUtils.notEmpty(list)) {
 					for (BillLoan bill : list) {

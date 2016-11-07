@@ -71,7 +71,7 @@ public class SignAction extends BaseAction<Sign>{
 			String token = getRequest().getParameter("token");
 			String memberId="";
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(memberId = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(memberId = MemberCollection.getInstance(token).getMainField(token))){
 				PageUtil<Sign> page = getPageUtil();
 				page.setPageRecords(30);
 				List<Sign> signList = signService.queryEntity("memberInfo.id", memberId, page, Order.desc("signDate"));
@@ -111,7 +111,7 @@ public class SignAction extends BaseAction<Sign>{
 		try {
 			String token = getRequest().getParameter("token");
 			String memberId = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(memberId = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(memberId = MemberCollection.getInstance(token).getMainField(token))) {
 				int num = DataUtils.str2int(getRequest().getParameter("num"));
 				int count = DataUtils.str2int(getRequest().getParameter("count"));
 				if (num != 0 && count != 0) {
@@ -189,7 +189,7 @@ public class SignAction extends BaseAction<Sign>{
 			//添加的积分数
 			int score = 0;
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(memberId = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(memberId = MemberCollection.getInstance(token).getMainField(token))){
 				//判断今天是否已经签到
 				if(isSignToday(memberId)){
 					success = true;

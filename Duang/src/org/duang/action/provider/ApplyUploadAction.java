@@ -47,7 +47,7 @@ public class ApplyUploadAction extends BaseAction<Object>{
 			String token = getRequest().getParameter("token");
 			String id = "";
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))){
 				Map<String,Object>  pathMap = new HashMap<String,Object>();
 				pathMap.put("salarycheck", UploadFile.PATH.getVal(UploadFile.SALARY.getVal(id)));
 				pathMap.put("personcheck", UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(id)));

@@ -227,7 +227,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			String token = getRequest().getParameter("token");
 			String id = getRequest().getParameter("id");
 			String memeberId ="";
-			if(DataUtils.notEmpty(id) && DataUtils.notEmpty(token) && DataUtils.notEmpty((memeberId = MemberCollection.getInstance().getMainField(token)))){
+			if(DataUtils.notEmpty(id) && DataUtils.notEmpty(token) && DataUtils.notEmpty((memeberId = MemberCollection.getInstance(token).getMainField(token)))){
 				StringBuffer sql = new StringBuffer();
 				sql.append("SELECT product.name_zh, product.days, product.category, il.money, il.total_money,");
 				sql.append(" scale.id, scale.`name`, scale.yet_money, scale.residue_money, scale.revenue, scale.revenue_add, scale.return_style,");

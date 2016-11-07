@@ -77,7 +77,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("token"))){
 			MemberInfo memberInfo = new MemberInfo();
-			memberInfo.setId(MemberCollection.getInstance().getMainField(getRequest().getParameter("token")));
+			memberInfo.setId(MemberCollection.getInstance(getRequest().getParameter("token")).getMainField(getRequest().getParameter("token")));
 			loanList.setMemberInfo(memberInfo);
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_money"))){

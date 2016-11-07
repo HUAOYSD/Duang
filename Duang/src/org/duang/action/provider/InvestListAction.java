@@ -143,7 +143,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 			
 			String id = "";
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))){
 				double money = DataUtils.str2double(p_money, 6);
 				if (DataUtils.isEmpty(p_scaleId)) {
 					msg = "理财标主键传值失败";
@@ -220,7 +220,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 			String num = getRequest().getParameter("num");
 			//判断参数是否为空
 			String id = "";
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))){
 				//初始化下滑次数
 				int currentPageNum = 1;
 				//初始化获取的条数

@@ -66,7 +66,7 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))) {
 				List<BillInvest> list = service.queryEntity("memberInfo.id", id, null, Order.desc("optTime"));
 				success = true;
 				if (DataUtils.notEmpty(list)) {
@@ -115,7 +115,7 @@ public class BillInvestAction extends BaseAction<BillInvest>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token).getMainField(token))) {
 				condsUtils.addProperties(true, "memberInfo");
 				condsUtils.concatValue(new String[] { "infoAlias", "as" });
 				condsUtils.addProperties(false, "infoAlias.id");

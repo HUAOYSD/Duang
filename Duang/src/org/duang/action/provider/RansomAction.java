@@ -54,7 +54,7 @@ public class RansomAction extends BaseAction<Ad>{
 		try {
 			String token = getRequest().getParameter("token");
 			if (DataUtils.notEmpty(token)) {
-				String id = MemberCollection.getInstance().getMainField(token);
+				String id = MemberCollection.getInstance(token).getMainField(token);
 				if(DataUtils.notEmpty(id)){
 					List<InvestList> list = service.queryEntity("status", Status.S2.getVal(), null, org.hibernate.criterion.Order.desc("openDate"));
 					if (DataUtils.notEmpty(list)) {
