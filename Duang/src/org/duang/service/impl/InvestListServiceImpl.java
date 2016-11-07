@@ -461,4 +461,22 @@ public class InvestListServiceImpl implements InvestListService{
 		return dao.deleteEntity(t);
 	}
 	
+	
+	/**
+	 * 提前赎回成功后的回调
+	 * @param id
+	 * @return
+	 */
+	public boolean ransomed(String id, double income) throws Exception {
+		//
+		//改变理财标状态
+		InvestList investList = dao.findById(id);
+		investList.setBackIncome(income);
+		investList.setTotalMoney(investList.getMoney() + income);
+		investList.setIncome(income);
+		investList.setStatus(Status.S8.getVal());
+		//增加理财交易流水
+		return true;
+	}
+	
 }
