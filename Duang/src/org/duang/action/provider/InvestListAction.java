@@ -26,6 +26,7 @@ import org.duang.enums.invest.TurnStatus;
 import org.duang.enums.invest.UseTicket;
 import org.duang.enums.product.Category;
 import org.duang.service.InvestListService;
+import org.duang.service.MemberInfoService;
 import org.duang.service.ScaleService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -61,7 +62,12 @@ public class InvestListAction extends BaseAction<InvestList>{
 	public void setScaleService(ScaleService scaleService) {
 		this.scaleService = scaleService;
 	}
-
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
+	}
+	
 	/**   
 	 * 获取首页推荐标信息
 	 * @Title: getHomeRecommendScale   
@@ -143,7 +149,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 			
 			String id = "";
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,memberInfoService).getMainField(token))){
 				double money = DataUtils.str2double(p_money, 6);
 				if (DataUtils.isEmpty(p_scaleId)) {
 					msg = "理财标主键传值失败";
@@ -220,7 +226,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 			String num = getRequest().getParameter("num");
 			//判断参数是否为空
 			String id = "";
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,memberInfoService).getMainField(token))){
 				//初始化下滑次数
 				int currentPageNum = 1;
 				//初始化获取的条数
@@ -449,7 +455,6 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 */
 	public void investFFCallback(){
 		try{
-			boolean success=false;
 			//读取配置文件中
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String requestId = getRequest().getParameter("requestId");
@@ -513,9 +518,9 @@ public class InvestListAction extends BaseAction<InvestList>{
 					String pactNumber = DateUtils.date2Str(new Date(), "MMDDhhmmss") + DataUtils.sixNumber();
 					investList.setPactNumber(pactNumber);
 					investList.setDays(day);
-					success = investListService.saveEntity(investList);
+					investListService.saveEntity(investList);
 				}else{
-					LoggerUtils.error("流程号："+requestId+"------"+ReadProperties.getStringValue(properties, result),this.getClass());
+					LoggerUtils.error("流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
 			}else {
 				//签名不匹配

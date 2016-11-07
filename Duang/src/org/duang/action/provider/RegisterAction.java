@@ -184,7 +184,6 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 						entity.setRegisterStyle(Integer.parseInt(registerStyle));
 						entity.setCreateTime(new Date());
 						entity.setRequestId(DataUtils.randomUUID());
-						entity.setToken(entity.getRequestId());
 						entity.setToken(DataUtils.randomUUID());
 						//附加投资用户身份
 						LoanMember loanMember = new LoanMember();

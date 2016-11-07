@@ -6,7 +6,9 @@ import javax.annotation.Resource;
 
 import org.duang.entity.MemberInfo;
 import org.duang.service.MemberInfoService;
+import org.duang.service.impl.MemberInfoServiceImpl;
 import org.duang.util.DataUtils;
+import org.springframework.stereotype.Component;
 
 import net.sf.json.JSONObject;
 
@@ -16,24 +18,15 @@ import net.sf.json.JSONObject;
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 5y
  * @date 2016年9月6日 上午11:04:58      
- */  
+ */ 
+@Component
 public class MemberCollection {  
-	
-	private MemberInfoService service;
-	@Resource
-	public void setService(MemberInfoService service) {
-		this.service = service;
-	}
-	public MemberInfoService getService() {
-		return service;
-	}
-
 	private static MemberCollection instance;  
 	private MemberCollection() {  
 		members = new HashMap<String, JSONObject>();  
 		id_token = new HashMap<String, String>();  
 	}  
-	public static MemberCollection getInstance(String token) throws Exception{  
+	public static MemberCollection getInstance(String token,MemberInfoService service) throws Exception{  
 		if (instance == null) {  
 			instance = new MemberCollection();  
 		}  
@@ -41,7 +34,7 @@ public class MemberCollection {
 			JSONObject jsonObject = instance.optJsonObject(token);
 			if (jsonObject == null || jsonObject.size() == 0) {
 				jsonObject = new JSONObject();
-				MemberInfo entity = instance.getService().findEntity("token", token);
+				MemberInfo entity = service.findEntity("token", token);
 				jsonObject.put("pd", entity.getPassword());
 				jsonObject.put("token", token);
 				jsonObject.put("id", entity.getId());

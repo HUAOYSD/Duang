@@ -14,6 +14,8 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.Product;
 import org.duang.entity.Scale;
+import org.duang.service.InvestListService;
+import org.duang.service.MemberInfoService;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -40,7 +42,11 @@ public class ScaleAction extends BaseAction<Scale>{
 	public void setScaleService(ScaleService scaleService) {
 		this.scaleService = scaleService;
 	}
-
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
+	}
 	/**   
 	 * 查询房标列表
 	 * @Title: queryHouseScale   
@@ -226,7 +232,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			String token = getRequest().getParameter("token");
 			String id = getRequest().getParameter("id");
 			String memeberId ="";
-			if(DataUtils.notEmpty(id) && DataUtils.notEmpty(token) && DataUtils.notEmpty((memeberId = MemberCollection.getInstance().getMainField(token)))){
+			if(DataUtils.notEmpty(id) && DataUtils.notEmpty(token) && DataUtils.notEmpty((memeberId = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))){
 				StringBuffer sql = new StringBuffer();
 				sql.append("SELECT product.name_zh, product.days, product.category, il.money, il.total_money,");
 				sql.append(" scale.id, scale.`name`, scale.yet_money, scale.residue_money, scale.revenue, scale.revenue_add, scale.return_style,");
@@ -280,6 +286,11 @@ public class ScaleAction extends BaseAction<Scale>{
 		return listMap;
 	}
 	
+	private InvestListService investListService;
+	@Resource
+	public void setService(InvestListService investListService) {
+		this.investListService = investListService;
+	}
 	/**   
 	 * 填充List数据
 	 * @Title: fillDatagridCons   
@@ -311,6 +322,9 @@ public class ScaleAction extends BaseAction<Scale>{
 					resultMap.put("useTicket", s.getUseTicket());
 					resultMap.put("transfer", s.getTransfer());
 					resultMap.put("status", s.getStatus());
+					//标的购买人数
+					int investMemberNum = investListService.count("scale.id", s.getId());
+					resultMap.put("investMemberNum", investMemberNum);
 				}
 				Product p = s.getProduct();
 				if (p != null) {

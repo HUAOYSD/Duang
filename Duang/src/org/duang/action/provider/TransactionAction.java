@@ -53,7 +53,7 @@ private static final long serialVersionUID = 1L;
 			String token = getRequest().getParameter("token");
 			String id = "";
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))){
 				Map<String, Object> map = sysMemberInfoService.queryLoanAndInvestInfo(id);
 				jsonObject.put("result", map);
 				success = true;
@@ -87,7 +87,7 @@ private static final long serialVersionUID = 1L;
 			String token = getRequest().getParameter("token");
 			String id = "";
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))){
 				Map<String, Object> map = sysMemberInfoService.queryLoanAndInvestInfo(id);
 				jsonObject.put("result", map);
 				success = true;

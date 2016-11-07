@@ -18,6 +18,7 @@ import org.duang.entity.Friends;
 import org.duang.entity.MemberInfo;
 import org.duang.service.BillInvestService;
 import org.duang.service.FriendsService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
@@ -48,6 +49,15 @@ public class FriendsAction extends BaseAction<Friends>{
 		this.billInvestService = billInvestService;
 	}
 
+	/**
+	 * 客户基本信息
+	 */
+	private MemberInfoService sysMemberInfoService;
+
+	@Resource(name = "sysmemberinfoserviceimpl")
+	public void setService(MemberInfoService sysMemberInfoService) {
+		this.sysMemberInfoService = sysMemberInfoService;
+	}
 	/**   
 	 * 查询我关注的
 	 * @Title: queryMyStars   
@@ -63,7 +73,7 @@ public class FriendsAction extends BaseAction<Friends>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				List<Friends> list = service.queryEntity("memberInfoBySelf.id", id, null, Order.desc("optTime"));
 				if (DataUtils.notEmpty(list)) {
 					for (Friends friends : list) {
@@ -110,7 +120,7 @@ public class FriendsAction extends BaseAction<Friends>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				List<Friends> list = service.queryEntity("memberInfoByTarget.id", id, null, Order.desc("optTime"));
 				if (DataUtils.notEmpty(list)) {
 					for (Friends friends : list) {
@@ -173,7 +183,7 @@ public class FriendsAction extends BaseAction<Friends>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				List<?> list = billInvestService.findCostInfo(id);
 				if (list!=null && list.size()>0 && list.get(0) instanceof Object[]) {
 					int tm = DataUtils.str2int(((Object[])list.get(0))[0].toString());
@@ -230,7 +240,7 @@ public class FriendsAction extends BaseAction<Friends>{
 			String token = getRequest().getParameter("token");
 			String targetMemberid = getRequest().getParameter("targetMemberid");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				if (DataUtils.notEmpty(targetMemberid)) {
 					if (service.addFriend(id, targetMemberid)) {
 						success = true;
@@ -272,7 +282,7 @@ public class FriendsAction extends BaseAction<Friends>{
 			String token = getRequest().getParameter("token");
 			String targetMemberid = getRequest().getParameter("targetMemberid");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				if (DataUtils.notEmpty(targetMemberid)) {
 					if (service.cancelFriend(id, targetMemberid)) {
 						success = true;
@@ -313,7 +323,7 @@ public class FriendsAction extends BaseAction<Friends>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				String sql = "select im.total_income,mi.real_name,mi.user_img from friends fri LEFT JOIN invest_member im on im.memberinfo_id=fri.target "+
 							 " LEFT JOIN member_info mi on mi.id=im.memberinfo_id "+
 							 " where fri.self='"+id+"' order by im.total_income desc";

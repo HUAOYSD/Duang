@@ -22,6 +22,7 @@ import org.duang.enums.billinvest.BillStatus;
 import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
 import org.duang.service.InvestMemberService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
@@ -54,6 +55,12 @@ public class PayAction extends BaseAction<BillInvest>{
 	public void setInvestMemberService(InvestMemberService investMemberService) {
 		this.investMemberService = investMemberService;
 	}
+	
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
+	}
 	/**   
 	 * 充值 <成功回调> 
 	 * @Title: deposit   
@@ -73,7 +80,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			String platform = getRequest().getParameter("p_platform");
 			String pk = DataUtils.randomUUID();
 			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
 				double pushManyVal = DataUtils.str2double(pushMany, 6);
 				if (pushManyVal > 0) {
 					entity = new BillInvest(pk, new MemberInfo(id), null, new BindCard(bankid), UseType.UT1.getVal(), pushManyVal, 0, 0, BillStatus.BS1.getVal(), new Date(), "充值", DataUtils.str2int(platform));
@@ -117,7 +124,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			String token = getRequest().getParameter("token");
 			String pkid = getRequest().getParameter("p_id");
 			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
 				final InvestMember investMember = investMemberService.findEntity("memberInfo.id", id);
 				String sql = "SELECT BALANCE,ASSET  FROM BILL_INVEST WHERE MEMBER_INFO = '"+id+"' AND STATUS = "+BillStatus.BS2.getVal()+" ORDER BY OPT_TIME DESC";
 				List<?> list = service.queryBySQL(sql, null, null, false);
@@ -177,7 +184,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			String platform = getRequest().getParameter("p_platform");
 			String pk = DataUtils.randomUUID();
 			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
 				double fetchManyVal = DataUtils.str2double(p_fetchMany, 6);
 				if (fetchManyVal > 0) {
 					entity = new BillInvest(pk, new MemberInfo(id), null, new BindCard(bankid), UseType.UT2.getVal(), fetchManyVal, 0, 0, BillStatus.BS1.getVal(), new Date(), "提现", DataUtils.str2int(platform));
@@ -221,7 +228,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			String token = getRequest().getParameter("token");
 			String pkid = getRequest().getParameter("p_id");
 			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
 				final InvestMember investMember = investMemberService.findEntity("memberInfo.id", id);
 				String sql = "SELECT BALANCE,ASSET  FROM BILL_INVEST WHERE MEMBER_INFO = '"+id+"' AND STATUS = "+BillStatus.BS2.getVal()+" ORDER BY OPT_TIME DESC";
 				List<?> list = service.queryBySQL(sql, null, null, false);

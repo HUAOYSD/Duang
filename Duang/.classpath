@@ -109,5 +109,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-cache-4.3.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpcore-4.3.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpmime-4.3.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
