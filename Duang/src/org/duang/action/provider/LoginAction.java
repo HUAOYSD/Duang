@@ -128,6 +128,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 							resultjson.put("pd", jsonObject.optString("pd"));
 							resultjson.put("token", jsonObject.optString("token"));
 							resultjson.put("id", jsonObject.optString("id"));
+							resultjson.put("entityCode", jsonObject.optString("entityCode"));
 							MemberCollection.getInstance(token,service).putJsonObject(token, resultjson);
 						}else {
 							msg = "未获取到该用户";

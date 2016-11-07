@@ -11,6 +11,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.SMSUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.SMSVerificationCode;
+import org.duang.enums.Platform;
 import org.duang.service.SMSVerificationCodeService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -114,15 +115,13 @@ public class SMSVerificationCodeAction extends BaseAction<SMSVerificationCode>{
 			String platform = getRequest().getParameter("platform");
 			if (DataUtils.notEmpty(platform) && ("IOS".equals(platform) || "Android".equals(platform))) {
 				String signature = getRequest().getParameter("signature");
-				//String content = "您的注册验证码是："+vc;
+				String content = "验证码是：";
 				if ("IOS".equals(platform) && SMSUtils.IOS_SIGNATURE.equals(signature)) {
 					jsonObject.put("vc", vCode);
-					//success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P3.getVal());
-					success = true;
+					success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P3.getVal());
 				}else if ("Android".equals(platform) && SMSUtils.ANDORID_SIGNATURE.equals(signature)) {
 					jsonObject.put("vc", vCode);
-					//success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P2.getVal());
-					success = true;
+					success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P2.getVal());
 				}else {
 					msg = "短信签名错误";
 				}
