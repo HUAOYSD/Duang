@@ -19,9 +19,11 @@ import org.duang.common.system.MemberCollection;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
+import org.duang.entity.SMSVerificationCode;
 import org.duang.enums.If;
 import org.duang.enums.ResultCode;
 import org.duang.service.MemberInfoService;
+import org.duang.service.SMSVerificationCodeService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -130,6 +132,56 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			e.printStackTrace();
 			LoggerUtils.error("MemberAction——modifyLoginPassword方法错误：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("MemberAction——modifyLoginPassword方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	private SMSVerificationCodeService smsVerificationCodeService;
+	@Resource
+	public void setSmsVerificationCodeService(SMSVerificationCodeService smsVerificationCodeService) {
+		this.smsVerificationCodeService = smsVerificationCodeService;
+	}
+	
+	/**
+	 * 忘记密码接口
+	 * @Title: forgetLoginPassword   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月8日 上午9:09:37
+	 * @return: void      
+	 * @throws
+	 */
+	public void forgetLoginPassword(){
+		boolean success = false;
+		try {
+			String pwd = getRequest().getParameter("pwd");
+			String vcode = getRequest().getParameter("vcode");
+			String phone = getRequest().getParameter("phone");
+			if (DataUtils.notEmpty(phone) && DataUtils.notEmpty(pwd) && DataUtils.notEmpty(vcode)) {
+				//校验验证码
+				SMSVerificationCode smsVerificationCode = smsVerificationCodeService.findEntity("phone", phone);
+				//系统目前时间
+				Date curDate = new Date();
+				//有效期结束时间
+				Date endDate = smsVerificationCode.getEndTime();
+				if(endDate.getTime()-curDate.getTime()>=0){
+					MemberInfo memberInfo = service.findEntity("phone", DES.decryptDES(phone));
+					memberInfo.setPassword(pwd);
+					success = service.updateEntity(memberInfo);
+				}else{
+					msg = "验证码已过期";
+				}
+			}else{
+				msg = "参数不能为空";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction——forgetLoginPassword方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction——forgetLoginPassword方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
@@ -589,19 +641,19 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String payType = getRequest().getParameter("payType");
 			String merBizRequestId = getRequest().getParameter("merBizRequestId");
 			String signature = getRequest().getParameter("signature");
-			LoggerUtils.info("----实名认证"+requestId+";"+result+";"+status+";"+userName+";"+idNumber+";"+payType+";"+merBizRequestId, this.getClass());
-			LoggerUtils.info("---------------------------"+signature, this.getClass());
+			LoggerUtils.info("----------实名认证回调  返回参数字符串"+requestId+";"+result+";"+status+";"+userName+";"+idNumber+";"+payType+";"+merBizRequestId, this.getClass());
+			LoggerUtils.info("----------实名认证回调  返回的签名 "+signature, this.getClass());
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
+			signatureStr.append(merBizRequestId);
 			signatureStr.append(result);
 			signatureStr.append(status);
 			signatureStr.append(userName);
 			signatureStr.append(idNumber);
 			signatureStr.append(payType);
-			signatureStr.append(merBizRequestId);
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
-			LoggerUtils.info("dataSign---------------------------"+dataSign, this.getClass());
+			LoggerUtils.info("----------实名认证回调 本地加密签名"+dataSign, this.getClass());
 			if(signature.equals(dataSign)){
 				//请求成功
 				if(result.equals(ResultCode.SUCCESS.getVal())){
@@ -609,16 +661,16 @@ public class MemberAction extends BaseAction<MemberInfo>{
 					if(status.equals(String.valueOf(If.If0.getVal()))){
 						success = true;
 					}else{ //不一致
-						LoggerUtils.error("流程号："+requestId+" 实名制流程，姓名和身份证号不一致",this.getClass());
+						LoggerUtils.error("----------实名认证回调  流程号："+requestId+",原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 					}
 				}else if(result.equals(ResultCode.Doing.getVal())){
 					success = queryRealNameAuth(properties,userName,idNumber);
 				}else{
-					LoggerUtils.error("流程号："+requestId+"------"+ReadProperties.getStringValue(properties, result),this.getClass());
+					LoggerUtils.error("----------实名认证回调 流程号："+requestId+"，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
 			}else {
 				//签名不匹配
-				LoggerUtils.error("流程号："+requestId+" 实名制流程，签名不一致",this.getClass());
+				LoggerUtils.error("----------实名认证回调   流程号："+requestId+" ，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 			}
 			
 			if(success){
@@ -999,5 +1051,5 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		}
 		return jsonObject;
 	}
-	
+		
 }

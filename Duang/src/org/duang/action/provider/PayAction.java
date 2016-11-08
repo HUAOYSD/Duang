@@ -16,7 +16,6 @@ import org.duang.entity.BillInvest;
 import org.duang.entity.BindCard;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
-import org.duang.enums.If;
 import org.duang.enums.ResultCode;
 import org.duang.enums.billinvest.BillStatus;
 import org.duang.enums.billinvest.UseType;
@@ -334,8 +333,8 @@ public class PayAction extends BaseAction<BillInvest>{
 			String name = getRequest().getParameter("name");
 			String signature = getRequest().getParameter("signature");
 			
-			LoggerUtils.info(requestId+";"+result+";"+sum+";"+userIdIdentity+";"+unsettledBalance+";"+userBalance+";"+withdrawableBalance+";"+frozenBalance+";"+name, this.getClass());
-			LoggerUtils.info("---------------------------"+signature, this.getClass());
+			LoggerUtils.info("---------------------------充值回调字符串"+requestId+";"+result+";"+sum+";"+userIdIdentity+";"+unsettledBalance+";"+userBalance+";"+withdrawableBalance+";"+frozenBalance+";"+name, this.getClass());
+			LoggerUtils.info("---------------------------充值回调签名："+signature, this.getClass());
 			
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
@@ -345,16 +344,16 @@ public class PayAction extends BaseAction<BillInvest>{
 			signatureStr.append(userBalance);
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
-			LoggerUtils.info("---------------------------"+dataSign, this.getClass());
+			LoggerUtils.info("---------------------------本地加密后的签名:"+dataSign, this.getClass());
 			if(dataSign.equals(signature)){
-				if(result.equals(ResultCode.SUCCESS)){
+				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//修改数据库
 					updateMemberInfoBalance(userIdIdentity,withdrawableBalance,userBalance,frozenBalance,unsettledBalance);
 				}else{
-					LoggerUtils.error(name+"提现,错误，原因："+ReadProperties.getStringValue(properties, result), this.getClass());
+					LoggerUtils.error(name+"充值,错误，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)), this.getClass());
 				}
 			}else{
-				LoggerUtils.error(name+"提现,原因：秘钥校验错误", this.getClass());
+				LoggerUtils.error(name+"充值,原因：秘钥校验错误", this.getClass());
 			}
 		
 		}catch(Exception e){
@@ -376,10 +375,11 @@ public class PayAction extends BaseAction<BillInvest>{
 	 */
 	public void withdrawalsFFCallBack(){
 		try{
-			//读取配置文件
+			 //下面注释的代码是丰付返回的数据，只是没有用到，所以给注释了，如果需要使用，请消除注释
+			//读取配置文件  
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String requestId = getRequest().getParameter("requestId");
-			String noticeType = getRequest().getParameter("noticeType");
+			//String noticeType = getRequest().getParameter("noticeType");
 			String result = getRequest().getParameter("result");
 			String sum = getRequest().getParameter("sum");
 			String userIdIdentity = getRequest().getParameter("userIdIdentity");
@@ -406,11 +406,11 @@ public class PayAction extends BaseAction<BillInvest>{
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
 			if(dataSign.equals(signature)){
-				if((noticeType.equals(String.valueOf(If.If0.getVal()))|| noticeType.equals(String.valueOf(If.If1.getVal()))) && result.equals(ResultCode.SUCCESS)){
+				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//修改数据库
 					updateMemberInfoBalance(userIdIdentity,withdrawableBalance,userBalance,frozenBalance);
 				}else{
-					LoggerUtils.error(name+"提现,错误，原因："+ReadProperties.getStringValue(properties, result)+"---"+failReason, this.getClass());
+					LoggerUtils.error(name+"提现,错误，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result))+"---"+failReason, this.getClass());
 				}
 			}else{
 				LoggerUtils.error(name+"提现,原因：秘钥校验错误", this.getClass());

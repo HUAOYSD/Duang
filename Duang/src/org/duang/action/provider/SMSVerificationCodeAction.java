@@ -67,7 +67,7 @@ public class SMSVerificationCodeAction extends BaseAction<SMSVerificationCode>{
 					vCode.setvCode(DataUtils.sixNumber());
 					Date currDate = new Date();
 					long currDateLong = DateUtils.getTimeStamp(currDate);
-					Date endDate = new Date(currDateLong+600000);
+					Date endDate = new Date(currDateLong+60*1000*10);
 					vCode.setStartTime(currDate);
 					vCode.setEndTime(endDate);
 					success = service.saveEntity(vCode);
@@ -75,7 +75,7 @@ public class SMSVerificationCodeAction extends BaseAction<SMSVerificationCode>{
 					vCode.setvCode(DataUtils.sixNumber());
 					Date currDate = new Date();
 					long currDateLong = DateUtils.getTimeStamp(currDate);
-					Date endDate = new Date(currDateLong+10*1000);
+					Date endDate = new Date(currDateLong+60*1000*10);
 					vCode.setStartTime(currDate);
 					vCode.setEndTime(endDate);
 					success = service.updateEntity(vCode);
