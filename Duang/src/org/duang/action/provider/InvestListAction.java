@@ -520,11 +520,11 @@ public class InvestListAction extends BaseAction<InvestList>{
 					investList.setDays(day);
 					investListService.saveEntity(investList);
 				}else{
-					LoggerUtils.error("流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+					LoggerUtils.error("---------------------------投标回调 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
 			}else {
 				//签名不匹配
-				LoggerUtils.error("流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+				LoggerUtils.error("---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 			}
 		}catch(Exception e){
 			e.printStackTrace();

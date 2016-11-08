@@ -22,11 +22,13 @@ import org.duang.entity.MemberInfo;
 import org.duang.entity.SMSVerificationCode;
 import org.duang.enums.If;
 import org.duang.enums.ResultCode;
+import org.duang.enums.UploadFile;
 import org.duang.service.MemberInfoService;
 import org.duang.service.SMSVerificationCodeService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.duang.util.ImageString;
 import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
 import org.duang.util.SSLClient;
@@ -800,7 +802,10 @@ public class MemberAction extends BaseAction<MemberInfo>{
 							success=true;
 						}
 					}else{
-						msg="您未实名制,账户上没有相关信息，请先进行实名制";
+						jsonObject.put("balance", 0);
+						jsonObject.put("withdrawAbleBalance", 0);
+						jsonObject.put("frozenBalance", 0);
+						success=true;
 					}
 				}else {
 					msg="未查到记录";
@@ -1052,4 +1057,38 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		return jsonObject;
 	}
 		
+	
+	/**
+	 * 上传头像
+	 */
+	public void uploadUseImg(){
+		boolean success=false;
+		try{
+			String token = getRequest().getParameter("token");
+			String imgdata = getRequest().getParameter("imgdata");
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(imgdata)) {
+				String id = MemberCollection.getInstance(token, service).getMainField(token);
+				if (DataUtils.notEmpty(id)) {
+					MemberInfo memberInfo = service.findById(id);
+					String fullpath = UploadFile.PATH.getVal(UploadFile.HEAD.getVal(memberInfo.getId()))+"\\"+DataUtils.randomUUID()+".jpg";
+					jsonObject.put("path", fullpath);
+					boolean con = ImageString.generateImage(imgdata, fullpath);
+					success = con;
+				}else{
+					msg = "登录失效";
+				}
+			}else{
+				msg = "缺少参数,请补充";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction uploadUseImg：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction uploadUseImg：" + e.getLocalizedMessage(), this.getClass());
+		}    
+		jsonObject.put("success", success);
+		jsonObject.put("success", msg);
+		printJsonResult();
+	}
+
+	
 }
