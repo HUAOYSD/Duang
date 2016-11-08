@@ -403,8 +403,13 @@ public class PayAction extends BaseAction<BillInvest>{
 			signatureStr.append(sum);
 			signatureStr.append(userIdIdentity);
 			signatureStr.append(userBalance);
+			
+			LoggerUtils.info("---------------------------提现回调字符串"+requestId+";"+result+";"+sum+";"+userIdIdentity+";"+userIdIdentity+";"+userBalance+";"+withdrawableBalance+";"+frozenBalance+";"+name, this.getClass());
+			LoggerUtils.info("---------------------------提现回调签名："+signature, this.getClass());
+			
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			LoggerUtils.info("---------------------------提现回调本地加密签名："+dataSign, this.getClass());
 			if(dataSign.equals(signature)){
 				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//修改数据库
