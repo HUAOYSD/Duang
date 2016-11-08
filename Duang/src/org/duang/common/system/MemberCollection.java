@@ -38,6 +38,8 @@ public class MemberCollection {
 				jsonObject.put("pd", entity.getPassword());
 				jsonObject.put("token", token);
 				jsonObject.put("id", entity.getId());
+				jsonObject.put("isAuth", String.valueOf(entity.getIsAuth()));
+				jsonObject.put("idcard", entity.getIdCard());
 				instance.putJsonObject(token, jsonObject);
 			}
 		}

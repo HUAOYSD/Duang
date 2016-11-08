@@ -228,7 +228,6 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 						entity.setRegisterStyle(Integer.parseInt(registerStyle));
 						entity.setCreateTime(new Date());
 						entity.setRequestId(DataUtils.randomUUID());
-						entity.setToken(entity.getRequestId());
 						entity.setToken(DataUtils.randomUUID());
 						
 						//生成自己的邀请码
@@ -238,7 +237,8 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 							//推荐人信息
 							MemberInfo EntityMemberInfo = getMemberInfoByEntityCode(entityCode);
 							if(EntityMemberInfo!=null){
-								entity.setMemberInfo(new MemberInfo(EntityMemberInfo.getId()));
+								entity.setMemberInfo(EntityMemberInfo);
+								entity.setCusmembername(EntityMemberInfo.getRealName());
 							}
 						}
 						//附加投资用户身份

@@ -67,7 +67,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-beans-3.2.9.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-build-src-3.2.9.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-context-3.2.9.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-context-support-3.2.9.RELEASE.jar" sourcepath="WebContent/WEB-INF/lib/spring-context-3.2.9.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-context-support-3.2.9.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-core-3.2.9.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-expression-3.2.9.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-framework-bom-3.2.9.RELEASE.jar"/>
@@ -109,13 +109,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-cache-4.3.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpcore-4.3.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpmime-4.3.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-1.8.6.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-all-1.8.6.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-commonj-1.8.6.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-jboss-1.8.6.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-oracle-1.8.6.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-weblogic-1.8.6.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/core_3.2.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
