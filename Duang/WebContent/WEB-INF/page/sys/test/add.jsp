@@ -10,24 +10,47 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>增加</title>
 <script type="text/javascript">
-	
+function doUpload() {
+	$("#btn_submit_userImg").attr("disabled", true); 
+	//获取文件的属性
+	var a = document.getElementById("file").files;
+    if(a[0].size>4*1024*1024){
+    	layer.msg("文件超出了指定4M大小",{time:3000});
+    }else{
+    	var fileName = a[0].name;
+    	var fileType = (fileName.substring(fileName.lastIndexOf(".")+1,fileName.length)).toLowerCase();
+    	//如果符合上传格式，则上传
+    	if((fileType=="jpg")||(fileType=="jpeg")||(fileType=="gif")||(fileType=="png")){
+    		 var formData = new FormData($( "#uploadUserImageForm" )[0]); 
+    		 layer.load();
+		     $.ajax({  
+		          url: 'provider_upload!uploadMemberHeadImg.do?type=head&id=d2eef99f254a4bd1b00d8609dfc86059',  
+		          type: 'POST',  
+		          data: formData,  
+		          async: false,  
+		          cache: false,  
+		          contentType: false,  
+		          processData: false,  
+		          success: function (data) {
+		        	  data = JSON.parse(data);
+		              console.info(data);
+		          }
+		          
+		     });  
+    	}else{
+    		layer.msg("上传文件格式不合法",{time:3000});
+    	}
+    }
+}
 </script>
 </head>
+<%@ include file="/page/inc/inc.jsp"%>
 <body>
 	<div>
-		<form action="<%=path %>/sysseraction!saveSysUser.do" method="post">
-			<div>
-				<input name="返回" value="返回" type="button" onclick="javascript:window.history.back();"/>
-			</div>
-			<div>
-				ID:<input name="id"/><br/>
-				名字:<input name="name"/><br/>
-				密码:<input name="password"/><br/>
-				邮箱:<input name="email"/><br/>
-				
-				<input name="增加" value="增加" type="button" onclick="javascript:document.forms[0].submit();"/>
-			</div>
-		</form>
+		<form id="uploadUserImageForm">
+              <input type="file" id="file" name="file" accept=".jpg,.jpeg,.png,.gif"> 
+              <input style="width:45px;" type="button" value="上传" onclick="doUpload()" id="btn_submit_userImg"/>
+		</form> 
 	</div>
 </body>
 </html>
