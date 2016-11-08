@@ -82,6 +82,7 @@ public class MD5Utils {
 	}  
 	
 	public static void main(String[] args) {
-		System.out.println(hmacSign("4edc84b9db1c4264b322b30258b21f8afbm000004da5d2a3f259c4a2994ba22ab8b9d2d5f韩玉昆510709198408248248","RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF"));
+		String  str="14785724778283438107354a087d06984bfc8e35f10c0ab1aa12000000韩玉昆5107091984082482481";
+		System.out.println(hmacSign(str,"RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF"));
 	}
 }

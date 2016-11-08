@@ -641,7 +641,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String payType = getRequest().getParameter("payType");
 			String merBizRequestId = getRequest().getParameter("merBizRequestId");
 			String signature = getRequest().getParameter("signature");
-			LoggerUtils.info("----------实名认证回调  返回参数字符串"+requestId+";"+result+";"+status+";"+userName+";"+idNumber+";"+payType+";"+merBizRequestId, this.getClass());
+			LoggerUtils.info("----------实名认证回调  返回参数字符串"+requestId+";"+merBizRequestId+";"+result+";"+status+";"+userName+";"+idNumber+";"+payType, this.getClass());
 			LoggerUtils.info("----------实名认证回调  返回的签名 "+signature, this.getClass());
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
