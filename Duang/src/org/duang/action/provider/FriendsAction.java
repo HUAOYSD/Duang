@@ -297,8 +297,8 @@ public class FriendsAction extends BaseAction<Friends>{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("FriendsAction——removeFriends方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("FriendsAction——removeFriends方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
