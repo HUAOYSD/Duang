@@ -14,6 +14,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.Ad;
 import org.duang.enums.If;
+import org.duang.enums.UploadFile;
 import org.duang.service.AdService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -101,7 +102,7 @@ public class AdAction extends BaseAction<Ad>{
 				map.put("createTime", DateUtils.date2Str(ad.getCreateTime()));
 				map.put("isUse", ad.getIsUse());
 				map.put("linkAddress", ad.getLinkAddress());
-				map.put("imageAddress", ad.getImageAddress());
+				map.put("imageAddress", UploadFile.PATH.getVal(UploadFile.AD.getVal())+"\\"+ad.getImageAddress());
 				map.put("name", ad.getName());
 				map.put("remark", ad.getRemark());
 				listMap.add(map);

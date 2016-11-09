@@ -1,4 +1,5 @@
 package org.duang.action.provider;
+import java.net.URLEncoder;
 import java.util.Date;
 
 import javax.annotation.Resource;
@@ -112,10 +113,11 @@ public class SMSVerificationCodeAction extends BaseAction<SMSVerificationCode>{
 		boolean success = false;
 		if (DataUtils.notEmpty(phone)) {
 			phone = DES.decryptDES(phone);
+			LoggerUtils.info("--------------------发送验证码"+phone+":"+vCode, this.getClass());
 			String platform = getRequest().getParameter("platform");
 			if (DataUtils.notEmpty(platform) && ("IOS".equals(platform) || "Android".equals(platform))) {
 				String signature = getRequest().getParameter("signature");
-				String content = "验证码是：";
+				String content = "手机验证码是  "+vCode;
 				if ("IOS".equals(platform) && SMSUtils.IOS_SIGNATURE.equals(signature)) {
 					jsonObject.put("vc", vCode);
 					success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P3.getVal());

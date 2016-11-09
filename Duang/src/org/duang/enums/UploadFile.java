@@ -24,7 +24,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String path) {
 			if(DataUtils.notEmpty(path)){
-				return "resources\\file\\basic" + path;
+				return "resources\\file\\basic\\" + path;
 			}else{
 				return "resources\\file\\basic\\";
 			}

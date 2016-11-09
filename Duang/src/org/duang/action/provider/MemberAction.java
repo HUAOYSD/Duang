@@ -339,7 +339,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		try {
 			if (entity != null && DataUtils.notEmpty(entity.getId()) && DataUtils.notEmpty(getRequest().getParameter("nickname"))) {
 				String DESNickname = getRequest().getParameter("nickname");
-				String nickName = DES.decryptDES(DESNickname);
+				String nickName = new String(DES.decryptDES(DESNickname).getBytes(),"utf-8");
 				MemberInfo memberInfoByNickName = service.findEntity("nickname", nickName);
 				if(memberInfoByNickName !=null){
 					success = false;
@@ -978,9 +978,10 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		//数字签名字符串
 		StringBuffer signatureBuffer = new StringBuffer();
 		signatureBuffer.append(requestId+merchantCode+userIdIdentity+queryType);
-		System.out.println(signatureBuffer.toString());
+		LoggerUtils.info("------------查询银行卡信息 数字签名字符串："+signatureBuffer.toString(), this.getClass());
 		//加密后的数字签名
 		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
+		LoggerUtils.info("------------查询银行卡信息 签名加密："+signature_sign.toString(), this.getClass());
 		//封装map参数
 		Map<String,String> map = new HashMap<String, String>();
 		map.put("requestId",requestId);

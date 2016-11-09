@@ -14,6 +14,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -124,10 +125,10 @@ public class SMSUtils {
 						params.add(new BasicNameValuePair("ac", AC));
 						params.add(new BasicNameValuePair("authkey", AUTHKEY));
 						params.add(new BasicNameValuePair("cgid", CGID));
-						String c = new String(content.getBytes(), "UTF-8");
+						String c = new String(content.getBytes(),"GBK");
 						params.add(new BasicNameValuePair("c", c));
 						params.add(new BasicNameValuePair("m", mobile));
-						post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+						post.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
 						HttpResponse httpResponse = httpclient.execute(post);
 						String result = null;
 						if (httpResponse.getStatusLine().getStatusCode() == 200){

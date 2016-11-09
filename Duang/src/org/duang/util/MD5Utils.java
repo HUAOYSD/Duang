@@ -82,7 +82,11 @@ public class MD5Utils {
 	}  
 	
 	public static void main(String[] args) {
+		String idString="PFT0001" + "qttHrRHHDthH2QPrmmmJBEyVjgtREHO438FvDDi2" + "fbm000004" +
+                "da5d2a3f259c4a2994ba22ab8b9d2d5f" + "500" + "3" +
+                "[{“roleType\":\"0\",\"roleCode\":\"da5d2a3f259c4a2994ba22ab8b9d2d5f\",\"inOrOut\":\"0\",\"sum\":\"500\"}]" +
+                "1" + "http://219.143.6.68:8080/Duang/provider_wallet!depositFFCallBack.do";
 		String  str="14785724778283438107354a087d06984bfc8e35f10c0ab1aa12000000韩玉昆5107091984082482481";
-		System.out.println(hmacSign(str,"RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF"));
+		System.out.println(hmacSign(idString,"RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF"));
 	}
 }

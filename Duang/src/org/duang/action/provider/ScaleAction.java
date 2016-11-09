@@ -375,5 +375,4 @@ public class ScaleAction extends BaseAction<Scale>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-
 }
