@@ -50,6 +50,7 @@ public class Scale implements java.io.Serializable {
 	private int onesScore;
 	private int status;
 	private int isTurn;
+	private String giftFlag;
 	private Set<Stock> stocks = new HashSet<Stock>(0);
 	private Set<ScaleLoanList> scaleLoanLists = new HashSet<ScaleLoanList>(0);
 	private Set<InvestList> investLists = new HashSet<InvestList>(0);
@@ -105,6 +106,14 @@ public class Scale implements java.io.Serializable {
 		this.name = name;
 	}
 
+	@Column(name = "giftFlag", length = 10)
+	public String getGiftFlag() {
+		return giftFlag;
+	}
+
+	public void setGiftFlag(String giftFlag) {
+		this.giftFlag = giftFlag;
+	}
 	// Property accessors
 	@Id
 	@Column(name = "id", unique = true, nullable = false, length = 36)

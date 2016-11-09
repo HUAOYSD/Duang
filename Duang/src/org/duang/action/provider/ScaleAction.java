@@ -17,6 +17,7 @@ import org.duang.entity.Scale;
 import org.duang.service.InvestListService;
 import org.duang.service.MemberInfoService;
 import org.duang.service.ScaleService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
@@ -334,6 +335,45 @@ public class ScaleAction extends BaseAction<Scale>{
 			}
 		}
 		return listMap;
+	}
+
+	/**
+	 * 检查购买是否超过限额
+	 */
+	public void checkMoneyLimit(){
+		boolean success = false;
+		try {
+			String money = getRequest().getParameter("buyMoney");
+			String scaleid = getRequest().getParameter("scaleid");//加密的哈
+			if(DataUtils.notEmpty(money) && DataUtils.notEmpty(scaleid)){
+				double buyMoney = DataUtils.str2double(money, 6);
+				entity = scaleService.findById(DES.decryptDES(scaleid));
+				if (buyMoney <= entity.getMaxLimit() && buyMoney <= entity.getResidueMoney()) {
+					success = true;
+					jsonObject.put("projectSum", entity.getTotalMoney());
+					jsonObject.put("giftFlag", entity.getGiftFlag());
+				}else{
+					//超出限额金额
+					double er_maxMoney = buyMoney-entity.getMaxLimit();
+					//超出剩余可投金额
+					double er_residueMoney = buyMoney-entity.getResidueMoney();
+					double beyond_money = er_maxMoney>er_residueMoney?er_maxMoney:er_residueMoney;
+					//超出金额
+					jsonObject.put("beyond_money", beyond_money);
+					msg="购买超额";
+				}
+			}else{
+				msg = "缺少参数";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("ScaleAction——checkMoneyLimit方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ScaleAction——checkMoneyLimit方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
 	}
 
 }

@@ -380,12 +380,19 @@ public class FriendsAction extends BaseAction<Friends>{
 					msg="目前还没有好友或者好友无推荐收益";
 				}else {
 					for(int i=0;i<list.size();i++){
-						Map<String, Object> map = new HashMap<String, Object>();
-						map.put("total_income",  DataUtils.str2double((((Object[])list.get(i))[0])+"",2));
-						map.put("real_name", ((Object[])list.get(i))[1]);
-						map.put("nick_name", ((Object[])list.get(i))[2]);
-						map.put("user_img", ((Object[])list.get(i))[3]);
-						listMap.add(map);
+						if(list.get(i)!=null){
+							Map<String, Object> map = new HashMap<String, Object>();
+							String totalIncome = String.valueOf(((Object[])list.get(i))[0]);
+							if(DataUtils.notEmpty(totalIncome)){
+								map.put("total_income",  DataUtils.str2double(totalIncome+"",2));
+							}else{
+								map.put("total_income",  0);
+							}
+							map.put("real_name", ((Object[])list.get(i))[1]);
+							map.put("nick_name", ((Object[])list.get(i))[2]);
+							map.put("user_img", ((Object[])list.get(i))[3]);
+							listMap.add(map);
+						}
 					}
 				}
 				success = true;

@@ -1,4 +1,5 @@
 package org.duang.action.provider;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -853,10 +854,10 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		signatureBuffer.append(userIdIdentity);
 		signatureBuffer.append(userName);
 		signatureBuffer.append(idNumber);
-		System.out.println("-------------数字签名字符串：signature:"+signatureBuffer.toString());
+		LoggerUtils.info("-------------查询账户信息   数字签名字符串：signature:"+signatureBuffer.toString(),this.getClass());
 		//加密后的数字签名
 		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
-		System.out.println("-------------加密后的数字签名：signature_sign:"+signature_sign);
+		LoggerUtils.info("-------------查询账户信息  加密后的数字签名：signature_sign:"+signature_sign,this.getClass());
 		//封装map参数
 		Map<String,String> map = new HashMap<String, String>();
 		map.put("requestId",requestId);
@@ -891,6 +892,11 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			StringBuffer back_signatureBuffer = new StringBuffer(back_userIdIdentity+back_userName+back_idNumber+
 					back_result+back_balance+back_withdrawAbleBalance+back_frozenBalance);
 			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), akey);
+			
+			LoggerUtils.info("-------------查询账户信息   返回的参数信息:"+back_signatureBuffer.toString(),this.getClass());
+			LoggerUtils.info("-------------查询账户信息   返回的签名-back_signature:"+back_signature,this.getClass());
+			LoggerUtils.info("-------------查询账户信息   返回的参数信息-加密签名:"+back_signature_sign.toString(),this.getClass());
+			
 			if(back_signature_sign.equals(back_signature)){
 				jsonObject.put("userIdIdentity", back_userIdIdentity);
 				jsonObject.put("userName", back_userName);
@@ -1070,10 +1076,23 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				String id = MemberCollection.getInstance(token, service).getMainField(token);
 				if (DataUtils.notEmpty(id)) {
 					MemberInfo memberInfo = service.findById(id);
-					String fullpath = UploadFile.PATH.getVal(UploadFile.HEAD.getVal(memberInfo.getId()))+"\\"+DataUtils.randomUUID()+".jpg";
-					jsonObject.put("path", fullpath);
-					boolean con = ImageString.generateImage(imgdata, fullpath);
-					success = con;
+					String temPath = getRequest().getSession().getServletContext().getRealPath("/");
+					String fullpath = temPath+UploadFile.PATH.getVal(UploadFile.HEAD.getVal(memberInfo.getId()))+"\\";
+					//文件名称
+					String fileName = DataUtils.randomUUID()+".jpg";
+					// 如果保存的路径不存在,则新建
+					File savefile = new File(new File(fullpath),fileName);
+					if (!savefile.getParentFile().exists()) {
+						savefile.getParentFile().mkdirs();
+					}
+					fullpath+=fileName;
+					jsonObject.put("path", UploadFile.PATH.getVal(UploadFile.HEAD.getVal(memberInfo.getId()))+"\\"+fileName);
+					success = ImageString.generateImage(imgdata, fullpath);
+					LoggerUtils.info("userId:"+id+"----------------上传头像："+success, this.getClass());
+					if(success){
+						memberInfo.setUserImg(fileName);
+						success = service.updateEntity(memberInfo);
+					}
 				}else{
 					msg = "登录失效";
 				}

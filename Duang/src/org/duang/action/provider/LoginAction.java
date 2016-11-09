@@ -16,6 +16,7 @@ import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.If;
+import org.duang.enums.UploadFile;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -73,6 +74,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 						resultjson.put("isAuth", jsonObject.optString("isAuth"));
 						resultjson.put("idcard", jsonObject.optString("idcard"));
 						resultjson.put("entityCode", jsonObject.optString("entityCode"));
+						resultjson.put("photo", jsonObject.optString("photo"));
 						MemberCollection.getInstance(token,service).putJsonObject(token, resultjson);
 						success = true;
 					} else {
@@ -213,7 +215,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		jsonObject.put("email", entity.getEmail());
 		jsonObject.put("age", entity.getAge());
 		jsonObject.put("sex", entity.getSex());
-		jsonObject.put("photo", entity.getUserImg());
+		jsonObject.put("photo", UploadFile.PATH.getVal(UploadFile.HEAD.getVal( entity.getId()))+"\\"+ entity.getUserImg());
 		jsonObject.put("isAuth", String.valueOf(entity.getIsAuth()));
 		jsonObject.put("entityCode", entity.getEntityCode());
 		jsonObject.put("isEliteAccount", If.valueOf("If"+entity.getIsEliteAccount()).toString());

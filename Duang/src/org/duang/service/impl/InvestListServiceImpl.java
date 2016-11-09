@@ -16,13 +16,11 @@ import org.duang.common.ContractFactory;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.InvestListDao;
 import org.duang.dao.LoanMemberDao;
-import org.duang.dao.ScaleDao;
 import org.duang.dao.StockDao;
 import org.duang.entity.Contract;
 import org.duang.entity.InvestList;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
-import org.duang.entity.Scale;
 import org.duang.entity.Stock;
 import org.duang.enums.If;
 import org.duang.enums.UploadFile;
@@ -153,19 +151,16 @@ public class InvestListServiceImpl implements InvestListService{
 		//2、更改分配到的库存的状态
 		boolean checkStocks = checkStock(investList);
 		if (checkStocks) {
-			//3、更正理财标
-			success = updateScale(investList,investList.getScale().getId());
-			if(success){
-				//4、产生理财订单
-				//4.1、先获取到此人，最后一次billinvest记录，该条记录含有此人最新的余额、总资产数据，新记录的这俩数据，通过这个数据做加减法即可得到
+				//3、产生理财订单
+				//3.1、先获取到此人，最后一次billinvest记录，该条记录含有此人最新的余额、总资产数据，新记录的这俩数据，通过这个数据做加减法即可得到
 				success = billInvestService.createBill(investList);
-				//5、改变资产，改变invest_member中的值，获取值的方式和上面的第4步骤差不多
+				//4、改变资产，改变invest_member中的值，获取值的方式和上面的第4步骤差不多
 				MemberInfo memberInfo = investMemberService.modifyInvestMembersBalance(investList);
 				ServletActionContext.getRequest().setAttribute("memberName", memberInfo.getRealName());
 				ServletActionContext.getRequest().setAttribute("memberIdcard", memberInfo.getIdCard());
-				//6、增加理财记录
+				//5、增加理财记录
 				success = dao.saveEntity(investList);
-				//7、生成合同
+				//6、生成合同
 				//合同单号
 				String contractNo = String.valueOf(contractService.getContractIndexByYear()+1);
 				ServletActionContext.getRequest().setAttribute("contractNo",  DataUtils.getContractNo(DataUtils.str2int(contractNo)));
@@ -173,12 +168,12 @@ public class InvestListServiceImpl implements InvestListService{
 				//获取合同的编号
 				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
 				String fullPath = temPath+UploadFile.PATH.getVal(UploadFile.CONTRACT.getVal());
+				LoggerUtils.info("-----------------合同编号："+contractNo+"生成合同的地址："+fullPath,this.getClass());
 				//生成合同
 				ContractFactory contractFactory = ContractFactory.getInstance(memberInfo, loanMembers, investList, DataUtils.getContractNo(DataUtils.str2int(contractNo)), fullPath);
 				contractFactory.start();
 				//保存合同信息
 				success = saveContract(contractFactory);
-			}
 		}
 		return success;
 	}
@@ -187,11 +182,6 @@ public class InvestListServiceImpl implements InvestListService{
 	@Resource
 	public void setStockDao(StockDao stockDao) {
 		this.stockDao = stockDao;
-	}
-	private ScaleDao scaleDao;
-	@Resource
-	public void setScaleDao(ScaleDao scaleDao) {
-		this.scaleDao = scaleDao;
 	}
 	private BillInvestService billInvestService;
 	private InvestMemberService investMemberService;
@@ -223,29 +213,6 @@ public class InvestListServiceImpl implements InvestListService{
 		contract.setCreateTime(new Date());
 		contract.setState(If.If1.getVal());
 		return contractService.saveEntity(contract);
-	}
-	
-	/**
-	 * 更正理财标
-	 * @Title: updateScale   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param investList
-	 * @param: @return
-	 * @param: @throws Exception  
-	 * @author LiYonghui    
-	 * @date 2016年10月28日 上午11:34:42
-	 * @return: boolean      
-	 * @throws
-	 */
-	private boolean updateScale(InvestList investList,String p_scaleId) throws Exception{
-		boolean success = false;
-		//3、更正理财标
-		Scale scale = scaleDao.findById(p_scaleId);
-		scale.setResidueMoney(scale.getResidueMoney() - investList.getMoney());
-		scale.setYetMoney(scale.getYetMoney() + investList.getMoney());
-		scale.setStatus(2);
-		success = scaleDao.updateEntity(scale);
-		return success;
 	}
 	
 	/**

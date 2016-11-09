@@ -373,6 +373,11 @@ public class InvestListAction extends BaseAction<InvestList>{
 						resultMap.put("productName", fk2.getProduct().getName());
 						resultMap.put("proCategory", fk2.getProduct().getCategory());
 						resultMap.put("days", fk2.getProduct().getDays());
+						//标的购买人数
+						int investMemberNum = investListService.count("scale.id", fk2.getId());
+						resultMap.put("investMemberNum", investMemberNum);
+						resultMap.put("investing", pk.getMoney()*(fk2.getRevenueAdd()+fk2.getRevenue())/365D*fk2.getProduct().getDays());
+						resultMap.put("minMoney", "500.00");
 					}
 					listMap.add(resultMap);
 				}
@@ -470,13 +475,13 @@ public class InvestListAction extends BaseAction<InvestList>{
 			//红包金额
 			String giftSum = getRequest().getParameter("giftSum");
 			//项目总额
-			String projectSum = getRequest().getParameter("projectSum");
+			//String projectSum = getRequest().getParameter("projectSum");
 			//剩余可投金额
-			String remainInvestmentSum = getRequest().getParameter("remainInvestmentSum");
+			//String remainInvestmentSum = getRequest().getParameter("remainInvestmentSum");
 			
 			String signature = getRequest().getParameter("signature");
 			
-			LoggerUtils.info("---------------------------投标回调字符串："+requestId+";"+result+";"+sum+";"+userIdIdentity+";"+projectCode+";"+investmentSum+";"+giftSum+";"+projectSum+";"+remainInvestmentSum, this.getClass());
+			LoggerUtils.info("---------------------------投标回调字符串："+requestId+";"+result+";"+sum+";"+userIdIdentity+";"+projectCode+";"+investmentSum+";"+giftSum, this.getClass());
 			LoggerUtils.info("---------------------------投标回调签名："+signature, this.getClass());
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
@@ -499,13 +504,19 @@ public class InvestListAction extends BaseAction<InvestList>{
 					investList.setGiftSum(DataUtils.str2double(giftSum, 6));
 					investList.setMemberInfo(new MemberInfo(userIdIdentity));
 					//根据理财标和投资本金计算本金和预期收益和
-					//查找理财标
+					//查找理财标并更新
 					Scale scale = scaleService.findById(projectCode);
-					scale.setTotalMoney(DataUtils.str2double(projectSum, 6));
-					scale.setResidueMoney(DataUtils.str2double(remainInvestmentSum, 6));
-					scale.setYetMoney(scale.getYetMoney()+DataUtils.str2double(sum, 6));
+					//剩余可投金额
+					scale.setResidueMoney(scale.getTotalMoney()-DataUtils.str2double(investmentSum, 6));
+					if(scale.getResidueMoney()==0){
+						//0新建标，1可投入，2还有机会，3已完成
+						scale.setStatus(3);
+					}
+					//已经投金额
+					scale.setYetMoney(DataUtils.str2double(investmentSum, 6));
 					scaleService.updateEntity(scale);
-					
+					LoggerUtils.info("---------------------------标更新成功，标总金额："+scale.getTotalMoney()+
+							"；已投金额："+scale.getYetMoney()+"；剩余金额："+scale.getResidueMoney(), this.getClass());
 					//理财天数
 					int day = scale.getProduct().getDays();
 					//收益
@@ -518,7 +529,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 					String pactNumber = DateUtils.date2Str(new Date(), "MMDDhhmmss") + DataUtils.sixNumber();
 					investList.setPactNumber(pactNumber);
 					investList.setDays(day);
-					investListService.saveEntity(investList);
+					boolean saveEntity = investListService.saveEntity(investList);
+					LoggerUtils.info("---------------------------标投标理财记录（investList）成功 ["+saveEntity+"]，更新的id："+investList.getId(), this.getClass());
 				}else{
 					LoggerUtils.error("---------------------------投标回调 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
