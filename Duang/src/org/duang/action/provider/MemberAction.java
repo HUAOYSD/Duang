@@ -1,6 +1,8 @@
 package org.duang.action.provider;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -622,6 +624,65 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	}
 	
 	/**
+	 * 开户回调
+	 * @Title: realNameCertification   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月2日 上午11:38:10
+	 * @return: void      
+	 * @throws
+	 */
+	public void openAccountCallback(){
+		try{
+			LoggerUtils.info("--------------------------开户回调开始", this.getClass());
+			boolean success=false;
+			//读取配置文件中
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			String requestId = getRequest().getParameter("requestId");
+			String result = getRequest().getParameter("result");
+			String userIdIdentity = getRequest().getParameter("userIdIdentity");
+			String name = getRequest().getParameter("name");
+			String userId = getRequest().getParameter("userId");
+			String payType = getRequest().getParameter("payType");
+			String mobileNo = getRequest().getParameter("mobileNo");
+			String signature = getRequest().getParameter("signature");
+			
+			StringBuffer backStringBuffer = new StringBuffer("---------------------------开户回调  字符串：");
+			backStringBuffer.append("----requestId:"+requestId)
+							.append("----result:"+result)
+							.append("----userIdIdentity:"+userIdIdentity)
+							.append("----name:"+name)
+							.append("----userId:"+userId)
+							.append("----payType:"+payType)
+							.append("----mobileNo:"+mobileNo)
+							.append("----signature:"+signature);
+			
+			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
+			if(result.equals(ResultCode.SUCCESS.getVal())){
+				success = true;
+			}else{
+				LoggerUtils.error("----------开户回调 流程号："+requestId+"，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+			}
+		if(success){
+			//修改用户信息
+			MemberInfo memberInfo = service.findEntity("id", userIdIdentity);
+			memberInfo.setPhone(mobileNo);
+			memberInfo.setRealName(name);
+			memberInfo.setPayType(payType);
+			memberInfo.setUserId(userId);
+			service.updateEntity(memberInfo);
+		}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction openAccountCallback：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction openAccountCallback：" + e.getLocalizedMessage(), this.getClass());
+		}
+		
+	}
+	
+	/**
 	 * 实名认证结果
 	 * @Title: realNameCertification   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -647,13 +708,13 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			
 			StringBuffer backStringBuffer = new StringBuffer("---------------------------实名认证回调  字符串：");
 			backStringBuffer.append("----requestId:"+requestId)
-							.append("----result"+result)
-							.append("----status"+status)
-							.append("----userName"+userName)
-							.append("----idNumber"+idNumber)
-							.append("----payType"+payType)
-							.append("----merBizRequestId"+merBizRequestId)
-							.append("----signature"+signature);
+							.append("----result:"+result)
+							.append("----status:"+status)
+							.append("----userName:"+userName)
+							.append("----idNumber:"+idNumber)
+							.append("----payType:"+payType)
+							.append("----merBizRequestId:"+merBizRequestId)
+							.append("----signature:"+signature);
 			
 			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
 			
@@ -717,7 +778,6 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		//身份证与姓名一致,进行修改用户表
 		MemberInfo memberInfo = service.findEntity("requestId", requestId);
 		memberInfo.setIdCard(idNumber);
-		memberInfo.setRealName(userName);
 		memberInfo.setPayType(payType);
 		memberInfo.setIsAuth(If.If1.getVal());
 		service.updateEntity(memberInfo);
@@ -737,7 +797,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @return: boolean      
 	 * @throws
 	 */
-	private boolean  queryRealNameAuth(Properties properties, String userName,String idNumber) throws Exception{
+	public boolean  queryRealNameAuth(Properties properties,String userName,String idNumber) throws Exception{
 		boolean success = false;
 		//请求受理成功，正在处理，需要主动查询
 		String urlStr = ReadProperties.getStringValue(properties, "realNameAuthURL");
@@ -748,8 +808,16 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		//生成一个流水号
 		String self_requestId = DataUtils.randomUUID();
 		//起始时间和截止时间
-		String eDate = DateUtils.getCurrentDate("yyyyMMdd");
-		String sDate = DateUtils.date2Str(new Date(DateUtils.getTimeStamp(DateUtils.str2Date(eDate))-(29*24*3600*1000)), "yyyyMMdd");
+		Date dNow = new Date();   //当前时间
+		Date dBefore = new Date();
+		Calendar calendar = Calendar.getInstance(); //得到日历
+		calendar.setTime(dNow);//把当前时间赋给日历
+		calendar.add(Calendar.DAY_OF_MONTH, -29);  //设置为前一天
+		dBefore = calendar.getTime();   //得到前一天的时间
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd"); //设置时间格式
+		String sDate = sdf.format(dBefore);    //格式化前一天
+		String eDate = sdf.format(dNow); //格式化当前时间
+		
 		//数字签名字符串
 		StringBuffer signatureBuffer = new StringBuffer();
 		signatureBuffer.append(self_requestId+merchantCode+userName+idNumber+1+sDate+eDate);
@@ -770,23 +838,25 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		//result 查询结果  00000代表成功
 		String resultCallbace = jsonObject.get("result").toString();
 		if(resultCallbace.equals(ResultCode.SUCCESS)){
-			JSONArray jsonArray = (JSONArray)jsonObject.get("authList");
-			//如果length>0说明查出来人员，否则未查出用户
-			if(jsonArray.length()>0){
-				//有可能存在多个，获取第一个就可以了
-				JSONObject authListObject = (JSONObject)jsonArray.get(0);
-				String authResult = authListObject.get("authResult").toString();
-				//authResult 等于0表示认证成功，1表示认证失败
-				if(authResult.equals(String.valueOf(If.If0.getVal()))){
-					success = true;
+			if(DataUtils.notEmpty(jsonObject.get("authList").toString())){
+				JSONArray jsonArray = (JSONArray)jsonObject.get("authList");
+				//如果length>0说明查出来人员，否则未查出用户
+				if(jsonArray.length()>0){
+					//有可能存在多个，获取第一个就可以了
+					JSONObject authListObject = (JSONObject)jsonArray.get(0);
+					String authResult = authListObject.get("authResult").toString();
+					//authResult 等于0表示认证成功，1表示认证失败
+					if(authResult.equals(String.valueOf(If.If0.getVal()))){
+						success = true;
+					}else{
+						LoggerUtils.error("流程号："+self_requestId+"------"+"判断是否实名认证失败,原因："+authListObject.get("failReason").toString()+",认证时间："+authListObject.get("authTime").toString(),this.getClass());
+					}
 				}else{
-					LoggerUtils.error("流程号："+self_requestId+"------"+"认证失败,原因："+authListObject.get("failReason").toString()+",认证时间："+authListObject.get("authTime").toString(),this.getClass());
+					LoggerUtils.error("流程号："+self_requestId+"------"+"判断是否实名认证失败,原因：未查出用户信息",this.getClass());
 				}
-			}else{
-				LoggerUtils.error("流程号："+self_requestId+"------"+"认证失败,原因：未查出该用户",this.getClass());
 			}
 		}else{
-			LoggerUtils.error("流程号："+self_requestId+"------"+"认证失败,原因："+ReadProperties.getStringValue(properties, resultCallbace),this.getClass());
+			LoggerUtils.error("流程号："+self_requestId+"------"+"判断是否实名认证失败,原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)),this.getClass());
 		}
 		return success;
 	}
@@ -945,7 +1015,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		}else{
 			jsonObject.put("result", false);
 			jsonObject.put("msg", DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)));
-			LoggerUtils.error("流程号："+requestId+"------"+"认证失败,原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)),this.getClass());
+			LoggerUtils.error("流程号："+requestId+"------查询账户信息 失败,原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)),this.getClass());
 		}
 		return jsonObject;
 	}
@@ -1047,50 +1117,56 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				jsonObject.put("signature", back_signature);
 				//用户提现卡列表
 				if(queryType.equals("0") || queryType.equals("1")){
-					JSONArray withdrawBankJSONArray = jsonObjectData.getJSONArray("withdrawBankList");
-					if(withdrawBankJSONArray != null){
-						List<Map<String,String>> withdrawBankList = new ArrayList<Map<String,String>>();
-						for(int i=0;i<withdrawBankJSONArray.length();i++){
-							Map<String,String> withdrawBank = new HashMap<String, String>();
-							JSONObject withdrawBankObject = (JSONObject)withdrawBankJSONArray.get(i);
-							withdrawBank.put("bankName", withdrawBankObject.getString("bankName"));
-							withdrawBank.put("bankAccount", withdrawBankObject.getString("bankAccount"));
-							withdrawBank.put("bindId", withdrawBankObject.getString("bindId"));
-							withdrawBankList.add(withdrawBank);
+					if(DataUtils.notEmpty(jsonObjectData.get("withdrawBankList").toString())){
+						JSONArray withdrawBankJSONArray = jsonObjectData.getJSONArray("withdrawBankList");
+						if(withdrawBankJSONArray != null){
+							List<Map<String,String>> withdrawBankList = new ArrayList<Map<String,String>>();
+							for(int i=0;i<withdrawBankJSONArray.length();i++){
+								Map<String,String> withdrawBank = new HashMap<String, String>();
+								JSONObject withdrawBankObject = (JSONObject)withdrawBankJSONArray.get(i);
+								withdrawBank.put("bankName", withdrawBankObject.getString("bankName"));
+								withdrawBank.put("bankAccount", withdrawBankObject.getString("bankAccount"));
+								withdrawBank.put("bindId", withdrawBankObject.getString("bindId"));
+								withdrawBankList.add(withdrawBank);
+							}
+							jsonObject.put("withdrawBankList", withdrawBankList);
 						}
-						jsonObject.put("withdrawBankList", withdrawBankList);
 					}
 				}
 				//一键充值卡列表
 				else if(queryType.equals("0") || queryType.equals("2")){
-					JSONArray rechargeProtocolJSONArray = jsonObjectData.getJSONArray("rechargeProtocolList");
-					if(rechargeProtocolJSONArray != null){
-						List<Map<String,String>> rechargeProtocolList = new ArrayList<Map<String,String>>();
-						for(int i=0;i<rechargeProtocolJSONArray.length();i++){
-							Map<String,String> rechargeProtocol = new HashMap<String, String>();
-							JSONObject rechargeProtocolObject = (JSONObject)rechargeProtocolJSONArray.get(i);
-							rechargeProtocol.put("bankName", rechargeProtocolObject.getString("bankName"));
-							rechargeProtocol.put("bankAccount", rechargeProtocolObject.getString("bankAccount"));
-							rechargeProtocol.put("protocolNo", rechargeProtocolObject.getString("protocolNo"));
-							rechargeProtocolList.add(rechargeProtocol);
+					if(DataUtils.notEmpty(jsonObjectData.get("rechargeProtocolList").toString())){
+						JSONArray rechargeProtocolJSONArray = jsonObjectData.getJSONArray("rechargeProtocolList");
+						if(rechargeProtocolJSONArray != null){
+							List<Map<String,String>> rechargeProtocolList = new ArrayList<Map<String,String>>();
+							for(int i=0;i<rechargeProtocolJSONArray.length();i++){
+								Map<String,String> rechargeProtocol = new HashMap<String, String>();
+								JSONObject rechargeProtocolObject = (JSONObject)rechargeProtocolJSONArray.get(i);
+								rechargeProtocol.put("bankName", rechargeProtocolObject.getString("bankName"));
+								rechargeProtocol.put("bankAccount", rechargeProtocolObject.getString("bankAccount"));
+								rechargeProtocol.put("protocolNo", rechargeProtocolObject.getString("protocolNo"));
+								rechargeProtocolList.add(rechargeProtocol);
+							}
+							jsonObject.put("rechargeProtocolList", rechargeProtocolList);
 						}
-						jsonObject.put("rechargeProtocolList", rechargeProtocolList);
 					}
 				}
 				//协议还款卡列表
 				else if(queryType.equals("0") || queryType.equals("3")){
-					JSONArray repayProtocolJSONArray = jsonObjectData.getJSONArray("repayProtocolList");
-					if(repayProtocolJSONArray != null){
-						List<Map<String,String>> repayProtocolList = new ArrayList<Map<String,String>>();
-						for(int i=0;i<repayProtocolJSONArray.length();i++){
-							Map<String,String> repayProtocol = new HashMap<String, String>();
-							JSONObject repayProtocolObject = (JSONObject)repayProtocolJSONArray.get(i);
-							repayProtocol.put("bankName", repayProtocolObject.getString("bankName"));
-							repayProtocol.put("bankAccount", repayProtocolObject.getString("bankAccount"));
-							repayProtocol.put("protocolNo", repayProtocolObject.getString("protocolNo"));
-							repayProtocolList.add(repayProtocol);
+					if(DataUtils.notEmpty(jsonObjectData.get("repayProtocolList").toString())){
+						JSONArray repayProtocolJSONArray = jsonObjectData.getJSONArray("repayProtocolList");
+						if(repayProtocolJSONArray != null){
+							List<Map<String,String>> repayProtocolList = new ArrayList<Map<String,String>>();
+							for(int i=0;i<repayProtocolJSONArray.length();i++){
+								Map<String,String> repayProtocol = new HashMap<String, String>();
+								JSONObject repayProtocolObject = (JSONObject)repayProtocolJSONArray.get(i);
+								repayProtocol.put("bankName", repayProtocolObject.getString("bankName"));
+								repayProtocol.put("bankAccount", repayProtocolObject.getString("bankAccount"));
+								repayProtocol.put("protocolNo", repayProtocolObject.getString("protocolNo"));
+								repayProtocolList.add(repayProtocol);
+							}
+							jsonObject.put("repayProtocolList", repayProtocolList);
 						}
-						jsonObject.put("repayProtocolList", repayProtocolList);
 					}
 				}
 				
@@ -1109,7 +1185,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		}else{
 			jsonObject.put("result", false);
 			jsonObject.put("msg", DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)));
-			LoggerUtils.error("流程号："+requestId+"------"+"认证失败,原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)),this.getClass());
+			LoggerUtils.error("流程号："+requestId+"------"+"查询用户绑定的银行卡  结果失败,原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)),this.getClass());
 		}
 		return jsonObject;
 	}

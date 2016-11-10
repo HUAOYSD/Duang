@@ -215,7 +215,7 @@ public class LoginAction extends BaseAction<MemberInfo>{
 		jsonObject.put("email", entity.getEmail());
 		jsonObject.put("age", entity.getAge());
 		jsonObject.put("sex", entity.getSex());
-		jsonObject.put("photo", UploadFile.PATH.getVal(UploadFile.HEAD.getVal( entity.getId()))+"\\"+ entity.getUserImg());
+		jsonObject.put("photo", UploadFile.HEAD.appPath()+entity.getId()+"/head/"+ entity.getUserImg());
 		jsonObject.put("isAuth", String.valueOf(entity.getIsAuth()));
 		jsonObject.put("entityCode", entity.getEntityCode());
 		jsonObject.put("isEliteAccount", If.valueOf("If"+entity.getIsEliteAccount()).toString());
