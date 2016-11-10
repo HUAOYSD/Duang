@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ page language="java" import="java.util.*" contentType="text/html; charset=GBK" pageEncoding="utf-8"%>
 <%@ include file="/page/inc/inc.jsp"%>
 <% String path = request.getContextPath();%>
 <body style="background-color:#fff;">

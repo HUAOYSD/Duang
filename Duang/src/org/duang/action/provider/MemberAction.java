@@ -644,8 +644,19 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String payType = getRequest().getParameter("payType");
 			String merBizRequestId = getRequest().getParameter("merBizRequestId");
 			String signature = getRequest().getParameter("signature");
-			LoggerUtils.info("----------实名认证回调  返回参数字符串"+requestId+";"+merBizRequestId+";"+result+";"+status+";"+userName+";"+idNumber+";"+payType, this.getClass());
-			LoggerUtils.info("----------实名认证回调  返回的签名 "+signature, this.getClass());
+			
+			StringBuffer backStringBuffer = new StringBuffer("---------------------------实名认证回调  字符串：");
+			backStringBuffer.append("----requestId:"+requestId)
+							.append("----result"+result)
+							.append("----status"+status)
+							.append("----userName"+userName)
+							.append("----idNumber"+idNumber)
+							.append("----payType"+payType)
+							.append("----merBizRequestId"+merBizRequestId)
+							.append("----signature"+signature);
+			
+			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
+			
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
 			signatureStr.append(merBizRequestId);
@@ -847,6 +858,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		String akey = ReadProperties.getStringValue(properties, "akey");
 		//生成一个流水号
 		String requestId = DataUtils.randomUUID();
+		
 		//数字签名字符串
 		StringBuffer signatureBuffer = new StringBuffer();
 		signatureBuffer.append(requestId);
@@ -854,7 +866,16 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		signatureBuffer.append(userIdIdentity);
 		signatureBuffer.append(userName);
 		signatureBuffer.append(idNumber);
-		LoggerUtils.info("-------------查询账户信息   数字签名字符串：signature:"+signatureBuffer.toString(),this.getClass());
+		
+		StringBuffer sendStringBuffer = new StringBuffer("---------------------------查询账户信息  send2FF的字符串：");
+		sendStringBuffer.append("----requestId:"+requestId)
+						.append("----merchantCode"+merchantCode)
+						.append("----akey"+akey)
+						.append("----userIdIdentity"+userIdIdentity)
+						.append("----userName"+userName)
+						.append("----idNumber"+idNumber)
+						.append("----signature"+signatureBuffer.toString());
+		LoggerUtils.info(sendStringBuffer.toString(), this.getClass());
 		//加密后的数字签名
 		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
 		LoggerUtils.info("-------------查询账户信息  加密后的数字签名：signature_sign:"+signature_sign,this.getClass());
@@ -889,12 +910,21 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			}
 			String back_signature = jsonObjectData.get("signature").toString();
 			
+			StringBuffer backDataStringBuffer = new StringBuffer("---------------------------查询账户信息  BackData的字符串：");
+			backDataStringBuffer.append("----back_userIdIdentity:"+back_userIdIdentity)
+								.append("----back_userName"+back_userName)
+								.append("----back_idNumber"+back_idNumber)
+								.append("----back_result"+back_result)
+								.append("----back_balance"+back_balance)
+								.append("----back_withdrawAbleBalance"+back_withdrawAbleBalance)
+								.append("----back_frozenBalance"+back_frozenBalance)
+								.append("----back_signature"+back_signature);
+			LoggerUtils.info(backDataStringBuffer.toString(), this.getClass());
+			
+			
 			StringBuffer back_signatureBuffer = new StringBuffer(back_userIdIdentity+back_userName+back_idNumber+
 					back_result+back_balance+back_withdrawAbleBalance+back_frozenBalance);
 			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), akey);
-			
-			LoggerUtils.info("-------------查询账户信息   返回的参数信息:"+back_signatureBuffer.toString(),this.getClass());
-			LoggerUtils.info("-------------查询账户信息   返回的签名-back_signature:"+back_signature,this.getClass());
 			LoggerUtils.info("-------------查询账户信息   返回的参数信息-加密签名:"+back_signature_sign.toString(),this.getClass());
 			
 			if(back_signature_sign.equals(back_signature)){
@@ -989,6 +1019,15 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		map.put("userIdIdentity",userIdIdentity);
 		map.put("queryType",queryType);
 		map.put("signature",signature_sign);
+		
+		StringBuffer sendDataStringBuffer = new StringBuffer("---------------------------查询账户绑定的银行卡  SendFF的字符串：");
+		sendDataStringBuffer.append("----requestId:"+requestId)
+							.append("----merchantCode:"+merchantCode)
+							.append("----userIdIdentity:"+userIdIdentity)
+							.append("----queryType:"+queryType)
+							.append("----signature:"+signature_sign);
+		LoggerUtils.info(sendDataStringBuffer.toString(), this.getClass());
+		
 		//获取转换的参数
 		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
 		//result 查询结果  00000代表成功
@@ -998,8 +1037,10 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String back_userIdIdentity = jsonObjectData.get("userIdIdentity").toString();
 			String back_result = jsonObjectData.get("result").toString();
 			String back_signature = jsonObjectData.get("signature").toString();
+			//本地签名拼接
 			StringBuffer back_signatureBuffer = new StringBuffer(back_requestId+back_result+back_userIdIdentity);
 			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), akey);
+			
 			if(back_signature_sign.equals(back_signature)){
 				jsonObject.put("userIdIdentity", back_userIdIdentity);
 				jsonObject.put("result", back_result);
@@ -1052,6 +1093,15 @@ public class MemberAction extends BaseAction<MemberInfo>{
 						jsonObject.put("repayProtocolList", repayProtocolList);
 					}
 				}
+				
+				StringBuffer backDataStringBuffer = new StringBuffer("---------------------------查询账户绑定的银行卡  BackData的字符串：");
+				backDataStringBuffer.append("----back_userIdIdentity:"+back_userIdIdentity)
+									.append("----back_requestId:"+back_requestId)
+									.append("----back_result:"+back_result)
+									.append("----back_signature:"+back_signature);
+				LoggerUtils.info(backDataStringBuffer.toString(), this.getClass());
+				LoggerUtils.info("----------------------查询账户绑定的银行卡   本地加密签名"+back_signature_sign,this.getClass());
+				
 			}else{
 				jsonObject.put("result", false);
 				jsonObject.put("msg", "签名不一致");

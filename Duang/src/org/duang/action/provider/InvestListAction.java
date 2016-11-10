@@ -92,8 +92,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 					map.put("id", scale.getId());
 					map.put("day", product.getDays());
 					map.put("min", 500);
-					map.put("revenue", scale.getRevenue());
-					map.put("revenueAdd", scale.getRevenueAdd());
+					map.put("revenue", scale.getRevenue()*100);
+					map.put("revenueAdd", scale.getRevenueAdd()*100);
 					map.put("yetmoney", scale.getYetMoney());
 					map.put("residuemoney", scale.getResidueMoney());
 					map.put("totalmoney", scale.getTotalMoney());
@@ -475,14 +475,26 @@ public class InvestListAction extends BaseAction<InvestList>{
 			//红包金额
 			String giftSum = getRequest().getParameter("giftSum");
 			//项目总额
-			//String projectSum = getRequest().getParameter("projectSum");
+			String projectSum = getRequest().getParameter("projectSum");
 			//剩余可投金额
-			//String remainInvestmentSum = getRequest().getParameter("remainInvestmentSum");
+			String remainInvestmentSum = getRequest().getParameter("remainInvestmentSum");
 			
 			String signature = getRequest().getParameter("signature");
 			
-			LoggerUtils.info("---------------------------投标回调字符串："+requestId+";"+result+";"+sum+";"+userIdIdentity+";"+projectCode+";"+investmentSum+";"+giftSum, this.getClass());
-			LoggerUtils.info("---------------------------投标回调签名："+signature, this.getClass());
+			StringBuffer backStringBuffer = new StringBuffer("---------------------------投标回调字符串：");
+			backStringBuffer.append("----requestId:"+requestId)
+							.append("----result:"+result)
+							.append("----sum:"+sum)
+							.append("----userIdIdentity:"+userIdIdentity)
+							.append("----projectCode:"+projectCode)
+							.append("----investmentSum:"+investmentSum)
+							.append("----giftSum:"+giftSum)
+							.append("----projectSum:"+projectSum)
+							.append("----remainInvestmentSum:"+remainInvestmentSum)
+							.append("----signature:"+signature);
+			
+			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
+			
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
 			signatureStr.append(result);
@@ -490,7 +502,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 			signatureStr.append(userIdIdentity);
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
-			LoggerUtils.info("---------------------------投标回调本地加密签名："+dataSign, this.getClass());
+			LoggerUtils.info("---------------------------投标回调 本地加密签名："+dataSign, this.getClass());
 			if(signature.equals(dataSign)){
 				//请求成功
 				if(result.equals(ResultCode.SUCCESS.getVal())){
@@ -515,8 +527,13 @@ public class InvestListAction extends BaseAction<InvestList>{
 					//已经投金额
 					scale.setYetMoney(DataUtils.str2double(investmentSum, 6));
 					scaleService.updateEntity(scale);
-					LoggerUtils.info("---------------------------标更新成功，标总金额："+scale.getTotalMoney()+
-							"；已投金额："+scale.getYetMoney()+"；剩余金额："+scale.getResidueMoney(), this.getClass());
+					
+					StringBuffer updateScaleBuffer = new StringBuffer("---------------------------标更新成功，标总金额：");
+					updateScaleBuffer.append("标总金额 scale.getTotalMoney():"+scale.getTotalMoney())
+									 .append("已投金额 scale.getYetMoney():"+scale.getYetMoney())
+									 .append("剩余金额scale.getResidueMoney():"+scale.getResidueMoney());
+					
+					LoggerUtils.info(updateScaleBuffer.toString(), this.getClass());
 					//理财天数
 					int day = scale.getProduct().getDays();
 					//收益

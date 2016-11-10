@@ -311,7 +311,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			
 			String requestId = getRequest().getParameter("requestId");
-			//String noticeType = getRequest().getParameter("noticeType");
+			String noticeType = getRequest().getParameter("noticeType");
 			String result = getRequest().getParameter("result");
 			//充值金额
 			String sum = getRequest().getParameter("sum");
@@ -325,16 +325,33 @@ public class PayAction extends BaseAction<BillInvest>{
 			String withdrawableBalance = getRequest().getParameter("withdrawableBalance");
 			//冻结余额
 			String frozenBalance = getRequest().getParameter("frozenBalance");
-			/*String payType = getRequest().getParameter("payType");
+			String payType = getRequest().getParameter("payType");
 			String mainAccountType = getRequest().getParameter("mainAccountType");
 			String mainAccountCode = getRequest().getParameter("mainAccountCode");
 			String bankAccount = getRequest().getParameter("bankAccount");
-			String bankName = getRequest().getParameter("bankName");*/
+			String bankName = getRequest().getParameter("bankName");
 			String name = getRequest().getParameter("name");
 			String signature = getRequest().getParameter("signature");
 			
-			LoggerUtils.info("---------------------------充值回调字符串"+requestId+";"+result+";"+sum+";"+userIdIdentity+";"+unsettledBalance+";"+userBalance+";"+withdrawableBalance+";"+frozenBalance+";"+name, this.getClass());
-			LoggerUtils.info("---------------------------充值回调签名："+signature, this.getClass());
+			StringBuffer backDataBuffer = new StringBuffer("---------------------------充值回调  字符串");
+			backDataBuffer.append("----requestId:"+requestId)
+						  .append("----noticeType:"+noticeType)
+						  .append("----result:"+result)
+						  .append("----sum:"+sum)
+						  .append("----userIdIdentity:"+userIdIdentity)
+						  .append("----unsettledBalance:"+unsettledBalance)
+						  .append("----userBalance:"+userBalance)
+						  .append("----withdrawableBalance:"+withdrawableBalance)
+						  .append("----frozenBalance:"+frozenBalance)
+						  .append("----payType:"+payType)
+						  .append("----mainAccountType:"+mainAccountType)
+						  .append("----mainAccountCode"+mainAccountCode)
+						  .append("----bankAccount:"+bankAccount)
+						  .append("----bankName:"+bankName)
+						  .append("----name:"+name)
+						  .append("----signature:"+signature);
+			
+			LoggerUtils.info(backDataBuffer.toString(), this.getClass());
 			
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
@@ -344,7 +361,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			signatureStr.append(userBalance);
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
-			LoggerUtils.info("---------------------------本地加密后的签名:"+dataSign, this.getClass());
+			LoggerUtils.info("---------------------------充值回调  本地加密后的签名:"+dataSign, this.getClass());
 			if(dataSign.equals(signature)){
 				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//修改数据库
@@ -379,7 +396,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			//读取配置文件  
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String requestId = getRequest().getParameter("requestId");
-			//String noticeType = getRequest().getParameter("noticeType");
+			String noticeType = getRequest().getParameter("noticeType");
 			String result = getRequest().getParameter("result");
 			String sum = getRequest().getParameter("sum");
 			String userIdIdentity = getRequest().getParameter("userIdIdentity");
@@ -387,14 +404,14 @@ public class PayAction extends BaseAction<BillInvest>{
 			String userBalance = getRequest().getParameter("userBalance");
 			String withdrawableBalance = getRequest().getParameter("withdrawableBalance");
 			String frozenBalance = getRequest().getParameter("frozenBalance");
-			/*String payType = getRequest().getParameter("payType");
+			String payType = getRequest().getParameter("payType");
 			String mainAccountType = getRequest().getParameter("mainAccountType");
 			String mainAccountCode = getRequest().getParameter("mainAccountCode");
 			String bankAccount = getRequest().getParameter("bankAccount");
-			String bankName = getRequest().getParameter("bankName");*/
+			String bankName = getRequest().getParameter("bankName");
 			String name = getRequest().getParameter("name");
-			/*String requestTime = getRequest().getParameter("requestTime");
-			String dealTime = getRequest().getParameter("dealTime");*/
+			String requestTime = getRequest().getParameter("requestTime");
+			String dealTime = getRequest().getParameter("dealTime");
 			String signature = getRequest().getParameter("signature");
 			
 			StringBuffer signatureStr = new StringBuffer();
@@ -404,8 +421,27 @@ public class PayAction extends BaseAction<BillInvest>{
 			signatureStr.append(userIdIdentity);
 			signatureStr.append(userBalance);
 			
-			LoggerUtils.info("---------------------------提现回调字符串"+requestId+";"+result+";"+sum+";"+userIdIdentity+";"+userIdIdentity+";"+userBalance+";"+withdrawableBalance+";"+frozenBalance+";"+name, this.getClass());
-			LoggerUtils.info("---------------------------提现回调签名："+signature, this.getClass());
+			StringBuffer backDataBuffer = new StringBuffer("---------------------------提现回调字符串");
+			backDataBuffer.append("----requestId:"+requestId)
+						  .append("----noticeType:"+noticeType)
+						  .append("----result:"+result)
+						  .append("----sum:"+sum)
+						  .append("----userIdIdentity:"+userIdIdentity)
+						  .append("----failReason:"+failReason)
+						  .append("----userBalance:"+userBalance)
+						  .append("----withdrawableBalance:"+withdrawableBalance)
+						  .append("----frozenBalance:"+frozenBalance)
+						  .append("----payType:"+payType)
+						  .append("----mainAccountType:"+mainAccountType)
+						  .append("----mainAccountCode"+mainAccountCode)
+						  .append("----bankAccount:"+bankAccount)
+						  .append("----bankName:"+bankName)
+						  .append("----name:"+name)
+						  .append("----requestTime:"+requestTime)
+						  .append("----dealTime:"+dealTime)
+						  .append("----signature:"+signature);
+			
+			LoggerUtils.info(backDataBuffer.toString(), this.getClass());
 			
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));

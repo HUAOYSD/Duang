@@ -46,7 +46,7 @@ public enum Days {
 	day270 {
 		@Override
 		public int getVal() {
-			return 180;
+			return 270;
 		}
 		
 	},
