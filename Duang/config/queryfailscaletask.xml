@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">  
 <beans>  
- 	<!-- 查询到期标 赎回-->  
+ 	<!-- 查询流标 赎回-->  
     <!-- 定时服务定义 -->  
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
         <!-- 自动启动 -->  
@@ -21,17 +21,17 @@
         </property>  
         <property name="cronExpression">  
             <!-- 凌晨3点开始-->  
-            <value>0 0 3 * * ?</value>  
+            <value>0 0 1 * * ?</value>  
         </property>  
     </bean>  
       
     <bean id="jobDetailBean" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
         <!-- 执行任务的类 -->
-        <property name="targetObject" ref="queryExpireScale"></property>       
+        <property name="targetObject" ref="queryFailScale"></property>       
         <!-- 执行任务的方法 -->
         <property name="targetMethod" value="run"></property>  
         <property name="concurrent" value="false" />  
     </bean>  
      <!-- 执行任务的类映射 -->
-    <bean id="queryExpireScale" class="org.duang.task.QueryExpireScale"></bean>  
+    <bean id="queryFailScale" class="org.duang.task.QueryFailScale"></bean>  
 </beans>  

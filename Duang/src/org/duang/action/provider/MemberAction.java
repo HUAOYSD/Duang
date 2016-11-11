@@ -749,7 +749,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			}
 			
 			if(success){
-				realNameAuthMemberInfo(requestId,userName,idNumber,payType);
+				realNameAuthMemberInfo(merBizRequestId,userName,idNumber,payType);
 			}
 			
 		}catch(Exception e){
@@ -774,9 +774,9 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @return: void      
 	 * @throws
 	 */
-	private void realNameAuthMemberInfo(String requestId,String userName,String idNumber,String payType) throws Exception{
+	private void realNameAuthMemberInfo(String merBizRequestId,String userName,String idNumber,String payType) throws Exception{
 		//身份证与姓名一致,进行修改用户表
-		MemberInfo memberInfo = service.findEntity("requestId", requestId);
+		MemberInfo memberInfo = service.findEntity("requestId", merBizRequestId);
 		memberInfo.setIdCard(idNumber);
 		memberInfo.setPayType(payType);
 		memberInfo.setIsAuth(If.If1.getVal());
@@ -1213,7 +1213,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 						savefile.getParentFile().mkdirs();
 					}
 					fullpath+=fileName;
-					jsonObject.put("path", UploadFile.PATH.getVal(UploadFile.HEAD.getVal(memberInfo.getId()))+"\\"+fileName);
+					jsonObject.put("path", UploadFile.HEAD.appPath()+memberInfo.getId()+"/head/"+fileName);
 					success = ImageString.generateImage(imgdata, fullpath);
 					LoggerUtils.info("userId:"+id+"----------------上传头像："+success, this.getClass());
 					if(success){

@@ -481,17 +481,17 @@ public class InvestListAction extends BaseAction<InvestList>{
 			
 			String signature = getRequest().getParameter("signature");
 			
-			StringBuffer backStringBuffer = new StringBuffer("---------------------------投标回调字符串：");
-			backStringBuffer.append("----requestId:"+requestId)
-							.append("----result:"+result)
-							.append("----sum:"+sum)
-							.append("----userIdIdentity:"+userIdIdentity)
-							.append("----projectCode:"+projectCode)
-							.append("----investmentSum:"+investmentSum)
-							.append("----giftSum:"+giftSum)
-							.append("----projectSum:"+projectSum)
-							.append("----remainInvestmentSum:"+remainInvestmentSum)
-							.append("----signature:"+signature);
+			StringBuffer backStringBuffer = new StringBuffer("\t\n---------------------------投标回调字符串：");
+			backStringBuffer.append("\t\n----requestId:"+requestId)
+							.append("\t\n----result:"+result)
+							.append("\t\n----sum:"+sum)
+							.append("\t\n----userIdIdentity:"+userIdIdentity)
+							.append("\t\n----projectCode:"+projectCode)
+							.append("\t\n----investmentSum:"+investmentSum)
+							.append("\t\n----giftSum:"+giftSum)
+							.append("\t\n----projectSum:"+projectSum)
+							.append("\t\n----remainInvestmentSum:"+remainInvestmentSum)
+							.append("\t\n----signature:"+signature);
 			
 			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
 			
@@ -502,7 +502,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 			signatureStr.append(userIdIdentity);
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
-			LoggerUtils.info("---------------------------投标回调 本地加密签名："+dataSign, this.getClass());
+			LoggerUtils.info("\t\n---------------------------投标回调 本地加密签名："+dataSign, this.getClass());
 			if(signature.equals(dataSign)){
 				//请求成功
 				if(result.equals(ResultCode.SUCCESS.getVal())){
@@ -521,17 +521,17 @@ public class InvestListAction extends BaseAction<InvestList>{
 					//剩余可投金额
 					scale.setResidueMoney(scale.getTotalMoney()-DataUtils.str2double(investmentSum, 6));
 					if(scale.getResidueMoney()==0){
-						//0新建标，1可投入，2还有机会，3已完成
+						//0新建标，1流标，2可投标，3已完成
 						scale.setStatus(3);
 					}
 					//已经投金额
 					scale.setYetMoney(DataUtils.str2double(investmentSum, 6));
 					scaleService.updateEntity(scale);
 					
-					StringBuffer updateScaleBuffer = new StringBuffer("---------------------------标更新成功，标总金额：");
-					updateScaleBuffer.append("标总金额 scale.getTotalMoney():"+scale.getTotalMoney())
-									 .append("已投金额 scale.getYetMoney():"+scale.getYetMoney())
-									 .append("剩余金额scale.getResidueMoney():"+scale.getResidueMoney());
+					StringBuffer updateScaleBuffer = new StringBuffer("\t\n---------------------------标更新成功");
+					updateScaleBuffer.append("\t\n-------------标总金额 scale.getTotalMoney():"+scale.getTotalMoney())
+									 .append("\t\n-------------已投金额 scale.getYetMoney():"+scale.getYetMoney())
+									 .append("\t\n-------------剩余金额scale.getResidueMoney():"+scale.getResidueMoney());
 					
 					LoggerUtils.info(updateScaleBuffer.toString(), this.getClass());
 					//理财天数
@@ -547,13 +547,13 @@ public class InvestListAction extends BaseAction<InvestList>{
 					investList.setPactNumber(pactNumber);
 					investList.setDays(day);
 					boolean saveEntity = investListService.saveEntity(investList);
-					LoggerUtils.info("---------------------------标投标理财记录（investList）成功 ["+saveEntity+"]，更新的id："+investList.getId(), this.getClass());
+					LoggerUtils.info("\t\n---------------------------标投标理财记录（investList）成功 ["+saveEntity+"]，更新的id："+investList.getId(), this.getClass());
 				}else{
-					LoggerUtils.error("---------------------------投标回调 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+					LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
 			}else {
 				//签名不匹配
-				LoggerUtils.error("---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+				LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 			}
 		}catch(Exception e){
 			e.printStackTrace();

@@ -60,6 +60,7 @@ public class SSLClient{
 	 * @throws
 	 */
 	public static JSONObject getJsonObjectByUrl(String url,Map<String, String> map,String charset) throws Exception{
+		LoggerUtils.info("\t\n---------------开始调用平台 URL:"+url, new SSLClient().getClass());
 		OutputStream outputStream = null;
 		URL reqURL = new URL(url); //创建URL对象
 		//创建SSLContext对象，并使用我们指定的信任管理器初始化
@@ -71,7 +72,7 @@ public class SSLClient{
 		//创建HttpsURLConnection对象，并设置其SSLSocketFactory对象
 		HttpsURLConnection httpsConn = (HttpsURLConnection)reqURL.openConnection();
 		httpsConn.setRequestMethod("POST");
-		
+		LoggerUtils.info("\t\n-----------------发送的参数如下：", new SSLClient().getClass());
 		StringBuffer paramBuffer = new StringBuffer();
         if (map != null && !map.isEmpty()) {
            for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -79,6 +80,7 @@ public class SSLClient{
                       .append("=")
                       .append(URLEncoder.encode(entry.getValue(), "gbk"))
                       .append("&");
+        	   LoggerUtils.info("\t\n---------"+entry.getKey()+":"+URLEncoder.encode(entry.getValue(), "gbk"), new SSLClient().getClass());
            }
            paramBuffer.deleteCharAt(paramBuffer.length() - 1);
         }
@@ -106,7 +108,7 @@ public class SSLClient{
             while(null != (line=br.readLine())){
                 result += line;
             }
-            LoggerUtils.info(result,new SSLClient().getClass());
+            LoggerUtils.info("\t\n---------返回结果"+result,new SSLClient().getClass());
 			jsonObject = new JSONObject(result);
 		}
 		return jsonObject;	

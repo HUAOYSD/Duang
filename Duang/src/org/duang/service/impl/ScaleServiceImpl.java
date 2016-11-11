@@ -282,4 +282,24 @@ public class ScaleServiceImpl implements ScaleService{
 	public boolean deleteEntity(Scale t) throws Exception {
 		return dao.deleteEntity(t);
 	}
+
+	/**
+	 * 查询标的状态  //0新建标，1流标，2可投标，3已完成
+	 * <p>Title: findScaleState</p>   
+	 * <p>Description: </p>  
+	 * @author LiYonghui
+	 * @date 2016年11月11日 上午11:11:09
+	 * @param id
+	 * @return
+	 * @throws Exception   
+	 * @see org.duang.service.ScaleService#findScaleState(java.lang.String)
+	 */
+	@Override
+	public int findScaleState(String id) throws Exception {
+		Scale scale = dao.findById(id);
+		if(scale != null){
+			return scale.getStatus();
+		}
+		return -1;
+	}
 }
