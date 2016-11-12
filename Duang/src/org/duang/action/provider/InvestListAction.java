@@ -82,7 +82,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 		boolean success = false;
 		try {
 			condsUtils.addProperties(true, "product", "myAlias.isRecommend", "myAlias.isSell", "status", "order");
-			condsUtils.addValues(true, new Object[]{"myAlias","as"}, 1, 1, new Object[]{1, 2, "or"}, Order.asc("myAlias.days"));
+			condsUtils.addValues(true, new Object[]{"myAlias","as"}, 1, 1, new Object[]{0, "ne"}, Order.asc("myAlias.days"));
 			List<Scale> list = scaleService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 			if (DataUtils.notEmpty(list)) {
 				for(Scale scale : list){
@@ -91,7 +91,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 					Product product = scale.getProduct();
 					map.put("id", scale.getId());
 					map.put("day", product.getDays());
-					map.put("min", 500);
+					map.put("min", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
 					map.put("revenue", scale.getRevenue()*100);
 					map.put("revenueAdd", scale.getRevenueAdd()*100);
 					map.put("yetmoney", scale.getYetMoney());
@@ -377,7 +377,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 						int investMemberNum = investListService.count("scale.id", fk2.getId());
 						resultMap.put("investMemberNum", investMemberNum);
 						resultMap.put("investing", pk.getMoney()*(fk2.getRevenueAdd()+fk2.getRevenue())/365D*fk2.getProduct().getDays());
-						resultMap.put("minMoney", "500.00");
+						resultMap.put("minMoney", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
 					}
 					listMap.add(resultMap);
 				}

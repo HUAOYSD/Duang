@@ -937,14 +937,14 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		signatureBuffer.append(userName);
 		signatureBuffer.append(idNumber);
 		
-		StringBuffer sendStringBuffer = new StringBuffer("---------------------------查询账户信息  send2FF的字符串：");
-		sendStringBuffer.append("----requestId:"+requestId)
-						.append("----merchantCode"+merchantCode)
-						.append("----akey"+akey)
-						.append("----userIdIdentity"+userIdIdentity)
-						.append("----userName"+userName)
-						.append("----idNumber"+idNumber)
-						.append("----signature"+signatureBuffer.toString());
+		StringBuffer sendStringBuffer = new StringBuffer("\t\n---------------------------查询账户信息  send2FF的字符串：");
+		sendStringBuffer.append("\t\n----requestId:"+requestId)
+						.append("\t\n----merchantCode:"+merchantCode)
+						.append("\t\n----akey:"+akey)
+						.append("\t\n----userIdIdentity:"+userIdIdentity)
+						.append("\t\n----userName:"+userName)
+						.append("\t\n----idNumber:"+idNumber)
+						.append("\t\n----signature:"+signatureBuffer.toString());
 		LoggerUtils.info(sendStringBuffer.toString(), this.getClass());
 		//加密后的数字签名
 		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
@@ -980,22 +980,22 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			}
 			String back_signature = jsonObjectData.get("signature").toString();
 			
-			StringBuffer backDataStringBuffer = new StringBuffer("---------------------------查询账户信息  BackData的字符串：");
-			backDataStringBuffer.append("----back_userIdIdentity:"+back_userIdIdentity)
-								.append("----back_userName"+back_userName)
-								.append("----back_idNumber"+back_idNumber)
-								.append("----back_result"+back_result)
-								.append("----back_balance"+back_balance)
-								.append("----back_withdrawAbleBalance"+back_withdrawAbleBalance)
-								.append("----back_frozenBalance"+back_frozenBalance)
-								.append("----back_signature"+back_signature);
+			StringBuffer backDataStringBuffer = new StringBuffer("\t\n---------------------------查询账户信息  BackData的字符串：");
+			backDataStringBuffer.append("\t\n----back_userIdIdentity:"+back_userIdIdentity)
+								.append("\t\n----back_userName:"+back_userName)
+								.append("\t\n----back_idNumber:"+back_idNumber)
+								.append("\t\n----back_result:"+back_result)
+								.append("\t\n----back_balance:"+back_balance)
+								.append("\t\n----back_withdrawAbleBalance:"+back_withdrawAbleBalance)
+								.append("\t\n----back_frozenBalance:"+back_frozenBalance)
+								.append("\t\n----back_signature:"+back_signature);
 			LoggerUtils.info(backDataStringBuffer.toString(), this.getClass());
 			
 			
 			StringBuffer back_signatureBuffer = new StringBuffer(back_userIdIdentity+back_userName+back_idNumber+
 					back_result+back_balance+back_withdrawAbleBalance+back_frozenBalance);
 			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), akey);
-			LoggerUtils.info("-------------查询账户信息   返回的参数信息-加密签名:"+back_signature_sign.toString(),this.getClass());
+			LoggerUtils.info("\t\n-------------查询账户信息   返回的参数信息-加密签名:"+back_signature_sign.toString(),this.getClass());
 			
 			if(back_signature_sign.equals(back_signature)){
 				jsonObject.put("userIdIdentity", back_userIdIdentity);

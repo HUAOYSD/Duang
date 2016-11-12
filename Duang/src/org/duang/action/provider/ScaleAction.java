@@ -78,7 +78,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			if (countNumber > 0 && numNumber > 0) {
 				StringBuffer sql = new StringBuffer();
 				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
-				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_HOUSE) and SCA.status!=0 ");
+				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_HOUSE) and (SCA.status!=0 or SCA.status != 1)");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -122,7 +122,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			if (countNumber > 0 && numNumber > 0) {
 				StringBuffer sql = new StringBuffer();
 				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
-				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_CAR) and SCA.status!=0 ");
+				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_CAR) and (SCA.status!=0 or SCA.status != 1)");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -166,7 +166,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			if (countNumber > 0 && numNumber > 0) {
 				StringBuffer sql = new StringBuffer();
 				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
-				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_INFO) and SCA.status!=0 ");
+				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_INFO) and (SCA.status!=0 or SCA.status != 1)");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -262,12 +262,13 @@ public class ScaleAction extends BaseAction<Scale>{
 					resultMap.put("name", scale.getName());
 					resultMap.put("yetMoney", scale.getYetMoney());
 					resultMap.put("residueMoney", scale.getResidueMoney());
-					resultMap.put("revenue", scale.getRevenue());
-					resultMap.put("revenueAdd", scale.getRevenueAdd());
+					resultMap.put("revenue", scale.getRevenue()*100);
+					resultMap.put("revenueAdd", scale.getRevenueAdd()*100);
 					resultMap.put("calStyle", scale.getReturnStyle());
 					resultMap.put("buyName", memberInfo.getRealName());
 					resultMap.put("numbers", numbers);
-					resultMap.put("min", 500);
+					resultMap.put("status", scale.getStatus());
+					resultMap.put("min", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
 				}
 				
 				scaleListMap.add(resultMap);
@@ -314,8 +315,8 @@ public class ScaleAction extends BaseAction<Scale>{
 				if (s != null) {
 					resultMap.put("id", s.getId());
 					resultMap.put("scaleName", s.getName());
-					resultMap.put("revenue", s.getRevenue());
-					resultMap.put("revenueAdd", s.getRevenueAdd());
+					resultMap.put("revenue", s.getRevenue()*100);
+					resultMap.put("revenueAdd", s.getRevenueAdd()*100);
 					resultMap.put("timeLimit", s.getTimeLimit());
 					resultMap.put("beginTime", DateUtils.getTimeStamp(s.getBeginTime()));
 					resultMap.put("endTime", DateUtils.getTimeStamp(s.getEndTime()));
@@ -362,10 +363,11 @@ public class ScaleAction extends BaseAction<Scale>{
 					double er_maxMoney = buyMoney-entity.getMaxLimit();
 					//超出剩余可投金额
 					double er_residueMoney = buyMoney-entity.getResidueMoney();
-					double beyond_money = er_maxMoney>er_residueMoney?er_maxMoney:er_residueMoney;
-					//超出金额
-					jsonObject.put("beyond_money", beyond_money);
-					msg="购买超额";
+					if(er_maxMoney>0){
+						msg="超出单笔限额 "+(buyMoney-entity.getMaxLimit())+"元";
+					}else if(er_residueMoney>0){
+						msg="库存不足";
+					}
 				}
 			}else{
 				msg = "缺少参数";
