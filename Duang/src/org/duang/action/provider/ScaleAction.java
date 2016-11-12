@@ -1,4 +1,5 @@
 package org.duang.action.provider;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +78,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			if (countNumber > 0 && numNumber > 0) {
 				StringBuffer sql = new StringBuffer();
 				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
-				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_HOUSE)");
+				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_HOUSE) and SCA.status!=0 ");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -121,7 +122,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			if (countNumber > 0 && numNumber > 0) {
 				StringBuffer sql = new StringBuffer();
 				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
-				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_CAR)");
+				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_CAR) and SCA.status!=0 ");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -165,7 +166,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			if (countNumber > 0 && numNumber > 0) {
 				StringBuffer sql = new StringBuffer();
 				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
-				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_INFO)");
+				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_INFO) and SCA.status!=0 ");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -240,19 +241,40 @@ public class ScaleAction extends BaseAction<Scale>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = getRequest().getParameter("id");
+			String money = getRequest().getParameter("money");
 			String memeberId ="";
 			if(DataUtils.notEmpty(id) && DataUtils.notEmpty(token) && DataUtils.notEmpty((memeberId = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))){
-				StringBuffer sql = new StringBuffer();
-				sql.append("SELECT product.name_zh, product.days, product.category, il.money, il.total_money,");
-				sql.append(" scale.id, scale.`name`, scale.yet_money, scale.residue_money, scale.revenue, scale.revenue_add, scale.return_style,");
-				sql.append(" member_info.real_name, buyNum.numbers FROM scale LEFT JOIN invest_list il on il.scale_id=scale.id");
-				sql.append(" LEFT JOIN product ON product.id = scale.product_id LEFT JOIN member_info ON member_info.id=il.member_info left JOIN (");
-				sql.append(" select scale_id, count(*) numbers  from invest_list where invest_list.scale_id='"+id+"' and invest_list.`status` in(2,3) ");
-				sql.append(" ) as buyNum  ON buyNum.scale_id=scale.id  where scale.id='"+id+"' and member_info.id='"+memeberId+"'");
-				List<?> list = scaleService.queryBySQL(sql.toString(), null, null, false);
+				Scale scale = scaleService.findById(id);
+				MemberInfo memberInfo = memberInfoService.findById(memeberId);
+				List<Map<String,Object>> scaleListMap = new ArrayList<Map<String,Object>>();
+				//购买人数
+				int numbers = investListService.count("scale.id", id);
+				
+				Map<String,Object> resultMap = new HashMap<String,Object>();
+				if(scale != null && memberInfo != null){
+					Product product = scale.getProduct();
+					resultMap.put("productName", product.getName());
+					resultMap.put("days", product.getDays());
+					resultMap.put("proCategory", product.getCategory());
+					resultMap.put("money", DataUtils.str2double(money, 6));
+					resultMap.put("totalMoney",scale.getTotalMoney());
+					resultMap.put("id", id);
+					resultMap.put("name", scale.getName());
+					resultMap.put("yetMoney", scale.getYetMoney());
+					resultMap.put("residueMoney", scale.getResidueMoney());
+					resultMap.put("revenue", scale.getRevenue());
+					resultMap.put("revenueAdd", scale.getRevenueAdd());
+					resultMap.put("calStyle", scale.getReturnStyle());
+					resultMap.put("buyName", memberInfo.getRealName());
+					resultMap.put("numbers", numbers);
+					resultMap.put("min", 500);
+				}
+				
+				scaleListMap.add(resultMap);
+				
 				success = true;
-				jsonObject.put("result", fillDatagridArray(list));
-				if (list == null || list.size() == 0) {
+				jsonObject.put("result", scaleListMap);
+				if (scaleListMap == null || scaleListMap.size() == 0) {
 					msg = "没有更多了";
 				}
 			}else{
@@ -270,31 +292,6 @@ public class ScaleAction extends BaseAction<Scale>{
 		printJsonResult();
 	}
 
-	private List<Map<String, Object>> fillDatagridArray(List<?> list) throws Exception{
-		if (list !=null && list.size() > 0) {
-			for(int i=0; i<list.size(); i++) {
-				Map<String,Object> resultMap = new HashMap<String,Object>();
-				resultMap.put("productName", ((Object[])list.get(i))[0]);
-				resultMap.put("days", ((Object[])list.get(i))[1]);
-				resultMap.put("proCategory", ((Object[])list.get(i))[2]);
-				resultMap.put("money", ((Object[])list.get(i))[3]);
-				resultMap.put("totalMoney",((Object[])list.get(i))[4]);
-				resultMap.put("id", ((Object[])list.get(i))[5]);
-				resultMap.put("name", ((Object[])list.get(i))[6]);
-				resultMap.put("yetMoney", ((Object[])list.get(i))[7]);
-				resultMap.put("residueMoney", ((Object[])list.get(i))[8]);
-				resultMap.put("revenue", ((Object[])list.get(i))[9]);
-				resultMap.put("revenueAdd", ((Object[])list.get(i))[10]);
-				resultMap.put("calStyle", ((Object[])list.get(i))[11]);
-				resultMap.put("buyName", ((Object[])list.get(i))[12]);
-				resultMap.put("numbers", ((Object[])list.get(i))[13]);
-				resultMap.put("min", 500);
-				listMap.add(resultMap);
-			}
-		}
-		return listMap;
-	}
-	
 	private InvestListService investListService;
 	@Resource
 	public void setService(InvestListService investListService) {
@@ -417,79 +414,6 @@ public class ScaleAction extends BaseAction<Scale>{
 			String signature = getRequest().getParameter("signature");
 			
 			StringBuffer backStringBuffer = new StringBuffer("\t\n---------------------------投标回调字符串：");
-			backStringBuffer.append("\t\n----requestId:"+requestId)
-							.append("\t\n----result:"+result)
-							.append("\t\n----sum:"+sum)
-							.append("\t\n----userIdIdentity:"+userIdIdentity)
-							.append("\t\n----projectCode:"+projectCode)
-							.append("\t\n----investmentSum:"+investmentSum)
-							.append("\t\n----giftSum:"+giftSum)
-							.append("\t\n----projectSum:"+projectSum)
-							.append("\t\n----remainInvestmentSum:"+remainInvestmentSum)
-							.append("\t\n----signature:"+signature);
-			
-			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
-			
-			StringBuffer signatureStr = new StringBuffer();
-			signatureStr.append(requestId);
-			signatureStr.append(result);
-			signatureStr.append(sum);
-			signatureStr.append(userIdIdentity);
-			//获取返回数据的加密数据用于与签名校验
-			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
-			LoggerUtils.info("\t\n---------------------------投标回调 本地加密签名："+dataSign, this.getClass());
-			if(signature.equals(dataSign)){
-				//请求成功
-				if(result.equals(ResultCode.SUCCESS.getVal())){
-					//修改标等信息
-					InvestList investList = new InvestList();
-					investList.setId(DataUtils.randomUUID());
-					investList.setMoney(DataUtils.str2double(sum, 6));
-					investList.setUseTicket(1);
-					investList.setTotalMoney(0);
-					investList.setInvestStyle(4);
-					investList.setGiftSum(DataUtils.str2double(giftSum, 6));
-					investList.setMemberInfo(new MemberInfo(userIdIdentity));
-					//根据理财标和投资本金计算本金和预期收益和
-					//查找理财标并更新
-					Scale scale = scaleService.findById(projectCode);
-					//剩余可投金额
-					scale.setResidueMoney(scale.getTotalMoney()-DataUtils.str2double(investmentSum, 6));
-					if(scale.getResidueMoney()==0){
-						//0新建标，1流标，2可投标，3已完成
-						scale.setStatus(3);
-					}
-					//已经投金额
-					scale.setYetMoney(DataUtils.str2double(investmentSum, 6));
-					scaleService.updateEntity(scale);
-					
-					StringBuffer updateScaleBuffer = new StringBuffer("\t\n---------------------------标更新成功");
-					updateScaleBuffer.append("\t\n-------------标总金额 scale.getTotalMoney():"+scale.getTotalMoney())
-									 .append("\t\n-------------已投金额 scale.getYetMoney():"+scale.getYetMoney())
-									 .append("\t\n-------------剩余金额scale.getResidueMoney():"+scale.getResidueMoney());
-					
-					LoggerUtils.info(updateScaleBuffer.toString(), this.getClass());
-					//理财天数
-					int day = scale.getProduct().getDays();
-					//收益
-					double income = DataUtils.str2double(sum, 6) * (scale.getRevenue() + scale.getRevenueAdd()) / 365D * day;
-					income = DataUtils.str2double(income+"", 6);
-					investList.setScale(scale);
-					investList.setIncome(income);
-					investList.setStatus(Status.S2.getVal());
-					investList.setOpenDate(new Date());
-					String pactNumber = DateUtils.date2Str(new Date(), "MMDDhhmmss") + DataUtils.sixNumber();
-					investList.setPactNumber(pactNumber);
-					investList.setDays(day);
-					boolean saveEntity = investListService.saveEntity(investList);
-					LoggerUtils.info("\t\n---------------------------标投标理财记录（investList）成功 ["+saveEntity+"]，更新的id："+investList.getId(), this.getClass());
-				}else{
-					LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
-				}
-			}else {
-				//签名不匹配
-				LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
-			}
 		}catch(Exception e){
 			e.printStackTrace();
 			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
