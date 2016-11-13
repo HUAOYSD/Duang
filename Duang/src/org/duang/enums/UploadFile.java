@@ -65,7 +65,7 @@ public enum UploadFile {
 	CONTRACT{
 		@Override
 		public String getVal() {
-			return "\\contract";
+			return "contract";
 		}
 
 		@Override
