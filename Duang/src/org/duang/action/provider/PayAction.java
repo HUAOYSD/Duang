@@ -366,7 +366,9 @@ public class PayAction extends BaseAction<BillInvest>{
 			if(dataSign.equals(signature)){
 				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//修改数据库
-					updateMemberInfoBalance(userIdIdentity,withdrawableBalance,userBalance,frozenBalance,unsettledBalance);
+					investMemberService.depositFFCallBackUpdateInvest(userIdIdentity,DataUtils.str2double(withdrawableBalance, 6),
+							DataUtils.str2double(userBalance, 6),DataUtils.str2double(frozenBalance, 6),DataUtils.str2double(unsettledBalance, 6),
+							DataUtils.str2double(sum, 6),bankAccount);
 				}else{
 					LoggerUtils.error(name+"充值,错误，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)), this.getClass());
 				}
@@ -450,7 +452,8 @@ public class PayAction extends BaseAction<BillInvest>{
 			if(dataSign.equals(signature)){
 				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//修改数据库
-					updateMemberInfoBalance(userIdIdentity,withdrawableBalance,userBalance,frozenBalance);
+					investMemberService.withdrawalsFFCallBackUpdateInvest(userIdIdentity,DataUtils.str2double(withdrawableBalance, 6),
+							DataUtils.str2double(userBalance, 6),DataUtils.str2double(frozenBalance, 6),DataUtils.str2double(sum, 6),bankAccount);
 				}else{
 					LoggerUtils.error(name+"提现,错误，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result))+"---"+failReason, this.getClass());
 				}
@@ -465,68 +468,4 @@ public class PayAction extends BaseAction<BillInvest>{
 		}
 	}
 
-	/**
-	 * 提现，修改理财用户的数据
-	 * @Title: updateMemberInfoBalance   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param memberInfoId   用户id
-	 * @param: @param balance    余额
-	 * @param: @param totalMoney 总金额
-	 * @param: @param frozenBalance 投资中的金额
-	 * @param: @throws Exception  
-	 * @author LiYonghui    
-	 * @date 2016年11月3日 下午3:59:47
-	 * @return: void      
-	 * @throws
-	 */
-	private void  updateMemberInfoBalance(String memberInfoId,String balance,String totalMoney,String frozenBalance) throws Exception{
-		LoggerUtils.info("\t\n------------------------提现修改本地用户金额-------------------------------------\t\n", this.getClass());
-		InvestMember investMember = investMemberService.findEntity("memberInfo.id", memberInfoId);
-		if(investMember != null){
-			LoggerUtils.info("\t\n--------姓名："+investMember.getMemberInfo().getRealName()+"  电话："+investMember.getMemberInfo().getPhone(), this.getClass());
-			LoggerUtils.info("\t\n--------余额："+DataUtils.str2double(balance,6), this.getClass());
-			LoggerUtils.info("\t\n--------理财："+DataUtils.str2double(frozenBalance,6), this.getClass());
-			LoggerUtils.info("\t\n--------总资产："+DataUtils.str2double(totalMoney,6), this.getClass());
-			investMember.setBalance(DataUtils.str2double(balance,6));
-			investMember.setInvesting(DataUtils.str2double(frozenBalance,6));
-			investMember.setTotalMoney(DataUtils.str2double(totalMoney,6));
-			investMemberService.updateEntity(investMember);
-		}else{
-			LoggerUtils.error("提现 修改本地用户金额数据错误,原因：未查找到该用户 memberId="+memberInfoId, this.getClass());
-		}
-	}
-	
-	/**
-	 * 充值回调修改金额，修改理财用户的数据
-	 * @Title: updateMemberInfoBalance   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param memberInfoId   用户id
-	 * @param: @param balance    余额
-	 * @param: @param totalMoney 总金额
-	 * @param: @param frozenBalance 投资中的金额
-	 * @param: @param unsettledBalance 未结金额
-	 * @param: @throws Exception  
-	 * @author LiYonghui    
-	 * @date 2016年11月3日 下午3:59:47
-	 * @return: void      
-	 * @throws
-	 */
-	private void  updateMemberInfoBalance(String memberInfoId,String balance,String totalMoney,String frozenBalance,String unsettledBalance) throws Exception{
-		LoggerUtils.info("\t\n------------------------充值修改本地用户金额-------------------------------------\t\n", this.getClass());
-		InvestMember investMember = investMemberService.findEntity("memberInfo.id", memberInfoId);
-		if(investMember != null){
-			LoggerUtils.info("\t\n--------姓名："+investMember.getMemberInfo().getRealName()+"  电话："+investMember.getMemberInfo().getPhone(), this.getClass());
-			LoggerUtils.info("\t\n--------余额："+DataUtils.str2double(balance,6), this.getClass());
-			LoggerUtils.info("\t\n--------理财："+DataUtils.str2double(frozenBalance,6), this.getClass());
-			LoggerUtils.info("\t\n--------总资产："+DataUtils.str2double(totalMoney,6), this.getClass());
-			LoggerUtils.info("\t\n--------未结金额："+DataUtils.str2double(unsettledBalance,6), this.getClass());
-			investMember.setBalance(DataUtils.str2double(balance,6));
-			investMember.setInvesting(DataUtils.str2double(frozenBalance,6));
-			investMember.setTotalMoney(DataUtils.str2double(totalMoney,6));
-			investMember.setUnsettledBalance(DataUtils.str2double(unsettledBalance,6));
-			investMemberService.updateEntity(investMember);
-		}else{
-			LoggerUtils.error("充值 修改本地用户金额数据错误,原因：未查找到该用户 memberId="+memberInfoId, this.getClass());
-		}
-	}
 }

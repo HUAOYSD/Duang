@@ -13,6 +13,7 @@ import org.duang.entity.MemberInfo;
  * @date 2016年7月25日 下午4:27:27      
  */ 
 public interface InvestMemberService extends CommonInterface<InvestMember>{
+	
 	/**
 	 * 修改理财用户的余额
 	 * @Title: modifyInvestMembers   
@@ -26,4 +27,38 @@ public interface InvestMemberService extends CommonInterface<InvestMember>{
 	 * @throws
 	 */
 	public abstract MemberInfo modifyInvestMembersBalance(InvestList investList) throws Exception; 
+	
+	
+	/**
+	 * 充值过后修改用户的账户金额信息
+	 * @Title: depositFFCallBackUpdateInvest   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param userIdIdentity
+	 * @param withdrawableBalance
+	 * @param userBalance
+	 * @param frozenBalance
+	 * @param unsettledBalance
+	 * @param bankAccount
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract boolean depositFFCallBackUpdateInvest(String userIdIdentity,double withdrawableBalance,double userBalance,
+			double frozenBalance,double unsettledBalance,double sum, String bankAccount) throws Exception;
+	
+	/**
+	 * 提现后修改用户的账户金额信息
+	 * @Title: depositFFCallBackUpdateInvest   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param userIdIdentity
+	 * @param withdrawableBalance
+	 * @param userBalance
+	 * @param frozenBalance
+	 * @param unsettledBalance
+	 * @param bankAccount
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract boolean withdrawalsFFCallBackUpdateInvest(String userIdIdentity,double withdrawableBalance,double userBalance,
+			double frozenBalance,double sum, String bankAccount) throws Exception;
+	
 }

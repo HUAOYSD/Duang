@@ -7,12 +7,14 @@ import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.BillInvestDao;
+import org.duang.dao.BindCardDao;
 import org.duang.dao.InvestMemberDao;
+import org.duang.entity.BindCard;
 import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
 import org.duang.service.InvestMemberService;
-import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,19 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 		this.dao = dao;
 	}
 
+	private BillInvestDao billInvestDao;
+	@Resource(name="billinvestdaoimpl")
+	public void setBillInvestDao(BillInvestDao billInvestDao) {
+		this.billInvestDao = billInvestDao;
+	}
+	
+	private BindCardDao bindCardDao;
+
+	@Resource(name="bindcarddaoimpl")
+	public void setBindCardDao(BindCardDao bindCardDao) {
+		this.bindCardDao = bindCardDao;
+	}
+	
 	public InvestMemberServiceImpl(){
 		LoggerUtils.info("注入InvestMemberServiceImpl服务层", this.getClass());
 	}
@@ -301,14 +316,98 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	 */
 	public MemberInfo modifyInvestMembersBalance(InvestList investList) throws Exception{
 		MemberInfo memberInfo = null;
-		List<InvestMember> investMembers = dao.queryEntity("memberInfo.id", investList.getMemberInfo().getId(), null, null);
-		if(DataUtils.notEmpty(investMembers)){
-			InvestMember investMember = investMembers.get(0);
+		InvestMember investMember = dao.findEntity("memberInfo.id", investList.getMemberInfo().getId());
+		if(investMember !=null){
 			investMember.setBalance(investMember.getBalance()-investList.getMoney());
 			investMember.setInvesting(investMember.getInvesting()+investList.getMoney());
 			dao.updateEntity(investMember);
 			memberInfo = investMember.getMemberInfo();
+		}else{
+			LoggerUtils.error("InvestMemberServiceImple----------modifyInvestMembersBalance修改账户余额错误,未查到改用户对象:"+investList.getMemberInfo().getId(), this.getClass());
 		}
 		return memberInfo;
+	}
+
+	/**
+	 * 充值过后修改用户的账户金额信息
+	 * @Title: depositFFCallBackUpdateInvest   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param userIdIdentity  用户id
+	 * @param withdrawableBalance  余额
+	 * @param userBalance   用户总额
+	 * @param frozenBalance 投资金额
+	 * @param unsettledBalance 未结金额
+	 * @param sum           操作金额
+	 * @param bankAccount   银行卡号
+	 * @return
+	 * @throws Exception
+	 */
+	public synchronized boolean depositFFCallBackUpdateInvest(String userIdIdentity,double withdrawableBalance,double userBalance,
+			double frozenBalance,double unsettledBalance,double sum, String bankAccount)throws Exception {
+		LoggerUtils.info("\t\n------------------------充值修改本地用户金额-------------------------------------\t\n", this.getClass());
+		InvestMember investMember = dao.findEntity("memberInfo.id", userIdIdentity);
+		boolean success = false;
+		if(investMember != null){
+			LoggerUtils.info("\t\n--------姓名："+investMember.getMemberInfo().getRealName()+"  电话："+investMember.getMemberInfo().getPhone(), this.getClass());
+			LoggerUtils.info("\t\n--------余额："+withdrawableBalance, this.getClass());
+			LoggerUtils.info("\t\n--------投标金额："+frozenBalance, this.getClass());
+			LoggerUtils.info("\t\n--------总资产："+userBalance, this.getClass());
+			LoggerUtils.info("\t\n--------未结金额："+unsettledBalance, this.getClass());
+			investMember.setBalance(withdrawableBalance);
+			investMember.setInvesting(frozenBalance);
+			investMember.setTotalMoney(userBalance);
+			investMember.setUnsettledBalance(unsettledBalance);
+			success = dao.updateEntity(investMember);
+			if(success){
+				BindCard bindCard = bindCardDao.findEntity("bankNo", bankAccount);
+				LoggerUtils.info("\t\n-----------充值回调 银行账户"+"\t\n-------银行卡："+bindCard.getBankNo()+
+						"\t\n-------用户姓名："+bindCard.getName()+"\t\n-------用户姓名："+bindCard.getIdcard(), this.getClass());
+				success = billInvestDao.depositFFCallBackCreateBill(investMember, sum, bindCard);
+			}
+			
+		}else{
+			LoggerUtils.error("充值 修改本地用户金额数据错误,原因：未查找到该用户 memberId="+userIdIdentity, this.getClass());
+		}
+		return success;
+	}
+
+	/**
+	 * 提现过后修改用户的账户金额信息
+	 * @Title: withdrawalsFFCallBackUpdateInvest   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param userIdIdentity  用户id
+	 * @param withdrawableBalance  余额
+	 * @param userBalance   用户总额
+	 * @param frozenBalance 投资金额
+	 * @param sum           操作金额
+	 * @param bankAccount   银行卡号
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean withdrawalsFFCallBackUpdateInvest(String userIdIdentity, double withdrawableBalance, double userBalance,
+			double frozenBalance,double sum, String bankAccount) throws Exception {
+		LoggerUtils.info("\t\n------------------------提现后修改本地用户金额-------------------------------------\t\n", this.getClass());
+		InvestMember investMember = dao.findEntity("memberInfo.id", userIdIdentity);
+		boolean success = false;
+		if(investMember != null){
+			LoggerUtils.info("\t\n--------姓名："+investMember.getMemberInfo().getRealName()+"  电话："+investMember.getMemberInfo().getPhone(), this.getClass());
+			LoggerUtils.info("\t\n--------提现余额："+withdrawableBalance, this.getClass());
+			LoggerUtils.info("\t\n--------投标金额："+frozenBalance, this.getClass());
+			LoggerUtils.info("\t\n--------总资产："+userBalance, this.getClass());
+			investMember.setBalance(withdrawableBalance);
+			investMember.setInvesting(frozenBalance);
+			investMember.setTotalMoney(userBalance);
+			success = dao.updateEntity(investMember);
+			if(success){
+				BindCard bindCard = bindCardDao.findEntity("bankNo", bankAccount);
+				LoggerUtils.info("\t\n-----------提现回调 银行账户"+"\t\n-------银行卡："+bindCard.getBankNo()+
+						"\t\n-------用户姓名："+bindCard.getName()+"\t\n-------用户姓名："+bindCard.getIdcard(), this.getClass());
+				success = billInvestDao.depositFFCallBackCreateBill(investMember, sum, bindCard);
+			}
+			
+		}else{
+			LoggerUtils.error("提现 修改本地用户金额数据错误,原因：未查找到该用户 memberId="+userIdIdentity, this.getClass());
+		}
+		return success;
 	}
 }

@@ -1,6 +1,7 @@
 package org.duang.dao.impl; 
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,11 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.BillInvestDao;
 import org.duang.dao.base.BaseDao;
 import org.duang.entity.BillInvest;
+import org.duang.entity.BindCard;
+import org.duang.entity.InvestMember;
+import org.duang.enums.billinvest.BillStatus;
+import org.duang.enums.billinvest.UseType;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -286,6 +292,50 @@ public class BillInvestDaoImpl extends BaseDao<BillInvest> implements BillInvest
 	 */
 	public List<BillInvest> queryBySQL(String sql, String countSql, PageUtil<BillInvest> page, boolean convert, Object... params) throws Exception{
 		return super.queryBySQL(sql, countSql, convert, page, params);
+	}
+
+	/**
+	 * 充值成功之后，产生记录
+	 * @Title: depositFFCallBackCreateBill   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:investMember
+	 * @param: money   充值金额
+	 * @param: bindcard 充值的银行卡操作
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月13日 下午2:50:02
+	 * @return: boolean      
+	 * @throws
+	 */
+	public boolean depositFFCallBackCreateBill(InvestMember investMember,double money,BindCard bindCard) throws Exception {
+		boolean success = false;
+			BillInvest nextBillInvest = new BillInvest(DataUtils.randomUUID(), investMember.getMemberInfo(), null, bindCard, 
+					UseType.UT1.getVal(), money, investMember.getBalance(), investMember.getBalance()+investMember.getInvesting(),
+					BillStatus.BS2.getVal(), new Date(), "充值", 4);
+			success = saveEntity(nextBillInvest);
+		return success;
+	}
+	
+	/**
+	 * 提现成功之后，产生记录
+	 * @Title: withdrawalsFFCallBackCreateBill   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:investMember
+	 * @param: money   提现金额
+	 * @param: bindcard 提现的银行卡操作
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月13日 下午2:50:02
+	 * @return: boolean      
+	 * @throws
+	 */
+	public boolean withdrawalsFFCallBackCreateBill(InvestMember investMember,double money,BindCard bindCard) throws Exception {
+		boolean success = false;
+			BillInvest nextBillInvest = new BillInvest(DataUtils.randomUUID(), investMember.getMemberInfo(), null, bindCard, 
+					UseType.UT2.getVal(), money, investMember.getBalance(), investMember.getBalance()+investMember.getInvesting(),
+					BillStatus.BS2.getVal(), new Date(), "提现", 4);
+			success = saveEntity(nextBillInvest);
+		return success;
 	}
 }
 
