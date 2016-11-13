@@ -136,9 +136,13 @@ public class DataUtils {
 	 */  
 	public static double str2double(String string, int scale){
 		try {
-			java.math.BigDecimal b = new java.math.BigDecimal(string);
-			java.math.BigDecimal one = new java.math.BigDecimal("1");
-			return b.divide(one, scale, java.math.BigDecimal.ROUND_HALF_UP).doubleValue();
+			if (DataUtils.isEmpty(string)) {
+				return 0.0; 
+			}else {
+				java.math.BigDecimal b = new java.math.BigDecimal(string);
+				java.math.BigDecimal one = new java.math.BigDecimal("1");
+				return b.divide(one, scale, java.math.BigDecimal.ROUND_HALF_UP).doubleValue();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -198,15 +202,15 @@ public class DataUtils {
 		contractNo.append("-"+String.format("%04d", index));
 		return contractNo.toString();
 	}
-	
+
 	public static String ISO2UTF8(String str) throws UnsupportedEncodingException{
 		if(notEmpty(str)){
 			return new String(str.getBytes("ISO-8859-1"),"UTF-8");
 		}else {
 			return "";
 		}
-		
+
 	}
-	
+
 }
 

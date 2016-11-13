@@ -348,7 +348,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 			
 			//判断是否是客户经理查看会员理财列表
 			String isCustomer = getRequest().getParameter("isCustomer");
-			if(isCustomer.equals("1")){ //==1说明是客户经理查看信息
+			if("1".equals(isCustomer)){ //==1说明是客户经理查看信息
 				String loginId = SessionTools.getSessionSysUser().getId();
 				CustomerManager customerManager = customerManagerService.findEntity("sysUser.id", loginId);
 				if(customerManager != null){

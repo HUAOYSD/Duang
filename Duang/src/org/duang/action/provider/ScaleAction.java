@@ -13,6 +13,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
+import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.InvestList;
@@ -77,8 +78,9 @@ public class ScaleAction extends BaseAction<Scale>{
 			int countNumber = DataUtils.str2int(count), numNumber = DataUtils.str2int(num);
 			if (countNumber > 0 && numNumber > 0) {
 				StringBuffer sql = new StringBuffer();
-				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
-				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_HOUSE) and (SCA.status!=0 or SCA.status != 1)");
+				sql.append(" SELECT  SCALE.* FROM SCALE  ");
+				sql.append(" INNER JOIN PRODUCT ON PRODUCT.ID = SCALE.PRODUCT_ID ");
+				sql.append(" WHERE PRODUCT.CATEGORY = 2 AND SCALE.STATUS <> 1 AND  SCALE.STATUS <> 0 ");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -121,8 +123,9 @@ public class ScaleAction extends BaseAction<Scale>{
 			int countNumber = DataUtils.str2int(count), numNumber = DataUtils.str2int(num);
 			if (countNumber > 0 && numNumber > 0) {
 				StringBuffer sql = new StringBuffer();
-				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
-				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_CAR) and (SCA.status!=0 or SCA.status != 1)");
+				sql.append(" SELECT  SCALE.* FROM SCALE  ");
+				sql.append(" INNER JOIN PRODUCT ON PRODUCT.ID = SCALE.PRODUCT_ID ");
+				sql.append(" WHERE PRODUCT.CATEGORY = 3 AND SCALE.STATUS <> 1 AND  SCALE.STATUS <> 0 ");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -165,8 +168,9 @@ public class ScaleAction extends BaseAction<Scale>{
 			int countNumber = DataUtils.str2int(count), numNumber = DataUtils.str2int(num);
 			if (countNumber > 0 && numNumber > 0) {
 				StringBuffer sql = new StringBuffer();
-				sql.append(" SELECT SCA.* FROM SCALE SCA LEFT JOIN SCALE_LOAN_LIST SLL ON SLL.SCALE = SCA.ID");
-				sql.append(" WHERE SLL.LOAN_LIST IN( SELECT LOAN_LIST_ID FROM APPLY_LOAN_INFO) and (SCA.status!=0 or SCA.status != 1)");
+				sql.append(" SELECT  SCALE.* FROM SCALE  ");
+				sql.append(" INNER JOIN PRODUCT ON PRODUCT.ID = SCALE.PRODUCT_ID ");
+				sql.append(" WHERE PRODUCT.CATEGORY = 1 AND SCALE.STATUS <> 1 AND  SCALE.STATUS <> 0 ");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -241,21 +245,31 @@ public class ScaleAction extends BaseAction<Scale>{
 		try {
 			String token = getRequest().getParameter("token");
 			String id = getRequest().getParameter("id");
-			String money = getRequest().getParameter("money");
+			String money = getRequest().getParameter("money");//投资成功后需要用到
 			String memeberId ="";
 			if(DataUtils.notEmpty(id) && DataUtils.notEmpty(token) && DataUtils.notEmpty((memeberId = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))){
 				Scale scale = scaleService.findById(id);
 				MemberInfo memberInfo = memberInfoService.findById(memeberId);
 				List<Map<String,Object>> scaleListMap = new ArrayList<Map<String,Object>>();
 				//购买人数
-				int numbers = investListService.count("scale.id", id);
-				
+				int numbers = 0;
+				if (DataUtils.isEmpty(money)) {//表详情页面
+					CondsUtils condsUtils = new CondsUtils();
+					condsUtils.addProperties(true, "scale.id", "status");
+					condsUtils.addValues(true, id, Status.S3.getVal());
+					numbers = investListService.count(condsUtils.getPropertys(), condsUtils.getValues());
+				}
 				Map<String,Object> resultMap = new HashMap<String,Object>();
 				if(scale != null && memberInfo != null){
 					Product product = scale.getProduct();
 					resultMap.put("productName", product.getName());
 					resultMap.put("days", product.getDays());
 					resultMap.put("proCategory", product.getCategory());
+					
+//					resultMap.put("prodescript", product.getProductDescribe());//介绍
+//					resultMap.put("riskcontrol", product.getRiskControl());//风险控制
+//					resultMap.put("details", product.getDetails());//更多详情
+					
 					resultMap.put("money", DataUtils.str2double(money, 6));
 					resultMap.put("totalMoney",scale.getTotalMoney());
 					resultMap.put("id", id);
@@ -324,7 +338,8 @@ public class ScaleAction extends BaseAction<Scale>{
 					resultMap.put("totalMoney", s.getTotalMoney());
 					resultMap.put("residueMoney", s.getResidueMoney());
 					resultMap.put("yetMoney", s.getYetMoney());
-					resultMap.put("returnStyle", s.getReturnStyle());
+					resultMap.put("returnStyle", "到期一次还本付息");
+					//resultMap.put("returnStyle", s.getReturnStyle());
 					resultMap.put("tags", s.getTags());
 					resultMap.put("useTicket", s.getUseTicket());
 					resultMap.put("transfer", s.getTransfer());

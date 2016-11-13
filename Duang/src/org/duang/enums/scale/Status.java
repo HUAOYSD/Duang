@@ -108,7 +108,7 @@ public enum Status {
 		
 	},
 	S3 {
-		private String desc = "已完成";
+		private String desc = "满标";
 		
 		@Override
 		public int getVal() {
@@ -132,13 +132,47 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "已完成";
+			this.desc = "满标";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "已完成";
+			return "满标";
+		}
+		
+	},S4 {
+		private String desc = "已结束";
+		
+		@Override
+		public int getVal() {
+			return 3;
+		}
+
+		@Override
+		public String getDesc() {
+			return desc;
+		}
+
+		@Override
+		public Object setDesc(String desc) {
+			if (DataUtils.notEmpty(desc)) {
+				this.desc = desc;
+				return this;
+			}else {
+				return setDefaultDesc();
+			}
+		}
+
+		@Override
+		public Object setDefaultDesc() {
+			this.desc = "已结束";
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "已结束";
 		}
 		
 	};

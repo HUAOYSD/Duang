@@ -111,6 +111,8 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 		//4、计算理财标总额度
 		scale.setTotalMoney(money);
 		scale.setStatus(org.duang.enums.scale.Status.S2.getVal());
+		scale.setResidueMoney(money);
+		scale.setYetMoney(0);
 		scaleDao.updateEntity(scale);
 
 		//5、分配库存

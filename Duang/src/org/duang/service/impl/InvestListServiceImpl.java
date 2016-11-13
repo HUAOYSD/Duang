@@ -1,6 +1,8 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,21 +16,29 @@ import org.duang.annotation.ServiceLog;
 import org.duang.common.CondsUtils;
 import org.duang.common.ContractFactory;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.BillInvestDao;
+import org.duang.dao.ContractDao;
 import org.duang.dao.InvestListDao;
+import org.duang.dao.InvestMemberDao;
 import org.duang.dao.LoanMemberDao;
+import org.duang.dao.MemberInfoDao;
+import org.duang.dao.ScaleDao;
 import org.duang.dao.StockDao;
+import org.duang.entity.BillInvest;
 import org.duang.entity.Contract;
 import org.duang.entity.InvestList;
+import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
+import org.duang.entity.Scale;
 import org.duang.entity.Stock;
 import org.duang.enums.If;
 import org.duang.enums.UploadFile;
+import org.duang.enums.billinvest.BillStatus;
+import org.duang.enums.billinvest.UseType;
 import org.duang.enums.invest.Status;
-import org.duang.service.BillInvestService;
 import org.duang.service.ContractService;
 import org.duang.service.InvestListService;
-import org.duang.service.InvestMemberService;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -54,6 +64,196 @@ public class InvestListServiceImpl implements InvestListService{
 
 	public InvestListServiceImpl(){
 		LoggerUtils.info("注入InvestListServiceImpl服务层", this.getClass());
+	}
+	@Resource
+	private ScaleDao scaleDao;
+	@Resource
+	private MemberInfoDao memberInfoDao;
+	private StockDao stockDao;
+	@Resource
+	public void setStockDao(StockDao stockDao) {
+		this.stockDao = stockDao;
+	}
+	@Resource
+	private BillInvestDao billInvestDao;
+	@Resource
+	private ContractService contractService;
+	@Resource
+	private LoanMemberDao loanMemberDao;
+	@Resource
+	private InvestMemberDao investMemberDao;
+	@Resource
+	private ContractDao contractDao;
+
+	/**
+	 * 丰付投标回调
+	 * @Title: investFFCallback   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月3日 下午7:32:03
+	 * @return: void      
+	 * @throws
+	 */
+	public synchronized boolean investFFCallback(String scaleid, String memberinfoid, double money, int investStyle, double giftSum, String requestid) throws Exception{
+		Scale scale = scaleDao.findById(scaleid);
+		MemberInfo memberInfo = memberInfoDao.findById(memberinfoid);
+		double income = money * (scale.getRevenue() + scale.getRevenueAdd()) / 365 * scale.getProduct().getDays();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		int sevenactivity = 0;
+		if (System.currentTimeMillis() <= sf.parse("2016-11-18 23:59:59").getTime() ) {
+			income += scale.getProduct().getDays() / 365 * money * (scale.getRevenue() + scale.getRevenueAdd()) / 365 * 7;
+			sevenactivity = 1;
+		}
+		income = DataUtils.str2double(income+"", 6);
+		//增加理财记录信息
+		Calendar calendar = Calendar.getInstance();
+		Date today = sf.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:30:00");
+		Date backdate = new Date(today.getTime() + 24*3600*1000);
+		Date endDate = new Date(today.getTime() + 24*3600*1000*scale.getProduct().getDays());
+		InvestList investList = new InvestList(DataUtils.randomUUID(), scale, null, memberInfo, money, 0, 0, 1, 0, 0, money+income, income, 0, Status.S3.getVal(), new Date(), null, backdate, endDate, null, investStyle, 0, 0, giftSum, scale.getProduct().getDays(), null, null, null, null, null,sevenactivity,requestid);
+
+		//理财标更新
+		scale.setResidueMoney(scale.getResidueMoney()-money);//剩余可投金额
+		scale.setYetMoney(scale.getYetMoney() + money);//已经投金额
+		if(scale.getResidueMoney()==0){
+			scale.setStatus(org.duang.enums.scale.Status.S3.getVal());
+		}
+		boolean success = scaleDao.updateEntity(scale);
+
+		//合同
+		String contractNo = String.valueOf(contractService.getContractIndexByYear()+1);
+		String pactNumber = DataUtils.getContractNo(DataUtils.str2int(contractNo));
+		investList.setPactNumber(pactNumber);
+
+		//1、匹配库存
+		//2、更改分配到的库存的状态
+		//根据投资列表id查找理财标库存中未被分配的记录
+		CondsUtils condsUtils = new CondsUtils();
+		condsUtils.addProperties(true, "scale.id","status");
+		condsUtils.addValues(true, scaleid, 0);
+		List<Stock> stocks = stockDao.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);//获取该理财标库存中还未分配理财标的记录
+		List<Map<String, String>> loanMembers = new ArrayList<Map<String,String>>();
+		if (DataUtils.notEmpty(stocks)) {
+			//将集合打乱顺序，随机为该投资人分配借贷人
+			Collections.shuffle(stocks);
+			List<Stock> mystock = new ArrayList<Stock>();//存放该理财记录的库存记录的集合
+			if (money <= 500) {//测试时候，购买少量金额
+				Stock stock = stocks.get(0);
+				stock.setFetch(money);
+				stock.setFetchTime(new Date());
+				stock.setDifference(stock.getMoney() - money);
+				stock.setStatus(Status.S2.getVal());
+				stock.setInvestList(investList);
+				mystock.add(stock);
+
+				MemberInfo loanmemberinfo = stock.getLoanList().getMemberInfo();
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("name", loanmemberinfo.getRealName());
+				map.put("idcard", loanmemberinfo.getIdCard());
+				map.put("money", String.valueOf(money));
+				loanMembers.add(map);
+			}else {//正常仪式购买
+				double tempMoney = 0;
+				for (Stock stock : stocks) {
+					if (tempMoney + stock.getMoney() < investList.getMoney()) {
+						stock.setFetch(stock.getMoney());
+						stock.setFetchTime(new Date());
+						stock.setDifference(0);
+						stock.setStatus(Status.S2.getVal());
+						stock.setInvestList(investList);
+						mystock.add(stock);
+						//获取每个库存中借贷人loanMember的信息
+						MemberInfo loanmemberinfo = stock.getLoanList().getMemberInfo();
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("name", loanmemberinfo.getRealName());
+						map.put("idcard", loanmemberinfo.getIdCard());
+						LoanMember loanMember = loanMemberDao.findEntity("memberInfo.id", loanmemberinfo.getId());
+						if(loanMember!=null){
+							map.put("money", String.valueOf(loanMember.getLendMoney()));
+						}else{
+							map.put("money", "0");
+						}
+						loanMembers.add(map);
+						success = true;
+					}else {
+						break;
+					}
+				}
+			}
+			//更改分配到的库存的状态
+			for (Stock stock : mystock) {
+				success = stockDao.updateEntity(stock);
+			}
+			if (success) {
+				//3、产生理财订单
+				//3.1、先获取到此人，最后一次billinvest记录，该条记录含有此人最新的余额、总资产数据	，新记录的这俩数据，通过这个数据做加减法即可得到
+				List<BillInvest> billInvestsList = billInvestDao.queryEntity("memberInfo.id", investList.getMemberInfo().getId(), null, Order.desc("optTime"));
+				if(DataUtils.isEmpty(billInvestsList)){//首次产生流水,其实不会
+					BillInvest nextBillInvest = new BillInvest();
+					nextBillInvest.setId(DataUtils.randomUUID());
+					nextBillInvest.setMemberInfo(memberInfo);
+					nextBillInvest.setInvestList(investList);
+					nextBillInvest.setUseType(UseType.UT3.getVal());
+					nextBillInvest.setMoney(money);
+					nextBillInvest.setBalance(0);
+					nextBillInvest.setAsset(money);
+					nextBillInvest.setBindCard(null);
+					nextBillInvest.setOptTime(new Date());
+					nextBillInvest.setRemark("购买理财");
+					nextBillInvest.setStyle(investStyle);
+					nextBillInvest.setStatus(BillStatus.BS2.getVal());
+					success = billInvestDao.saveEntity(nextBillInvest);
+				}else{
+					BillInvest nextBillInvest = new BillInvest();
+					nextBillInvest.setId(DataUtils.randomUUID());
+					nextBillInvest.setMemberInfo(memberInfo);
+					nextBillInvest.setInvestList(investList);
+					nextBillInvest.setUseType(UseType.UT3.getVal());
+					nextBillInvest.setMoney(money);
+					nextBillInvest.setBalance(billInvestsList.get(0).getBalance() - money);
+					nextBillInvest.setAsset(billInvestsList.get(0).getAsset());
+					nextBillInvest.setBindCard(null);
+					nextBillInvest.setOptTime(new Date());
+					nextBillInvest.setRemark("购买理财");
+					nextBillInvest.setStyle(investStyle);
+					nextBillInvest.setStatus(BillStatus.BS2.getVal());
+					success = billInvestDao.saveEntity(nextBillInvest);
+				}
+				
+				
+				//4、改变资产，改变invest_member中的值，获取值的方式和上面的第4步骤差不多
+				InvestMember investMember = investMemberDao.findEntity("memberInfo.id", investList.getMemberInfo().getId());
+				investMember.setBalance(investMember.getBalance() - money);
+				investMember.setInvesting(investMember.getInvesting() + money);
+				investMember.setTotalMoney(investMember.getBalance() + investMember.getInvesting());
+				investMember.setCurrentIncome(income);
+				//investMember.setUnsettledBalance();
+				
+				//ServletActionContext.getRequest().setAttribute("memberName", memberInfo.getRealName());
+				//ServletActionContext.getRequest().setAttribute("memberIdcard", memberInfo.getIdCard());
+				//5、增加理财记录
+				success = dao.saveEntity(investList);
+				//6、生成合同
+				//保存合同路径
+				//获取合同的编号
+				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
+				String fullPath = temPath+UploadFile.PATH.getVal(UploadFile.CONTRACT.getVal());
+				LoggerUtils.info("-----------------合同编号："+contractNo+"生成合同的地址："+fullPath,this.getClass());
+				//生成合同
+				ContractFactory contractFactory = ContractFactory.getInstance(memberInfo, loanMembers, investList, pactNumber, fullPath);
+				contractFactory.start();
+				//保存合同信息
+				Contract contract = new Contract();
+				contract.setId(pactNumber);
+				contract.setName(contractFactory.getContractNo()+".pdf");
+				contract.setConPath(UploadFile.PATH.getVal(UploadFile.CONTRACT.getVal())+"\\"+contractFactory.getContractNo()+".pdf");
+				contract.setCreateTime(new Date());
+				contract.setState(If.If1.getVal());
+				success = contractDao.saveEntity(contract);
+			}
+		}
+		return success;
 	}
 
 	/**
@@ -138,143 +338,20 @@ public class InvestListServiceImpl implements InvestListService{
 	public InvestList findById(Serializable id) throws Exception{
 		return dao.findById(id);
 	}
-	
-	
+
+
 	/**
 	 * 通过实体对象增加实体数据
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public synchronized boolean saveEntity(InvestList investList) throws Exception{
+	public boolean saveEntity(InvestList investList) throws Exception{
 		boolean  success = false;
-		//1、匹配库存
-		//2、更改分配到的库存的状态
-		boolean checkStocks = checkStock(investList);
-		if (checkStocks) {
-				//3、产生理财订单
-				//3.1、先获取到此人，最后一次billinvest记录，该条记录含有此人最新的余额、总资产数据，新记录的这俩数据，通过这个数据做加减法即可得到
-				success = billInvestService.createBill(investList);
-				//4、改变资产，改变invest_member中的值，获取值的方式和上面的第4步骤差不多
-				MemberInfo memberInfo = investMemberService.modifyInvestMembersBalance(investList);
-				ServletActionContext.getRequest().setAttribute("memberName", memberInfo.getRealName());
-				ServletActionContext.getRequest().setAttribute("memberIdcard", memberInfo.getIdCard());
-				//5、增加理财记录
-				success = dao.saveEntity(investList);
-				//6、生成合同
-				//合同单号
-				String contractNo = String.valueOf(contractService.getContractIndexByYear()+1);
-				ServletActionContext.getRequest().setAttribute("contractNo",  DataUtils.getContractNo(DataUtils.str2int(contractNo)));
-				//保存合同路径
-				//获取合同的编号
-				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
-				String fullPath = temPath+UploadFile.PATH.getVal(UploadFile.CONTRACT.getVal());
-				LoggerUtils.info("-----------------合同编号："+contractNo+"生成合同的地址："+fullPath,this.getClass());
-				//生成合同
-				ContractFactory contractFactory = ContractFactory.getInstance(memberInfo, loanMembers, investList, DataUtils.getContractNo(DataUtils.str2int(contractNo)), fullPath);
-				contractFactory.start();
-				//保存合同信息
-				success = saveContract(contractFactory);
-		}
+		dao.saveEntity(investList);
 		return success;
-	}
-	private List<Map<String, String>> loanMembers = new ArrayList<Map<String,String>>();
-	private StockDao stockDao;
-	@Resource
-	public void setStockDao(StockDao stockDao) {
-		this.stockDao = stockDao;
-	}
-	private BillInvestService billInvestService;
-	private InvestMemberService investMemberService;
-	private ContractService contractService;
-	private LoanMemberDao loanMemberDao;
-	@Resource
-	public void setBillInvestService(BillInvestService billInvestService) {
-		this.billInvestService = billInvestService;
-	}
-	@Resource
-	public void setInvestMemberService(InvestMemberService investMemberService) {
-		this.investMemberService = investMemberService;
-	}
-	@Resource
-	public void setContractService(ContractService contractService) {
-		this.contractService = contractService;
-	}
-	@Resource(name="loanmemberdaoimpl")
-	public void setLoanMemberDao(LoanMemberDao loanMemberDao) {
-		this.loanMemberDao = loanMemberDao;
 	}
 
-	private boolean  saveContract(ContractFactory contractFactory) throws Exception{
-		//保存合同
-		Contract contract = new Contract();
-		contract.setId(DataUtils.randomUUID());
-		contract.setName(contractFactory.getContractNo()+".pdf");
-		contract.setConPath(UploadFile.PATH.getVal(UploadFile.CONTRACT.getVal())+"\\"+contractFactory.getContractNo()+".pdf");
-		contract.setCreateTime(new Date());
-		contract.setState(If.If1.getVal());
-		return contractService.saveEntity(contract);
-	}
-	
-	/**
-	 * 匹配库存
-	 * @Title: checkStock   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param investList
-	 * @param: @param loanMembers
-	 * @param: @return
-	 * @param: @throws Exception  
-	 * @author LiYonghui    
-	 * @date 2016年10月28日 上午11:31:56
-	 * @return: boolean      
-	 * @throws
-	 */
-	private boolean checkStock(InvestList investList) throws Exception{
-		boolean success = false;
-		//根据投资列表id查找理财标库存中未被分配的记录
-		CondsUtils condsUtils = new CondsUtils();
-		condsUtils.addProperties(true, "scale.id","status");
-		condsUtils.addValues(true,investList.getScale().getId(),0);
-		List<Stock> stocks = stockDao.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);//获取该理财标库存中还未分配理财标的记录
-		
-		if (DataUtils.notEmpty(stocks)) {
-			//将集合打乱顺序，随机为该投资人分配借贷人
-			Collections.shuffle(stocks);
-			List<Stock> mystock = new ArrayList<Stock>();//存放该理财记录的库存记录的集合
-			double tempMoney = 0;
-			for (Stock stock : stocks) {
-				if (tempMoney + stock.getMoney() < investList.getMoney()) {
-					stock.setFetch(stock.getMoney());
-					stock.setFetchTime(new Date());
-					stock.setDifference(0);
-					stock.setStatus(Status.S2.getVal());
-					stock.setInvestList(investList);
-					mystock.add(stock);
-					//获取每个库存中借贷人loanMember的信息
-					MemberInfo memberInfo = stock.getLoanList().getMemberInfo();
-					Map<String, String> map = new HashMap<String, String>();
-					map.put("name", memberInfo.getRealName());
-					map.put("idcard", memberInfo.getIdCard());
-					LoanMember loanMember = loanMemberDao.findEntity("memberInfo.id", memberInfo.getId());
-					if(loanMember!=null){
-						map.put("money", String.valueOf(loanMember.getLendMoney()));
-					}else{
-						map.put("money", "0");
-					}
-					loanMembers.add(map);
-					success = true;
-				}else {
-					break;
-				}
-			}
-			//2、更改分配到的库存的状态
-			for (Stock stock : mystock) {
-				success = stockDao.updateEntity(stock);
-			}
-		}
-		return success;
-	}
-	
-	
+
 	/**
 	 * 通过实体对象修改实体数据
 	 * @param t  实体对象
@@ -427,8 +504,8 @@ public class InvestListServiceImpl implements InvestListService{
 	public boolean deleteEntity(InvestList t) throws Exception {
 		return dao.deleteEntity(t);
 	}
-	
-	
+
+
 	/**
 	 * 提前赎回成功后的回调
 	 * @param id
@@ -445,5 +522,5 @@ public class InvestListServiceImpl implements InvestListService{
 		//增加理财交易流水
 		return true;
 	}
-	
+
 }
