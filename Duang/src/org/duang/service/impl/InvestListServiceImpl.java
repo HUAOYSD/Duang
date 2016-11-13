@@ -98,26 +98,26 @@ public class InvestListServiceImpl implements InvestListService{
 	public synchronized boolean investFFCallback(String scaleid, String memberinfoid, double money, int investStyle, double giftSum, String requestid) throws Exception{
 		Scale scale = scaleDao.findById(scaleid);
 		MemberInfo memberInfo = memberInfoDao.findById(memberinfoid);
-		double income = money * (scale.getRevenue() + scale.getRevenueAdd()) / 365 * scale.getProduct().getDays();
+		double income = money * (scale.getRevenue() + scale.getRevenueAdd()) / 365D * scale.getProduct().getDays();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		int sevenactivity = 0;
 		if (System.currentTimeMillis() <= sf.parse("2016-11-18 23:59:59").getTime() ) {
-			income += scale.getProduct().getDays() / 365 * money * (scale.getRevenue() + scale.getRevenueAdd()) / 365 * 7;
+			income += scale.getProduct().getDays() / 365D * money * (scale.getRevenue() + scale.getRevenueAdd()) / 365D * 7D;
 			sevenactivity = 1;
 		}
 		income = DataUtils.str2double(income+"", 6);
 		//增加理财记录信息
 		Calendar calendar = Calendar.getInstance();
 		Date today = sf.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:30:00");
-		Date backdate = new Date(today.getTime() + 24*3600*1000);
-		Date endDate = new Date(today.getTime() + 24*3600*1000*scale.getProduct().getDays());
+		Date backdate = new Date(today.getTime() + 24L*3600L*1000L);
+		Date endDate = new Date(today.getTime() + 24L*3600L*1000L*scale.getProduct().getDays());
 		InvestList investList = new InvestList(DataUtils.randomUUID(), scale, null, memberInfo, money, 0, 0, 1, 0, 0, money+income, income, 0, Status.S3.getVal(), new Date(), null, backdate, endDate, null, investStyle, 0, 0, giftSum, scale.getProduct().getDays(), null, null, null, null, null,sevenactivity,requestid);
 
 		//理财标更新
 		scale.setResidueMoney(scale.getResidueMoney()-money);//剩余可投金额
 		scale.setYetMoney(scale.getYetMoney() + money);//已经投金额
 		if(scale.getResidueMoney()==0){
-			scale.setStatus(org.duang.enums.scale.Status.S3.getVal());
+			scale.setStatus(org.duang.enums.scale.Status.S2.getVal());
 		}
 		boolean success = scaleDao.updateEntity(scale);
 

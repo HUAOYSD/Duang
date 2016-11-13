@@ -117,16 +117,16 @@ public class ContractFactory extends Thread{
 		paragraph = new Paragraph("身份证号码： "+investMember.getIdCard(), normalFont);
 		document.add(paragraph);
 		//Paragraph————乙方
-		paragraph = new Paragraph("乙方： 北京华澳融信国际投资管理咨询有限公司", normalFont);
+		paragraph = new Paragraph("乙方： 北京万益利合投资有限公司", normalFont);
 		paragraph.setSpacingBefore(20);
 		document.add(paragraph);
-		paragraph = new Paragraph("通信地址： 北京市朝阳区永安东里甲3号院1号楼20层2307内2307B", normalFont);
+		paragraph = new Paragraph("通信地址： 北京市朝阳区禧瑞都3号楼1101口", normalFont);
 		document.add(paragraph);
 		//Paragraph————丙方
-		paragraph = new Paragraph("丙方(余盆平台的运营管理人)：北京华澳翼时代信息技术有限责任公司", normalFont);
+		paragraph = new Paragraph("丙方：牛奔贷", normalFont);
 		paragraph.setSpacingBefore(20);
 		document.add(paragraph);
-		paragraph = new Paragraph("通信地址：北京市朝阳区望京东园七区19号保利国际广场T1-803室", normalFont);
+		paragraph = new Paragraph("通信地址：北京市朝阳区禧瑞都3号楼1101口", normalFont);
 		document.add(paragraph);
 		//Paragraph————规定
 		Phrase phrase = new Phrase();

@@ -16,12 +16,14 @@ import org.duang.entity.BillInvest;
 import org.duang.entity.BindCard;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
+import org.duang.entity.RequestFlow;
 import org.duang.enums.ResultCode;
 import org.duang.enums.billinvest.BillStatus;
 import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
 import org.duang.service.InvestMemberService;
 import org.duang.service.MemberInfoService;
+import org.duang.service.RequestFlowService;
 import org.duang.util.DataUtils;
 import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
@@ -54,7 +56,7 @@ public class PayAction extends BaseAction<BillInvest>{
 	public void setInvestMemberService(InvestMemberService investMemberService) {
 		this.investMemberService = investMemberService;
 	}
-	
+
 	private MemberInfoService memberInfoService;
 	@Resource
 	public void setMemberInfoService(MemberInfoService memberInfoService) {
@@ -210,7 +212,7 @@ public class PayAction extends BaseAction<BillInvest>{
 		printJsonResult();
 	}
 
-	
+
 	/**   
 	 * 提现 <成功回调>
 	 * @Title: withdrawalsCallBack   
@@ -267,7 +269,7 @@ public class PayAction extends BaseAction<BillInvest>{
 		printJsonResult();
 	}
 
-	
+
 	/**   
 	 * 支付————理财订单 <成功回调>
 	 * @Title: payInvest   
@@ -292,8 +294,11 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws   
 	 */  
 	public void redemptiveInvest(){
-		
+
 	}
+
+	@Resource
+	private RequestFlowService requestFlowService;
 
 	/**
 	 * 丰付充值回调
@@ -305,19 +310,24 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @return: void      
 	 * @throws
 	 */
-	public void depositFFCallBack(){
+	public synchronized void depositFFCallBack(){
 		LoggerUtils.info("\t\n--------------------------充值回调-----------------------------------\t\n", this.getClass());
 		try{
+
+			String requestId = getRequest().getParameter("requestId");
+			if (DataUtils.isEmpty(requestId) || requestFlowService.findEntity("requestId", requestId) != null) {
+				return;
+			}
 			//读取配置文件
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
-			
-			String requestId = getRequest().getParameter("requestId");
+
+
 			String noticeType = getRequest().getParameter("noticeType");
 			String result = getRequest().getParameter("result");
 			//充值金额
 			String sum = getRequest().getParameter("sum");
 			String userIdIdentity = getRequest().getParameter("userIdIdentity");
-			
+
 			//未结金额
 			String unsettledBalance = getRequest().getParameter("unsettledBalance");
 			//账户总额
@@ -336,24 +346,24 @@ public class PayAction extends BaseAction<BillInvest>{
 			LoggerUtils.info("\t\n------------------------充值回调开始-------------------------------------\t\n", this.getClass());
 			StringBuffer backDataBuffer = new StringBuffer("/t/n---------------------------充值回调  字符串");
 			backDataBuffer.append("/t/n----requestId:"+requestId)
-						  .append("/t/n----noticeType:"+noticeType)
-						  .append("/t/n----result:"+result)
-						  .append("/t/n----sum:"+sum)
-						  .append("/t/n----userIdIdentity:"+userIdIdentity)
-						  .append("/t/n----unsettledBalance:"+unsettledBalance)
-						  .append("/t/n----userBalance:"+userBalance)
-						  .append("/t/n----withdrawableBalance:"+withdrawableBalance)
-						  .append("/t/n----frozenBalance:"+frozenBalance)
-						  .append("/t/n----payType:"+payType)
-						  .append("/t/n----mainAccountType:"+mainAccountType)
-						  .append("/t/n----mainAccountCode"+mainAccountCode)
-						  .append("/t/n----bankAccount:"+bankAccount)
-						  .append("/t/n----bankName:"+bankName)
-						  .append("/t/n----name:"+name)
-						  .append("/t/n----signature:"+signature);
-			
+			.append("/t/n----noticeType:"+noticeType)
+			.append("/t/n----result:"+result)
+			.append("/t/n----sum:"+sum)
+			.append("/t/n----userIdIdentity:"+userIdIdentity)
+			.append("/t/n----unsettledBalance:"+unsettledBalance)
+			.append("/t/n----userBalance:"+userBalance)
+			.append("/t/n----withdrawableBalance:"+withdrawableBalance)
+			.append("/t/n----frozenBalance:"+frozenBalance)
+			.append("/t/n----payType:"+payType)
+			.append("/t/n----mainAccountType:"+mainAccountType)
+			.append("/t/n----mainAccountCode"+mainAccountCode)
+			.append("/t/n----bankAccount:"+bankAccount)
+			.append("/t/n----bankName:"+bankName)
+			.append("/t/n----name:"+name)
+			.append("/t/n----signature:"+signature);
+
 			LoggerUtils.info(backDataBuffer.toString(), this.getClass());
-			
+
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
 			signatureStr.append(result);
@@ -375,6 +385,10 @@ public class PayAction extends BaseAction<BillInvest>{
 			}else{
 				LoggerUtils.error(name+"充值,原因：秘钥校验错误", this.getClass());
 			}
+
+			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date());
+			requestFlowService.saveEntity(requestFlow);
+
 			LoggerUtils.info("\t\n------------------------充值回调结束-------------------------------------\t\n", this.getClass());
 		}catch(Exception e){
 			e.printStackTrace();
@@ -382,7 +396,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			LoggerUtils.error("PayAction——depositFFCallBack方法错误：" + e.getLocalizedMessage(), this.getClass());
 		}
 	}
-	
+
 	/**
 	 * 丰付提现，回调
 	 * @Title: withdrawalsFFCallBack   
@@ -393,12 +407,16 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @return: void      
 	 * @throws
 	 */
-	public void withdrawalsFFCallBack(){
+	public synchronized void withdrawalsFFCallBack(){
 		try{
-			 //下面注释的代码是丰付返回的数据，只是没有用到，所以给注释了，如果需要使用，请消除注释
+			//下面注释的代码是丰付返回的数据，只是没有用到，所以给注释了，如果需要使用，请消除注释
 			//读取配置文件  
-			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String requestId = getRequest().getParameter("requestId");
+			if (DataUtils.isEmpty(requestId) || requestFlowService.findEntity("requestId", requestId) != null) {
+				return;
+			}
+
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String noticeType = getRequest().getParameter("noticeType");
 			String result = getRequest().getParameter("result");
 			String sum = getRequest().getParameter("sum");
@@ -416,7 +434,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			String requestTime = getRequest().getParameter("requestTime");
 			String dealTime = getRequest().getParameter("dealTime");
 			String signature = getRequest().getParameter("signature");
-			
+
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
 			signatureStr.append(result);
@@ -426,26 +444,26 @@ public class PayAction extends BaseAction<BillInvest>{
 			LoggerUtils.info("\t\n--------------------------提现回调-----------------------------------\t\n", this.getClass());
 			StringBuffer backDataBuffer = new StringBuffer("\t\n---------------------------提现回调字符串");
 			backDataBuffer.append("\t\n----requestId:"+requestId)
-						  .append("\t\n----noticeType:"+noticeType)
-						  .append("\t\n----result:"+result)
-						  .append("\t\n----sum:"+sum)
-						  .append("\t\n----userIdIdentity:"+userIdIdentity)
-						  .append("\t\n----failReason:"+failReason)
-						  .append("\t\n----userBalance:"+userBalance)
-						  .append("\t\n----withdrawableBalance:"+withdrawableBalance)
-						  .append("\t\n----frozenBalance:"+frozenBalance)
-						  .append("\t\n----payType:"+payType)
-						  .append("\t\n----mainAccountType:"+mainAccountType)
-						  .append("\t\n----mainAccountCode"+mainAccountCode)
-						  .append("\t\n----bankAccount:"+bankAccount)
-						  .append("\t\n----bankName:"+bankName)
-						  .append("\t\n----name:"+name)
-						  .append("\t\n----requestTime:"+requestTime)
-						  .append("\t\n----dealTime:"+dealTime)
-						  .append("\t\n----signature:"+signature);
-			
+			.append("\t\n----noticeType:"+noticeType)
+			.append("\t\n----result:"+result)
+			.append("\t\n----sum:"+sum)
+			.append("\t\n----userIdIdentity:"+userIdIdentity)
+			.append("\t\n----failReason:"+failReason)
+			.append("\t\n----userBalance:"+userBalance)
+			.append("\t\n----withdrawableBalance:"+withdrawableBalance)
+			.append("\t\n----frozenBalance:"+frozenBalance)
+			.append("\t\n----payType:"+payType)
+			.append("\t\n----mainAccountType:"+mainAccountType)
+			.append("\t\n----mainAccountCode"+mainAccountCode)
+			.append("\t\n----bankAccount:"+bankAccount)
+			.append("\t\n----bankName:"+bankName)
+			.append("\t\n----name:"+name)
+			.append("\t\n----requestTime:"+requestTime)
+			.append("\t\n----dealTime:"+dealTime)
+			.append("\t\n----signature:"+signature);
+
 			LoggerUtils.info(backDataBuffer.toString(), this.getClass());
-			
+
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
 			LoggerUtils.info("\t\n---------------------------提现回调本地加密签名："+dataSign, this.getClass());
@@ -460,7 +478,8 @@ public class PayAction extends BaseAction<BillInvest>{
 			}else{
 				LoggerUtils.error(name+"提现,原因：秘钥校验错误", this.getClass());
 			}
-		
+			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date());
+			requestFlowService.saveEntity(requestFlow);
 		}catch(Exception e){
 			e.printStackTrace();
 			LoggerUtils.error("PayAction——depositFFCallBack方法错误：" + e.getMessage(), this.getClass());

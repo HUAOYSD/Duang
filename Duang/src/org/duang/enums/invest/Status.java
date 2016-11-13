@@ -37,7 +37,7 @@ public enum Status {
 		}
 	},
 	S1 {
-		private String desc = "资金匹配中";
+		private String desc = "匹配中";
 
 		@Override
 		public int getVal() {
@@ -61,18 +61,18 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "资金匹配中";
+			this.desc = "匹配中";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "资金匹配中";
+			return "匹配中";
 		}
 
 	},
 	S2 {
-		private String desc = "投资收益中";
+		private String desc = "收益中";
 
 		@Override
 		public int getVal() {
@@ -96,13 +96,13 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "投资收益中";
+			this.desc = "收益中";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "投资收益中";
+			return "收益中";
 		}
 
 	},

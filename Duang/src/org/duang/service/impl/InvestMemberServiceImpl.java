@@ -42,18 +42,18 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	public void setBillInvestDao(BillInvestDao billInvestDao) {
 		this.billInvestDao = billInvestDao;
 	}
-	
+
 	private BindCardDao bindCardDao;
 
 	@Resource(name="bindcarddaoimpl")
 	public void setBindCardDao(BindCardDao bindCardDao) {
 		this.bindCardDao = bindCardDao;
 	}
-	
+
 	public InvestMemberServiceImpl(){
 		LoggerUtils.info("注入InvestMemberServiceImpl服务层", this.getClass());
 	}
-	
+
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
@@ -177,7 +177,7 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 		return dao.deleteEntity(id);
 	}
 
-	
+
 	/**
 	 * 通过map条件对象删除实体数据
 	 * @param t  实体对象
@@ -186,7 +186,7 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	public boolean deleteEntity(Map<String, Object> map) throws Exception{
 		return dao.deleteEntity(map);
 	}
-	
+
 
 	/**
 	 * 根据sql语句执行sql代码
@@ -275,7 +275,7 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 		return dao.findEntity(params);
 	}
 
-	
+
 	/**
 	 * 根据Hql语句查询
 	 * @param hql hql语句
@@ -300,7 +300,7 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	public List<InvestMember> queryBySQL(String sql,String countsql, PageUtil<InvestMember> page, boolean convert, Object... params) throws Exception{
 		return dao.queryBySQL(sql, countsql, page, convert, params);
 	}
-	
+
 	/**
 	 * 订单产生以后，修改理财用户的余额和投资金额等。
 	 * @Title: modifyInvestMembers   
@@ -354,17 +354,17 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 			LoggerUtils.info("\t\n--------总资产："+userBalance, this.getClass());
 			LoggerUtils.info("\t\n--------未结金额："+unsettledBalance, this.getClass());
 			investMember.setBalance(withdrawableBalance);
-			investMember.setInvesting(frozenBalance);
+			//investMember.setInvesting(frozenBalance);
 			investMember.setTotalMoney(userBalance);
 			investMember.setUnsettledBalance(unsettledBalance);
 			success = dao.updateEntity(investMember);
 			if(success){
 				BindCard bindCard = bindCardDao.findEntity("bankNo", bankAccount);
-				LoggerUtils.info("\t\n-----------充值回调 银行账户"+"\t\n-------银行卡："+bindCard.getBankNo()+
-						"\t\n-------用户姓名："+bindCard.getName()+"\t\n-------用户姓名："+bindCard.getIdcard(), this.getClass());
+				//LoggerUtils.info("\t\n-----------充值回调 银行账户"+"\t\n-------银行卡："+bindCard.getBankNo()+
+				//"\t\n-------用户姓名："+bindCard.getName()+"\t\n-------用户姓名："+bindCard.getIdcard(), this.getClass());
 				success = billInvestDao.depositFFCallBackCreateBill(investMember, sum, bindCard);
 			}
-			
+
 		}else{
 			LoggerUtils.error("充值 修改本地用户金额数据错误,原因：未查找到该用户 memberId="+userIdIdentity, this.getClass());
 		}
@@ -395,16 +395,15 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 			LoggerUtils.info("\t\n--------投标金额："+frozenBalance, this.getClass());
 			LoggerUtils.info("\t\n--------总资产："+userBalance, this.getClass());
 			investMember.setBalance(withdrawableBalance);
-			investMember.setInvesting(frozenBalance);
-			investMember.setTotalMoney(userBalance);
+			//investMember.setInvesting(frozenBalance);
+			investMember.setTotalMoney(investMember.getTotalMoney()-sum);
 			success = dao.updateEntity(investMember);
 			if(success){
 				BindCard bindCard = bindCardDao.findEntity("bankNo", bankAccount);
-				LoggerUtils.info("\t\n-----------提现回调 银行账户"+"\t\n-------银行卡："+bindCard.getBankNo()+
-						"\t\n-------用户姓名："+bindCard.getName()+"\t\n-------用户姓名："+bindCard.getIdcard(), this.getClass());
-				success = billInvestDao.depositFFCallBackCreateBill(investMember, sum, bindCard);
+				//LoggerUtils.info("\t\n-----------提现回调 银行账户"+"\t\n-------银行卡："+bindCard.getBankNo()+
+				//	"\t\n-------用户姓名："+bindCard.getName()+"\t\n-------用户姓名："+bindCard.getIdcard(), this.getClass());
+				success = billInvestDao.withdrawalsFFCallBackCreateBill(investMember, sum, bindCard);
 			}
-			
 		}else{
 			LoggerUtils.error("提现 修改本地用户金额数据错误,原因：未查找到该用户 memberId="+userIdIdentity, this.getClass());
 		}

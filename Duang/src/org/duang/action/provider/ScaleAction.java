@@ -1,6 +1,5 @@
 package org.duang.action.provider;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +15,9 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
-import org.duang.entity.InvestList;
 import org.duang.entity.MemberInfo;
 import org.duang.entity.Product;
 import org.duang.entity.Scale;
-import org.duang.enums.ResultCode;
 import org.duang.enums.invest.Status;
 import org.duang.service.InvestListService;
 import org.duang.service.MemberInfoService;
@@ -28,7 +25,6 @@ import org.duang.service.ScaleService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
-import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -218,7 +214,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			}else{
 				msg = "参数为空";
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("ScaleAction——findScaleInfo方法错误：" + e.getMessage(), this.getClass());
@@ -256,7 +252,7 @@ public class ScaleAction extends BaseAction<Scale>{
 				if (DataUtils.isEmpty(money)) {//表详情页面
 					CondsUtils condsUtils = new CondsUtils();
 					condsUtils.addProperties(true, "scale.id", "status");
-					condsUtils.addValues(true, id, Status.S3.getVal());
+					condsUtils.addValues(true, id, new Object[]{new Object[]{Status.S2.getVal(), Status.S3.getVal()}, "in"});
 					numbers = investListService.count(condsUtils.getPropertys(), condsUtils.getValues());
 				}
 				Map<String,Object> resultMap = new HashMap<String,Object>();
@@ -265,16 +261,18 @@ public class ScaleAction extends BaseAction<Scale>{
 					resultMap.put("productName", product.getName());
 					resultMap.put("days", product.getDays());
 					resultMap.put("proCategory", product.getCategory());
-					
-//					resultMap.put("prodescript", product.getProductDescribe());//介绍
-//					resultMap.put("riskcontrol", product.getRiskControl());//风险控制
-//					resultMap.put("details", product.getDetails());//更多详情
-					
+
+					//					resultMap.put("prodescript", product.getProductDescribe());//介绍
+					//					resultMap.put("riskcontrol", product.getRiskControl());//风险控制
+					//					resultMap.put("details", product.getDetails());//更多详情
+
 					resultMap.put("money", DataUtils.str2double(money, 6));
 					resultMap.put("totalMoney",scale.getTotalMoney());
 					resultMap.put("id", id);
 					resultMap.put("name", scale.getName());
 					resultMap.put("yetMoney", scale.getYetMoney());
+				    //DecimalFormat df = new DecimalFormat("0.00");
+					//resultMap.put("residueMoney", df.format(scale.getResidueMoney()/10000D));
 					resultMap.put("residueMoney", scale.getResidueMoney());
 					resultMap.put("revenue", scale.getRevenue()*100);
 					resultMap.put("revenueAdd", scale.getRevenueAdd()*100);
@@ -284,9 +282,9 @@ public class ScaleAction extends BaseAction<Scale>{
 					resultMap.put("status", scale.getStatus());
 					resultMap.put("min", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
 				}
-				
+
 				scaleListMap.add(resultMap);
-				
+
 				success = true;
 				jsonObject.put("result", scaleListMap);
 				if (scaleListMap == null || scaleListMap.size() == 0) {
@@ -295,7 +293,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			}else{
 				msg = "参数为空";
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("ScaleAction——findScaleInfoByInvest方法错误：" + e.getMessage(), this.getClass());
@@ -397,8 +395,8 @@ public class ScaleAction extends BaseAction<Scale>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
-	
+
+
 	/**
 	 * 流标赎回异步回调
 	 * @Title: failScaleFFCallback   
@@ -427,16 +425,16 @@ public class ScaleAction extends BaseAction<Scale>{
 			String dealTime = getRequest().getParameter("dealTime");
 			//手续费收取方式
 			String payType = getRequest().getParameter("payType");
-			
+
 			String signature = getRequest().getParameter("signature");
-			
+
 			StringBuffer backStringBuffer = new StringBuffer("\t\n---------------------------投标回调字符串：");
 		}catch(Exception e){
 			e.printStackTrace();
 			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getLocalizedMessage(), this.getClass());
 		}
-		
+
 	}
-	
+
 }

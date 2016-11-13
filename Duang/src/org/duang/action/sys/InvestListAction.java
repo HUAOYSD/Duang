@@ -84,7 +84,7 @@ public class InvestListAction extends BaseAction<InvestList> {
 	public void queryByPage() {
 		try {
 			condsUtils.addProperties(true, "memberInfo","memberAlias.customerManager", "scale", "order");
-			condsUtils.addValues(true, new Object[]{"memberAlias","as"},new Object[]{"customerManagerAlias","as"}, new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
+			condsUtils.addValues(true, new Object[]{"memberAlias","as"},new Object[]{"customerManagerAlias","asleft"}, new Object[]{"scaleAlias","as"}, Order.desc("openDate"));
 			if (DataUtils.notEmpty(getRequest().getParameter("memberName"))) {
 				condsUtils.concat("memberAlias.realName", URLDecoder.decode(getRequest().getParameter("memberName"),"UTF-8"));
 			}
@@ -130,8 +130,7 @@ public class InvestListAction extends BaseAction<InvestList> {
 			if (DataUtils.notEmpty(getRequest().getParameter("calenddate1")) && DataUtils.notEmpty(getRequest().getParameter("calenddate2"))) {
 				condsUtils.concat("calcEndDate", new Object[]{DateUtils.str2Date(getRequest().getParameter("calenddate1"), "yyyy-MM-dd"), DateUtils.str2Date(getRequest().getParameter("calenddate2"), "yyyy-MM-dd"), "between"});
 			}
-			@SuppressWarnings("rawtypes")
-			List list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
+			List<?> list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), getPageUtil());
 			fillDatagridCons(list);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -227,7 +226,7 @@ public class InvestListAction extends BaseAction<InvestList> {
 		try {
 			//判断是否是客户经理查看会员理财列表
 			String isCustomer = getRequest().getParameter("isCustomer");
-			if(isCustomer.equals("1")){ //==1说明是客户经理查看信息
+			if("1".equals(isCustomer)){ //==1说明是客户经理查看信息
 				String loginId = SessionTools.getSessionSysUser().getId();
 				CustomerManager customerManager = customerManagerService.findEntity("sysUser.id", loginId);
 				if(customerManager != null){

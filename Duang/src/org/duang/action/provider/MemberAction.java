@@ -17,17 +17,24 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
+import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
+import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanMember;
 import org.duang.entity.MemberInfo;
+import org.duang.entity.RequestFlow;
 import org.duang.entity.SMSVerificationCode;
 import org.duang.enums.If;
 import org.duang.enums.ResultCode;
 import org.duang.enums.UploadFile;
+import org.duang.enums.invest.Status;
+import org.duang.service.InvestListService;
 import org.duang.service.MemberInfoService;
+import org.duang.service.RequestFlowService;
 import org.duang.service.SMSVerificationCodeService;
+import org.duang.service.ScaleService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -54,13 +61,15 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("provider")
 @Action(value = "provider_member")
 public class MemberAction extends BaseAction<MemberInfo>{
-	
+
 	private MemberInfoService service;
+	@Resource
+	private InvestListService investListService;
 	@Resource
 	public void setService(MemberInfoService service) {
 		this.service = service;
 	}
-	
+
 	/**   
 	 * 验证登录密码
 	 * @Title: checkLoginPassword   
@@ -98,8 +107,8 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
-	
+
+
 	/**   
 	 * 修改登录密码
 	 * @Title: modifyLoginPassword   
@@ -143,13 +152,13 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
+
 	private SMSVerificationCodeService smsVerificationCodeService;
 	@Resource
 	public void setSmsVerificationCodeService(SMSVerificationCodeService smsVerificationCodeService) {
 		this.smsVerificationCodeService = smsVerificationCodeService;
 	}
-	
+
 	/**
 	 * 忘记密码接口
 	 * @Title: forgetLoginPassword   
@@ -193,8 +202,8 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
-	
+
+
 	/**   
 	 * 验证支付密码
 	 * @Title: checkPayPassword   
@@ -232,8 +241,8 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
-	
+
+
 	/**   
 	 * 修改支付密码
 	 * @Title: modifyPayPassword   
@@ -307,7 +316,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 							msg = "修改支付密码错误，连接超时";
 						}
 					}
-					
+
 				} else {
 					msg = "未查到该用户";
 				}
@@ -324,8 +333,8 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
-	
+
+
 	/**   
 	 * 修改用户名
 	 * @Title: modifyNickName   
@@ -354,7 +363,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 						if(!success){
 							msg = "修改失败，请检查网络";
 						}
-						
+
 					} else {
 						msg = "未查到该用户";
 					}
@@ -372,7 +381,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
+
 	/**   
 	 * 验证用户真实名字和身份证号
 	 * @Title: modifyNameAndIdcard   
@@ -420,7 +429,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
-	
+
 	/**
 	 * 根据id查找用户的具体信息
 	 * @Title: findMemberById   
@@ -462,7 +471,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			printJsonResult();
 		}
 	}
-	
+
 	/**
 	 * 获取用户的金钱信息
 	 * @Title: findMemberMoneyById   
@@ -500,7 +509,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			printJsonResult();
 		}
 	}
-	
+
 	/**
 	 * 填充信息
 	 * @Title: fillMemberInfo   
@@ -511,7 +520,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @return: void      
 	 * @throws
 	 */
-	private void fillMemberInfo(MemberInfo memberInfo){
+	private void fillMemberInfo(MemberInfo memberInfo) throws Exception{
 		jsonObject.put("time", DateUtils.getCurrentDate("yyyy-MM-dd HH:mm:ss"));
 		jsonObject.put("id", memberInfo.getId());
 		jsonObject.put("name", memberInfo.getRealName());
@@ -522,8 +531,31 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			jsonObject.put("money", investMember.getTotalMoney());
 			jsonObject.put("investing", investMember.getInvesting());
 			jsonObject.put("balance", investMember.getBalance());
-			jsonObject.put("totalEarnings", investMember.getTotalIncome());
-			jsonObject.put("currentEarnings", investMember.getCurrentIncome());
+			
+			
+			//我的所有的收益中的理财标
+			CondsUtils condsUtils = new CondsUtils();
+			condsUtils.addProperties(true, "status", "memberInfo");
+			condsUtils.addValues(true, new Object[]{new Object[]{Status.S2.getVal(), Status.S3.getVal()}, "in"}, memberInfo);
+//			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//			Calendar calendar = Calendar.getInstance();
+//			Date today = sf.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:30:00");
+//			Date date = new Date(today.getTime() + 24L*3600L*1000L);
+			List<InvestList> list = investListService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+			double totalEarnings = 0;
+			if (DataUtils.notEmpty(list)) {
+				for (InvestList obj : list) {
+					if (obj==null || obj.getCalcBeginDate() == null) {
+						continue;
+					}
+					if (obj.getCalcBeginDate().getTime()<=System.currentTimeMillis()) {
+						totalEarnings += obj.getMoney() * (obj.getScale().getRevenue() + obj.getScale().getRevenueAdd()) / 365D / obj.getDays();
+					}
+				}
+				jsonObject.put("totalEarnings", totalEarnings);
+			}else {
+				jsonObject.put("currentEarnings", 0);
+			}
 		}else {
 			jsonObject.put("money", 0);
 			jsonObject.put("investing", 0);
@@ -547,7 +579,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			jsonObject.put("backMoney", 0);
 		}
 	}
-	
+
 	/**
 	 * 封装客户信息（理财客户、借贷客户）
 	 * @Title: fillDataObjectArray   
@@ -622,7 +654,8 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		}
 		return listMap;
 	}
-	
+	@Resource
+	private RequestFlowService requestFlowService;
 	/**
 	 * 开户回调
 	 * @Title: realNameCertification   
@@ -633,13 +666,17 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @return: void      
 	 * @throws
 	 */
-	public void openAccountCallback(){
+	public synchronized void openAccountCallback(){
 		try{
 			LoggerUtils.info("--------------------------开户回调开始", this.getClass());
 			boolean success=false;
 			//读取配置文件中
-			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String requestId = getRequest().getParameter("requestId");
+
+			if (DataUtils.isEmpty(requestId) || requestFlowService.findEntity("requestId", requestId) != null) {
+				return;
+			}
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String result = getRequest().getParameter("result");
 			String userIdIdentity = getRequest().getParameter("userIdIdentity");
 			String name = getRequest().getParameter("name");
@@ -647,41 +684,44 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String payType = getRequest().getParameter("payType");
 			String mobileNo = getRequest().getParameter("mobileNo");
 			String signature = getRequest().getParameter("signature");
-			
+
 			StringBuffer backStringBuffer = new StringBuffer("---------------------------开户回调  字符串：");
 			backStringBuffer.append("----requestId:"+requestId)
-							.append("----result:"+result)
-							.append("----userIdIdentity:"+userIdIdentity)
-							.append("----name:"+name)
-							.append("----userId:"+userId)
-							.append("----payType:"+payType)
-							.append("----mobileNo:"+mobileNo)
-							.append("----signature:"+signature);
-			
+			.append("----result:"+result)
+			.append("----userIdIdentity:"+userIdIdentity)
+			.append("----name:"+name)
+			.append("----userId:"+userId)
+			.append("----payType:"+payType)
+			.append("----mobileNo:"+mobileNo)
+			.append("----signature:"+signature);
+
 			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
 			if(result.equals(ResultCode.SUCCESS.getVal())){
 				success = true;
 			}else{
 				LoggerUtils.error("----------开户回调 流程号："+requestId+"，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 			}
-		if(success){
-			//修改用户信息
-			MemberInfo memberInfo = service.findEntity("id", userIdIdentity);
-			memberInfo.setPhone(mobileNo);
-			memberInfo.setRealName(name);
-			memberInfo.setPayType(payType);
-			memberInfo.setUserId(userId);
-			service.updateEntity(memberInfo);
-		}
-			
+			if(success){
+				//修改用户信息
+				MemberInfo memberInfo = service.findEntity("id", userIdIdentity);
+				memberInfo.setPhone(mobileNo);
+				memberInfo.setRealName(name);
+				memberInfo.setPayType(payType);
+				memberInfo.setUserId(userId);
+				service.updateEntity(memberInfo);
+			}
+
+			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date());
+			requestFlowService.saveEntity(requestFlow);
+
 		}catch(Exception e){
 			e.printStackTrace();
 			LoggerUtils.error("MemberAction openAccountCallback：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("MemberAction openAccountCallback：" + e.getLocalizedMessage(), this.getClass());
 		}
-		
+
 	}
-	
+
 	/**
 	 * 实名认证结果
 	 * @Title: realNameCertification   
@@ -692,12 +732,15 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @return: void      
 	 * @throws
 	 */
-	public void realNameAuthCallback(){
+	public synchronized void realNameAuthCallback(){
 		try{
 			boolean success=false;
 			//读取配置文件中
-			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String requestId = getRequest().getParameter("requestId");
+			if (DataUtils.isEmpty(requestId) || requestFlowService.findEntity("requestId", requestId) != null) {
+				return;
+			}
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String result = getRequest().getParameter("result");
 			String status = getRequest().getParameter("status");
 			String userName = getRequest().getParameter("userName");
@@ -705,19 +748,19 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String payType = getRequest().getParameter("payType");
 			String merBizRequestId = getRequest().getParameter("merBizRequestId");
 			String signature = getRequest().getParameter("signature");
-			
+
 			StringBuffer backStringBuffer = new StringBuffer("---------------------------实名认证回调  字符串：");
 			backStringBuffer.append("----requestId:"+requestId)
-							.append("----result:"+result)
-							.append("----status:"+status)
-							.append("----userName:"+userName)
-							.append("----idNumber:"+idNumber)
-							.append("----payType:"+payType)
-							.append("----merBizRequestId:"+merBizRequestId)
-							.append("----signature:"+signature);
-			
+			.append("----result:"+result)
+			.append("----status:"+status)
+			.append("----userName:"+userName)
+			.append("----idNumber:"+idNumber)
+			.append("----payType:"+payType)
+			.append("----merBizRequestId:"+merBizRequestId)
+			.append("----signature:"+signature);
+
 			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
-			
+
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
 			signatureStr.append(merBizRequestId);
@@ -747,19 +790,21 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				//签名不匹配
 				LoggerUtils.error("----------实名认证回调   流程号："+requestId+" ，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 			}
-			
+
 			if(success){
 				realNameAuthMemberInfo(merBizRequestId,userName,idNumber,payType);
 			}
-			
+			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, null, new Date());
+			requestFlowService.saveEntity(requestFlow);
+
 		}catch(Exception e){
 			e.printStackTrace();
 			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getLocalizedMessage(), this.getClass());
 		}
-		
+
 	}
-	
+
 	/**
 	 * 实名认证更新数据库
 	 * @Title: realNameAuthMemberInfo   
@@ -782,7 +827,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		memberInfo.setIsAuth(If.If1.getVal());
 		service.updateEntity(memberInfo);
 	}
-	
+
 	/**
 	 * 判断是否实名认证
 	 * @Title: queryRealNameAuth   
@@ -817,7 +862,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd"); //设置时间格式
 		String sDate = sdf.format(dBefore);    //格式化前一天
 		String eDate = sdf.format(dNow); //格式化当前时间
-		
+
 		//数字签名字符串
 		StringBuffer signatureBuffer = new StringBuffer();
 		signatureBuffer.append(self_requestId+merchantCode+userName+idNumber+1+sDate+eDate);
@@ -860,7 +905,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		}
 		return success;
 	}
-	
+
 	/**
 	 * 查询用户的账户信息
 	 * @Title: queryMemberAccount   
@@ -906,7 +951,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			printJsonResult();
 		}
 	}
-	
+
 	/**
 	 * 查询用户的账户信息
 	 * @Title: queryMemberAccount   
@@ -928,7 +973,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		String akey = ReadProperties.getStringValue(properties, "akey");
 		//生成一个流水号
 		String requestId = DataUtils.randomUUID();
-		
+
 		//数字签名字符串
 		StringBuffer signatureBuffer = new StringBuffer();
 		signatureBuffer.append(requestId);
@@ -936,15 +981,15 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		signatureBuffer.append(userIdIdentity);
 		signatureBuffer.append(userName);
 		signatureBuffer.append(idNumber);
-		
+
 		StringBuffer sendStringBuffer = new StringBuffer("\t\n---------------------------查询账户信息  send2FF的字符串：");
 		sendStringBuffer.append("\t\n----requestId:"+requestId)
-						.append("\t\n----merchantCode:"+merchantCode)
-						.append("\t\n----akey:"+akey)
-						.append("\t\n----userIdIdentity:"+userIdIdentity)
-						.append("\t\n----userName:"+userName)
-						.append("\t\n----idNumber:"+idNumber)
-						.append("\t\n----signature:"+signatureBuffer.toString());
+		.append("\t\n----merchantCode:"+merchantCode)
+		.append("\t\n----akey:"+akey)
+		.append("\t\n----userIdIdentity:"+userIdIdentity)
+		.append("\t\n----userName:"+userName)
+		.append("\t\n----idNumber:"+idNumber)
+		.append("\t\n----signature:"+signatureBuffer.toString());
 		LoggerUtils.info(sendStringBuffer.toString(), this.getClass());
 		//加密后的数字签名
 		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
@@ -979,24 +1024,24 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				back_frozenBalance="0";
 			}
 			String back_signature = jsonObjectData.get("signature").toString();
-			
+
 			StringBuffer backDataStringBuffer = new StringBuffer("\t\n---------------------------查询账户信息  BackData的字符串：");
 			backDataStringBuffer.append("\t\n----back_userIdIdentity:"+back_userIdIdentity)
-								.append("\t\n----back_userName:"+back_userName)
-								.append("\t\n----back_idNumber:"+back_idNumber)
-								.append("\t\n----back_result:"+back_result)
-								.append("\t\n----back_balance:"+back_balance)
-								.append("\t\n----back_withdrawAbleBalance:"+back_withdrawAbleBalance)
-								.append("\t\n----back_frozenBalance:"+back_frozenBalance)
-								.append("\t\n----back_signature:"+back_signature);
+			.append("\t\n----back_userName:"+back_userName)
+			.append("\t\n----back_idNumber:"+back_idNumber)
+			.append("\t\n----back_result:"+back_result)
+			.append("\t\n----back_balance:"+back_balance)
+			.append("\t\n----back_withdrawAbleBalance:"+back_withdrawAbleBalance)
+			.append("\t\n----back_frozenBalance:"+back_frozenBalance)
+			.append("\t\n----back_signature:"+back_signature);
 			LoggerUtils.info(backDataStringBuffer.toString(), this.getClass());
-			
-			
+
+
 			StringBuffer back_signatureBuffer = new StringBuffer(back_userIdIdentity+back_userName+back_idNumber+
 					back_result+back_balance+back_withdrawAbleBalance+back_frozenBalance);
 			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), akey);
 			LoggerUtils.info("\t\n-------------查询账户信息   返回的参数信息-加密签名:"+back_signature_sign.toString(),this.getClass());
-			
+
 			if(back_signature_sign.equals(back_signature)){
 				jsonObject.put("userIdIdentity", back_userIdIdentity);
 				jsonObject.put("userName", back_userName);
@@ -1019,7 +1064,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		}
 		return jsonObject;
 	}
-	
+
 	/**
 	 * 查询用户的银行卡信息
 	 * @Title: queryMemberAccount   
@@ -1035,11 +1080,11 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			String id = getRequest().getParameter("id");
 			String queryType = getRequest().getParameter("queryType");
 			if (DataUtils.notEmpty(id)) {
-					Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
-					jsonObject = queryMemberSignBankCard(properties,id,queryType);
-					if(jsonObject.get("result").equals(ResultCode.SUCCESS.getVal())){
-						success=true;
-					}
+				Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+				jsonObject = queryMemberSignBankCard(properties,id,queryType);
+				if(jsonObject.get("result").equals(ResultCode.SUCCESS.getVal())){
+					success=true;
+				}
 			}else{
 				msg="数据丢失，请重新登录";
 			}
@@ -1054,7 +1099,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			printJsonResult();
 		}
 	}
-	
+
 	/**
 	 * 查询用户的账户绑定银行卡信息
 	 * @Title: queryMemberSignBankCard   
@@ -1089,15 +1134,15 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		map.put("userIdIdentity",userIdIdentity);
 		map.put("queryType",queryType);
 		map.put("signature",signature_sign);
-		
+
 		StringBuffer sendDataStringBuffer = new StringBuffer("---------------------------查询账户绑定的银行卡  SendFF的字符串：");
 		sendDataStringBuffer.append("----requestId:"+requestId)
-							.append("----merchantCode:"+merchantCode)
-							.append("----userIdIdentity:"+userIdIdentity)
-							.append("----queryType:"+queryType)
-							.append("----signature:"+signature_sign);
+		.append("----merchantCode:"+merchantCode)
+		.append("----userIdIdentity:"+userIdIdentity)
+		.append("----queryType:"+queryType)
+		.append("----signature:"+signature_sign);
 		LoggerUtils.info(sendDataStringBuffer.toString(), this.getClass());
-		
+
 		//获取转换的参数
 		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
 		//result 查询结果  00000代表成功
@@ -1110,7 +1155,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			//本地签名拼接
 			StringBuffer back_signatureBuffer = new StringBuffer(back_requestId+back_result+back_userIdIdentity);
 			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), akey);
-			
+
 			if(back_signature_sign.equals(back_signature)){
 				jsonObject.put("userIdIdentity", back_userIdIdentity);
 				jsonObject.put("result", back_result);
@@ -1169,15 +1214,15 @@ public class MemberAction extends BaseAction<MemberInfo>{
 						}
 					}
 				}
-				
+
 				StringBuffer backDataStringBuffer = new StringBuffer("---------------------------查询账户绑定的银行卡  BackData的字符串：");
 				backDataStringBuffer.append("----back_userIdIdentity:"+back_userIdIdentity)
-									.append("----back_requestId:"+back_requestId)
-									.append("----back_result:"+back_result)
-									.append("----back_signature:"+back_signature);
+				.append("----back_requestId:"+back_requestId)
+				.append("----back_result:"+back_result)
+				.append("----back_signature:"+back_signature);
 				LoggerUtils.info(backDataStringBuffer.toString(), this.getClass());
 				LoggerUtils.info("----------------------查询账户绑定的银行卡   本地加密签名"+back_signature_sign,this.getClass());
-				
+
 			}else{
 				jsonObject.put("result", false);
 				jsonObject.put("msg", "签名不一致");
@@ -1189,8 +1234,8 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		}
 		return jsonObject;
 	}
-		
-	
+
+
 	/**
 	 * 上传头像
 	 */
@@ -1236,5 +1281,5 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		printJsonResult();
 	}
 
-	
+
 }

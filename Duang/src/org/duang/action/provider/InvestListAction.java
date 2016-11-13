@@ -18,6 +18,7 @@ import org.duang.common.system.MemberCollection;
 import org.duang.entity.InvestList;
 import org.duang.entity.MemberInfo;
 import org.duang.entity.Product;
+import org.duang.entity.RequestFlow;
 import org.duang.entity.Scale;
 import org.duang.enums.If;
 import org.duang.enums.Platform;
@@ -28,6 +29,7 @@ import org.duang.enums.invest.UseTicket;
 import org.duang.enums.product.Category;
 import org.duang.service.InvestListService;
 import org.duang.service.MemberInfoService;
+import org.duang.service.RequestFlowService;
 import org.duang.service.ScaleService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -424,10 +426,6 @@ public class InvestListAction extends BaseAction<InvestList>{
 				resultMap.put("income", pk.getIncome());
 				resultMap.put("ticketBonus", pk.getTicketBonus());
 				resultMap.put("status", Status.valueOf("S"+pk.getStatus()).toString());
-				resultMap.put("openDate", DateUtils.date2Str(pk.getOpenDate()));
-				resultMap.put("backDate", DateUtils.date2Str(pk.getBackDate()));
-				resultMap.put("calcBegin", DateUtils.date2Str(pk.getBackDate()));
-				resultMap.put("calcEnd", DateUtils.date2Str(pk.getBackDate()));
 				resultMap.put("pactNumber", pk.getPactNumber());
 				resultMap.put("investStyle", Platform.valueOf("P"+pk.getInvestStyle()).toString());
 				resultMap.put("poundageTurn", pk.getPoundageTurn());
@@ -450,10 +448,20 @@ public class InvestListAction extends BaseAction<InvestList>{
 				resultMap.put("calcEndTime", DateUtils.date2Str(fk2.getCalcEndTime()));
 				resultMap.put("productName", fk2.getProduct().getName());
 				resultMap.put("productDetails", fk2.getProduct().getDetails());
-				resultMap.put("profitMoney", (fk2.getRevenue()+fk2.getRevenueAdd())*pk.getMoney());
+				int days = (int) ((new Date().getTime() - pk.getCalcBeginDate().getTime()) / (3600000L*24));
+				double profit = (fk2.getRevenue()+fk2.getRevenueAdd())*pk.getMoney() / 365D * days;
+				
+				
+				resultMap.put("profitMoney", profit);
 				resultMap.put("proCategory", fk2.getProduct().getCategory());
-
+				
+				resultMap.put("openDate", DateUtils.date2Str(pk.getOpenDate(),"yyyy-MM-dd"));
+				resultMap.put("backDate", DateUtils.date2Str(pk.getBackDate(),"yyyy-MM-dd"));
+				resultMap.put("calcBegin", DateUtils.date2Str(pk.getCalcBeginDate(),"yyyy-MM-dd"));
+				resultMap.put("calcEnd", DateUtils.date2Str(pk.getCalcEndDate(),"yyyy-MM-dd"));
+				resultMap.put("days", product.getDays());
 			}
+			resultMap.put("systemtime", DateUtils.getCurrentDate("yyyy-MM-dd hh:mm:ss"));
 		}
 		return resultMap;
 	}
@@ -509,7 +517,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 								.append("\t\n----remainInvestmentSum:"+remainInvestmentSum)
 								.append("\t\n----signature:"+signature);
 				
-				LoggerUtils.info(backStringBuffer.toString(), this.getClass());
+				//LoggerUtils.info(backStringBuffer.toString(), this.getClass());
 				
 				StringBuffer signatureStr = new StringBuffer();
 				signatureStr.append(requestId);
@@ -530,6 +538,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 					//签名不匹配
 					LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
+				RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date());
+				requestFlowService.saveEntity(requestFlow);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -541,5 +551,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 		jsonObject.put("msg", msg);
 		printJsonResult();
 	}
+	
+	@Resource
+	private RequestFlowService requestFlowService;
 	
 }
