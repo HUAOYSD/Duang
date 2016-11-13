@@ -1,4 +1,5 @@
 package org.duang.action.provider;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -81,26 +82,31 @@ public class InvestListAction extends BaseAction<InvestList>{
 	public void getHomeRecommendScale(){
 		boolean success = false;
 		try {
-			condsUtils.addProperties(true, "product", "myAlias.isRecommend", "myAlias.isSell", "status", "order");
-			condsUtils.addValues(true, new Object[]{"myAlias","as"}, 1, 1, new Object[]{0, "ne"}, Order.asc("myAlias.days"));
+			condsUtils.addProperties(true, "product", "myAlias.isRecommend", "myAlias.isSell", "status","status", "order");
+			condsUtils.addValues(true, new Object[]{"myAlias","as"}, 1, 1, new Object[]{0, "ne"}, new Object[]{1, "ne"}, Order.asc("myAlias.days"));
 			List<Scale> list = scaleService.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 			if (DataUtils.notEmpty(list)) {
-				for(Scale scale : list){
-					Map<String, Object> map = new HashMap<String, Object>();
-					//时长、起投、预期收益率、附加预期收益率、已投金额、剩余可投金额、标总额、产品类型、产品名称、标名称
-					Product product = scale.getProduct();
-					map.put("id", scale.getId());
-					map.put("day", product.getDays());
-					map.put("min", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
-					map.put("revenue", scale.getRevenue()*100);
-					map.put("revenueAdd", scale.getRevenueAdd()*100);
-					map.put("yetmoney", scale.getYetMoney());
-					map.put("residuemoney", scale.getResidueMoney());
-					map.put("totalmoney", scale.getTotalMoney());
-					map.put("productcategory", Category.valueOf("C"+product.getCategory()).toString());
-					map.put("productname", product.getNameZh());
-					map.put("scalename", scale.getName());
-					listMap.add(map);
+				for (int i = 0; i < 5; i++) {
+					try {
+						Scale scale = list.get(i);
+						Map<String, Object> map = new HashMap<String, Object>();
+						//时长、起投、预期收益率、附加预期收益率、已投金额、剩余可投金额、标总额、产品类型、产品名称、标名称
+						Product product = scale.getProduct();
+						map.put("id", scale.getId());
+						map.put("day", product.getDays());
+						map.put("min", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
+						map.put("revenue", scale.getRevenue()*100);
+						map.put("revenueAdd", scale.getRevenueAdd()*100);
+						map.put("yetmoney", scale.getYetMoney());
+						map.put("residuemoney", scale.getResidueMoney());
+						map.put("totalmoney", scale.getTotalMoney());
+						map.put("productcategory", Category.valueOf("C"+product.getCategory()).toString());
+						map.put("productname", product.getNameZh());
+						map.put("scalename", scale.getName());
+						listMap.add(map);
+					} catch (Exception e) {
+						break;
+					}
 				}
 			}else {
 				msg = "暂无推荐";
@@ -404,7 +410,11 @@ public class InvestListAction extends BaseAction<InvestList>{
 			InvestList pk = invest;
 			MemberInfo fk = invest.getMemberInfo();
 			Scale fk2 = invest.getScale();
+			Product product = fk2.getProduct();
 			if (pk != null) {
+				resultMap.put("prodescript", product.getProductDescribe());//介绍
+				resultMap.put("riskcontrol", product.getRiskControl());//风险控制
+				resultMap.put("details", product.getDetails());//更多详情
 				resultMap.put("id", pk.getId());
 				resultMap.put("money", pk.getMoney());
 				resultMap.put("backIncome", pk.getBackIncome());
@@ -458,109 +468,78 @@ public class InvestListAction extends BaseAction<InvestList>{
 	 * @return: void      
 	 * @throws
 	 */
-	public void investFFCallback(){
+	public synchronized void investFFCallback(){
+		boolean success = false;
 		try{
-			//读取配置文件中
-			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String requestId = getRequest().getParameter("requestId");
-			String result = getRequest().getParameter("result");
-			//投标金额
-			String sum = getRequest().getParameter("sum");
-			//第三方用户标识
-			String userIdIdentity = getRequest().getParameter("userIdIdentity");
-			//项目编号
-			String projectCode = getRequest().getParameter("projectCode");
-			//项目投资金额
-			String investmentSum = getRequest().getParameter("investmentSum");
-			//红包金额
-			String giftSum = getRequest().getParameter("giftSum");
-			//项目总额
-			String projectSum = getRequest().getParameter("projectSum");
-			//剩余可投金额
-			String remainInvestmentSum = getRequest().getParameter("remainInvestmentSum");
-			
-			String signature = getRequest().getParameter("signature");
-			
-			StringBuffer backStringBuffer = new StringBuffer("\t\n---------------------------投标回调字符串：");
-			backStringBuffer.append("\t\n----requestId:"+requestId)
-							.append("\t\n----result:"+result)
-							.append("\t\n----sum:"+sum)
-							.append("\t\n----userIdIdentity:"+userIdIdentity)
-							.append("\t\n----projectCode:"+projectCode)
-							.append("\t\n----investmentSum:"+investmentSum)
-							.append("\t\n----giftSum:"+giftSum)
-							.append("\t\n----projectSum:"+projectSum)
-							.append("\t\n----remainInvestmentSum:"+remainInvestmentSum)
-							.append("\t\n----signature:"+signature);
-			
-			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
-			
-			StringBuffer signatureStr = new StringBuffer();
-			signatureStr.append(requestId);
-			signatureStr.append(result);
-			signatureStr.append(sum);
-			signatureStr.append(userIdIdentity);
-			//获取返回数据的加密数据用于与签名校验
-			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
-			LoggerUtils.info("\t\n---------------------------投标回调 本地加密签名："+dataSign, this.getClass());
-			if(signature.equals(dataSign)){
-				//请求成功
-				if(result.equals(ResultCode.SUCCESS.getVal())){
-					//修改标等信息
-					InvestList investList = new InvestList();
-					investList.setId(DataUtils.randomUUID());
-					investList.setMoney(DataUtils.str2double(sum, 6));
-					investList.setUseTicket(1);
-					investList.setTotalMoney(0);
-					investList.setInvestStyle(4);
-					investList.setGiftSum(DataUtils.str2double(giftSum, 6));
-					investList.setMemberInfo(new MemberInfo(userIdIdentity));
-					//根据理财标和投资本金计算本金和预期收益和
-					//查找理财标并更新
-					Scale scale = scaleService.findById(projectCode);
-					//剩余可投金额
-					scale.setResidueMoney(scale.getTotalMoney()-DataUtils.str2double(investmentSum, 6));
-					if(scale.getResidueMoney()==0){
-						//0新建标，1流标，2可投标，3已完成
-						scale.setStatus(3);
+			entity = investListService.findEntity("requestid", requestId);
+			System.out.println("[[[[[[[[[[[[[[[[[[[[[[[[[[["+requestId+"]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
+			if (entity==null) {
+				//读取配置文件中
+				Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+				
+				String result = getRequest().getParameter("result");
+				//投标金额
+				String sum = getRequest().getParameter("sum");
+				//第三方用户标识
+				String userIdIdentity = getRequest().getParameter("userIdIdentity");
+				
+				//项目编号
+				String projectCode = getRequest().getParameter("projectCode");
+				//项目投资金额
+				String investmentSum = getRequest().getParameter("investmentSum");
+				//红包金额
+				String giftSum = getRequest().getParameter("giftSum");
+				//项目总额
+				String projectSum = getRequest().getParameter("projectSum");
+				//剩余可投金额
+				String remainInvestmentSum = getRequest().getParameter("remainInvestmentSum");
+				
+				String signature = getRequest().getParameter("signature");
+				
+				StringBuffer backStringBuffer = new StringBuffer("\t\n---------------------------投标回调字符串：");
+				backStringBuffer.append("\t\n----requestId:"+requestId)
+								.append("\t\n----result:"+result)
+								.append("\t\n----sum:"+sum)
+								.append("\t\n----userIdIdentity:"+userIdIdentity)
+								.append("\t\n----projectCode:"+projectCode)
+								.append("\t\n----investmentSum:"+investmentSum)
+								.append("\t\n----giftSum:"+giftSum)
+								.append("\t\n----projectSum:"+projectSum)
+								.append("\t\n----remainInvestmentSum:"+remainInvestmentSum)
+								.append("\t\n----signature:"+signature);
+				
+				LoggerUtils.info(backStringBuffer.toString(), this.getClass());
+				
+				StringBuffer signatureStr = new StringBuffer();
+				signatureStr.append(requestId);
+				signatureStr.append(result);
+				signatureStr.append(sum);
+				signatureStr.append(userIdIdentity);
+				//获取返回数据的加密数据用于与签名校验
+				String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+				LoggerUtils.info("\t\n---------------------------投标回调 本地加密签名："+dataSign, this.getClass());
+				if(signature.equals(dataSign)){
+					//请求成功
+					if(result.equals(ResultCode.SUCCESS.getVal())){
+						success = investListService.investFFCallback(projectCode, userIdIdentity, DataUtils.str2double(sum, 6), 3, DataUtils.str2double(giftSum, 6), requestId);
+					}else{
+						LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 					}
-					//已经投金额
-					scale.setYetMoney(DataUtils.str2double(investmentSum, 6));
-					scaleService.updateEntity(scale);
-					
-					StringBuffer updateScaleBuffer = new StringBuffer("\t\n---------------------------标更新成功");
-					updateScaleBuffer.append("\t\n-------------标总金额 scale.getTotalMoney():"+scale.getTotalMoney())
-									 .append("\t\n-------------已投金额 scale.getYetMoney():"+scale.getYetMoney())
-									 .append("\t\n-------------剩余金额scale.getResidueMoney():"+scale.getResidueMoney());
-					
-					LoggerUtils.info(updateScaleBuffer.toString(), this.getClass());
-					//理财天数
-					int day = scale.getProduct().getDays();
-					//收益
-					double income = DataUtils.str2double(sum, 6) * (scale.getRevenue() + scale.getRevenueAdd()) / 365D * day;
-					income = DataUtils.str2double(income+"", 6);
-					investList.setScale(scale);
-					investList.setIncome(income);
-					investList.setStatus(Status.S2.getVal());
-					investList.setOpenDate(new Date());
-					String pactNumber = DateUtils.date2Str(new Date(), "MMDDhhmmss") + DataUtils.sixNumber();
-					investList.setPactNumber(pactNumber);
-					investList.setDays(day);
-					boolean saveEntity = investListService.saveEntity(investList);
-					LoggerUtils.info("\t\n---------------------------标投标理财记录（investList）成功 ["+saveEntity+"]，更新的id："+investList.getId(), this.getClass());
-				}else{
-					LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+				}else {
+					//签名不匹配
+					LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
-			}else {
-				//签名不匹配
-				LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getLocalizedMessage(), this.getClass());
+			msg = "投资回调失败";
 		}
-		
+		jsonObject.put("success", success);
+		jsonObject.put("msg", msg);
+		printJsonResult();
 	}
 	
 }

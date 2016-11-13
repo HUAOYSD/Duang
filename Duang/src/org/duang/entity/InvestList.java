@@ -56,50 +56,11 @@ public class InvestList implements java.io.Serializable {
 	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
 	private Set<Stock> stocksForTurnInvestListId = new HashSet<Stock>(0);
 	private Set<Scale> scales = new HashSet<Scale>(0);
+	
+	private int sevenactivity;
+	private String requestid;
 
 	
-	
-	public InvestList(String id, Scale scale, InvestTicket investTicket,
-			MemberInfo memberInfo, double money, double backIncome,
-			double backMoney, int useTicket, int isTurn, int turnStatus,
-			double totalMoney, double income, double ticketBonus, int status,
-			Date openDate, Date backDate, Date calcBeginDate, Date calcEndDate,
-			String pactNumber, int investStyle, double poundageTurn,
-			double poundagePrivilege, int days,
-			Set<Stock> stocksForInvestListId,
-			Set<MemberTicketRecord> memberTicketRecords,
-			Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId,
-			Set<Scale> scales) {
-		super();
-		this.id = id;
-		this.scale = scale;
-		this.investTicket = investTicket;
-		this.memberInfo = memberInfo;
-		this.money = money;
-		this.backIncome = backIncome;
-		this.backMoney = backMoney;
-		this.useTicket = useTicket;
-		this.isTurn = isTurn;
-		this.turnStatus = turnStatus;
-		this.totalMoney = totalMoney;
-		this.income = income;
-		this.ticketBonus = ticketBonus;
-		this.status = status;
-		this.openDate = openDate;
-		this.backDate = backDate;
-		this.calcBeginDate = calcBeginDate;
-		this.calcEndDate = calcEndDate;
-		this.pactNumber = pactNumber;
-		this.investStyle = investStyle;
-		this.poundageTurn = poundageTurn;
-		this.poundagePrivilege = poundagePrivilege;
-		this.days = days;
-		this.stocksForInvestListId = stocksForInvestListId;
-		this.memberTicketRecords = memberTicketRecords;
-		this.billInvests = billInvests;
-		this.stocksForTurnInvestListId = stocksForTurnInvestListId;
-		this.scales = scales;
-	}
 
 	// Constructors
 
@@ -111,33 +72,54 @@ public class InvestList implements java.io.Serializable {
 	public InvestList(String id) {
 		this.id = id;
 	}
+	
+	
+	@Column(name = "sevenactivity")
+	public int getSevenactivity() {
+		return sevenactivity;
+	}
 
-	/** full constructor */
-	public InvestList(String id,Date calcBeginDate,Date calcEndDate,int isTurn,int turnStatus, Scale scale, InvestTicket investTicket,int  days, 
-			MemberInfo memberInfo, double money,  double backIncome, double backMoney, int useTicket, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, String pactNumber, int investStyle, double poundageTurn, double poundagePrivilege, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales) {
+	public void setSevenactivity(int sevenactivity) {
+		this.sevenactivity = sevenactivity;
+	}
+
+	@Column(name = "requestid")
+	public String getRequestid() {
+		return requestid;
+	}
+
+	public void setRequestid(String requestid) {
+		this.requestid = requestid;
+	}
+
+	public InvestList(String id, Scale scale, InvestTicket investTicket, MemberInfo memberInfo, double money, double backIncome, double backMoney, int useTicket, int isTurn, int turnStatus, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, Date calcBeginDate, Date calcEndDate, String pactNumber, int investStyle, double poundageTurn, double poundagePrivilege, double giftSum, int days, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales,int sevenactivity,String requestid) {
+		super();
 		this.id = id;
-		this.calcBeginDate = calcBeginDate;
-		this.calcEndDate = calcEndDate;
-		this.turnStatus = turnStatus;
-		this.isTurn = isTurn;
 		this.scale = scale;
 		this.investTicket = investTicket;
-		this.days = days;
 		this.memberInfo = memberInfo;
 		this.money = money;
 		this.backIncome = backIncome;
+		this.sevenactivity = sevenactivity;
+		this.requestid = requestid;
 		this.backMoney = backMoney;
 		this.useTicket = useTicket;
+		this.isTurn = isTurn;
+		this.turnStatus = turnStatus;
 		this.totalMoney = totalMoney;
 		this.income = income;
 		this.ticketBonus = ticketBonus;
 		this.status = status;
 		this.openDate = openDate;
 		this.backDate = backDate;
+		this.calcBeginDate = calcBeginDate;
+		this.calcEndDate = calcEndDate;
 		this.pactNumber = pactNumber;
 		this.investStyle = investStyle;
 		this.poundageTurn = poundageTurn;
 		this.poundagePrivilege = poundagePrivilege;
+		this.giftSum = giftSum;
+		this.days = days;
 		this.stocksForInvestListId = stocksForInvestListId;
 		this.memberTicketRecords = memberTicketRecords;
 		this.billInvests = billInvests;
