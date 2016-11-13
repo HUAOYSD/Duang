@@ -1,6 +1,15 @@
 package org.duang.common.system;
 
 import java.util.HashMap;
+
+import javax.annotation.Resource;
+
+import org.duang.entity.MemberInfo;
+import org.duang.service.MemberInfoService;
+import org.duang.service.impl.MemberInfoServiceImpl;
+import org.duang.util.DataUtils;
+import org.springframework.stereotype.Component;
+
 import net.sf.json.JSONObject;
 
 /**   
@@ -9,18 +18,31 @@ import net.sf.json.JSONObject;
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 5y
  * @date 2016年9月6日 上午11:04:58      
- */  
+ */ 
+@Component
 public class MemberCollection {  
-
 	private static MemberCollection instance;  
 	private MemberCollection() {  
 		members = new HashMap<String, JSONObject>();  
 		id_token = new HashMap<String, String>();  
 	}  
-	public static MemberCollection getInstance() {  
+	public static MemberCollection getInstance(String token,MemberInfoService service) throws Exception{  
 		if (instance == null) {  
 			instance = new MemberCollection();  
 		}  
+		if (DataUtils.notEmpty(token)) {
+			JSONObject jsonObject = instance.optJsonObject(token);
+			if (jsonObject == null || jsonObject.size() == 0) {
+				jsonObject = new JSONObject();
+				MemberInfo entity = service.findEntity("token", token);
+				jsonObject.put("pd", entity.getPassword());
+				jsonObject.put("token", token);
+				jsonObject.put("id", entity.getId());
+				jsonObject.put("isAuth", String.valueOf(entity.getIsAuth()));
+				jsonObject.put("idcard", entity.getIdCard());
+				instance.putJsonObject(token, jsonObject);
+			}
+		}
 		return instance;  
 	}  
 
@@ -54,4 +76,5 @@ public class MemberCollection {
 	public synchronized String getField(String token, String field) throws Exception{
 		return optJsonObject(token).optString(field, "");
 	}
+	
 }  

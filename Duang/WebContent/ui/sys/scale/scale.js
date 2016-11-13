@@ -250,7 +250,8 @@ $("#allot_btn_scale").on("click",function(){
 		maxmin:true,
 		shade: 0.8,
 		area: ['80%', '85%'],
-		content: 'loanlist!openDialog.do?path=allot&scaleid='+selectedRow.id
+		content: 'loanlist!openDialog.do?path=allot&scaleid='+selectedRow.id+
+		"&begin_date="+new Date(selectedRow.beginTime).format("yyyy-MM-dd")+"&end_date="+new Date(selectedRow.endTime).format("yyyy-MM-dd")
 	}); 
 });
 

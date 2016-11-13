@@ -38,7 +38,7 @@ public enum Status {
 		
 	},
 	S1 {
-		private String desc = "可投入";
+		private String desc = "流标";
 		
 		@Override
 		public int getVal() {
@@ -62,18 +62,18 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "可投入";
+			this.desc = "流标";
 			return this;
 		}
 		
 		@Override
 		public String toString() {
-			return "可投入";
+			return "流标";
 		}
 
 	},
 	S2 {
-		private String desc = "还有机会";
+		private String desc = "可投入";
 		
 		@Override
 		public int getVal() {
@@ -97,13 +97,13 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "还有机会";
+			this.desc = "可投入";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "还有机会";
+			return "可投入";
 		}
 		
 	},

@@ -6,7 +6,8 @@ $(function() {
 		$('#loanlist_conditon').toggle(80);
 		setTimeout(domresize,100);//条件隐藏，改变表格高度
 	});	
-	loadloanlist("loanlist!queryPassLoanRecords.do");
+	alert(begin_date);
+	loadloanlist("loanlist!queryPassLoanRecords.do?begin_date="+begin_date+"&end_date="+end_date,null);
 });
 
 

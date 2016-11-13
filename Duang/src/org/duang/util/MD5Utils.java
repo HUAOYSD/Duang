@@ -41,7 +41,7 @@ public class MD5Utils {
 		byte value[];  
 		try {  
 		     keyb = aKey.getBytes("utf-8");  
-		     value = aValue.getBytes("uft-8");  
+		     value = aValue.getBytes("utf-8");  
 		} catch (UnsupportedEncodingException e) {  
 		     keyb = aKey.getBytes();  
 		     value = aValue.getBytes();  
@@ -82,6 +82,7 @@ public class MD5Utils {
 	}  
 	
 	public static void main(String[] args) {
-		System.out.println(hmacSign("1234234fbm000004韩玉昆510709198408248248102016010120161102","RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF"));
+		String idString="PFT0000723ff3e951ec425c9809f94ab838905ffbm000004d46b080bffae4c88b5baf3877226c0a41韩玉昆51070919840824824813996523694http://219.143.6.68:8080/Duang/provider_wallet!depositFFCallBack.dohttp://219.143.6.68:8080/Duang/provider_member!realNameAuthCallback.do";
+		System.out.println(hmacSign(idString,"RaeWUYmPbjfLAQ8dU9itzMA78eULQuHF"));
 	}
 }

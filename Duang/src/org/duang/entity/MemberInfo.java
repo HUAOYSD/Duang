@@ -60,7 +60,9 @@ public class MemberInfo implements java.io.Serializable {
 	private String payType;
 	private String token;
 	private String requestId;
-	
+	private String entityCode;
+	//资金存管平台用户ID
+	private String userId;
 	private Set<MemberExtraInfo> memberExtraInfos = new HashSet<MemberExtraInfo>(0);
 	private Set<Friends> friendsesForTarget = new HashSet<Friends>(0);
 	private Set<Friends> friendsesForSelf = new HashSet<Friends>(0);
@@ -597,6 +599,14 @@ public class MemberInfo implements java.io.Serializable {
 		this.payType = payType;
 	}
 
+	@Column(name = "userId")
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 	@Column(name = "token",length=50)
 	public String getToken() {
 		return token;
@@ -613,6 +623,14 @@ public class MemberInfo implements java.io.Serializable {
 		this.requestId = requestId;
 	}
 
+	@Column(name = "entity_code",length=50)
+	public String getEntityCode() {
+		return entityCode;
+	}
+	public void setEntityCode(String entityCode) {
+		this.entityCode = entityCode;
+	}
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
 	public CustomerManager getCustomerManager() {

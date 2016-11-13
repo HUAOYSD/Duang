@@ -18,6 +18,7 @@ import org.duang.entity.FriendsNews;
 import org.duang.entity.FriendsNewsImg;
 import org.duang.service.FriendsNewsImgService;
 import org.duang.service.FriendsNewsService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
@@ -51,6 +52,17 @@ public class FriendsNewsAction extends BaseAction<FriendsNews>{
 	}
 	
 	/**
+	 * 客户基本信息
+	 */
+	private MemberInfoService sysMemberInfoService;
+
+	@Resource(name = "sysmemberinfoserviceimpl")
+	public void setService(MemberInfoService sysMemberInfoService) {
+		this.sysMemberInfoService = sysMemberInfoService;
+	}
+	
+	
+	/**
 	 * 查询财友动态
 	 * @Title: queryFriendsNews   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -71,7 +83,7 @@ public class FriendsNewsAction extends BaseAction<FriendsNews>{
 			//登录人id
 			String id = "";
 			if(DataUtils.notEmpty(num) && DataUtils.notEmpty(count) && DataUtils.notEmpty(token) && 
-					DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+					DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))){
 				int countNumber = DataUtils.str2int(count), numNumber = DataUtils.str2int(num);
 				String sql = "SELECT fn.id, fn.content, fn.createtime, mi.real_name, mi.nickname, mi.user_img "+
 							 " FROM friends_news fn LEFT JOIN member_info mi ON mi.id = fn.member_id WHERE fn.member_id IN ( "+

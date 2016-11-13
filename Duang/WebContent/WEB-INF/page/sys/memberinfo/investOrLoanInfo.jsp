@@ -1,7 +1,7 @@
 <%@page import="org.duang.entity.MemberInfo"%>
 <%@page import="org.duang.entity.InvestMember"%>
 <%@page import="java.util.Set"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=GBK" pageEncoding="UTF-8"%>
 <% 
 	String path = request.getContextPath();
 %>

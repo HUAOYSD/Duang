@@ -1,4 +1,5 @@
 package org.duang.action.provider;
+import java.net.URLEncoder;
 import java.util.Date;
 
 import javax.annotation.Resource;
@@ -11,6 +12,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.SMSUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.SMSVerificationCode;
+import org.duang.enums.Platform;
 import org.duang.service.SMSVerificationCodeService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -66,7 +68,7 @@ public class SMSVerificationCodeAction extends BaseAction<SMSVerificationCode>{
 					vCode.setvCode(DataUtils.sixNumber());
 					Date currDate = new Date();
 					long currDateLong = DateUtils.getTimeStamp(currDate);
-					Date endDate = new Date(currDateLong+600000);
+					Date endDate = new Date(currDateLong+60*1000*10);
 					vCode.setStartTime(currDate);
 					vCode.setEndTime(endDate);
 					success = service.saveEntity(vCode);
@@ -74,7 +76,7 @@ public class SMSVerificationCodeAction extends BaseAction<SMSVerificationCode>{
 					vCode.setvCode(DataUtils.sixNumber());
 					Date currDate = new Date();
 					long currDateLong = DateUtils.getTimeStamp(currDate);
-					Date endDate = new Date(currDateLong+10*1000);
+					Date endDate = new Date(currDateLong+60*1000*10);
 					vCode.setStartTime(currDate);
 					vCode.setEndTime(endDate);
 					success = service.updateEntity(vCode);
@@ -85,8 +87,8 @@ public class SMSVerificationCodeAction extends BaseAction<SMSVerificationCode>{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("AdAction——getHomeAd方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("AdAction——getHomeAd方法错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("SMSVerificationCodeAction——getVCode方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("SMSVerificationCodeAction——getVCode方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
@@ -111,18 +113,17 @@ public class SMSVerificationCodeAction extends BaseAction<SMSVerificationCode>{
 		boolean success = false;
 		if (DataUtils.notEmpty(phone)) {
 			phone = DES.decryptDES(phone);
+			LoggerUtils.info("--------------------发送验证码"+phone+":"+vCode, this.getClass());
 			String platform = getRequest().getParameter("platform");
 			if (DataUtils.notEmpty(platform) && ("IOS".equals(platform) || "Android".equals(platform))) {
 				String signature = getRequest().getParameter("signature");
-				//String content = "您的注册验证码是："+vc;
+				String content = "手机验证码是  "+vCode;
 				if ("IOS".equals(platform) && SMSUtils.IOS_SIGNATURE.equals(signature)) {
 					jsonObject.put("vc", vCode);
-					//success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P3.getVal());
-					success = true;
+					success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P3.getVal());
 				}else if ("Android".equals(platform) && SMSUtils.ANDORID_SIGNATURE.equals(signature)) {
 					jsonObject.put("vc", vCode);
-					//success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P2.getVal());
-					success = true;
+					success = SMSUtils.getInstance().sendSMS(content, phone, Platform.P2.getVal());
 				}else {
 					msg = "短信签名错误";
 				}

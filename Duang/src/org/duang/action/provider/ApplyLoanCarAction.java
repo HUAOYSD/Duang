@@ -17,6 +17,7 @@ import org.duang.enums.loan.Poundage;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
 import org.duang.service.ApplyLoanCarService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
@@ -41,6 +42,12 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 	@Resource(name = "applyloancarserviceimpl")
 	public void setService(ApplyLoanCarService applyLoanCarService) {
 		this.applyLoanCarService = applyLoanCarService;
+	}
+	
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
 	}
 	
 	/**
@@ -75,9 +82,10 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 		if(DataUtils.notEmpty(getRequest().getParameter("p_backStyle"))){
 			loanList.setBackStyle(DataUtils.str2int((getRequest().getParameter("p_backStyle"))));
 		}
-		if(DataUtils.notEmpty(getRequest().getParameter("token"))){
+		String token = getRequest().getParameter("token");
+		if(DataUtils.notEmpty(token)){
 			MemberInfo memberInfo = new MemberInfo();
-			memberInfo.setId(MemberCollection.getInstance().getMainField(getRequest().getParameter("token")));
+			memberInfo.setId(MemberCollection.getInstance(token,memberInfoService).getMainField(token));
 			loanList.setMemberInfo(memberInfo);
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_money"))){

@@ -1,5 +1,6 @@
 package org.duang.util; 
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -197,5 +198,15 @@ public class DataUtils {
 		contractNo.append("-"+String.format("%04d", index));
 		return contractNo.toString();
 	}
+	
+	public static String ISO2UTF8(String str) throws UnsupportedEncodingException{
+		if(notEmpty(str)){
+			return new String(str.getBytes("ISO-8859-1"),"UTF-8");
+		}else {
+			return "";
+		}
+		
+	}
+	
 }
 

@@ -16,12 +16,12 @@ import org.duang.entity.BillInvest;
 import org.duang.entity.BindCard;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
-import org.duang.enums.If;
 import org.duang.enums.ResultCode;
 import org.duang.enums.billinvest.BillStatus;
 import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
 import org.duang.service.InvestMemberService;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
@@ -54,6 +54,12 @@ public class PayAction extends BaseAction<BillInvest>{
 	public void setInvestMemberService(InvestMemberService investMemberService) {
 		this.investMemberService = investMemberService;
 	}
+	
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
+	}
 	/**   
 	 * 充值 <成功回调> 
 	 * @Title: deposit   
@@ -73,7 +79,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			String platform = getRequest().getParameter("p_platform");
 			String pk = DataUtils.randomUUID();
 			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
 				double pushManyVal = DataUtils.str2double(pushMany, 6);
 				if (pushManyVal > 0) {
 					entity = new BillInvest(pk, new MemberInfo(id), null, new BindCard(bankid), UseType.UT1.getVal(), pushManyVal, 0, 0, BillStatus.BS1.getVal(), new Date(), "充值", DataUtils.str2int(platform));
@@ -117,7 +123,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			String token = getRequest().getParameter("token");
 			String pkid = getRequest().getParameter("p_id");
 			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
 				final InvestMember investMember = investMemberService.findEntity("memberInfo.id", id);
 				String sql = "SELECT BALANCE,ASSET  FROM BILL_INVEST WHERE MEMBER_INFO = '"+id+"' AND STATUS = "+BillStatus.BS2.getVal()+" ORDER BY OPT_TIME DESC";
 				List<?> list = service.queryBySQL(sql, null, null, false);
@@ -177,7 +183,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			String platform = getRequest().getParameter("p_platform");
 			String pk = DataUtils.randomUUID();
 			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
 				double fetchManyVal = DataUtils.str2double(p_fetchMany, 6);
 				if (fetchManyVal > 0) {
 					entity = new BillInvest(pk, new MemberInfo(id), null, new BindCard(bankid), UseType.UT2.getVal(), fetchManyVal, 0, 0, BillStatus.BS1.getVal(), new Date(), "提现", DataUtils.str2int(platform));
@@ -221,7 +227,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			String token = getRequest().getParameter("token");
 			String pkid = getRequest().getParameter("p_id");
 			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance().getMainField(token)))) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
 				final InvestMember investMember = investMemberService.findEntity("memberInfo.id", id);
 				String sql = "SELECT BALANCE,ASSET  FROM BILL_INVEST WHERE MEMBER_INFO = '"+id+"' AND STATUS = "+BillStatus.BS2.getVal()+" ORDER BY OPT_TIME DESC";
 				List<?> list = service.queryBySQL(sql, null, null, false);
@@ -300,12 +306,13 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws
 	 */
 	public void depositFFCallBack(){
+		LoggerUtils.info("\t\n--------------------------充值回调-----------------------------------\t\n", this.getClass());
 		try{
 			//读取配置文件
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			
 			String requestId = getRequest().getParameter("requestId");
-			//String noticeType = getRequest().getParameter("noticeType");
+			String noticeType = getRequest().getParameter("noticeType");
 			String result = getRequest().getParameter("result");
 			//充值金额
 			String sum = getRequest().getParameter("sum");
@@ -319,16 +326,33 @@ public class PayAction extends BaseAction<BillInvest>{
 			String withdrawableBalance = getRequest().getParameter("withdrawableBalance");
 			//冻结余额
 			String frozenBalance = getRequest().getParameter("frozenBalance");
-			/*String payType = getRequest().getParameter("payType");
+			String payType = getRequest().getParameter("payType");
 			String mainAccountType = getRequest().getParameter("mainAccountType");
 			String mainAccountCode = getRequest().getParameter("mainAccountCode");
 			String bankAccount = getRequest().getParameter("bankAccount");
-			String bankName = getRequest().getParameter("bankName");*/
+			String bankName = getRequest().getParameter("bankName");
 			String name = getRequest().getParameter("name");
 			String signature = getRequest().getParameter("signature");
+			LoggerUtils.info("\t\n------------------------充值回调开始-------------------------------------\t\n", this.getClass());
+			StringBuffer backDataBuffer = new StringBuffer("/t/n---------------------------充值回调  字符串");
+			backDataBuffer.append("/t/n----requestId:"+requestId)
+						  .append("/t/n----noticeType:"+noticeType)
+						  .append("/t/n----result:"+result)
+						  .append("/t/n----sum:"+sum)
+						  .append("/t/n----userIdIdentity:"+userIdIdentity)
+						  .append("/t/n----unsettledBalance:"+unsettledBalance)
+						  .append("/t/n----userBalance:"+userBalance)
+						  .append("/t/n----withdrawableBalance:"+withdrawableBalance)
+						  .append("/t/n----frozenBalance:"+frozenBalance)
+						  .append("/t/n----payType:"+payType)
+						  .append("/t/n----mainAccountType:"+mainAccountType)
+						  .append("/t/n----mainAccountCode"+mainAccountCode)
+						  .append("/t/n----bankAccount:"+bankAccount)
+						  .append("/t/n----bankName:"+bankName)
+						  .append("/t/n----name:"+name)
+						  .append("/t/n----signature:"+signature);
 			
-			LoggerUtils.info(requestId+";"+result+";"+sum+";"+userIdIdentity+";"+unsettledBalance+";"+userBalance+";"+withdrawableBalance+";"+frozenBalance+";"+name, this.getClass());
-			LoggerUtils.info("---------------------------"+signature, this.getClass());
+			LoggerUtils.info(backDataBuffer.toString(), this.getClass());
 			
 			StringBuffer signatureStr = new StringBuffer();
 			signatureStr.append(requestId);
@@ -338,18 +362,18 @@ public class PayAction extends BaseAction<BillInvest>{
 			signatureStr.append(userBalance);
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
-			LoggerUtils.info("---------------------------"+dataSign, this.getClass());
+			LoggerUtils.info("/t/n---------------------------充值回调  本地加密后的签名:"+dataSign, this.getClass());
 			if(dataSign.equals(signature)){
-				if(result.equals(ResultCode.SUCCESS)){
+				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//修改数据库
 					updateMemberInfoBalance(userIdIdentity,withdrawableBalance,userBalance,frozenBalance,unsettledBalance);
 				}else{
-					LoggerUtils.error(name+"提现,错误，原因："+ReadProperties.getStringValue(properties, result), this.getClass());
+					LoggerUtils.error(name+"充值,错误，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)), this.getClass());
 				}
 			}else{
-				LoggerUtils.error(name+"提现,原因：秘钥校验错误", this.getClass());
+				LoggerUtils.error(name+"充值,原因：秘钥校验错误", this.getClass());
 			}
-		
+			LoggerUtils.info("\t\n------------------------充值回调结束-------------------------------------\t\n", this.getClass());
 		}catch(Exception e){
 			e.printStackTrace();
 			LoggerUtils.error("PayAction——depositFFCallBack方法错误：" + e.getMessage(), this.getClass());
@@ -369,7 +393,8 @@ public class PayAction extends BaseAction<BillInvest>{
 	 */
 	public void withdrawalsFFCallBack(){
 		try{
-			//读取配置文件
+			 //下面注释的代码是丰付返回的数据，只是没有用到，所以给注释了，如果需要使用，请消除注释
+			//读取配置文件  
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 			String requestId = getRequest().getParameter("requestId");
 			String noticeType = getRequest().getParameter("noticeType");
@@ -380,14 +405,14 @@ public class PayAction extends BaseAction<BillInvest>{
 			String userBalance = getRequest().getParameter("userBalance");
 			String withdrawableBalance = getRequest().getParameter("withdrawableBalance");
 			String frozenBalance = getRequest().getParameter("frozenBalance");
-			/*String payType = getRequest().getParameter("payType");
+			String payType = getRequest().getParameter("payType");
 			String mainAccountType = getRequest().getParameter("mainAccountType");
 			String mainAccountCode = getRequest().getParameter("mainAccountCode");
 			String bankAccount = getRequest().getParameter("bankAccount");
-			String bankName = getRequest().getParameter("bankName");*/
+			String bankName = getRequest().getParameter("bankName");
 			String name = getRequest().getParameter("name");
-			/*String requestTime = getRequest().getParameter("requestTime");
-			String dealTime = getRequest().getParameter("dealTime");*/
+			String requestTime = getRequest().getParameter("requestTime");
+			String dealTime = getRequest().getParameter("dealTime");
 			String signature = getRequest().getParameter("signature");
 			
 			StringBuffer signatureStr = new StringBuffer();
@@ -396,14 +421,38 @@ public class PayAction extends BaseAction<BillInvest>{
 			signatureStr.append(sum);
 			signatureStr.append(userIdIdentity);
 			signatureStr.append(userBalance);
+			LoggerUtils.info("\t\n--------------------------提现回调-----------------------------------\t\n", this.getClass());
+			StringBuffer backDataBuffer = new StringBuffer("\t\n---------------------------提现回调字符串");
+			backDataBuffer.append("\t\n----requestId:"+requestId)
+						  .append("\t\n----noticeType:"+noticeType)
+						  .append("\t\n----result:"+result)
+						  .append("\t\n----sum:"+sum)
+						  .append("\t\n----userIdIdentity:"+userIdIdentity)
+						  .append("\t\n----failReason:"+failReason)
+						  .append("\t\n----userBalance:"+userBalance)
+						  .append("\t\n----withdrawableBalance:"+withdrawableBalance)
+						  .append("\t\n----frozenBalance:"+frozenBalance)
+						  .append("\t\n----payType:"+payType)
+						  .append("\t\n----mainAccountType:"+mainAccountType)
+						  .append("\t\n----mainAccountCode"+mainAccountCode)
+						  .append("\t\n----bankAccount:"+bankAccount)
+						  .append("\t\n----bankName:"+bankName)
+						  .append("\t\n----name:"+name)
+						  .append("\t\n----requestTime:"+requestTime)
+						  .append("\t\n----dealTime:"+dealTime)
+						  .append("\t\n----signature:"+signature);
+			
+			LoggerUtils.info(backDataBuffer.toString(), this.getClass());
+			
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			LoggerUtils.info("\t\n---------------------------提现回调本地加密签名："+dataSign, this.getClass());
 			if(dataSign.equals(signature)){
-				if((noticeType.equals(String.valueOf(If.If0.getVal()))|| noticeType.equals(String.valueOf(If.If1.getVal()))) && result.equals(ResultCode.SUCCESS)){
+				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//修改数据库
 					updateMemberInfoBalance(userIdIdentity,withdrawableBalance,userBalance,frozenBalance);
 				}else{
-					LoggerUtils.error(name+"提现,错误，原因："+ReadProperties.getStringValue(properties, result)+"---"+failReason, this.getClass());
+					LoggerUtils.error(name+"提现,错误，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result))+"---"+failReason, this.getClass());
 				}
 			}else{
 				LoggerUtils.error(name+"提现,原因：秘钥校验错误", this.getClass());
@@ -431,25 +480,31 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws
 	 */
 	private void  updateMemberInfoBalance(String memberInfoId,String balance,String totalMoney,String frozenBalance) throws Exception{
+		LoggerUtils.info("\t\n------------------------提现修改本地用户金额-------------------------------------\t\n", this.getClass());
 		InvestMember investMember = investMemberService.findEntity("memberInfo.id", memberInfoId);
 		if(investMember != null){
+			LoggerUtils.info("\t\n--------姓名："+investMember.getMemberInfo().getRealName()+"  电话："+investMember.getMemberInfo().getPhone(), this.getClass());
+			LoggerUtils.info("\t\n--------余额："+DataUtils.str2double(balance,6), this.getClass());
+			LoggerUtils.info("\t\n--------理财："+DataUtils.str2double(frozenBalance,6), this.getClass());
+			LoggerUtils.info("\t\n--------总资产："+DataUtils.str2double(totalMoney,6), this.getClass());
 			investMember.setBalance(DataUtils.str2double(balance,6));
 			investMember.setInvesting(DataUtils.str2double(frozenBalance,6));
 			investMember.setTotalMoney(DataUtils.str2double(totalMoney,6));
 			investMemberService.updateEntity(investMember);
 		}else{
-			LoggerUtils.error("提现错误,原因：未查找到该用户", this.getClass());
+			LoggerUtils.error("提现 修改本地用户金额数据错误,原因：未查找到该用户 memberId="+memberInfoId, this.getClass());
 		}
 	}
 	
 	/**
-	 * 提现，修改理财用户的数据
+	 * 充值回调修改金额，修改理财用户的数据
 	 * @Title: updateMemberInfoBalance   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param memberInfoId   用户id
 	 * @param: @param balance    余额
 	 * @param: @param totalMoney 总金额
 	 * @param: @param frozenBalance 投资中的金额
+	 * @param: @param unsettledBalance 未结金额
 	 * @param: @throws Exception  
 	 * @author LiYonghui    
 	 * @date 2016年11月3日 下午3:59:47
@@ -457,15 +512,21 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws
 	 */
 	private void  updateMemberInfoBalance(String memberInfoId,String balance,String totalMoney,String frozenBalance,String unsettledBalance) throws Exception{
+		LoggerUtils.info("\t\n------------------------充值修改本地用户金额-------------------------------------\t\n", this.getClass());
 		InvestMember investMember = investMemberService.findEntity("memberInfo.id", memberInfoId);
 		if(investMember != null){
+			LoggerUtils.info("\t\n--------姓名："+investMember.getMemberInfo().getRealName()+"  电话："+investMember.getMemberInfo().getPhone(), this.getClass());
+			LoggerUtils.info("\t\n--------余额："+DataUtils.str2double(balance,6), this.getClass());
+			LoggerUtils.info("\t\n--------理财："+DataUtils.str2double(frozenBalance,6), this.getClass());
+			LoggerUtils.info("\t\n--------总资产："+DataUtils.str2double(totalMoney,6), this.getClass());
+			LoggerUtils.info("\t\n--------未结金额："+DataUtils.str2double(unsettledBalance,6), this.getClass());
 			investMember.setBalance(DataUtils.str2double(balance,6));
 			investMember.setInvesting(DataUtils.str2double(frozenBalance,6));
 			investMember.setTotalMoney(DataUtils.str2double(totalMoney,6));
 			investMember.setUnsettledBalance(DataUtils.str2double(unsettledBalance,6));
 			investMemberService.updateEntity(investMember);
 		}else{
-			LoggerUtils.error("提现错误,原因：未查找到该用户", this.getClass());
+			LoggerUtils.error("充值 修改本地用户金额数据错误,原因：未查找到该用户 memberId="+memberInfoId, this.getClass());
 		}
 	}
 }

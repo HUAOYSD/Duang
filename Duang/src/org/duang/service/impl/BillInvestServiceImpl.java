@@ -9,8 +9,10 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.BillInvestDao;
+import org.duang.dao.BindCardDao;
 import org.duang.dao.InvestMemberDao;
 import org.duang.entity.BillInvest;
+import org.duang.entity.BindCard;
 import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
 import org.duang.enums.billinvest.UseType;
@@ -33,6 +35,7 @@ public class BillInvestServiceImpl implements BillInvestService{
 
 	private BillInvestDao dao;
 	private InvestMemberDao investMemberDao;
+	private BindCardDao bindCardDao;
 	@Resource(name="sysinvestmemberdao")
 	public void setInvestMemberDao(InvestMemberDao investMemberDao) {
 		this.investMemberDao = investMemberDao;
@@ -45,6 +48,10 @@ public class BillInvestServiceImpl implements BillInvestService{
 		LoggerUtils.info("注入BillInvestServiceImpl服务层", this.getClass());
 	}
 
+	@Resource(name="bindcarddaoimpl")
+	public void setBindCardDao(BindCardDao bindCardDao) {
+		this.bindCardDao = bindCardDao;
+	}
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
@@ -366,11 +373,12 @@ public class BillInvestServiceImpl implements BillInvestService{
 			return false;
 		}
 	}
-
+	
 	@Override
 	public synchronized boolean createBill(InvestList investList) throws Exception {
 		boolean success = false;
 		List<BillInvest> billInvestsList = dao.queryEntity("memberInfo.id", investList.getMemberInfo().getId(), null, Order.desc("optTime"));
+		InvestMember investMember = investMemberDao.findEntity("memberInfo.id", investList.getMemberInfo().getId());
 		if(DataUtils.notEmpty(billInvestsList)){
 			BillInvest billInvest = billInvestsList.get(0);
 			BillInvest nextBillInvest = new BillInvest();
@@ -379,13 +387,26 @@ public class BillInvestServiceImpl implements BillInvestService{
 			nextBillInvest.setInvestList(investList);
 			nextBillInvest.setUseType(UseType.UT3.getVal());
 			nextBillInvest.setMoney(investList.getMoney());
-			nextBillInvest.setBalance(billInvest.getBalance()-investList.getMoney());
-			nextBillInvest.setAsset(billInvest.getAsset()-investList.getMoney());
+			nextBillInvest.setBalance(investMember.getBalance());
+			nextBillInvest.setAsset(investMember.getBalance()+investMember.getInvesting());
 			nextBillInvest.setBindCard(billInvest.getBindCard());
 			nextBillInvest.setOptTime(new Date());
 			nextBillInvest.setRemark(billInvest.getRemark());
 			success = dao.saveEntity(nextBillInvest);
 		}else{
+			BillInvest nextBillInvest = new BillInvest();
+			nextBillInvest.setId(DataUtils.randomUUID());
+			nextBillInvest.setMemberInfo(investList.getMemberInfo());
+			nextBillInvest.setInvestList(investList);
+			nextBillInvest.setUseType(UseType.UT3.getVal());
+			nextBillInvest.setMoney(investList.getMoney());
+			nextBillInvest.setBalance(investMember.getBalance());
+			nextBillInvest.setAsset(investMember.getBalance()+investMember.getInvesting());
+			BindCard bindCard = bindCardDao.findEntity("memberInfo.id", investList.getMemberInfo().getId());
+			nextBillInvest.setBindCard(bindCard);
+			nextBillInvest.setOptTime(new Date());
+			nextBillInvest.setRemark("投标");
+			success = dao.saveEntity(nextBillInvest);
 		}
 		return success;
 	}

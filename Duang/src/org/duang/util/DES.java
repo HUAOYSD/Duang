@@ -61,6 +61,8 @@ public class DES {
 		if (decryptString.startsWith("\"") && decryptString.endsWith("\"")) {
 			decryptString = decryptString.substring(1, decryptString.length()-1);
 		}
+		//进行更换特殊字符+，app把+转换为%2b,防止网络传输中的特殊字符的丢失，所以在这里需要更换回来
+		decryptString = decryptString.replace("%2b", "+");
 		byte[] byteMi = Base64.decode(decryptString);
 		IvParameterSpec zeroIv = new IvParameterSpec(IV);
 		SecretKeySpec key = new SecretKeySpec(DES_KEY.getBytes(), "DES");

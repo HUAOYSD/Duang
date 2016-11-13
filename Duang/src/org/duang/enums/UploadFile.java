@@ -24,10 +24,16 @@ public enum UploadFile {
 		@Override
 		public String getVal(String path) {
 			if(DataUtils.notEmpty(path)){
-				return "resources\\file\\basic" + path;
+				return "resources\\file\\basic\\" + path;
 			}else{
 				return "resources\\file\\basic\\";
 			}
+		}
+
+		@Override
+		public String appPath() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	},
 	TEM{ //临时
@@ -49,6 +55,12 @@ public enum UploadFile {
 				return "resources\\tem\\";
 			}
 		}
+
+		@Override
+		public String appPath() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	},
 	CONTRACT{
 		@Override
@@ -69,6 +81,12 @@ public enum UploadFile {
 				return "\\contract";
 			}
 		}
+
+		@Override
+		public String appPath() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	},
 	SALARY{
 		@Override
@@ -88,6 +106,12 @@ public enum UploadFile {
 			}else{
 				return "\\salary";
 			}
+		}
+
+		@Override
+		public String appPath() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	},
@@ -112,6 +136,12 @@ public enum UploadFile {
 			return "\\idcard";
 		}
 
+		@Override
+		public String appPath() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	},
 	//身份证
 	HOUSE{
@@ -132,6 +162,12 @@ public enum UploadFile {
 		@Override
 		public String getVal() {
 			return "\\house";
+		}
+
+		@Override
+		public String appPath() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	},
@@ -156,6 +192,12 @@ public enum UploadFile {
 			return "\\car";
 		}
 
+		@Override
+		public String appPath() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	},
 	//头像
 	HEAD {
@@ -178,6 +220,11 @@ public enum UploadFile {
 			}
 		}
 
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+
 	},
 	//广告
 	AD{
@@ -198,6 +245,10 @@ public enum UploadFile {
 			}else{
 				return "\\ad";
 			}
+		}
+		@Override
+		public String appPath() {
+			return "resources/file/basic/ad/";
 		}
 
 	},
@@ -222,6 +273,12 @@ public enum UploadFile {
 				}
 			}
 
+			@Override
+			public String appPath() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
 		},
 	//银行卡
 	BANK{
@@ -242,6 +299,12 @@ public enum UploadFile {
 			}else{
 				return "\\bindcard";
 			}
+		}
+
+		@Override
+		public String appPath() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	};
 	
@@ -270,4 +333,16 @@ public enum UploadFile {
 	 * @throws
 	 */
 	public abstract String getVal();
+	
+	/**
+	 * app调用时候返回的路径问题
+	 * @Title: appPath   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年11月10日 上午11:51:38
+	 * @return: String      
+	 * @throws
+	 */
+	public abstract String appPath();
 }

@@ -294,10 +294,12 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 */  
 	public void queryPassLoanRecords() {
 		try {
+			String begin_date = getRequest().getParameter("begin_date");
+			String end_date = getRequest().getParameter("end_date");
 			//审核通过且未起标
 			condsUtils.addProperties(true, "customerManager", "memberInfo", "applyState", "isSell", "order");
 			condsUtils.addValues(true, new Object[]{"customerAlias","as"}, new Object[]{"memberAlias","as"}, Apply.A2.getVal(), Scale.S1.getVal(), Order.desc("createTime"));
-			if (DataUtils.notEmpty(getRequest().getParameter("begin_date")) && DataUtils.notEmpty(getRequest().getParameter("end_date"))) {
+			if (DataUtils.notEmpty(begin_date) && DataUtils.notEmpty(end_date)) {
 				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("begin_date")+" 00:00:00"), "ge"});
 				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("end_date")+" 23:59:59"), "le"});
 			}else{
@@ -336,6 +338,8 @@ public class LoanListAction extends BaseAction<LoanList> {
 			String path = getRequest().getParameter("path");
 			if("allot".equals(path)) {
 				getRequest().setAttribute("scaleid", getRequest().getParameter("scaleid"));
+				getRequest().setAttribute("begin_date", getRequest().getParameter("begin_date"));
+				getRequest().setAttribute("end_date", getRequest().getParameter("end_date"));
 				return "allot";
 			}else if("review".equals(path)){
 				entity = service.findById(entity.getId());

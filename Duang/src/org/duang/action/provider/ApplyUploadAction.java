@@ -2,6 +2,8 @@ package org.duang.action.provider;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
@@ -10,6 +12,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.enums.UploadFile;
+import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -29,7 +32,11 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Action(value = "provider_applyUpload")
 public class ApplyUploadAction extends BaseAction<Object>{
 
-	
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
+	}
 
 	/**   
 	 * 上传借贷申请信息
@@ -47,7 +54,7 @@ public class ApplyUploadAction extends BaseAction<Object>{
 			String token = getRequest().getParameter("token");
 			String id = "";
 			//判断参数是否为空
-			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance().getMainField(token))){
+			if(DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,memberInfoService).getMainField(token))){
 				Map<String,Object>  pathMap = new HashMap<String,Object>();
 				pathMap.put("salarycheck", UploadFile.PATH.getVal(UploadFile.SALARY.getVal(id)));
 				pathMap.put("personcheck", UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(id)));

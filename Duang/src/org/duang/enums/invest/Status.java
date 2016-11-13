@@ -1,7 +1,7 @@
 package org.duang.enums.invest;
 import org.duang.util.DataUtils;
 
- 
+
 /**   
  * 理财状态的枚举类
  * @ClassName:  useTicket   
@@ -38,7 +38,7 @@ public enum Status {
 	},
 	S1 {
 		private String desc = "资金匹配中";
-		
+
 		@Override
 		public int getVal() {
 			return 1;
@@ -64,7 +64,7 @@ public enum Status {
 			this.desc = "资金匹配中";
 			return this;
 		}
-		
+
 		@Override
 		public String toString() {
 			return "资金匹配中";
@@ -73,7 +73,7 @@ public enum Status {
 	},
 	S2 {
 		private String desc = "投资收益中";
-		
+
 		@Override
 		public int getVal() {
 			return 2;
@@ -104,11 +104,11 @@ public enum Status {
 		public String toString() {
 			return "投资收益中";
 		}
-		
+
 	},
 	S3 {
 		private String desc = "完成投资";
-		
+
 		@Override
 		public int getVal() {
 			return 3;
@@ -139,11 +139,11 @@ public enum Status {
 		public String toString() {
 			return "完成投资";
 		}
-		
+
 	},
 	S4 {
 		private String desc = "到期回款中";
-		
+
 		@Override
 		public int getVal() {
 			return 4;
@@ -174,11 +174,11 @@ public enum Status {
 		public String toString() {
 			return "到期回款中";
 		}
-		
+
 	},
 	S5 {
 		private String desc = "回款成功";
-		
+
 		@Override
 		public int getVal() {
 			return 5;
@@ -209,11 +209,11 @@ public enum Status {
 		public String toString() {
 			return "回款成功";
 		}
-		
+
 	},
 	S6 {
 		private String desc = "回款失败";
-		
+
 		@Override
 		public int getVal() {
 			return 6;
@@ -244,11 +244,11 @@ public enum Status {
 		public String toString() {
 			return "回款失败";
 		}
-		
+
 	},
 	S7 {
 		private String desc = "过期";
-		
+
 		@Override
 		public int getVal() {
 			return 7;
@@ -279,9 +279,44 @@ public enum Status {
 		public String toString() {
 			return "过期";
 		}
-		
+
+	},	
+	S8 {
+		private String desc = "提前赎回成功";
+
+		@Override
+		public int getVal() {
+			return 7;
+		}
+
+		@Override
+		public String getDesc() {
+			return desc;
+		}
+
+		@Override
+		public Object setDesc(String desc) {
+			if (DataUtils.notEmpty(desc)) {
+				this.desc = desc;
+				return this;
+			}else {
+				return setDefaultDesc();
+			}
+		}
+
+		@Override
+		public Object setDefaultDesc() {
+			this.desc = "提前赎回成功";
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "提前赎回成功";
+		}
+
 	};
-	
+
 	/**   
 	 * 获取枚举值
 	 * @Title: getVal   
@@ -293,8 +328,8 @@ public enum Status {
 	 * @throws   
 	 */  
 	public abstract int getVal();
-	
-	
+
+
 	/**   
 	 * 获取枚举描述
 	 * @Title: getDesc   
@@ -306,8 +341,8 @@ public enum Status {
 	 * @throws   
 	 */  
 	public abstract String getDesc();
-	
-	
+
+
 	/**   
 	 * 设置描述文字，null代表默认值
 	 * @Title: setDesc   
@@ -319,8 +354,8 @@ public enum Status {
 	 * @throws   
 	 */  
 	public abstract Object setDesc(String desc);
-	
-	
+
+
 	/**   
 	 * 设置desc为默认描述文字
 	 * @Title: setDefaultDesc   
@@ -332,6 +367,6 @@ public enum Status {
 	 * @throws   
 	 */  
 	public abstract Object setDefaultDesc();
-	
-	
+
+
 }

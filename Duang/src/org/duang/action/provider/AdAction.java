@@ -1,8 +1,10 @@
 package org.duang.action.provider;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -14,9 +16,11 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.Ad;
 import org.duang.enums.If;
+import org.duang.enums.UploadFile;
 import org.duang.service.AdService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.duang.util.ReadProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -81,6 +85,7 @@ public class AdAction extends BaseAction<Ad>{
 	}
 	
 	/**
+	 * @throws IOException 
 	 * 封装集合
 	 * @Title: fillDataObjectList   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -91,8 +96,10 @@ public class AdAction extends BaseAction<Ad>{
 	 * @return: List<Map<String,Object>>      
 	 * @throws
 	 */
-	private List<Map<String, Object>> fillDataObjectList(List<Ad> list) {
+	private List<Map<String, Object>> fillDataObjectList(List<Ad> list) throws IOException {
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+		Properties properties = ReadProperties.initPrperties("tomcatIPPort.properties");
+		String tomcatIPPortAndName = ReadProperties.getStringValue(properties, "url");
 		try {
 			for (Ad ad : list) {
 				Map<String, Object> map = new HashMap<String, Object>();
@@ -101,7 +108,7 @@ public class AdAction extends BaseAction<Ad>{
 				map.put("createTime", DateUtils.date2Str(ad.getCreateTime()));
 				map.put("isUse", ad.getIsUse());
 				map.put("linkAddress", ad.getLinkAddress());
-				map.put("imageAddress", ad.getImageAddress());
+				map.put("imageAddress", tomcatIPPortAndName+UploadFile.AD.appPath()+ad.getImageAddress());
 				map.put("name", ad.getName());
 				map.put("remark", ad.getRemark());
 				listMap.add(map);

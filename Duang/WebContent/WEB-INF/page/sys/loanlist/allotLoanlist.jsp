@@ -1,6 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=GBK" pageEncoding="UTF-8"%>
 <% String path = request.getContextPath();%>
 <%@ include file="/page/inc/inc.jsp"%>
+<script type="text/javascript">
+	 	var begin_date = "${begin_date}";
+	 	var end_date = "${end_date}";
+</script>
 <body class="easyui-layout">
 	<div class="body" id="body_loanlist" region="center" style="border:0px;" >	
 		  <!-- 查询条件区域 -->
