@@ -77,6 +77,7 @@ public class ScaleAction extends BaseAction<Scale>{
 				sql.append(" SELECT  SCALE.* FROM SCALE  ");
 				sql.append(" INNER JOIN PRODUCT ON PRODUCT.ID = SCALE.PRODUCT_ID ");
 				sql.append(" WHERE PRODUCT.CATEGORY = 2 AND SCALE.STATUS <> 1 AND  SCALE.STATUS <> 0 ");
+				sql.append(" ORDER BY begin_time desc ");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -122,6 +123,7 @@ public class ScaleAction extends BaseAction<Scale>{
 				sql.append(" SELECT  SCALE.* FROM SCALE  ");
 				sql.append(" INNER JOIN PRODUCT ON PRODUCT.ID = SCALE.PRODUCT_ID ");
 				sql.append(" WHERE PRODUCT.CATEGORY = 3 AND SCALE.STATUS <> 1 AND  SCALE.STATUS <> 0 ");
+				sql.append(" ORDER BY begin_time desc ");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
@@ -167,6 +169,7 @@ public class ScaleAction extends BaseAction<Scale>{
 				sql.append(" SELECT  SCALE.* FROM SCALE  ");
 				sql.append(" INNER JOIN PRODUCT ON PRODUCT.ID = SCALE.PRODUCT_ID ");
 				sql.append(" WHERE PRODUCT.CATEGORY = 1 AND SCALE.STATUS <> 1 AND  SCALE.STATUS <> 0 ");
+				sql.append(" ORDER BY begin_time desc ");
 				sql.append(" LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber));
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;

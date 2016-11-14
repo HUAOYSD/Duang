@@ -704,7 +704,6 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			if(success){
 				//修改用户信息
 				MemberInfo memberInfo = service.findEntity("id", userIdIdentity);
-				memberInfo.setPhone(mobileNo);
 				memberInfo.setRealName(name);
 				memberInfo.setPayType(payType);
 				memberInfo.setUserId(userId);

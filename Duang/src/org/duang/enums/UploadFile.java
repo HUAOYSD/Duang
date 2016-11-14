@@ -214,7 +214,7 @@ public enum UploadFile {
 		@Override
 		public String getVal(String userId) {
 			if(DataUtils.notEmpty(userId)){
-				return "\\"+userId+"\\head";
+				return userId+"\\head";
 			}else{
 				return "\\head";
 			}

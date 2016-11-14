@@ -125,10 +125,11 @@ public class SMSUtils {
 						params.add(new BasicNameValuePair("ac", AC));
 						params.add(new BasicNameValuePair("authkey", AUTHKEY));
 						params.add(new BasicNameValuePair("cgid", CGID));
-						String c = new String(content.getBytes(),"GBK");
+						System.out.println("aaaaaaa");
+						String c = new String(content.getBytes(),"gbk");
 						params.add(new BasicNameValuePair("c", c));
 						params.add(new BasicNameValuePair("m", mobile));
-						post.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
+						post.setEntity(new UrlEncodedFormEntity(params, "gbk"));
 						HttpResponse httpResponse = httpclient.execute(post);
 						String result = null;
 						if (httpResponse.getStatusLine().getStatusCode() == 200){
