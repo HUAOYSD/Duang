@@ -259,13 +259,14 @@ public class AwardAction extends BaseAction<Award>{
 			    		}
 			    	} 
 			    	if(!isTrue){
-			    		LoggerUtils.warn("\t\n-----------memberId:"+memberId+",抽奖号码："+winCode+"没有中奖，回调的参数有误",this.getClass());
+			    		//保存用户中奖记录
+		    	    	MemberAward memberAward = new MemberAward(DataUtils.randomUUID(), memberId, 
+		    	    			"用积分抽奖，中奖体验金，未中奖", null, awardActivity.getUseScore(), new Date(),String.valueOf(If.If0.getVal()),winCode,awardActivityLevel.getOnceNum());
+		    	    	memberAwardService.saveEntity(memberAward);
+			    		
 			    	}
 		    	}else {
-					//保存用户中奖记录
-	    	    	MemberAward memberAward = new MemberAward(DataUtils.randomUUID(), memberId, 
-	    	    			"用积分抽奖，中奖体验金，未中奖", null, awardActivity.getUseScore(), new Date(),String.valueOf(If.If0.getVal()),winCode,awardActivityLevel.getOnceNum());
-	    	    	memberAwardService.saveEntity(memberAward);
+		    		LoggerUtils.warn("\t\n-----------memberId:"+memberId+",抽奖号码："+winCode+"没有中奖，回调的参数有误",this.getClass());
 				}
 			}
 		}catch(Exception e) {
