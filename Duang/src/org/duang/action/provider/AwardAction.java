@@ -135,6 +135,7 @@ public class AwardAction extends BaseAction<Award>{
 						    		}
 						    	}
 						    	if(!success){
+						    		success=true;
 						    		msg="本次未抽中，继续加油哦";
 						    	}
 						    	lotsNum = randomNum;
