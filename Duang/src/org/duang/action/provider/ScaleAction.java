@@ -348,6 +348,7 @@ public class ScaleAction extends BaseAction<Scale>{
 					//标的购买人数
 					int investMemberNum = investListService.count("scale.id", s.getId());
 					resultMap.put("investMemberNum", investMemberNum);
+					resultMap.put("minMoney", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
 				}
 				Product p = s.getProduct();
 				if (p != null) {
