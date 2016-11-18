@@ -13,18 +13,8 @@
 <link rel="stylesheet" type="text/css" href="<%=path%>/js/bootstrap/css/bootstrap.min.css">
 <script type="text/javascript" src="<%=path%>/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="<%=path%>/js/interactive/js/jquery.interactive_bg.js"></script>
 <script type="text/javascript" src="<%=path%>/js/util.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-		$(".bg").interactive_bg();
-		$("#btns").interactive_bg({
-			strength: 10,
-			scale: 1.15,
-			contain: false,
-			wrapContent: true
-		});
-	});
 </script>
 <style>
 	.bg {
@@ -32,9 +22,10 @@
 		min-height: 100% !important;
 		width: 100%;
 		z-index: 0;
+		background-color: #f1f1f1;
 	}
 	.background-color2 {
-		background: #000000;
+		background: #fff;
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -44,20 +35,22 @@
 	}
 	#register-info-describe{
 		position: absolute;
-		top: 15%;
+		top: 240px;
 		width:100%;
 		font-size:18px;
 		font-family: 'Microsoft YaHei' , Helvetica, Arial, sans-serif;
 		letter-spacing:1.5px;
+		margin-left:-15px;
 	}
 	#register-info{
 		background-color:#fff;
-		width:400px;
-		height:420px;
-		margin-top:40px;
+		width:385px;
+		height:280px;
 		-webkit-border-radius: 10px; /* 只支持webkit内核的浏览器 */
 		border-radius: 10px; /* 只支持IE内核的浏览器（IE>=7) */
 		-moz-border-radius : 10px; /* 只支持Mozilla内核的浏览器 */
+		border: 1px solid #dedede;
+    	border-radius: 2px;
 	}
 
 	#register-info .info{
@@ -92,21 +85,53 @@
 		padding-left:0px;
 		padding-right:0px;
 	}
+	.branding{
+		background: url(resources/image/logo.png) no-repeat center top;
+		height: 70px;
+    	margin-bottom: 15px;
+    	margin-left:-15px;
+    	margin-top:70px;
+    	background-size: 68px 68px;
+    	font-style: normal;
+    	font-weight: 300;
+    	text-align: center;
+    	color: #aaa;
+    	-webkit-font-smoothing: antialiased;
+	}
+	.heading h1{
+	    font-size: 32px;
+	    line-height: 36px;
+	    margin-bottom: 6px;
+	    color: #6a6a6a;
+	    margin: 0 0 1.33333333rem;
+	    font-family: caecilia,Times,serif;
+    	font-style: normal;
+    	font-weight: 300;
+    	-webkit-font-smoothing: antialiased;
+    	display: block;
+    	-webkit-margin-before: 0.67em;
+    	-webkit-margin-after: 0.67em;
+    	-webkit-margin-start: 0px;
+    	-webkit-margin-end: 0px;
+    	margin-left:-15px;
+	}
 </style>
 </head>
 <body>
-	<div class="container bg" id="container" data-ibg-bg="js/interactive/123.jpg">
+	<div class="container bg" id="container">
 		<div class="background-color2"></div>
+		<div class="branding"></div>
+		<div class="col-lg-12 heading" align="center">
+			<h1>登录</h1>
+		</div>
 		<div id="register-info-describe" align="center">
 			<div id="register-info">
-				<div id="title" align="left">
-					<h3>登录</h3>
-					<hr>
-				</div>
-				<div class="info" align="left">
+				<div class="info" align="center" style="margin-top:20px;">
 					<form action="<%=path %>/sys!login.do" method="post" id="loginForm">
 						<div class="col-lg-12">
-							<label class="control-label">用户名</label>&nbsp;&nbsp;
+							<div class="form-group">
+								<input style="height:40px;width:320px;" type="text" class="form-control" name="name" id="name" placeholder="用户名">
+							</div>
 							<c:choose>
 								<c:when test="${msg eq null }">
 									<label id="nameMsg" style="display: none;" class="text-danger error-text">（用户名不能为空）</label>
@@ -116,30 +141,28 @@
 								</c:otherwise>
 							</c:choose>
 						</div>
-						<div class="form-group">
-							<input style="height:40px;" type="text" class="form-control" name="name" id="name" placeholder="用户名">
-						</div>
 						<div class="col-lg-12">
-							<label class="control-label">密码</label>&nbsp;&nbsp;<label id="pwdMsg" style="display: none;" class="text-danger error-text">（密码不能为空）</label>
-						</div>
-						<div class="form-group">
-							<input style="height:40px;" type="password" class="form-control" name="password" id="password" placeholder="请输入6-12位数字或字母">
-						</div>
-						<div class="col-lg-12">
-								<label class="control-label">验证码</label>&nbsp;&nbsp;<label id="vcMsg" style="display: none;" class="text-danger error-text">（验证码不能为空）</label>
-						</div>
-						<div class="col-lg-6" style="padding-right: 0px;padding-left: 0px;">
 							<div class="form-group">
-								<input style="height:40px;" type="text" class="form-control" name="validateCode" id="validateCode" placeholder="验证码">
+								<input style="height:40px;width:320px;" type="password" class="form-control" name="password" id="password" placeholder="密码">
 							</div>
+							<label id="pwdMsg" style="display: none;" class="text-danger error-text">（密码不能为空）</label>
 						</div>
-						<div class="col-lg-4" style="padding:0px 8px 0px 8px;">
-							<img  src="<%=path %>/sys!getValidateCode.do" id="validateCodeImg" name="validateCode" onclick="getCheckCode()"></img>
+						
+						<div class="col-lg-12">
+							<div class="col-lg-5" style="padding-right: 0px;padding-left: 0px;">
+								<div class="form-group">
+									<input style="height:40px;width:118px;" type="text" class="form-control" name="validateCode" id="validateCode" placeholder="验证码">
+								</div>
+							</div>
+							<div class="col-lg-4" style="padding:0px 8px 0px 8px;">
+								<img  src="<%=path %>/sys!getValidateCode.do" id="validateCodeImg" name="validateCode" onclick="getCheckCode()"></img>
+							</div>
+							<div class="col-lg-3" style="padding:8px 0px 0px 10px;">
+								<a href="javascript:void(0)" onclick="getCheckCode()" style="text-decoration:none;font-size:13px;">&nbsp;换一张</a>
+							</div>	
+							<label id="vcMsg" style="display: none;" class="text-danger error-text">（验证码不能为空）</label>
 						</div>
-						<div class="col-lg-2" style="padding:8px 0px 0px 10px;">
-							<a href="javascript:void(0)" onclick="getCheckCode()" style="text-decoration:none;font-size:13px;">换一张</a>
-						</div>			
-						<div class="col-lg-12 col-md-12 col-xs-12" style="padding-top:15px;padding-left:0px;padding-right:0px;">
+						<div class="col-lg-12" style="padding-top:15px;padding-left:0px;padding-right:0px;">
 							<input style="height:40px;width:100%;" type="button" onclick="return loginSubmit();" class="btn btn-success" value="登录">
 						</div>
 					</form>

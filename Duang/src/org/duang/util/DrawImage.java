@@ -68,7 +68,7 @@ public class DrawImage{
      */
     private void setBorder(Graphics g) {
         // 设置边框颜色
-        g.setColor(Color.BLUE);
+        g.setColor(Color.LIGHT_GRAY);
         // 边框区域
         g.drawRect(1, 1, WIDTH - 2, HEIGHT - 2);
     }
@@ -79,7 +79,7 @@ public class DrawImage{
      */
     private void drawRandomLine(Graphics g) {
         // 设置颜色
-        g.setColor(Color.GREEN);
+        g.setColor(Color.LIGHT_GRAY);
         // 设置线条个数并画线
         for (int i = 0; i < 5; i++) {
             int x1 = new Random().nextInt(WIDTH);
@@ -100,7 +100,7 @@ public class DrawImage{
      */
     private String drawRandomNum(Graphics2D g,String... createTypeFlag) {
         // 设置颜色
-        g.setColor(Color.RED);
+        g.setColor(Color.DARK_GRAY);
         // 设置字体
         g.setFont(new Font("宋体", Font.BOLD, 20));
         //常用的中国汉字
