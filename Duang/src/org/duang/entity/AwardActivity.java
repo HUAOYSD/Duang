@@ -1,8 +1,9 @@
 package org.duang.entity;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ public class AwardActivity implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id;
 	private String title;
-	private int repeat;
+	private int isRepeat;
 	private int repeatNum;
 	private Date startTime;
 	private Date endTime;
@@ -46,12 +47,12 @@ public class AwardActivity implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AwardActivity(String id, String code, String title, int repeat, int repeatNum, Date startTime, Date endTime, 
+	public AwardActivity(String id, String code, String title, int isRepeat, int repeatNum, Date startTime, Date endTime, 
 			Date createTime, int nowNumber, int winNumber, Set<AwardActivityLevel> awardActivityLevels,int useScore) {
 		this.id = id;
 		this.title = title;
 		this.code = code;
-		this.repeat = repeat;
+		this.isRepeat = isRepeat;
 		this.repeatNum = repeatNum;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -91,13 +92,13 @@ public class AwardActivity implements java.io.Serializable {
 		this.code = code;
 	}
 
-	@Column(name = "repeat")
-	public int getRepeat() {
-		return this.repeat;
+	@Column(name = "isRepeat")
+	public int getIsRepeat() {
+		return this.isRepeat;
 	}
 
-	public void setRepeat(int repeat) {
-		this.repeat = repeat;
+	public void setIsRepeat(int isRepeat) {
+		this.isRepeat = isRepeat;
 	}
 
 	@Column(name = "repeatNum")

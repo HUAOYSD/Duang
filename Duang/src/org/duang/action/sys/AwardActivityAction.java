@@ -1,5 +1,6 @@
 package org.duang.action.sys;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +18,10 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.Award;
-import org.duang.enums.If;
-import org.duang.service.AwardService;
+import org.duang.entity.AwardActivity;
+import org.duang.service.AwardActivityService;
 import org.duang.util.DataUtils;
+import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -33,20 +34,20 @@ import org.springframework.context.annotation.ScopedProxyMode;
  */
 @Scope(value = "prototype", proxyMode = ScopedProxyMode.NO)
 @Namespaces({ @Namespace("/") })
-@Action(value = "award")
+@Action(value = "awardActivity")
 @ParentPackage("sys")
 @Results(value = { 
-			@Result(name = "list", type = "dispatcher", location = "WEB-INF/page/sys/award/awardList.jsp"),
-			@Result(name = ResultPath.ADD, type = "dispatcher", location = "WEB-INF/page/sys/award/addAward.jsp"),
-			@Result(name = ResultPath.EDIT, type = "dispatcher", location = "WEB-INF/page/sys/award/editAward.jsp"),
+			@Result(name = "list", type = "dispatcher", location = "WEB-INF/page/sys/award/awardActivityList.jsp"),
+			@Result(name = ResultPath.ADD, type = "dispatcher", location = "WEB-INF/page/sys/award/addAwardActivity.jsp"),
+			@Result(name = ResultPath.EDIT, type = "dispatcher", location = "WEB-INF/page/sys/award/editAwardActivity.jsp"),
 			@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") })
-public class AwardAction extends BaseAction<Award> {
+public class AwardActivityAction extends BaseAction<AwardActivity> {
 	private static final long serialVersionUID = 1L;
 	
-	private AwardService awardService;
+	private AwardActivityService awardActivityService;
 	@Resource
-	public void setAwardService(AwardService awardService) {
-		this.awardService = awardService;
+	public void setAwardActivityService(AwardActivityService awardActivityService) {
+		this.awardActivityService = awardActivityService;
 	}
 
 	/**
@@ -73,24 +74,25 @@ public class AwardAction extends BaseAction<Award> {
 	 * @return: void      
 	 * @throws
 	 */
-	public void queryAllAward() {
+	public void queryAll() {
 		try {
-			LoggerUtils.info("\t\n-----------查询所有的奖品--------------------", this.getClass());
-			List<Award> list = new ArrayList<Award>();
-			list = awardService.queryAllEntity(null);
+			LoggerUtils.info("\t\n-----------查询所有的活动--------------------", this.getClass());
+			List<AwardActivity> list = new ArrayList<AwardActivity>();
+			list = awardActivityService.queryAllEntity(null);
 			if (list != null && list.size() > 0) {
 				jsonObject.put("result", true);
 				jsonObject.put("rows", fillDataObjectList(list));
+				jsonObject.put("total", awardActivityService.count());
 			} else {
 				jsonObject.put("rows", new JSONArray());
 				jsonObject.put("total", 0);
 				jsonObject.put("result", false);
-				jsonObject.put("msg", "还没添加任何的奖品！");
+				jsonObject.put("msg", "还没有发起任何的活动！");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("奖品queryAllAward-----queryAllAward查询错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("奖品queryAllAward-----queryAllAward查询错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("奖品活动 queryAll---查询错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("奖品活动 queryAll---查询错误：" + e.getLocalizedMessage(), this.getClass());
 		} finally {
 			printJsonResult();
 		}
@@ -107,62 +109,35 @@ public class AwardAction extends BaseAction<Award> {
 	 * @return: List<Map<String,Object>>      
 	 * @throws
 	 */
-	private List<Map<String, Object>> fillDataObjectList(List<Award> list) {
-		LoggerUtils.info("\t\n-------------奖品的数量："+list.size(), this.getClass());
+	private List<Map<String, Object>> fillDataObjectList(List<AwardActivity> list) {
+		LoggerUtils.info("\t\n-------------活动的数量："+list.size(), this.getClass());
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		try {
-			for (Award award : list) {
+			for (AwardActivity awardActivity : list) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				//客户的基本信息
-				map.put("id", award.getId());
-				map.put("awardName", award.getName());
-				map.put("state", award.getState());
-				map.put("description", award.getDescription());
+				map.put("id", awardActivity.getId());
+				map.put("activity_title", awardActivity.getTitle());
+				map.put("repeat", awardActivity.getIsRepeat());
+				map.put("repeatNum", awardActivity.getRepeatNum());
+				map.put("startTime", DateUtils.getTimeStamp(awardActivity.getStartTime()));
+				map.put("endTime", DateUtils.getTimeStamp(awardActivity.getEndTime()));
+				map.put("createTime", DateUtils.getTimeStamp(awardActivity.getCreateTime()));
+				map.put("nowNumber", awardActivity.getNowNumber());
+				map.put("winNumber", awardActivity.getWinNumber());
+				map.put("code", awardActivity.getCode());
 				listMap.add(map);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("奖品封装错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("奖品封装错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("奖品活动封装错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("奖品活动错误：" + e.getLocalizedMessage(), this.getClass());
 		}
 		return listMap;
 	}
 	
-	
-	
 	/**
-	 * 
-	 * @Title: getAdInfoById   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author LiYonghui    
-	 * @date 2016年11月14日 下午5:27:18
-	 * @return: void      
-	 * @throws
-	 */
-	public void getAdInfoById() {
-		try {
-			if (entity != null && DataUtils.notEmpty(entity.getId())) {
-				Award award = awardService.findById(entity.getId());
-				if (award != null) {
-					//客户的基本信息
-					jsonObject.put("id", award.getId());
-					jsonObject.put("awardName", award.getName());
-					jsonObject.put("state", award.getState());
-					jsonObject.put("description", award.getDescription());
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("奖品ACTION，方法getAdInfoById错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("奖品ACTION，方法getAdInfoById错误：" + e.getLocalizedMessage(), this.getClass());
-		} finally {
-			printJsonResult();
-		}
-	}
-	
-	/**
-	 * 保存奖品
+	 * 保存活动
 	 * @Title: save   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
@@ -176,8 +151,10 @@ public class AwardAction extends BaseAction<Award> {
 			boolean result = false;
 			if(entity != null){
 				entity.setId(DataUtils.randomUUID());
-				entity.setState(String.valueOf(If.If1.getVal()));
-				result = awardService.saveEntity(entity);
+				entity.setCreateTime(new Date());
+				entity.setNowNumber(0);
+				entity.setWinNumber(0);
+				result = awardActivityService.saveEntity(entity);
 				if(!result){
 					jsonObject.put("success", false);
 					jsonObject.put("msg", "添加失败！");
@@ -191,9 +168,9 @@ public class AwardAction extends BaseAction<Award> {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("奖品ACTION保存：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("奖品ACTION保存：" + e.getLocalizedMessage(), this.getClass());
-			jsonObject.put("result", false);
+			LoggerUtils.error("奖品ACTION查询保存：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("奖品ACTION查询保存：" + e.getLocalizedMessage(), this.getClass());
+			jsonObject.put("success", false);
 			jsonObject.put("msg", "添加失败！");
 		} finally {
 			printJsonResult();
@@ -215,7 +192,7 @@ public class AwardAction extends BaseAction<Award> {
 		try {
 			boolean result = false;
 			if(entity != null){
-				result = awardService.updateEntity(entity);
+				result = awardActivityService.updateEntity(entity);
 				if(!result){
 					jsonObject.put("success", false);
 					jsonObject.put("msg", "修改失败！");
@@ -231,44 +208,13 @@ public class AwardAction extends BaseAction<Award> {
 			e.printStackTrace();
 			LoggerUtils.error("奖品ACTION修改错误：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("奖品ACTION修改错误：" + e.getLocalizedMessage(), this.getClass());
-			jsonObject.put("result", false);
+			jsonObject.put("success", false);
 			jsonObject.put("msg", "修改失败！");
 		} finally {
 			printJsonResult();
 		}
 	}
 	
-    /**
-     * 获取可使用的奖品给下拉框选择
-     * @Title: queryAwardToCheckbox   
-     * @Description: TODO(这里用一句话描述这个方法的作用)   
-     * @param:   
-     * @author LiYonghui    
-     * @date 2016年11月17日 下午7:23:38
-     * @return: void      
-     * @throws
-     */
-	public void queryAwardToCheckbox() {
-		String json = "";
-		try {
-			List<Award> list = awardService.queryAllEntity(null);
-			for(Award award : list){
-				Map<String,Object> map = new HashMap<String,Object>();
-				map.put("id", award.getId());
-				map.put("text", award.getName());
-				if(award.getId().equals(entity.getId())){
-					map.put("selected", true);
-				}
-				listMap.add(map);
-			}
-			json = JSONArray.fromObject(listMap).toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			printJsonResult(json);
-		}
-	}
-
 	/**   
 	 * 页面跳转
 	 * @Title: openDialog   
@@ -286,9 +232,12 @@ public class AwardAction extends BaseAction<Award> {
 				return ResultPath.ADD;
 			} else if(ResultPath.EDIT.equals(path)) {
 				if (entity != null && DataUtils.notEmpty(entity.getId())) {
-					entity = awardService.findById(entity.getId());
+					entity = awardActivityService.findById(entity.getId());
 				}
 				return ResultPath.EDIT;
+			} else if ("loanlistinfo".equals(path)) {
+				getRequest().setAttribute("scaleid", getRequest().getParameter("scaleid"));
+				return "loanlistinfo";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -297,4 +246,6 @@ public class AwardAction extends BaseAction<Award> {
 		}
 		return ResultPath.LIST;
 	}
+	
+	
 }

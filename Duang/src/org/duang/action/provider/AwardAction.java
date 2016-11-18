@@ -20,7 +20,6 @@ import org.duang.entity.AwardActivityLevel;
 import org.duang.entity.MemberAward;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.If;
-import org.duang.enums.award.AwardActivityType;
 import org.duang.service.AwardActivityLevelService;
 import org.duang.service.AwardActivityService;
 import org.duang.service.MemberAwardService;
@@ -83,13 +82,15 @@ public class AwardAction extends BaseAction<Award>{
 		boolean success = false;
 		try {
 			String memberInfo_id = getRequest().getParameter("memberId");
-			if(DataUtils.isEmpty(memberInfo_id)){
+			String activityCode = getRequest().getParameter("activityCode");
+			if(DataUtils.isEmpty(memberInfo_id) || DataUtils.isEmpty(activityCode)){
 				msg = "缺少参数";
 			}else {
 				
 				int lotsNum = -1;
+				String awardActivityLevelId = "";
 				//查询体验金活动
-				AwardActivity awardActivity = awardActivityService.findEntity("code", AwardActivityType.A1024.getVal());
+				AwardActivity awardActivity = awardActivityService.findEntity("code", activityCode);
 				//减去积分
 				MemberInfo memberInfo = memberInfoService.findById(memberInfo_id);
 				Date enDate = awardActivity.getEndTime();
@@ -102,46 +103,52 @@ public class AwardAction extends BaseAction<Award>{
 						 * 如果为0，则判断目前用户的抽奖次数
 						 * 如果为1，则判断可重复的次数是否为0（无限次），否则判断目前用户的抽奖次数
 						 */
-						if(isDrawLots(awardActivity.getRepeat(),awardActivity.getRepeatNum(),memberInfo_id)){
+						if(isDrawLots(awardActivity.getIsRepeat(),awardActivity.getRepeatNum(),memberInfo_id)){
 							//更新活动的抽奖次数
 							awardActivityService.executeSql("UPDATE award_activity SET nowNumber = "+(awardActivity.getNowNumber()+1)+" WHERE id = '"+awardActivity.getId()+"';");
 							//用户的积分减少
 							memberInfo.setUseableScore(memberInfo.getUseableScore()-awardActivity.getUseScore());
 							memberInfoService.updateEntity(memberInfo);
 							//根据活动获取抽奖级别
-							AwardActivityLevel awardActivityLevel = awardActivityLevelService.findEntity("awardAtivity.id", awardActivity.getId());
-							//中奖数字
-					    	List<String> winCodes = Arrays.asList(awardActivityLevel.getWinCode().split(","));
-					    	//判断是否是指定中奖用户
-							if(DataUtils.notEmpty(awardActivityLevel.getUserId()) && memberInfo_id.equals(awardActivityLevel.getUserId())){
-								msg="恭喜您！抽中"+awardActivityLevel.getOnceNum()+"元体验金";
-								lotsNum = DataUtils.str2int(winCodes.get(0));
-							}else{
-								//奖品数量
-								int awardNum = awardActivityLevel.getAwardNum();
-								//中奖率
-								int odds = awardActivityLevel.getOdds();
-								//生成一个awardNum*odds以内的随机正整数，就是用户的抽奖数字
-								Random rand =new Random();
-						    	int randomNum = rand.nextInt(awardNum*odds);
-						    	//比较是否和中奖数字中吻合
-						    	Iterator<String> winCodeIter = winCodes.iterator();  
-						    	while(winCodeIter.hasNext()){  
-						    	    String winCode = winCodeIter.next();  
-						    	    if(randomNum==DataUtils.str2int(winCode)){
-						    	    	success=true;
-						    	    	msg="恭喜您！抽中"+awardActivityLevel.getOnceNum()+"元体验金";
-						    	    	break;
-						    		}
-						    	}
-						    	if(!success){
-						    		success=true;
-						    		msg="本次未抽中，继续加油哦";
-						    	}
-						    	lotsNum = randomNum;
+							List<AwardActivityLevel> awardActivityLevelList = awardActivityLevelService.queryEntity("awardAtivity.id", awardActivity.getId(),null,null);
+							for(AwardActivityLevel awardActivityLevel : awardActivityLevelList){
+								awardActivityLevelId = awardActivityLevel.getId();
+								//中奖数字
+						    	List<String> winCodes = Arrays.asList(awardActivityLevel.getWinCode().split(","));
+						    	//判断是否是指定中奖用户
+								if(DataUtils.notEmpty(awardActivityLevel.getUserId()) && memberInfo_id.equals(awardActivityLevel.getUserId())){
+									msg="恭喜您！抽中"+awardActivityLevel.getOnceNum()+"个"+awardActivityLevel.getAward().getName();
+									lotsNum = DataUtils.str2int(winCodes.get(0));
+								}else{
+									//奖品数量
+									int awardNum = awardActivityLevel.getAwardNum();
+									//中奖率
+									int odds = awardActivityLevel.getOdds();
+									//生成一个awardNum*odds以内的随机正整数，就是用户的抽奖数字
+									Random rand =new Random();
+							    	int randomNum = rand.nextInt(awardNum*odds);
+							    	//比较是否和中奖数字中吻合
+							    	Iterator<String> winCodeIter = winCodes.iterator(); 
+							    	lotsNum = randomNum;
+							    	while(winCodeIter.hasNext()){  
+							    	    String winCode = winCodeIter.next();  
+							    	    if(randomNum==DataUtils.str2int(winCode)){
+							    	    	success=true;
+							    	    	msg="恭喜您！抽中"+awardActivityLevel.getOnceNum()+"个"+awardActivityLevel.getAward().getName();
+							    	    	break;
+							    		}
+							    	}
+							    	if(success){
+							    		break;
+							    	}
+								}
 							}
+					    	if(!success){
+					    		success=true;
+					    		msg="本次未抽中，继续加油哦";
+					    	}
 							jsonObject.put("lotsNum", lotsNum);
-			    	    	jsonObject.put("awardActivityLevelId", awardActivityLevel.getId());
+							jsonObject.put("awardActivityLevelId", awardActivityLevelId);
 			    	    	jsonObject.put("awardActivityId", awardActivity.getId());
 							
 						}else{

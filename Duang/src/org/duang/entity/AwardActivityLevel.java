@@ -29,6 +29,7 @@ public class AwardActivityLevel implements java.io.Serializable {
 	private int winNumber;
 	private int onceNum;
 	private String winCode;
+	private String allWinCode;
 	// Constructors
 
 	/** default constructor */
@@ -95,7 +96,7 @@ public class AwardActivityLevel implements java.io.Serializable {
 		this.title = title;
 	}
 
-	@Column(name = "winCode")
+	@Column(name = "plus_winCode")
 	public String getWinCode() {
 		return this.winCode;
 	}
@@ -148,5 +149,13 @@ public class AwardActivityLevel implements java.io.Serializable {
 	public void setWinNumber(int winNumber) {
 		this.winNumber = winNumber;
 	}
+	
+	@Column(name = "all_winCode")
+	public String getAllWinCode() {
+		return this.allWinCode;
+	}
 
+	public void setAllWinCode(String allWinCode) {
+		this.allWinCode = allWinCode;
+	}
 }
