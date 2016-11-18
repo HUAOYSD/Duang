@@ -16,6 +16,9 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.FriendsNews;
 import org.duang.entity.FriendsNewsImg;
+import org.duang.entity.MemberInfo;
+import org.duang.enums.If;
+import org.duang.enums.UploadFile;
 import org.duang.service.FriendsNewsImgService;
 import org.duang.service.FriendsNewsService;
 import org.duang.service.MemberInfoService;
@@ -49,6 +52,12 @@ public class FriendsNewsAction extends BaseAction<FriendsNews>{
 	@Resource
 	public void setFriendsNewsImgService(FriendsNewsImgService friendsNewsImgService) {
 		this.friendsNewsImgService = friendsNewsImgService;
+	}
+	
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
 	}
 	
 	/**
@@ -85,13 +94,54 @@ public class FriendsNewsAction extends BaseAction<FriendsNews>{
 			if(DataUtils.notEmpty(num) && DataUtils.notEmpty(count) && DataUtils.notEmpty(token) && 
 					DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))){
 				int countNumber = DataUtils.str2int(count), numNumber = DataUtils.str2int(num);
-				String sql = "SELECT fn.id, fn.content, fn.createtime, mi.real_name, mi.nickname, mi.user_img "+
+				String sql = "SELECT fn.id, fn.content, fn.createtime, mi.real_name, mi.nickname, mi.user_img"+
 							 " FROM friends_news fn LEFT JOIN member_info mi ON mi.id = fn.member_id WHERE fn.member_id IN ( "+
-							 " SELECT target FROM friends f WHERE f.self = '"+id+"' ) ORDER BY fn.createtime "+
+							 " SELECT target FROM friends f WHERE f.self = '"+id+"' ) or fn.member_id='"+id+"' ORDER BY fn.createtime desc "+
 							 " LIMIT "+ ((countNumber - 1) * numNumber)  +", "+ (countNumber * numNumber);
 				List<?> list = service.queryBySQL(sql, null, null, false);
 				success = true;
 				jsonObject.put("result", fillDataObjectList(list));
+			}else {
+				msg="参数无效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("NewsInformationAction——queryNews方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("NewsInformationAction——queryNews方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	/**
+	 * 添加财友圈
+	 * @Title: addFriendsNews   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月17日 下午2:44:30
+	 * @return: void      
+	 * @throws
+	 */
+	public void addFriendsNews(){
+		boolean success = false;
+		try {
+			//用户id
+			String token = getRequest().getParameter("token");
+			String id="";
+			if(DataUtils.notEmpty(entity.getContent())&&DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,memberInfoService).getMainField(token))){
+				entity.setContent(entity.getContent());
+				entity.setId(DataUtils.randomUUID());
+				entity.setMemberInfo(new MemberInfo(id));
+				entity.setCreatetime(new Date());
+				entity.setState(If.If1.getVal());
+				success = service.addFriendsNewsAndImg(entity);
+				if(!success){
+					msg="发送失败，请检查网络";
+					LoggerUtils.error("动态发送失败"+new Date(), this.getClass());
+				}
 			}else {
 				msg="参数无效";
 			}
@@ -128,13 +178,13 @@ public class FriendsNewsAction extends BaseAction<FriendsNews>{
 				map.put("createtime", DateUtils.date2Str((Date)objArray[2], "yyyy-MM-dd HH:mm:ss"));
 				map.put("real_name", objArray[3]);
 				map.put("nickname", objArray[4]);
-				map.put("user_img", objArray[5]);
+				map.put("user_img",  UploadFile.HEAD.appPath()+entity.getId()+"/head/"+objArray[5]);
 				String sql = "SELECT * from friends_news_img where friends_news_id='"+objArray[0]+"' order by order_index";
 				List<FriendsNewsImg> friendsNewsImgList = friendsNewsImgService.queryBySQL(sql, null, null, true);
 				List<String> imgList = new ArrayList<String>();
 				for(int j = 0;j<friendsNewsImgList.size(); j++){
 					FriendsNewsImg img = friendsNewsImgList.get(j);
-					imgList.add(img.getImgPath());
+					imgList.add(img.getImgPath().replace("\\", "/"));
 				}
 				map.put("imgs", imgList);
 				listMap.add(map);

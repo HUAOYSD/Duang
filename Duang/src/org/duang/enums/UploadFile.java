@@ -226,6 +226,33 @@ public enum UploadFile {
 		}
 
 	},
+	//及时分享朋友圈
+	MOMENTS{
+		@Override
+		public String getVal() {
+			return "\\moments";
+		}
+
+		@Override
+		public String toString() {
+			return "财友圈";
+		}
+
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\moments";
+			}else{
+				return "\\moments";
+			}
+		}
+
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+
+	},
 	//广告
 	AD{
 		@Override

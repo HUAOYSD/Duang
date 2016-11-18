@@ -1,5 +1,4 @@
 package org.duang.action.provider;
-import java.net.URLEncoder;
 import java.util.Date;
 
 import javax.annotation.Resource;

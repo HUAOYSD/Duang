@@ -2,7 +2,7 @@ package org.duang.entity;
 
 import java.io.File;
 
-public class FileUpload {
+public class FileUpload{
 	//文件上传
 	private File file;
 	private String fileFileName;
@@ -39,4 +39,5 @@ public class FileUpload {
 	public void setPath(String path) {
 		this.path = path;
 	}
+	
 }

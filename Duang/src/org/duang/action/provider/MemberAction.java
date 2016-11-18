@@ -34,7 +34,6 @@ import org.duang.service.InvestListService;
 import org.duang.service.MemberInfoService;
 import org.duang.service.RequestFlowService;
 import org.duang.service.SMSVerificationCodeService;
-import org.duang.service.ScaleService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -924,9 +923,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 					if(DataUtils.notEmpty(memberInfo.getRealName())&& DataUtils.notEmpty(memberInfo.getIdCard())){
 						Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
 						jsonObject = queryMemberAccount(properties,memberInfo.getId(),memberInfo.getRealName(),memberInfo.getIdCard());
-						if(jsonObject.get("result").equals(ResultCode.SUCCESS.getVal())){
-							success=true;
-						}
+						success=true;
 					}else{
 						jsonObject.put("balance", 0);
 						jsonObject.put("withdrawAbleBalance", 0);
@@ -934,10 +931,10 @@ public class MemberAction extends BaseAction<MemberInfo>{
 						success=true;
 					}
 				}else {
-					msg="未查到记录";
+					jsonObject.put("msg", "未查到记录");
 				}
 			}else{
-				msg="数据丢失，请重新登录";
+				jsonObject.put("msg", "数据丢失，请重新登录");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -945,7 +942,6 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			LoggerUtils.error("MemberAction——queryMemberAccount方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		} finally {
-			jsonObject.put("msg", msg);
 			jsonObject.put("success", success);
 			printJsonResult();
 		}
@@ -1047,7 +1043,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				jsonObject.put("idNumber", back_idNumber);
 				jsonObject.put("mobileNo", jsonObjectData.get("mobileNo"));
 				jsonObject.put("email", jsonObjectData.get("email"));
-				jsonObject.put("result", back_result);
+				jsonObject.put("result", true);
 				jsonObject.put("balance", back_balance);
 				jsonObject.put("withdrawAbleBalance", back_withdrawAbleBalance);
 				jsonObject.put("frozenBalance", back_frozenBalance);
@@ -1059,7 +1055,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		}else{
 			jsonObject.put("result", false);
 			jsonObject.put("msg", DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)));
-			LoggerUtils.error("流程号："+requestId+"------查询账户信息 失败,原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)),this.getClass());
+			LoggerUtils.error("流程号："+requestId+"------查询账户信息 失败,原因 错误码"+resultCallbace+"===="+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)),this.getClass());
 		}
 		return jsonObject;
 	}
@@ -1258,7 +1254,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 					}
 					fullpath+=fileName;
 					jsonObject.put("path", UploadFile.HEAD.appPath()+memberInfo.getId()+"/head/"+fileName);
-					success = ImageString.generateImage(imgdata, fullpath);
+					success = ImageString.generateImageBase64(imgdata, fullpath);
 					LoggerUtils.info("userId:"+id+"----------------上传头像："+success, this.getClass());
 					if(success){
 						memberInfo.setUserImg(fileName);
@@ -1279,6 +1275,4 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", msg);
 		printJsonResult();
 	}
-
-
 }

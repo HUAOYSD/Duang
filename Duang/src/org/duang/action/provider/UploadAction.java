@@ -112,7 +112,7 @@ public class UploadAction extends BaseAction<FileUpload>{
 				ServletFileUpload upload = initUpload(num);
 				//获取文件
 				@SuppressWarnings("unchecked")
-				List<FileUpload> list = (List<FileUpload>)upload.parseRequest(getRequest());
+				List<FileUpload> list = (List)upload.parseRequest(getRequest());
 				for(FileUpload fileUpload : list){
 					entity = fileUpload;
 				    //设置文件名称
@@ -164,7 +164,7 @@ public class UploadAction extends BaseAction<FileUpload>{
 				ServletFileUpload upload = initUpload(num);
 				//获取文件
 				@SuppressWarnings("unchecked")
-				List<FileUpload> list = (List<FileUpload>)upload.parseRequest(getRequest());
+				List<FileUpload> list = (List)upload.parseRequest(getRequest());
 				for(FileUpload fileUpload : list){
 					entity = fileUpload;
 				    //设置文件名称

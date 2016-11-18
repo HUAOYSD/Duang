@@ -61,7 +61,7 @@ public class FriendsAction extends BaseAction<Friends>{
 		this.sysMemberInfoService = sysMemberInfoService;
 	}
 	/**   
-	 * 查询我关注的
+	 * 查询我关注的  
 	 * @Title: queryMyStars   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
@@ -81,6 +81,7 @@ public class FriendsAction extends BaseAction<Friends>{
 					for (Friends friends : list) {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", friends.getId());
+						//只需要展示我关注的就行。进行取消关注
 						map.put("together", friends.getTogether());
 						MemberInfo memberInfo = friends.getMemberInfoByTarget();
 						map.put("friendid", memberInfo.getId());
@@ -188,24 +189,26 @@ public class FriendsAction extends BaseAction<Friends>{
 			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
 				List<?> list = billInvestService.findCostInfo(id);
 				if (list!=null && list.size()>0 && list.get(0) instanceof Object[]) {
-					int tm = DataUtils.str2int(((Object[])list.get(0))[0].toString());
-					double tn = DataUtils.str2double(((Object[])list.get(0))[1].toString(), 2);
-					list = billInvestService.queryFairlysMemberCostInfo(id, tm);
-					if (list != null) {
-						for (Object object : list) {
-							if (object instanceof Object[]) {
-								Map<String, Object> map = new HashMap<String, Object>();
-								map.put("investCount", ((Object[])object)[0]);
-								map.put("invertMoney", ((Object[])object)[1]);
-								map.put("memberid", ((Object[])object)[2]);
-								map.put("membernickname", ((Object[])object)[3]);
-								map.put("membername", ((Object[])object)[4]);
-								listMap.add(map);
+					if(((Object[])list.get(0))[0] != null && ((Object[])list.get(0))[1]!=null){
+						int tm = DataUtils.str2int(((Object[])list.get(0))[0].toString());
+						double tn = DataUtils.str2double(((Object[])list.get(0))[1].toString(), 2);
+						list = billInvestService.queryFairlysMemberCostInfo(id, tm);
+						if (list != null) {
+							for (Object object : list) {
+								if (object instanceof Object[]) {
+									Map<String, Object> map = new HashMap<String, Object>();
+									map.put("investCount", ((Object[])object)[0]);
+									map.put("invertMoney", ((Object[])object)[1]);
+									map.put("memberid", ((Object[])object)[2]);
+									map.put("membernickname", ((Object[])object)[3]);
+									map.put("membername", ((Object[])object)[4]);
+									listMap.add(map);
+								}
 							}
 						}
+						jsonObject.put("tn", tn);
+						jsonObject.put("tm", tm);
 					}
-					jsonObject.put("tn", tn);
-					jsonObject.put("tm", tm);
 				}else {
 					msg = "您未有投资记录";
 				}

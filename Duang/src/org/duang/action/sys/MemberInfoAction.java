@@ -572,4 +572,36 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 			printJsonResult();
 		}
 	}
+	
+	/**
+     * 获取所有用户给抽奖指定获奖人下拉框选择
+     * @Title: queryMemberToCheckbox   
+     * @Description: TODO(这里用一句话描述这个方法的作用)   
+     * @param:   
+     * @author LiYonghui    
+     * @date 2016年11月17日 下午7:23:38
+     * @return: void      
+     * @throws
+     */
+	public void queryMemberToCheckbox() {
+		String json = "";
+		try {
+			List<MemberInfo> list = sysMemberInfoService.queryAllEntity(null);
+			for(MemberInfo memberInfo : list){
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("id", memberInfo.getId());
+				map.put("text", memberInfo.getRealName()+"("+memberInfo.getPhone()+")");
+				if(memberInfo.getId().equals(entity.getId())){
+					map.put("selected", true);
+				}
+				listMap.add(map);
+			}
+			json = net.sf.json.JSONArray.fromObject(listMap).toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			printJsonResult(json);
+		}
+	}
+	
 }	
