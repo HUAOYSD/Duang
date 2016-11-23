@@ -107,7 +107,7 @@ public class NewsInformationAction extends BaseAction<NewsInformation>{
 	public void queryNews(){
 		try {
 			List<NewsInformation> list = new ArrayList<NewsInformation>();
-			String sql = "select ni.id,ni.content,ni.img,ni.createtime,ni.state,mi.`name` createuser from news_information ni left join sys_user mi on mi.id=ni.createuser "
+			String sql = "select ni.id,ni.title,ni.content,ni.img,ni.createtime,ni.state,mi.`name` createuser from news_information ni left join sys_user mi on mi.id=ni.createuser "
 					   + " ORDER BY ni.createtime DESC";
 			list = service.queryBySQL(sql,null,null, true);
 			if (list != null && list.size() > 0) {
@@ -151,6 +151,7 @@ public class NewsInformationAction extends BaseAction<NewsInformation>{
 				map.put("img", news.getImg());
 				map.put("createuser", news.getCreateuser());
 				map.put("state", news.getState());
+				map.put("title", news.getTitle());
 				listMap.add(map);
 			}
 		} catch (Exception e) {

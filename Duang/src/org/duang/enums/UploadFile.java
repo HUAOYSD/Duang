@@ -302,8 +302,7 @@ public enum UploadFile {
 
 			@Override
 			public String appPath() {
-				// TODO Auto-generated method stub
-				return null;
+				return "resources/file/basic/news/";
 			}
 
 		},

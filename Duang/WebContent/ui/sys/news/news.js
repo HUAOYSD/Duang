@@ -21,6 +21,7 @@ $(function(){
 		toolbar:'#newsToolBar',
 		columns:[[
 				{field:'id',hidden:true},
+				{field:'title',title:'标题',halign:"center", align:"left",width:500},
 				{field:'content',title:'内容',halign:"center", align:"left",width:500},
 				{field:'img',title:'图片',halign:"center", align:"center",width:200 },
 		        {field:'createuser',title:'创建人',halign:"center", align:"center",width:150},  

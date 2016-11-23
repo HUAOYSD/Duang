@@ -18,6 +18,7 @@ public class NewsInformation implements java.io.Serializable {
 	 */   
 	private static final long serialVersionUID = 1L;
 	private String id;
+	private String title;
 	private String content;
 	private Date createtime;
 	private String img;
@@ -30,15 +31,17 @@ public class NewsInformation implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public NewsInformation(String id, String content, Date createtime) {
+	public NewsInformation(String id, String title,String content, Date createtime) {
 		this.id = id;
+		this.title = title;
 		this.content = content;
 		this.createtime = createtime;
 	}
 
 	/** full constructor */
-	public NewsInformation(String id, String content, Date createtime, String img, String createuser,int state) {
+	public NewsInformation(String id,String title, String content, Date createtime, String img, String createuser,int state) {
 		this.id = id;
+		this.title = title;
 		this.content = content;
 		this.createtime = createtime;
 		this.img = img;
@@ -57,7 +60,16 @@ public class NewsInformation implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "content", nullable = false, length = 16777215)
+	@Column(name = "title", nullable = false, length = 1000)
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	@Column(name = "content", nullable = false)
 	public String getContent() {
 		return this.content;
 	}
