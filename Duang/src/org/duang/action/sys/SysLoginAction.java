@@ -93,7 +93,7 @@ public class SysLoginAction extends BaseAction<SysUser>{
 		}
 		try {
 			condsUtils.addProperties(true, "name","password");
-			condsUtils.addValues(true, entity.getName(), DES.encryptDES(entity.getPassword()));
+			condsUtils.addValues(true, entity.getName().trim(), DES.encryptDES(entity.getPassword().trim()));
 			List<SysUser> list = service.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
 			if(list!=null && list.size()==1) {
 				SessionTools.setSessionSysUser(list.get(0));
