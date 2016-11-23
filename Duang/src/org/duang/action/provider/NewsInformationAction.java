@@ -14,6 +14,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.NewsInformation;
 import org.duang.enums.If;
+import org.duang.enums.UploadFile;
 import org.duang.service.NewsInformationService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -102,7 +103,12 @@ public class NewsInformationAction extends BaseAction<NewsInformation>{
 				map.put("id", news.getId());
 				map.put("createtime", DateUtils.date2Str(news.getCreatetime()));
 				map.put("content", news.getContent());
-				map.put("img", news.getImg());
+				map.put("title", news.getTitle());
+				if(DataUtils.notEmpty(news.getImg())){
+					map.put("img",  UploadFile.NEWS.appPath()+ news.getImg());
+				}else{
+					map.put("img",  "");
+				}
 				listMap.add(map);
 			}
 		} catch (Exception e) {

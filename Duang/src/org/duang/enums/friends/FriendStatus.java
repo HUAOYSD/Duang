@@ -37,7 +37,7 @@ public enum FriendStatus {
 		}
 	},
 	FS1 {
-		private String desc = "仅关注";
+		private String desc = "我关注的";
 		
 		@Override
 		public int getVal() {
@@ -61,13 +61,13 @@ public enum FriendStatus {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "仅关注";
+			this.desc = "我关注的";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "仅关注";
+			return "我关注的";
 		}
 		
 	},
@@ -96,13 +96,13 @@ public enum FriendStatus {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "标类产品";
+			this.desc = "相互关注";
 			return this;
 		}
 		
 		@Override
 		public String toString() {
-			return "标类产品";
+			return "相互关注";
 		}
 
 	};

@@ -14,6 +14,7 @@ import org.duang.entity.Friends;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.friends.FriendStatus;
 import org.duang.service.FriendsService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
@@ -304,6 +305,7 @@ public class FriendsServiceImpl implements FriendsService{
 	 */  
 	public boolean addFriend(String selfid, String targetid) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
+		//查询targetid是否关注selfid
 		map.put("memberInfoBySelf.id", targetid);
 		map.put("memberInfoByTarget.id", selfid);
 		Friends friends = dao.findEntity(map);
@@ -337,6 +339,7 @@ public class FriendsServiceImpl implements FriendsService{
 	 * @throws   
 	 */  
 	public boolean cancelFriend(String selfid, String targetid) throws Exception{
+		targetid = DES.decryptDES(targetid);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("memberInfoBySelf.id", targetid);
 		map.put("memberInfoByTarget.id", selfid);

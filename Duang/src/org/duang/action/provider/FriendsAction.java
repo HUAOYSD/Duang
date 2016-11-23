@@ -16,11 +16,13 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.Friends;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.UploadFile;
 import org.duang.enums.billinvest.BillStatus;
 import org.duang.enums.billinvest.UseType;
 import org.duang.service.BillInvestService;
 import org.duang.service.FriendsService;
 import org.duang.service.MemberInfoService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
@@ -50,7 +52,6 @@ public class FriendsAction extends BaseAction<Friends>{
 	public void setBillInvestService(BillInvestService billInvestService) {
 		this.billInvestService = billInvestService;
 	}
-
 	/**
 	 * 客户基本信息
 	 */
@@ -60,6 +61,12 @@ public class FriendsAction extends BaseAction<Friends>{
 	public void setService(MemberInfoService sysMemberInfoService) {
 		this.sysMemberInfoService = sysMemberInfoService;
 	}
+	//添加关注
+	private static final int ADD_ATTENTION=1;
+	//已经关注
+	private static final int YET_ATTENTION=2;
+	//相互关注
+	private static final int EACH_OTHER_ATTENTION=3;
 	/**   
 	 * 查询我关注的  
 	 * @Title: queryMyStars   
@@ -82,10 +89,11 @@ public class FriendsAction extends BaseAction<Friends>{
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", friends.getId());
 						//只需要展示我关注的就行。进行取消关注
-						map.put("together", friends.getTogether());
+						map.put("together", friends.getTogether()==ADD_ATTENTION?YET_ATTENTION:EACH_OTHER_ATTENTION);
 						MemberInfo memberInfo = friends.getMemberInfoByTarget();
 						map.put("friendid", memberInfo.getId());
 						map.put("friendname", memberInfo.getNickname());
+						map.put("friendImg", UploadFile.HEAD.appPath()+entity.getId()+"/head/"+ memberInfo.getUserImg());
 						listMap.add(map);
 					}
 				}else {
@@ -130,9 +138,10 @@ public class FriendsAction extends BaseAction<Friends>{
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", friends.getId());
 						map.put("together", friends.getTogether());
-						MemberInfo memberInfo = friends.getMemberInfoByTarget();
+						MemberInfo memberInfo = friends.getMemberInfoBySelf();
 						map.put("friendid", memberInfo.getId());
 						map.put("friendname", memberInfo.getNickname());
+						map.put("friendImg", UploadFile.HEAD.appPath()+entity.getId()+"/head/"+ memberInfo.getUserImg());
 						listMap.add(map);
 					}
 				}else {
@@ -202,6 +211,7 @@ public class FriendsAction extends BaseAction<Friends>{
 									map.put("memberid", ((Object[])object)[2]);
 									map.put("membernickname", ((Object[])object)[3]);
 									map.put("membername", ((Object[])object)[4]);
+									map.put("userImg", UploadFile.HEAD.appPath()+entity.getId()+"/head/"+ ((Object[])object)[5]);
 									listMap.add(map);
 								}
 							}
@@ -243,20 +253,84 @@ public class FriendsAction extends BaseAction<Friends>{
 		boolean success = false;
 		try {
 			String token = getRequest().getParameter("token");
-			String targetMemberid = getRequest().getParameter("targetMemberid");
+			String targetMemberid = DES.decryptDES(getRequest().getParameter("targetMemberid"));
 			String id = null;
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
-				if (DataUtils.notEmpty(targetMemberid)) {
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(targetMemberid) && 
+					DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
+				//判断是否已经关注
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("memberInfoBySelf.id", id);
+				map.put("memberInfoByTarget.id", targetMemberid);
+				Friends friends = service.findEntity(map);
+				if (friends == null) {
 					if (service.addFriend(id, targetMemberid)) {
 						success = true;
 					}else {
 						msg = "关注失败";
 					}
 				}else {
-					msg = "关注用户无效";
+					success = true;
+					msg = "已经关注，可以在我的关注中找到他";
 				}
 			}else {
-				msg = "登录失效";
+				msg = "关注失败，电话号码为空！";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+
+	
+	/**   
+	 * 通过二维码添加好友。
+	 * @Title: addFriendsByQR   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 5y    
+	 * @date 2016年9月8日 下午4:20:35
+	 * @return: void      
+	 * @throws   
+	 */ 
+	public void addFriendsByQR(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String phone =  getRequest().getParameter("phone");
+			String id = null;
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(phone) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
+				//根据phone查询用户
+				MemberInfo memberInfo = sysMemberInfoService.findEntity("phone", phone);
+				if(memberInfo != null){
+					if(!memberInfo.getId().equals(id)){
+						//判断是否已经关注
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("memberInfoBySelf.id", id);
+						map.put("memberInfoByTarget.id", memberInfo.getId());
+						Friends friends = service.findEntity(map);
+						if (friends == null) {
+							if (service.addFriend(id, memberInfo.getId())) {
+								success = true;
+							}else {
+								msg = "关注失败";
+							}
+						}else {
+							success = true;
+							msg = "已经关注，可以在 我的关注 中找到他";
+						}
+					}else{
+						msg="自己不能加自己好友哦";
+					}
+				}else{
+					msg="关注用户无效";
+				}
+			}else {
+				msg = "参数无效";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -329,21 +403,43 @@ public class FriendsAction extends BaseAction<Friends>{
 			String token = getRequest().getParameter("token");
 			String id = null;
 			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,sysMemberInfoService).getMainField(token))) {
-				String sql = "select im.total_income,mi.real_name,mi.user_img from friends fri LEFT JOIN invest_member im on im.memberinfo_id=fri.target "+
+				String sql = "select im.total_income,mi.real_name,mi.user_img,mi.nickname,mi.id from friends fri LEFT JOIN invest_member im on im.memberinfo_id=fri.target "+
 							 " LEFT JOIN member_info mi on mi.id=im.memberinfo_id "+
 							 " where fri.self='"+id+"' order by im.total_income desc";
 				List<?> list = service.queryBySQL(sql, null, null, false);
-				List<Map<String, Object>> listMap = new ArrayList<Map<String,Object>>();
+				
+				//查询自己的
+				String selfsql="select total_income,real_name,user_img,nickname,member_info.id from invest_member LEFT JOIN member_info on "
+								+ "	invest_member.memberinfo_id=member_info.id WHERE member_info.id='"+id+"'";
+				List<?> selfList = service.queryBySQL(selfsql, null, null, false);
 				if(list==null || list.size()==0){
 					msg="目前还没有好友";
 				}else {
+					double selftIncome = DataUtils.str2double((((Object[])selfList.get(0))[0])+"",2);
+					//判断自己是否已经加进排行榜里了
+					boolean isSelf = false;
 					for(int i=0;i<list.size();i++){
 						Map<String, Object> map = new HashMap<String, Object>();
-						map.put("total_income",  DataUtils.str2double((((Object[])list.get(i))[0])+"",2));
-						map.put("real_name", ((Object[])list.get(i))[1]);
-						map.put("user_img", ((Object[])list.get(i))[2]);
+						double incomeSum = DataUtils.str2double((((Object[])list.get(i))[0])+"",2);
+						if(incomeSum<=selftIncome && !isSelf){
+							isSelf = true;
+							map.put("total_income",  selftIncome);
+							map.put("real_name", ((Object[])selfList.get(0))[1]);
+							map.put("user_img", UploadFile.HEAD.appPath()+entity.getId()+"/head/"+ ((Object[])selfList.get(0))[2]);
+							map.put("nickName", ((Object[])selfList.get(0))[3]);
+							map.put("userId", ((Object[])selfList.get(0))[4]);
+							map.put("index", i+1);
+						}else {
+							map.put("total_income",  incomeSum);
+							map.put("real_name", ((Object[])list.get(i))[1]);
+							map.put("user_img", UploadFile.HEAD.appPath()+entity.getId()+"/head/"+ ((Object[])list.get(i))[2]);
+							map.put("nickName", ((Object[])list.get(i))[3]);
+							map.put("userId", ((Object[])list.get(i))[4]);
+							map.put("index", i+1);
+						}
 						listMap.add(map);
 					}
+					
 				}
 				success = true;
 				jsonObject.put("result", listMap);

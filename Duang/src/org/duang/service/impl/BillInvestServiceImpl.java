@@ -336,18 +336,20 @@ public class BillInvestServiceImpl implements BillInvestService{
 	public List<BillInvest> queryFairlysMemberCostInfo(String memberid, double tm) throws Exception{
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT ");
-		sb.append("COUNT(MONEY) AS TN,");
-		sb.append("SUM(MONEY) AS TM,");
-		sb.append("BILL_INVEST.MEMBER_INFO,");
-		sb.append("MEMBER_INFO.NICKNAME,");
-		sb.append("MEMBER_INFO.REAL_NAME ");
-		sb.append("FROM BILL_INVEST ");
-		sb.append("INNER JOIN MEMBER_INFO ON MEMBER_INFO.ID = BILL_INVEST.MEMBER_INFO ");
-		sb.append("WHERE MEMBER_INFO <> '"+memberid+"' ");
-		sb.append("AND USE_TYPE = 3 AND STATUS = 2 ");
-		sb.append("GROUP BY MEMBER_INFO ");
-		sb.append("HAVING TM BETWEEN "+(tm-50000)+" AND "+(tm+50000)+" ");
-		sb.append("LIMIT 0, 20 ");
+		sb.append(" COUNT(MONEY) AS TN,");
+		sb.append(" SUM(MONEY) AS TM,");
+		sb.append(" BILL_INVEST.MEMBER_INFO,");
+		sb.append(" MEMBER_INFO.NICKNAME,");
+		sb.append(" MEMBER_INFO.REAL_NAME,");
+		sb.append(" MEMBER_INFO.USER_IMG ");
+		sb.append(" FROM BILL_INVEST ");
+		sb.append(" INNER JOIN MEMBER_INFO ON MEMBER_INFO.ID = BILL_INVEST.MEMBER_INFO ");
+		sb.append(" WHERE MEMBER_INFO <> '"+memberid+"' ");
+		sb.append(" AND USE_TYPE = 3 AND STATUS = 2 ");
+		sb.append(" AND MEMBER_INFO.id not IN ( SELECT target from friends where friends.self='"+memberid+"')");
+		sb.append(" GROUP BY MEMBER_INFO ");
+		sb.append(" HAVING TM BETWEEN "+(tm-50000)+" AND "+(tm+50000)+" ");
+		sb.append(" LIMIT 0, 20 ");
 		List<BillInvest> list = dao.queryBySQL(sb.toString(), null, null, false);
 		return list;
 	}

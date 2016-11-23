@@ -4,6 +4,10 @@
 <body style="background-color:#fff;">
 	<div class="operate_div_form">
 	  	<form id="news_add_form" method="post"> 
+	  		<div class="row">   
+		        <label for="title" class="add_edit_form_label">新闻资讯标题：</label>   
+		       	<input name="title" class="form-textarea" style="width:99%;">  
+		    </div>
 		    <div class="row">   
 		        <label for="content" class="add_edit_form_label">新闻资讯内容：</label>   
 		       	<textarea name="content" class="form-textarea" style="width:99%;height:300px;"></textarea>  
