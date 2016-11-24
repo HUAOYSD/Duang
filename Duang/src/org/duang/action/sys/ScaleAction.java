@@ -397,7 +397,7 @@ public class ScaleAction extends BaseAction<Scale> {
     private String getSubledgerList(String memberInfoId) throws Exception{
     	memberInfoId = "9f3de74e999b495dab72d634b983a267";
     	//List<BillInvest> billInvests = billInvestService.queryEntity("memberInfo.id", memberInfoId, null, Order.desc("optTime"));
-    	StringBuffer paramBuffer = new StringBuffer("{");
+    	StringBuffer paramBuffer = new StringBuffer("[{");
     	//if(DataUtils.notEmpty(billInvests)){
     		//BillInvest billInvest = billInvests.get(0);
     		 paramBuffer.append("roleType")
@@ -415,7 +415,7 @@ public class ScaleAction extends BaseAction<Scale> {
              .append("sum")
              .append(":")
              .append(URLEncoder.encode(String.valueOf(10), "gbk"))
-    		 .append("}");
+    		 .append("}]");
     		 
     	//}
     	return paramBuffer.toString();
