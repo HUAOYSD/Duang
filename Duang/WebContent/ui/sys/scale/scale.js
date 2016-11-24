@@ -6,6 +6,7 @@ $(function() {
 	$('#info_btn_scale').linkbutton('disable');
 	$('#allot_btn_scale').linkbutton('disable');
 	$('#match_btn_scale').linkbutton('disable');
+	$('#loan_btn_scale').linkbutton('disable');
 	$('#scale_open_close').on("click",function(){
 		$('#scale_conditon').toggle(80);
 		setTimeout(domresize,100);//条件隐藏，改变表格高度
@@ -129,18 +130,25 @@ function loadscale(url, dataObj){
 				$('#info_btn_scale').linkbutton('enable');
 				$('#allot_btn_scale').linkbutton('enable');
 				$('#match_btn_scale').linkbutton('enable');
+				if(rowData.status =='满标'){
+					$('#loan_btn_scale').linkbutton('enable');
+				}else{
+					$('#loan_btn_scale').linkbutton('disable');
+				}
 			},
 			onUnselect:function(rowIndex, rowData){
 				$('#edit_btn_scale').linkbutton('disable');
 				$('#info_btn_scale').linkbutton('disable');
 				$('#allot_btn_scale').linkbutton('disable');
 				$('#match_btn_scale').linkbutton('disable');
+				$('#loan_btn_scale').linkbutton('disable');
 			},
 			onLoadSuccess: function(data){
 				$('#edit_btn_scale').linkbutton('disable');
 				$('#info_btn_scale').linkbutton('disable');
 				$('#allot_btn_scale').linkbutton('disable');
 				$('#match_btn_scale').linkbutton('disable');
+				$('#loan_btn_scale').linkbutton('disable');
 			}
 		});
 }
@@ -277,4 +285,27 @@ $("#match_btn_scale").on("click",function(){
 		area: ['80%', '90%'],
 		content: 'scale!openDialog.do?path=loanlistinfo&scaleid='+selectedRow.id
 	}); 
+});
+
+
+/**
+ * 放款
+ */
+$("#loan_btn_scale").on("click",function(){
+	var selectedRow = $("#scale").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一个理财标",{time:1500});
+		return;
+	}else if(selectedRow.status != '满标'){
+		layer.msg("不是满标，不能进行放款操作",{time:1500});
+		return;
+	}
+	$.ajax({
+	   type: "POST",
+	   url: "scale!loanFullScaleToUser.do",
+	   data: "id="+selectedRow.id,
+	   success: function(msg){
+	     alert( "Data Saved: " + msg );
+	   }
+	});
 });

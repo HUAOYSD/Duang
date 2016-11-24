@@ -86,6 +86,7 @@
 		      <a id="info_btn_scale" class="easyui-linkbutton" iconCls="icon-information" plain="true">详情</a> 
 		      <a id="allot_btn_scale" class="easyui-linkbutton" iconCls="icon-wrench_orange" plain="true">借贷分配</a> 
 		      <a id="match_btn_scale" class="easyui-linkbutton" iconCls="icon-zoom" plain="true">查询借贷匹配</a> 
+		      <a id="loan_btn_scale" class="easyui-linkbutton" iconCls="icon-money" plain="true">放款</a>
 	  	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path %>/ui/sys/scale/scale.js"></script>
