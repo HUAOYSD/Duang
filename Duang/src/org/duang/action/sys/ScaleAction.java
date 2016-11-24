@@ -467,11 +467,11 @@ public class ScaleAction extends BaseAction<Scale> {
      * @return: List<InvestList>      
      * @throws
      */
-    private int queryLoanListMoney(String scaleId) throws Exception{
+    private double queryLoanListMoney(String scaleId) throws Exception{
     	String sql = "select sum(get_money-yet_money) from loan_list ll  left join scale_loan_list sll on ll.id=sll.loan_list where sll.scale='"+scaleId
     			+"' and apply_state=2 and loan_state=1";
     	List<?> loanLists = loanListService.queryBySQL(sql, null, null,false);
-    	return Integer.parseInt(loanLists.get(0).toString());
+    	return Double.parseDouble(loanLists.get(0).toString());
     }
     
     
