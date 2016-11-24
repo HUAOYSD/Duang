@@ -1,15 +1,15 @@
-package org.duang.enums.invest;
+package org.duang.enums.loan;
+
 import org.duang.util.DataUtils;
 
-
 /**   
- * 理财状态的枚举类
- * @ClassName:  useTicket   
+ * 贷款记录中申请模式的枚举类
+ * @ClassName:  Scale   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 5y
- * @date 2016年8月12日 下午4:18:33      
+ * @date 2016年8月11日 上午10:12:28      
  */  
-public enum Status {
+public enum LoanStatus {
 	S0 {
 		@Override
 		public int getVal() {
@@ -37,8 +37,8 @@ public enum Status {
 		}
 	},
 	S1 {
-		private String desc = "匹配中";
-
+		private String desc = "放款";
+		
 		@Override
 		public int getVal() {
 			return 1;
@@ -61,19 +61,19 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "匹配中";
+			this.desc = "放款";
 			return this;
 		}
-
+		
 		@Override
 		public String toString() {
-			return "匹配中";
+			return "放款";
 		}
 
 	},
 	S2 {
-		private String desc = "收益中";
-
+		private String desc = "还款";
+		
 		@Override
 		public int getVal() {
 			return 2;
@@ -96,19 +96,19 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "收益中";
+			this.desc = "还款";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "收益中";
+			return "还款";
 		}
-
+		
 	},
 	S3 {
-		private String desc = "完成投资";
-
+		private String desc = "增加逾期费";
+		
 		@Override
 		public int getVal() {
 			return 3;
@@ -131,19 +131,19 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "完成投资";
+			this.desc = "增加逾期费";
 			return this;
 		}
-
+		
 		@Override
 		public String toString() {
-			return "完成投资";
+			return "增加逾期费";
 		}
 
 	},
 	S4 {
-		private String desc = "到期回款中";
-
+		private String desc = "还逾期费";
+		
 		@Override
 		public int getVal() {
 			return 4;
@@ -166,192 +166,18 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "到期回款中";
+			this.desc = "还逾期费";
 			return this;
 		}
-
+		
 		@Override
 		public String toString() {
-			return "到期回款中";
-		}
-
-	},
-	S5 {
-		private String desc = "回款成功";
-
-		@Override
-		public int getVal() {
-			return 5;
-		}
-
-		@Override
-		public String getDesc() {
-			return desc;
-		}
-
-		@Override
-		public Object setDesc(String desc) {
-			if (DataUtils.notEmpty(desc)) {
-				this.desc = desc;
-				return this;
-			}else {
-				return setDefaultDesc();
-			}
-		}
-
-		@Override
-		public Object setDefaultDesc() {
-			this.desc = "回款成功";
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return "回款成功";
-		}
-
-	},
-	S6 {
-		private String desc = "回款失败";
-
-		@Override
-		public int getVal() {
-			return 6;
-		}
-
-		@Override
-		public String getDesc() {
-			return desc;
-		}
-
-		@Override
-		public Object setDesc(String desc) {
-			if (DataUtils.notEmpty(desc)) {
-				this.desc = desc;
-				return this;
-			}else {
-				return setDefaultDesc();
-			}
-		}
-
-		@Override
-		public Object setDefaultDesc() {
-			this.desc = "回款失败";
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return "回款失败";
-		}
-
-	},
-	S7 {
-		private String desc = "过期";
-
-		@Override
-		public int getVal() {
-			return 7;
-		}
-
-		@Override
-		public String getDesc() {
-			return desc;
-		}
-
-		@Override
-		public Object setDesc(String desc) {
-			if (DataUtils.notEmpty(desc)) {
-				this.desc = desc;
-				return this;
-			}else {
-				return setDefaultDesc();
-			}
-		}
-
-		@Override
-		public Object setDefaultDesc() {
-			this.desc = "过期";
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return "过期";
-		}
-
-	},	
-	S8 {
-		private String desc = "提前赎回成功";
-
-		@Override
-		public int getVal() {
-			return 8;
-		}
-
-		@Override
-		public String getDesc() {
-			return desc;
-		}
-
-		@Override
-		public Object setDesc(String desc) {
-			if (DataUtils.notEmpty(desc)) {
-				this.desc = desc;
-				return this;
-			}else {
-				return setDefaultDesc();
-			}
-		}
-
-		@Override
-		public Object setDefaultDesc() {
-			this.desc = "提前赎回成功";
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return "提前赎回成功";
-		}
-
-	},
-	S9 {
-		private String desc = "流标赎回成功";
-
-		@Override
-		public int getVal() {
-			return 9;
-		}
-
-		@Override
-		public String getDesc() {
-			return desc;
-		}
-
-		@Override
-		public Object setDesc(String desc) {
-			if (DataUtils.notEmpty(desc)) {
-				this.desc = desc;
-				return this;
-			}else {
-				return setDefaultDesc();
-			}
-		}
-
-		@Override
-		public Object setDefaultDesc() {
-			this.desc = "流标赎回成功";
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return "流标赎回成功";
+			return "还逾期费";
 		}
 
 	};
-
+	
+	
 	/**   
 	 * 获取枚举值
 	 * @Title: getVal   
@@ -363,8 +189,8 @@ public enum Status {
 	 * @throws   
 	 */  
 	public abstract int getVal();
-
-
+	
+	
 	/**   
 	 * 获取枚举描述
 	 * @Title: getDesc   
@@ -376,8 +202,8 @@ public enum Status {
 	 * @throws   
 	 */  
 	public abstract String getDesc();
-
-
+	
+	
 	/**   
 	 * 设置描述文字，null代表默认值
 	 * @Title: setDesc   
@@ -389,8 +215,8 @@ public enum Status {
 	 * @throws   
 	 */  
 	public abstract Object setDesc(String desc);
-
-
+	
+	
 	/**   
 	 * 设置desc为默认描述文字
 	 * @Title: setDefaultDesc   
@@ -402,6 +228,5 @@ public enum Status {
 	 * @throws   
 	 */  
 	public abstract Object setDefaultDesc();
-
-
+	
 }

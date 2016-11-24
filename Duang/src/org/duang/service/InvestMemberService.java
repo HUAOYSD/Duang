@@ -43,7 +43,7 @@ public interface InvestMemberService extends CommonInterface<InvestMember>{
 	 * @throws Exception
 	 */
 	public abstract boolean depositFFCallBackUpdateInvest(String userIdIdentity,double withdrawableBalance,double userBalance,
-			double frozenBalance,double unsettledBalance,double sum, String bankAccount) throws Exception;
+			double frozenBalance,double unsettledBalance,double sum, String bankAccount,String bankName) throws Exception;
 	
 	/**
 	 * 提现后修改用户的账户金额信息

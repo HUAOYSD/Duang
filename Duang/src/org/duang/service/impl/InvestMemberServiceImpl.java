@@ -1,5 +1,6 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,11 +11,13 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.BillInvestDao;
 import org.duang.dao.BindCardDao;
 import org.duang.dao.InvestMemberDao;
+import org.duang.dao.MemberInfoDao;
 import org.duang.entity.BindCard;
 import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
 import org.duang.entity.MemberInfo;
 import org.duang.service.InvestMemberService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,14 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 		this.dao = dao;
 	}
 
+	private MemberInfoDao memberInfoDao;
+
+	@Resource(name="sysmemberinfodaoimpl")
+	public void setDao(MemberInfoDao memberInfoDao) {
+		this.memberInfoDao = memberInfoDao;
+	}
+
+	
 	private BillInvestDao billInvestDao;
 	@Resource(name="billinvestdaoimpl")
 	public void setBillInvestDao(BillInvestDao billInvestDao) {
@@ -343,7 +354,7 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 	 * @throws Exception
 	 */
 	public synchronized boolean depositFFCallBackUpdateInvest(String userIdIdentity,double withdrawableBalance,double userBalance,
-			double frozenBalance,double unsettledBalance,double sum, String bankAccount)throws Exception {
+			double frozenBalance,double unsettledBalance,double sum, String bankAccount,String bankName)throws Exception {
 		LoggerUtils.info("\t\n------------------------充值修改本地用户金额-------------------------------------\t\n", this.getClass());
 		InvestMember investMember = dao.findEntity("memberInfo.id", userIdIdentity);
 		boolean success = false;
@@ -362,6 +373,13 @@ public class InvestMemberServiceImpl implements InvestMemberService{
 				BindCard bindCard = bindCardDao.findEntity("bankNo", bankAccount);
 				//LoggerUtils.info("\t\n-----------充值回调 银行账户"+"\t\n-------银行卡："+bindCard.getBankNo()+
 				//"\t\n-------用户姓名："+bindCard.getName()+"\t\n-------用户姓名："+bindCard.getIdcard(), this.getClass());
+				//第一次充值，进行保存绑定的银行卡信息
+				if(bindCard == null){
+					MemberInfo memberInfo = memberInfoDao.findById(userIdIdentity);
+					bindCard = new BindCard(DataUtils.randomUUID(), memberInfo, memberInfo.getRealName(), memberInfo.getIdCard(), memberInfo.getPhone(), 
+							bankAccount, bankName, 2, null, null, new Date(), null, null);
+					bindCardDao.saveEntity(bindCard);
+				}
 				success = billInvestDao.depositFFCallBackCreateBill(investMember, sum, bindCard);
 			}
 

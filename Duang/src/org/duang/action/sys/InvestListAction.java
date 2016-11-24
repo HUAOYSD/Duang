@@ -1,6 +1,7 @@
 package org.duang.action.sys;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,6 +159,13 @@ public class InvestListAction extends BaseAction<InvestList> {
 	 */  
 	private void fillDatagridCons(@SuppressWarnings("rawtypes") List list) throws Exception {
 		if (list !=null && list.size() > 0) {
+			//合计金额
+			Map<String,Object> totalMap = new HashMap<String,Object>();
+			double totalMoney = 0;
+			double totalBackIncome=0;
+			double totalBackMoney = 0;
+			double totalTmoney = 0;
+			double totalIncome = 0;
 			for(Object temp : list) {
 				if (temp instanceof Object[]) {
 					Map<String,Object> resultMap = new HashMap<String,Object>();
@@ -170,7 +178,7 @@ public class InvestListAction extends BaseAction<InvestList> {
 						resultMap.put("backIncome", pk.getBackIncome());
 						resultMap.put("backMoney", pk.getBackMoney());
 						resultMap.put("useTicket", UseTicket.valueOf("UT"+pk.getUseTicket()).toString());
-						resultMap.put("totalMoney", pk.getTotalMoney());
+						resultMap.put("total_money", pk.getTotalMoney());
 						resultMap.put("income", pk.getIncome());
 						resultMap.put("days", pk.getDays());
 						resultMap.put("ticketBonus", pk.getTicketBonus());
@@ -186,6 +194,11 @@ public class InvestListAction extends BaseAction<InvestList> {
 						resultMap.put("isTurn", If.valueOf("If"+pk.getIsTurn()).toString());
 						resultMap.put("turnStatus", TurnStatus.valueOf("TS"+pk.getTurnStatus()).toString());
 						
+						totalMoney+=pk.getMoney();
+						totalBackIncome+=pk.getBackIncome();
+						totalBackMoney += pk.getBackMoney();
+						totalTmoney+=pk.getTotalMoney();
+						totalIncome+=pk.getIncome();
 					}
 					if (fk != null) {
 						resultMap.put("memberName", fk.getRealName());
@@ -199,16 +212,25 @@ public class InvestListAction extends BaseAction<InvestList> {
 					listMap.add(resultMap);
 				}
 			}
+			totalMap.put("money",DataUtils.str2double(String.valueOf(totalMoney), 6));
+			totalMap.put("backIncome",DataUtils.str2double(String.valueOf(totalBackIncome), 6));
+			totalMap.put("backMoney",DataUtils.str2double(String.valueOf(totalBackMoney), 6));
+			totalMap.put("total_money",DataUtils.str2double(String.valueOf(totalTmoney), 6));
+			totalMap.put("income",DataUtils.str2double(String.valueOf(totalIncome), 6));
 			jsonObject.put("total", getPageUtil().getCountRecords());
 			jsonObject.put("currPage", getPageUtil().getCurrentPageNum());
 			jsonObject.put("pageSize", getPageUtil().getPageRecords());
 			jsonObject.put("rows", listMap);
+			List<Map<String, Object>> totalList = new ArrayList<Map<String,Object>>();
+			totalList.add(totalMap);
+			jsonObject.put("footer", totalList);
 		}else {
 			jsonObject.put("total", 0);
 			jsonObject.put("currPage", 0);
 			jsonObject.put("pageSize", 0);
 			jsonObject.put("rows",new JSONArray());
 		}
+		
 	}
 
 

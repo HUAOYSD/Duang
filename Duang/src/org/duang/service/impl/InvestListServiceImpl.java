@@ -117,6 +117,8 @@ public class InvestListServiceImpl implements InvestListService{
 		scale.setResidueMoney(scale.getResidueMoney()-money);//剩余可投金额
 		scale.setYetMoney(scale.getYetMoney() + money);//已经投金额
 		if(scale.getResidueMoney()==0){
+			scale.setStatus(org.duang.enums.scale.Status.S3.getVal());
+		}else{
 			scale.setStatus(org.duang.enums.scale.Status.S2.getVal());
 		}
 		boolean success = scaleDao.updateEntity(scale);

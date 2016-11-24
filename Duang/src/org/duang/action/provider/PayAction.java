@@ -378,7 +378,7 @@ public class PayAction extends BaseAction<BillInvest>{
 					//修改数据库
 					investMemberService.depositFFCallBackUpdateInvest(userIdIdentity,DataUtils.str2double(withdrawableBalance, 6),
 							DataUtils.str2double(userBalance, 6),DataUtils.str2double(frozenBalance, 6),DataUtils.str2double(unsettledBalance, 6),
-							DataUtils.str2double(sum, 6),bankAccount);
+							DataUtils.str2double(sum, 6),bankAccount,bankName);
 				}else{
 					LoggerUtils.error(name+"充值,错误，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)), this.getClass());
 				}

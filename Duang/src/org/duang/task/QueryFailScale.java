@@ -1,7 +1,6 @@
 package org.duang.task;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -13,11 +12,9 @@ import javax.annotation.Resource;
 
 import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.BillInvest;
 import org.duang.entity.InvestList;
 import org.duang.entity.Scale;
 import org.duang.enums.ResultCode;
-import org.duang.service.BillInvestService;
 import org.duang.service.InvestListService;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
@@ -25,7 +22,6 @@ import org.duang.util.DateUtils;
 import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
 import org.duang.util.SSLClient;
-import org.hibernate.criterion.Order;
 import org.json.JSONObject;
 
 /**
@@ -45,12 +41,6 @@ public class QueryFailScale{
     @Resource(name = "scaleserviceimpl")
 	public void setScaleService(ScaleService scaleService) {
 		this.scaleService = scaleService;
-	}
-   
-    private BillInvestService billInvestService;
-	@Resource
-	public void setBillInvestService(BillInvestService billInvestService) {
-		this.billInvestService = billInvestService;
 	}
 	private InvestListService investListService;
 	@Resource
@@ -152,44 +142,6 @@ public class QueryFailScale{
     }
     
     /**
-     * 获取 分账列表，对应记录一笔用户的进账明细；记录一条或多条商户的进账明细。
-     * @Title: getSubledgerList   
-     * @Description: TODO(这里用一句话描述这个方法的作用)   
-     * @param: @param memberInfoId
-     * @param: @return
-     * @param: @throws Exception  
-     * @author LiYonghui    
-     * @date 2016年11月9日 下午2:31:42
-     * @return: String      返回拼接好的参数类型   a=b&c=d 
-     * @throws
-     */
-    private String getSubledgerList(String memberInfoId) throws Exception{
-    	List<BillInvest> billInvests = billInvestService.queryEntity("memberInfo.id", memberInfoId, null, Order.desc("optTime"));
-    	StringBuffer paramBuffer = new StringBuffer("{");
-    	if(DataUtils.notEmpty(billInvests)){
-    		BillInvest billInvest = billInvests.get(0);
-    		 paramBuffer.append("roleType")
-             .append(":")
-             .append(URLEncoder.encode("0", "gbk"))
-             .append(",")
-             .append("roleCode")
-             .append(":")
-             .append(URLEncoder.encode(memberInfoId, "gbk"))
-             .append(",")
-             .append("inOrOut")
-             .append(":")
-             .append(URLEncoder.encode("0", "gbk"))
-             .append(",")
-             .append("sum")
-             .append(":")
-             .append(URLEncoder.encode(String.valueOf(billInvest.getMoney()), "gbk"))
-    		 .append("}");
-    		 
-    	}
-    	return paramBuffer.toString();
-    }
-    
-    /**
      * 获取 url，商户号，秘钥，手续费
      * 
      * @Title: getURLCodeAkey   
@@ -240,15 +192,13 @@ public class QueryFailScale{
 		String requestId = DataUtils.randomUUID();
 		//计算到账金额（本金）
 		double prinMoney = investList.getMoney(); //本金
-		//获取分账列表
-		String subledgerList = getSubledgerList(investList.getMemberInfo().getId());
-		Map<String , String> keyMap = getURLCodeAkey("prinInteMessageURL","prinInteFailScaleNoticeURL");
+		Map<String , String> keyMap = getURLCodeAkey("failScaleURL","failScaleCallbackURL");
 		//数字签名字符串
 		//规范请求流水号(requestId)+商户编号(merchantCode)+项目编号(projectCode)+本息到账金额(sum)+手续费收取方式(payType)+
 		//分账列表(subledgerList)+异步通知地址(noticeUrl)+主账户类型(mainAccountType)+主账户编码(mainAccountCode)
 		StringBuffer signatureBuffer = new StringBuffer();
-		signatureBuffer.append(requestId).append(keyMap.get("merchantCode")).append(scale.getId()).append(prinMoney).append(keyMap.get("fee"))
-					   .append(subledgerList).append(keyMap.get("noticeURL"));
+		signatureBuffer.append(requestId).append(keyMap.get("merchantCode")).append(scale.getId()).append(String.valueOf(prinMoney))
+					   .append(keyMap.get("noticeURL"));
 		LoggerUtils.info("\t\n------------流标赎回 数字签名字符串："+signatureBuffer.toString(), this.getClass());
 		//加密后的数字签名
 		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), keyMap.get("akey"));
@@ -259,8 +209,6 @@ public class QueryFailScale{
 		map.put("merchantCode",map.get("merchantCode"));
 		map.put("projectCode",scale.getId());
 		map.put("sum",String.valueOf(prinMoney));
-		map.put("payType",keyMap.get("fee"));
-		map.put("subledgerList",subledgerList);
 		map.put("noticeUrl",map.get("noticeUrl"));
 		map.put("signature",signature_sign);
 		//获取转换的参数
@@ -271,6 +219,10 @@ public class QueryFailScale{
 			LoggerUtils.info("\t\n------------流标赎回受理成功", this.getClass());
 			String back_projectCode = jsonObjectData.get("projectCode").toString();
 			String back_requestId = jsonObjectData.get("requestId").toString();
+			//金额
+			String back_sum = jsonObjectData.get("sum").toString();
+			//项目总额
+			String back_projectSum = jsonObjectData.get("projectSum").toString();
 			//返回的签名
 			String back_signature = jsonObjectData.get("signature").toString();
 			//返回数据进行签名拼接
@@ -285,12 +237,9 @@ public class QueryFailScale{
 				LoggerUtils.info("\t\n------------请求流水号："+back_requestId, this.getClass());
 				LoggerUtils.info("\t\n------------项目编号："+back_projectCode, this.getClass());
 				LoggerUtils.info("\t\n------------处理结果："+back_result, this.getClass());
-				LoggerUtils.info("\t\n------------手续费收取方式："+jsonObjectData.get("payType"), this.getClass());
-				LoggerUtils.info("\t\n------------主账户类型："+jsonObjectData.get("mainAccountType"), this.getClass());
-				LoggerUtils.info("\t\n------------主账户编码："+jsonObjectData.get("mainAccountCode"), this.getClass());
-				LoggerUtils.info("\t\n------------本息到账金额："+jsonObjectData.get("sum"), this.getClass());
-				LoggerUtils.info("\t\n------------请求时间："+jsonObjectData.get("requestTime"), this.getClass());
-				LoggerUtils.info("\t\n------------数字签名："+jsonObjectData.get("signature"), this.getClass());
+				LoggerUtils.info("\t\n------------金额："+back_sum, this.getClass());
+				LoggerUtils.info("\t\n------------项目总额："+back_projectSum, this.getClass());
+				LoggerUtils.info("\t\n------------数字签名："+back_signature, this.getClass());
 			}else{
 				LoggerUtils.info("\t\n------------签名不一致", this.getClass());
 			}

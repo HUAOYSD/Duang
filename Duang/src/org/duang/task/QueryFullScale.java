@@ -2,8 +2,6 @@ package org.duang.task;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -11,29 +9,24 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
-import javax.xml.crypto.Data;
 
-import org.duang.action.provider.InvestListAction;
 import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.BillInvest;
-import org.duang.entity.InvestList;
+import org.duang.entity.LoanList;
 import org.duang.entity.Scale;
 import org.duang.enums.ResultCode;
 import org.duang.service.BillInvestService;
-import org.duang.service.InvestListService;
+import org.duang.service.LoanListService;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
-import org.duang.util.DateUtils;
 import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
 import org.duang.util.SSLClient;
 import org.hibernate.criterion.Order;
 import org.json.JSONObject;
 
-import com.opensymphony.xwork2.util.logging.Logger;
-
-public class LoanFullScale{
+public class QueryFullScale{
  
 	private Properties properties;
 	//判断作业是否执行的旗标  
@@ -50,50 +43,33 @@ public class LoanFullScale{
 	public void setBillInvestService(BillInvestService billInvestService) {
 		this.billInvestService = billInvestService;
 	}
-	private InvestListService investListService;
+	private LoanListService loanListService;
 	@Resource
-	public void setService(InvestListService investListService) {
-		this.investListService = investListService;
+	public void setLoanListService(LoanListService loanListService) {
+		this.loanListService = loanListService;
 	}
     //定义任务执行体  
     public void run()    
     {  
         if (!isRunning)  
         {  
-        	 LoggerUtils.info("------------------------检测是否有满标，或者流标", this.getClass());
-        	try {
-        		//1.查询流标
-                queryTodayFailScale();
-			
-        	} catch (Exception e) {
-			
-			}
+        	try{
+        		//1.查询满标
+        		List<Scale> scales = queryTodayFullScale();
+        		for(Scale scale : scales){
+        			//2.查询满标中借贷列表
+        			List<LoanList> loanLists = queryLoanListByScale(scale.getId());
+        			//3.进行
+        			for(LoanList loanList : loanLists){
+        				fullScaleLoanMoney(loanList,scale);
+        			}
+        		}
+        	}catch(Exception e){
+        		LoggerUtils.error("QueryFullScale-----定时查询满标错误："+e.getMessage(), this.getClass());
+        		e.printStackTrace();
+        	}
         }  
     }  
-	
-	/**
-	 * 查询流标
-	 * @Title: queryTodayFailScale   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @return
-	 * @param: @throws Exception  
-	 * @author LiYonghui    
-	 * @date 2016年11月11日 上午11:29:53
-	 * @return: List<Scale>      
-	 * @throws
-	 */
-    private List<Scale> queryTodayFailScale() throws Exception{
-    	//获取昨天的日期
-    	Calendar cal = Calendar.getInstance();
-    	cal.add(Calendar.DATE, -1);
-    	System.out.println("------------------------检测 "+DateUtils.date2Str(cal.getTime(), "yyyy-MM-dd")+" 是否有满标");
-    	//查询到期的标
-    	CondsUtils condsUtils = new CondsUtils();
-    	condsUtils.addProperties(true, "endTime", "status");
-		condsUtils.addValues(true, cal.getTime(), 2);
-		List<Scale> scaleList = scaleService.queryEntity("endTime", cal.getTime(), null, null);
-    	return scaleList;
-    }
     
 	/**
 	 * 查询满标
@@ -113,14 +89,14 @@ public class LoanFullScale{
     	//查询到期的标
     	CondsUtils condsUtils = new CondsUtils();
     	condsUtils.addProperties(true, "endTime", "status");
-		condsUtils.addValues(true, cal.getTime(), 3);
+		condsUtils.addValues(true, cal.getTime(), org.duang.enums.loan.Scale.S3.getVal());
 		List<Scale> scaleList = scaleService.queryEntity("endTime", cal.getTime(), null, null);
     	return scaleList;
     }
     
     /**
-     * 根据标查询所有的投标列表
-     * @Title: queryInvestListByScale   
+     * 查询借贷列表
+     * @Title: queryLoanListByScale   
      * @Description: TODO(这里用一句话描述这个方法的作用)   
      * @param: @param scaleId
      * @param: @return
@@ -130,34 +106,30 @@ public class LoanFullScale{
      * @return: List<InvestList>      
      * @throws
      */
-    private List<InvestList> queryInvestListByScale(String scaleId) throws Exception{
-    	String sql = "select * from invest_list where scale_id='"+scaleId+"' and status=2 and isTurn=0";
-    	List<InvestList> investLists = investListService.queryBySQL(sql, null, null,true);
-    	return investLists;
+    private List<LoanList> queryLoanListByScale(String scaleId) throws Exception{
+    	String sql = "select * from loan_list ll  left join scale_loan_list sll on ll.id=sll.loan_list where sll.scale='"+scaleId
+    			+"' and apply_state=2 and loan_state=1";
+    	List<LoanList> loanLists = loanListService.queryBySQL(sql, null, null,true);
+    	return loanLists;
     }
     
     /**
-     * 根据标，查询所有的理财记录
-     * @Title: queryInvestorByScale   
+     * 查询借贷列表
+     * @Title: queryLoanListByScale   
      * @Description: TODO(这里用一句话描述这个方法的作用)   
-     * @param: @param scales
+     * @param: @param scaleId
      * @param: @return
      * @param: @throws Exception  
      * @author LiYonghui    
-     * @date 2016年11月11日 下午4:25:26
+     * @date 2016年11月11日 下午2:07:29
      * @return: List<InvestList>      
      * @throws
      */
-    private List<InvestList> queryInvestorByScale(List<Scale> scales) throws Exception{
-    	List<InvestList> investLists = new ArrayList<InvestList>();
-    	for (Scale scale : scales) {
-			List<InvestList> invests = queryInvestListByScale(scale.getId());
-			for(InvestList investList : invests){
-				investLists.add(investList);
-			}
-		}
-    	return investLists;
-    	
+    private int queryLoanListMoney(String scaleId) throws Exception{
+    	String sql = "select sum(get_money-yet_money) from loan_list ll  left join scale_loan_list sll on ll.id=sll.loan_list where sll.scale='"+scaleId
+    			+"' and apply_state=2 and loan_state=1";
+    	List<?> loanLists = loanListService.queryBySQL(sql, null, null,false);
+    	return Integer.parseInt(loanLists.get(0).toString());
     }
     
     /**
@@ -233,8 +205,8 @@ public class LoanFullScale{
     }
     
     /**
+     * 满标，进行放款
      * @throws Exception 
-     * 流标，退回投资人的本标投资资金
      * @Title: failScaleBackInvestorMoney   
      * @Description: TODO(这里用一句话描述这个方法的作用)   
      * @param: @param investLists  
@@ -243,15 +215,15 @@ public class LoanFullScale{
      * @return: void      
      * @throws
      */
-    private void failScaleBackInvestorMoney(InvestList investList,Scale scale) throws Exception{
-    	LoggerUtils.info("\t\n------------流标赎回  "+scale.getName()+"  退回"+investList.getMemberInfo().getRealName()+"的投资金额", this.getClass());
+    private void fullScaleLoanMoney(LoanList loanList,Scale scale) throws Exception{
+    	LoggerUtils.info("\t\n------------流标赎回  "+scale.getName()+"  退回"+loanList.getMemberInfo().getRealName()+"的投资金额", this.getClass());
     	//生成一个流水号
 		String requestId = DataUtils.randomUUID();
-		//计算到账金额（本金）
-		double prinMoney = investList.getMoney(); //本金
+		//放款金额
+		double prinMoney = queryLoanListMoney(scale.getId());
 		//获取分账列表
-		String subledgerList = getSubledgerList(investList.getMemberInfo().getId());
-		Map<String , String> keyMap = getURLCodeAkey("prinInteMessageURL","prinInteFailScaleNoticeURL");
+		String subledgerList = getSubledgerList(loanList.getMemberInfo().getId());
+		Map<String , String> keyMap = getURLCodeAkey("fullScaleURL","fullScaleCallbackURL");
 		//数字签名字符串
 		//规范请求流水号(requestId)+商户编号(merchantCode)+项目编号(projectCode)+本息到账金额(sum)+手续费收取方式(payType)+
 		//分账列表(subledgerList)+异步通知地址(noticeUrl)+主账户类型(mainAccountType)+主账户编码(mainAccountCode)
@@ -277,7 +249,7 @@ public class LoanFullScale{
 		//result 查询结果  00000代表成功
 		String back_result = jsonObjectData.get("result").toString();
 		if(back_result.equals(ResultCode.SUCCESS.getVal())){
-			LoggerUtils.info("\t\n------------流标赎回受理成功", this.getClass());
+			LoggerUtils.info("\t\n------------满标放款受理成功", this.getClass());
 			String back_projectCode = jsonObjectData.get("projectCode").toString();
 			String back_requestId = jsonObjectData.get("requestId").toString();
 			//返回的签名
@@ -304,54 +276,8 @@ public class LoanFullScale{
 				LoggerUtils.info("\t\n------------签名不一致", this.getClass());
 			}
 		}else{
-			LoggerUtils.info("\t\n------------流标赎回失败 ，原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, back_result)), this.getClass());
+			LoggerUtils.info("\t\n------------满标放款失败 ，原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, back_result)), this.getClass());
 		}
-    }
-    
-    
-    
-    /**
-     * 本息到账
-     */
-    private void ransomExpireScale(){
-    }
-    
-    
-    public void returnPrinInteMessage(String urlStr,String merchantCode,String akey,String fee,Scale scale,InvestList investList) throws Exception{
-		//生成一个流水号
-		String requestId = DataUtils.randomUUID();
-		//计算到账金额（本金+利息）
-		double prinMoney = investList.getMoney(); //本金
-		double total_revenue = scale.getRevenue()+scale.getRevenueAdd();//收益率
-		double incoming = total_revenue/365D*investList.getDays();//收益金额
-		double prinIntSum = prinMoney+incoming;//本息金额
-		//获取分账列表
-		String subledgerList = getSubledgerList(investList.getMemberInfo().getId());
-		//异步通知地址
-		String noticeUrl = "";
-		
-		//数字签名字符串
-		//规范请求流水号(requestId)+商户编号(merchantCode)+项目编号(projectCode)+本息到账金额(sum)+手续费收取方式(payType)+
-		//分账列表(subledgerList)+异步通知地址(noticeUrl)+主账户类型(mainAccountType)+主账户编码(mainAccountCode)
-		StringBuffer signatureBuffer = new StringBuffer();
-		signatureBuffer.append(requestId).append(merchantCode).append(scale.getId()).append(prinIntSum).append(fee)
-					   .append(subledgerList).append(noticeUrl);
-		LoggerUtils.info("------------查询银行卡信息 数字签名字符串："+signatureBuffer.toString(), this.getClass());
-		//加密后的数字签名
-		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), akey);
-		LoggerUtils.info("------------查询银行卡信息 签名加密："+signature_sign.toString(), this.getClass());
-		//封装map参数
-		Map<String,String> map = new HashMap<String, String>();
-		map.put("requestId",requestId);
-		map.put("merchantCode",merchantCode);
-		//map.put("userIdIdentity",userIdIdentity);
-		//map.put("queryType",queryType);
-		map.put("signature",signature_sign);
-		//获取转换的参数
-		//JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
-		//result 查询结果  00000代表成功
-		//String resultCallbace = jsonObjectData.get("result").toString();
-		
     }
     
 }

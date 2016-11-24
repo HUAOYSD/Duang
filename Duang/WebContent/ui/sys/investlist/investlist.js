@@ -59,6 +59,7 @@ function loadinvestlist(url, dataObj){
 		queryParams : dataObj,
 		fitColumns : false,
 		remoteSort : false,
+		showFooter: true,
 		rowStyler: function(index,row){},
 		frozenColumns: [[
 		                 {field:'id',checkbox:true},
@@ -87,11 +88,11 @@ function loadinvestlist(url, dataObj){
 		             {field : "memberPhone", title : "手机号", width : 120, align : "center" },
 		             {field : "memberIdcard", title : "身份证", width : 130, align : "center" },
 		             {field : "money", title : "投资总金额", width : 100, align : "center" },
-		             {field : "useTicket", title : "使用理财券", width : 100, align : "center" },
 		             {field : "total_money", title : "总金额", width : 100, align : "center" },
 		             {field : "backIncome", title : "赎回收益", width : 100, align : "center" },
 		             {field : "backMoney", title : "赎回(本金)", width : 100, align : "center" },
 		             {field : "income", title : "实际收益", width : 100, align : "center" },
+		             {field : "useTicket", title : "使用理财券", width : 100, align : "center" },
 		             {field : "ticketBonus", title : "理财券奖励", width : 100, align : "center" },
 		             {field : "isTurn", title : "是否已转让", width : 100, align : "center" },
 		             {field : "turnStatus", title : "转让状态", width : 100, align : "center" },
@@ -120,10 +121,33 @@ function loadinvestlist(url, dataObj){
 		            			 return new Date(value).format("yyyy-MM-dd");
 		            	 }
 		             }
-		             ] ]
+		             ] ],
+		             onLoadSuccess:function(data){
+		            	 getFooter();
+		        	}
 	});
 }
 
+function getFooter(){
+	//重新加载表格页脚行数据
+   // 更新页脚行的值并刷新
+	var footer = $('#investlist').datagrid('getFooterRows');
+	console.info(footer);
+	footer[0]['money'] = '<font style="font-weight: bold;">'+footer[0]['money']+'</font>';
+	footer[0]['total_money'] = '<font style="font-weight: bold;">'+footer[0]['total_money']+'</font>';
+	footer[0]['backIncome'] = '<font style="font-weight: bold;">'+footer[0]['backIncome']+'</font>';
+	footer[0]['backMoney'] = '<font style="font-weight: bold;">'+footer[0]['backMoney']+'</font>';
+	footer[0]['income'] = '<font style="font-weight: bold;">'+footer[0]['income']+'</font>';
+	
+	footer[0]['calcBeginDate'] = "";
+	footer[0]['calcEndDate'] = "";
+	footer[0]['openDate'] = "";
+	footer[0]['backDate'] = "";
+	footer[0]['days'] = "";
+	footer[0]['memberIdcard'] = '<font style="font-weight: bold;">合计：</font>';
+	
+	$('#investlist').datagrid('reloadFooter',footer);
+}
 
 /**
  * 查询

@@ -132,6 +132,7 @@ public class QueryExpireScale{
     		//手续费
     		String fee = ReadProperties.getStringValue(properties, "fee");
     		for (Scale scale : scales) {
+    			//查询每个标对应的理财记录
     			List<InvestList> invests = queryInvestListByScale(scale.getId());
     			for(InvestList investList : invests){
     				returnPrinInteMessage(urlStr,merchantCode,akey,fee,scale,investList);

@@ -1,5 +1,7 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -7,9 +9,27 @@ import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.BillLoanDao;
+import org.duang.dao.BindCardDao;
+import org.duang.dao.InvestListDao;
+import org.duang.dao.InvestMemberDao;
+import org.duang.dao.LoanListDao;
+import org.duang.dao.LoanMemberDao;
 import org.duang.dao.ScaleDao;
+import org.duang.dao.ScaleLoanListDao;
+import org.duang.entity.BillLoan;
+import org.duang.entity.BindCard;
+import org.duang.entity.InvestList;
+import org.duang.entity.InvestMember;
+import org.duang.entity.LoanList;
+import org.duang.entity.LoanMember;
 import org.duang.entity.Scale;
+import org.duang.entity.ScaleLoanList;
+import org.duang.enums.invest.Status;
+import org.duang.enums.loan.Apply;
+import org.duang.enums.loan.LoanStatus;
 import org.duang.service.ScaleService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -302,4 +322,169 @@ public class ScaleServiceImpl implements ScaleService{
 		}
 		return -1;
 	}
+
+	private LoanListDao loanListDao;
+	@Resource()
+	public void setLoanListDao(LoanListDao loanListDao) {
+		this.loanListDao = loanListDao;
+	}
+	private BindCardDao bindCardDao;
+	@Resource()
+	public void setBindCardDao(BindCardDao bindCardDao) {
+		this.bindCardDao = bindCardDao;
+	}
+	private BillLoanDao billLoanDao;
+	@Resource()
+	public void setBillLoanDao(BillLoanDao billLoanDao) {
+		this.billLoanDao = billLoanDao;
+	}
+	@Override
+	public boolean fullScaleLoanMoney(String scaleId, double money) throws Exception {
+		//满标进行放款
+		//查询标的借贷列表
+		boolean success = false;
+		String sql = "select * from loan_list ll  left join scale_loan_list sll on ll.id=sll.loan_list where sll.scale='"+scaleId
+    			+"' and apply_state=2 and loan_state=1";
+    	List<LoanList> loanLists = loanListDao.queryBySQL(sql, null, null,true);
+    	for(LoanList loanList : loanLists){
+    		loanList.setYetMoney(loanList.getGetMoney());
+    		loanList.setLoanState(3);
+    		//1.修改借贷列表
+    		success = loanListDao.updateEntity(loanList);
+    		if(success){
+    			//2.生成放款记录
+    			//获取BindCard
+    			BindCard bindCard = bindCardDao.findEntity("memberInfo.id", loanList.getMemberInfo().getId());
+    			BillLoan billLoan = new BillLoan(DataUtils.randomUUID());
+    			billLoan.setBindCard(bindCard);
+    			//状态，1操作中，2成功，3失败
+    			billLoan.setBillStatus(2);
+    			billLoan.setLoanList(loanList);
+    			billLoan.setMemberInfo(loanList.getMemberInfo());
+    			billLoan.setOptTime(new Date());
+    			billLoan.setStatus(LoanStatus.S1.getVal());
+    			billLoan.setMoney(+money);
+    			billLoan.setDoneMoney(money);
+    			//方式，1线下，2Android，3IOS，4平台系统
+    			billLoan.setStyle(4);
+    			billLoan.setRemark("放款");
+    			success = billLoanDao.saveEntity(billLoan);
+    			if(!success){
+    				LoggerUtils.error("\t\n-------------------------name:"+loanList.getMemberInfo().getRealName()+
+									  "\t\n------------------------phone:"+loanList.getMemberInfo().getPhone()+
+									  "\t\n---------------------nickName:"+loanList.getMemberInfo().getNickname()+
+									  "\t\n---------------------放款操作中，保存放款记录失败", this.getClass());
+    			}
+    		}else{
+    			LoggerUtils.error("\t\n-------------------------name:"+loanList.getMemberInfo().getRealName()+
+    							  "\t\n------------------------phone:"+loanList.getMemberInfo().getPhone()+
+    							  "\t\n---------------------nickName:"+loanList.getMemberInfo().getNickname()+
+    							  "\t\n---------------------放款操作中，更新借贷列表失败", this.getClass());
+    		}
+    	}
+    	
+    	List<InvestList> investLists = investListDao.queryEntity("scale.id", scaleId, null, null);
+    	for(InvestList investList : investLists){
+    		investList.setStatus(Status.S2.getVal());
+    		investList.setCalcBeginDate(new Date());
+    		investList.setCalcEndDate(getDate(investList.getCalcBeginDate(),investList.getDays()));
+    		//1.修改投标列表状态
+    		success = investListDao.updateEntity(investList);
+    	}
+    	
+		return success;
+	}
+
+	/**
+	 * 获取指定日期的day天前的日期
+	 * @Title: getDate   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param date
+	 * @param: @param day
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年11月23日 下午6:44:41
+	 * @return: Date      
+	 * @throws
+	 */
+	private Date getDate(Date date,int day){
+		  Calendar cal = Calendar.getInstance();
+		  cal.setTime(date);
+		  cal.add(Calendar.DATE, day);
+		  return cal.getTime();
+	}
+	
+	private InvestListDao investListDao;
+	@Resource
+	public void setInvestListDao(InvestListDao investListDao) {
+		this.investListDao = investListDao;
+	}
+	private InvestMemberDao investMemberDao;
+	@Resource
+	public void setInvestMemberDao(InvestMemberDao investMemberDao) {
+		this.investMemberDao = investMemberDao;
+	}
+	private ScaleLoanListDao scaleLoanListDao;
+	@Resource
+	public void setScaleLoanListDao(ScaleLoanListDao scaleLoanListDao) {
+		this.scaleLoanListDao = scaleLoanListDao;
+	}
+	private LoanMemberDao loanMemberDao;
+	@Resource
+	public void setLoanMemberDao(LoanMemberDao loanMemberDao) {
+		this.loanMemberDao = loanMemberDao;
+	}
+	/**
+	 * 流标赎回操作
+	 * @Title: fullScaleLoanMoney   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param scaleId
+	 * @param: @param money
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月23日 下午5:00:41
+	 * @return: boolean      
+	 * @throws
+	 */
+	public boolean failScaleBackMoney(String scaleId, double money) throws Exception {
+		boolean success = false;
+		//1.修改标状态
+		Scale scale = dao.findById(scaleId);
+		scale.setStatus(org.duang.enums.loan.Scale.S2.getVal());
+		success = dao.updateEntity(scale);
+		if(success){
+			//修改投资记录
+			List<InvestList> investLists = investListDao.queryEntity("scale.id", scaleId, null, null);
+			for(InvestList investList : investLists){
+				investList.setBackIncome(0);
+				investList.setBackMoney(investList.getMoney());
+				investList.setTotalMoney(investList.getMoney());
+				investList.setStatus(org.duang.enums.invest.Status.S9.getVal());
+				investList.setBackDate(new Date());
+				success = investListDao.updateEntity(investList);
+				//修改投标人的账户信息
+				InvestMember investMember = investMemberDao.findEntity("memberInfo.id",investList.getMemberInfo().getId());
+				if(investMember != null){
+					investMember.setInvesting(investMember.getInvesting()-investList.getMoney());
+					investMemberDao.updateEntity(investMember);
+				}
+			}
+			//修改借贷人的账户信息
+			List<ScaleLoanList> scaleLoanLists = scaleLoanListDao.queryEntity("scale.id",scaleId, null, null);
+			for(ScaleLoanList scaleLoanList : scaleLoanLists){
+				LoanList loanList = scaleLoanList.getLoanList();
+				loanList.setApplyState(Apply.A4.getVal());
+				success = loanListDao.updateEntity(loanList);
+				LoanMember loanMember = loanMemberDao.findEntity("memberInfo.id", loanList.getMemberInfo().getId());
+				loanMember.setBackMoney(loanMember.getCurMoney()-loanList.getMoney());
+				loanMember.setLendMoney(loanMember.getLendMoney()-loanList.getMoney());
+				loanMemberDao.updateEntity(loanMember);
+			}
+		}else{
+			LoggerUtils.error("\t\n--------------流标申请，异步返回数据处理，更新标状态错误", this.getClass());
+		}
+		return success;
+	}
+
 }

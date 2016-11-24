@@ -179,6 +179,10 @@
 	</aop:config>
   	<!-- 事务配置结束 -->
     
-    <!-- 定时任务 -->
+    <!-- 到期标定时任务 -->
     <import resource="classpath:queryexpirescaletask.xml"/>
+    <!-- 满标定时任务 -->
+    <import resource="classpath:queryfailscaletask.xml"/>
+    <!-- 流标定时任务 -->
+    <import resource="classpath:queryfullscaletask.xml"/>
 </beans>

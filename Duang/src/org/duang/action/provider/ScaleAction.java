@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -398,47 +397,6 @@ public class ScaleAction extends BaseAction<Scale>{
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
 		printJsonResult();
-	}
-
-
-	/**
-	 * 流标赎回异步回调
-	 * @Title: failScaleFFCallback   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author LiYonghui    
-	 * @date 2016年11月11日 下午5:18:20
-	 * @return: void      
-	 * @throws
-	 */
-	public void failScaleFFCallback(){
-		try{
-			//读取配置文件中
-			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
-			String requestId = getRequest().getParameter("requestId");
-			String result = getRequest().getParameter("result");
-			//本息到账金额
-			String sum = getRequest().getParameter("sum");
-			//项目编号
-			String projectCode = getRequest().getParameter("projectCode");
-			//项目还款账户余额
-			String accountBalance = getRequest().getParameter("accountBalance");
-			//请求时间
-			String requestTime = getRequest().getParameter("requestTime");
-			//处理时间
-			String dealTime = getRequest().getParameter("dealTime");
-			//手续费收取方式
-			String payType = getRequest().getParameter("payType");
-
-			String signature = getRequest().getParameter("signature");
-
-			StringBuffer backStringBuffer = new StringBuffer("\t\n---------------------------投标回调字符串：");
-		}catch(Exception e){
-			e.printStackTrace();
-			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getLocalizedMessage(), this.getClass());
-		}
-
 	}
 
 }

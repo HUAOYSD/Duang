@@ -25,4 +25,34 @@ public interface ScaleService extends CommonInterface<Scale>{
 	 * @throws
 	 */
 	public abstract int findScaleState(String id) throws Exception;
+	
+	/**
+	 * 满标放款操作
+	 * @Title: fullScaleLoanMoney   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param scaleId
+	 * @param: @param money
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月23日 下午5:00:41
+	 * @return: boolean      
+	 * @throws
+	 */
+	public abstract boolean fullScaleLoanMoney(String scaleId, double money) throws Exception;
+	
+	/**
+	 * 流标赎回操作
+	 * @Title: fullScaleLoanMoney   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param scaleId
+	 * @param: @param money
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年11月23日 下午5:00:41
+	 * @return: boolean      
+	 * @throws
+	 */
+	public abstract boolean failScaleBackMoney(String scaleId, double money) throws Exception;
 }

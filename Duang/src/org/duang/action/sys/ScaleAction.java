@@ -4,6 +4,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -23,11 +24,14 @@ import org.duang.entity.Scale;
 import org.duang.enums.Has;
 import org.duang.enums.If;
 import org.duang.enums.May;
+import org.duang.enums.ResultCode;
 import org.duang.enums.product.Category;
 import org.duang.enums.scale.Status;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.duang.util.MD5Utils;
+import org.duang.util.ReadProperties;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -314,4 +318,107 @@ public class ScaleAction extends BaseAction<Scale> {
 		}
 		return ResultPath.LIST;
 	}
+	
+	/**
+	 * 流标赎回异步回调
+	 * @Title: failScaleFFCallback   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月11日 下午5:18:20
+	 * @return: void      
+	 * @throws
+	 */
+	public void failScaleFFCallback(){
+		try{
+			//读取配置文件中
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			String requestId = getRequest().getParameter("requestId");
+			String result = getRequest().getParameter("result");
+			if(result.equals(ResultCode.SUCCESS.getVal())){
+				//本息到账金额
+				String sum = getRequest().getParameter("sum");
+				//项目编号
+				String projectCode = getRequest().getParameter("projectCode");
+				//项目总余额
+				String projectSum = getRequest().getParameter("projectSum");
+				String signature = getRequest().getParameter("signature");
+				
+				//返回数据进行签名拼接
+				StringBuffer back_data_str = new StringBuffer();
+				back_data_str.append(requestId).append(projectCode).append(result);
+				LoggerUtils.info("\t\n------------返回数据签名字符串拼接："+back_data_str, this.getClass());
+				//返回数据加密后的签名
+				String back_data_sign = MD5Utils.hmacSign(back_data_str.toString(), ReadProperties.getStringValue(properties, "akey"));
+				LoggerUtils.info("\t\n------------返回数据签名字符串加密："+back_data_sign, this.getClass());		
+				if(back_data_sign.equals(signature)){
+					service.failScaleBackMoney(projectCode, DataUtils.str2double(sum, 6));
+				}else{
+					LoggerUtils.error("\t\n------------流标赎回失败 ，原因签名不一致", this.getClass());
+				}
+			}else{
+				LoggerUtils.error("\t\n------------流标赎回失败 ，原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)), this.getClass());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getLocalizedMessage(), this.getClass());
+		}
+
+	}
+	
+	/**
+	 * 满标放款处理结果异步返回
+	 * @Title: fullLoanMoneyCallback   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月22日 下午1:52:11
+	 * @return: void      
+	 * @throws
+	 */
+	public void fullLoanMoneyCallback(){
+		LoggerUtils.info("\t\n---------------------------------------满标放款异步回调处理", this.getClass());
+		String projectCode = "";
+		try{
+			//读取配置文件中
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			String result = getRequest().getParameter("result");
+			if(result.equals(ResultCode.SUCCESS.getVal())){
+				String requestId = getRequest().getParameter("requestId");
+				//本息到账金额
+				String sum = getRequest().getParameter("sum");
+				//项目编号
+				projectCode = getRequest().getParameter("projectCode");
+				//项目还款账户余额
+				String mainAccountCode = getRequest().getParameter("mainAccountCode");
+				//主账户编码
+				String mainAccountType = getRequest().getParameter("mainAccountType");
+				//手续费收取方式
+				String payType = getRequest().getParameter("payType");
+	
+				String signature = getRequest().getParameter("signature");
+				
+				//返回数据进行签名拼接
+				StringBuffer back_data_str = new StringBuffer();
+				back_data_str.append(requestId).append(projectCode).append(result);
+				LoggerUtils.info("\t\n------------请求编号："+requestId+"  返回数据签名字符串拼接："+back_data_str, this.getClass());
+				//返回数据加密后的签名
+				String back_data_sign = MD5Utils.hmacSign(back_data_str.toString(), ReadProperties.getStringValue(properties, "akey"));
+				LoggerUtils.info("\t\n------------请求编号："+requestId+"  返回数据签名字符串加密："+back_data_sign, this.getClass());		
+				if(back_data_sign.equals(signature)){
+					service.fullScaleLoanMoney(projectCode, DataUtils.str2double(sum, 6));
+				}else{
+					LoggerUtils.info("\t\n------------满标放款 签名不一致 ，请求编号："+requestId, this.getClass());
+				}
+			}else{
+				LoggerUtils.info("满标放款失败，标的id:"+projectCode+"原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)), this.getClass());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getLocalizedMessage(), this.getClass());
+		}
+	}
+	
 }
