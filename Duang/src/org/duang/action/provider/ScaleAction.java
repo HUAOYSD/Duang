@@ -282,7 +282,8 @@ public class ScaleAction extends BaseAction<Scale>{
 					resultMap.put("buyName", memberInfo.getRealName());
 					resultMap.put("numbers", numbers);
 					resultMap.put("status", scale.getStatus());
-					resultMap.put("min", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
+					resultMap.put("singleOrSet", scale.getSingleOrSet());
+					resultMap.put("min", scale.getMinLimit());
 				}
 
 				scaleListMap.add(resultMap);
@@ -347,7 +348,8 @@ public class ScaleAction extends BaseAction<Scale>{
 					//标的购买人数
 					int investMemberNum = investListService.count("scale.id", s.getId());
 					resultMap.put("investMemberNum", investMemberNum);
-					resultMap.put("minMoney", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
+					resultMap.put("minMoney", s.getMinLimit());
+					resultMap.put("singleOrSet", s.getSingleOrSet());
 				}
 				Product p = s.getProduct();
 				if (p != null) {

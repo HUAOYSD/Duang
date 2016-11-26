@@ -177,6 +177,8 @@ public class ScaleAction extends BaseAction<Scale> {
 						resultMap.put("revenue", s.getRevenue());
 						resultMap.put("revenueAdd", s.getRevenueAdd());
 						resultMap.put("maxLimit", s.getMaxLimit());
+						resultMap.put("singleOrSet", s.getSingleOrSet());
+						resultMap.put("minLimit", s.getMinLimit());
 						resultMap.put("returnStyle", s.getReturnStyle());
 						resultMap.put("tags", s.getTags());
 						resultMap.put("useTicket", May.valueOf("May"+s.getUseTicket()).toString());
@@ -300,6 +302,7 @@ public class ScaleAction extends BaseAction<Scale> {
 					entity = service.findById(entity.getId());
 					Map<String, Object> map = new HashMap<String, Object>();
 					map.put("productName", entity.getProduct().getName());
+					map.put("product.id", entity.getProduct().getId());
 					map.put("name", entity.getName());
 					map.put("beginTime", DateUtils.date2Str(entity.getBeginTime(), "yyyy-MM-dd"));
 					map.put("endTime", DateUtils.date2Str(entity.getEndTime(), "yyyy-MM-dd"));
@@ -319,6 +322,8 @@ public class ScaleAction extends BaseAction<Scale> {
 					map.put("yetMoney", entity.getYetMoney());
 					map.put("scoreBonus", Has.valueOf("Has"+entity.getScoreBonus()).toString());
 					map.put("onesScore", entity.getOnesScore());
+					map.put("singleOrSet", entity.getSingleOrSet());
+					map.put("minLimit", entity.getMinLimit());
 					map.put("status", Status.valueOf("S"+entity.getStatus()).toString());
 					map.put("isTurn", If.valueOf("If"+entity.getIsTurn()).toString());
 					getRequest().setAttribute("info", map);
@@ -395,27 +400,28 @@ public class ScaleAction extends BaseAction<Scale> {
      * @throws
      */
     private String getSubledgerList(String memberInfoId) throws Exception{
-    	memberInfoId = "9f3de74e999b495dab72d634b983a267";
+    	memberInfoId = "da5d2a3f259c4a2994ba22ab8b9d2d5f";
     	//List<BillInvest> billInvests = billInvestService.queryEntity("memberInfo.id", memberInfoId, null, Order.desc("optTime"));
     	StringBuffer paramBuffer = new StringBuffer("[{");
     	//if(DataUtils.notEmpty(billInvests)){
     		//BillInvest billInvest = billInvests.get(0);
-    		 paramBuffer.append("roleType")
+    		 paramBuffer.append("\"roleType\"")
              .append(":")
-             .append(URLEncoder.encode("0", "gbk"))
+             .append("\"0\"")
              .append(",")
-             .append("roleCode")
+             .append("\"roleCode\"")
              .append(":")
-             .append(URLEncoder.encode(memberInfoId, "gbk"))
+             .append("\""+memberInfoId+"\"")
              .append(",")
-             .append("inOrOut")
+             .append("\"inOrOut\"")
              .append(":")
-             .append(URLEncoder.encode("0", "gbk"))
+             .append("\"0\"")
              .append(",")
-             .append("sum")
+             .append("\"sum\"")
              .append(":")
-             .append(URLEncoder.encode(String.valueOf(10), "gbk"))
-    		 .append("}]");
+             .append("\"500\"")
+    		 .append("}")
+    		 .append("]");
     		 
     	//}
     	return paramBuffer.toString();
@@ -487,11 +493,11 @@ public class ScaleAction extends BaseAction<Scale> {
      * @throws
      */
     private void fullScaleLoanMoney(LoanList loanList,Scale scale) throws Exception{
-    	LoggerUtils.info("\t\n------------流标赎回  "+scale.getName()+"  退回"+loanList.getMemberInfo().getRealName()+"的投资金额", this.getClass());
+    	LoggerUtils.info("\t\n------------满标放款  "+scale.getName()+"  退回"+loanList.getMemberInfo().getRealName()+"的投资金额", this.getClass());
     	//生成一个流水号
 		String requestId = DataUtils.randomUUID();
 		//放款金额
-		double prinMoney = queryLoanListMoney(scale.getId());
+		double prinMoney = 500;
 		//获取分账列表
 		String subledgerList = getSubledgerList(loanList.getMemberInfo().getId());
 		Map<String , String> keyMap = getURLCodeAkey("fullScaleURL","fullScaleCallbackURL");
@@ -501,19 +507,19 @@ public class ScaleAction extends BaseAction<Scale> {
 		StringBuffer signatureBuffer = new StringBuffer();
 		signatureBuffer.append(requestId).append(keyMap.get("merchantCode")).append(scale.getId()).append(prinMoney).append(keyMap.get("fee"))
 					   .append(subledgerList).append(keyMap.get("noticeURL"));
-		LoggerUtils.info("\t\n------------流标赎回 数字签名字符串："+signatureBuffer.toString(), this.getClass());
+		LoggerUtils.info("\t\n------------满标放款 数字签名字符串："+signatureBuffer.toString(), this.getClass());
 		//加密后的数字签名
 		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), keyMap.get("akey"));
-		LoggerUtils.info("\t\n------------流标赎回 签名加密："+signature_sign.toString(), this.getClass());
+		LoggerUtils.info("\t\n------------满标放款 签名加密："+signature_sign.toString(), this.getClass());
 		//封装map参数
 		Map<String,String> map = new HashMap<String, String>();
 		map.put("requestId",requestId);
-		map.put("merchantCode",map.get("merchantCode"));
+		map.put("merchantCode",keyMap.get("merchantCode"));
 		map.put("projectCode",scale.getId());
 		map.put("sum",String.valueOf(prinMoney));
 		map.put("payType",keyMap.get("fee"));
 		map.put("subledgerList",subledgerList);
-		map.put("noticeUrl",map.get("noticeUrl"));
+		map.put("noticeUrl",keyMap.get("noticeURL"));
 		map.put("signature",signature_sign);
 		//获取转换的参数
 		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(keyMap.get("url"),map,"GBK");
@@ -540,8 +546,7 @@ public class ScaleAction extends BaseAction<Scale> {
 				LoggerUtils.info("\t\n------------手续费收取方式："+jsonObjectData.get("payType"), this.getClass());
 				LoggerUtils.info("\t\n------------主账户类型："+jsonObjectData.get("mainAccountType"), this.getClass());
 				LoggerUtils.info("\t\n------------主账户编码："+jsonObjectData.get("mainAccountCode"), this.getClass());
-				LoggerUtils.info("\t\n------------本息到账金额："+jsonObjectData.get("sum"), this.getClass());
-				LoggerUtils.info("\t\n------------请求时间："+jsonObjectData.get("requestTime"), this.getClass());
+				LoggerUtils.info("\t\n------------放款金额："+jsonObjectData.get("sum"), this.getClass());
 				LoggerUtils.info("\t\n------------数字签名："+jsonObjectData.get("signature"), this.getClass());
 			}else{
 				LoggerUtils.info("\t\n------------签名不一致", this.getClass());

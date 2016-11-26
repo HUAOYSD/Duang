@@ -51,6 +51,12 @@ public class Scale implements java.io.Serializable {
 	private int status;
 	private int isTurn;
 	private String giftFlag;
+	
+	private String singleOrSet;
+	private double minLimit;
+	private String standby1;
+	private double standby2;
+	private int standby3;
 	private Set<Stock> stocks = new HashSet<Stock>(0);
 	private Set<ScaleLoanList> scaleLoanLists = new HashSet<ScaleLoanList>(0);
 	private Set<InvestList> investLists = new HashSet<InvestList>(0);
@@ -67,7 +73,11 @@ public class Scale implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Scale(String id, InvestList investList, Product product,String name, Date beginTime, Date endTime, String timeLimit, Date calcBeginTime, Date calcEndTime, double revenue, double revenueAdd, double maxLimit, int returnStyle, String tags, int useTicket, int transfer, Date turnDate, double totalMoney, double residueMoney, double yetMoney, int scoreBonus, int onesScore, int status, int isTurn, Set<Stock> stocks, Set<ScaleLoanList> scaleLoanLists, Set<InvestList> investLists) {
+	public Scale(String id, InvestList investList, Product product,String name, Date beginTime, Date endTime, String timeLimit, 
+			Date calcBeginTime, Date calcEndTime, double revenue, double revenueAdd, double maxLimit, int returnStyle, String tags, 
+			int useTicket, int transfer, Date turnDate, double totalMoney, double residueMoney, double yetMoney, int scoreBonus, 
+			int onesScore, int status, int isTurn,String singleOrSet,double minLimit,String standby1,double standby2,int standby3,
+			Set<Stock> stocks, Set<ScaleLoanList> scaleLoanLists, Set<InvestList> investLists) {
 		this.id = id;
 		this.investList = investList;
 		this.product = product;
@@ -93,6 +103,11 @@ public class Scale implements java.io.Serializable {
 		this.status = status;
 		this.isTurn = isTurn;
 		this.stocks = stocks;
+		this.singleOrSet = singleOrSet;
+		this.minLimit = minLimit;
+		this.standby1 = standby1;
+		this.standby2 = standby2;
+		this.standby3 = standby3;
 		this.scaleLoanLists = scaleLoanLists;
 		this.investLists = investLists;
 	}
@@ -327,6 +342,51 @@ public class Scale implements java.io.Serializable {
 
 	public void setIsTurn(int isTurn) {
 		this.isTurn = isTurn;
+	}
+	
+	@Column(name = "singleOrSet")
+	public String getSingleOrSet() {
+		return singleOrSet;
+	}
+
+	public void setSingleOrSet(String singleOrSet) {
+		this.singleOrSet = singleOrSet;
+	}
+
+	@Column(name = "min_limit")
+	public double getMinLimit() {
+		return minLimit;
+	}
+
+	public void setMinLimit(double minLimit) {
+		this.minLimit = minLimit;
+	}
+
+	@Column(name = "standby1")
+	public String getStandby1() {
+		return standby1;
+	}
+
+	public void setStandby1(String standby1) {
+		this.standby1 = standby1;
+	}
+
+	@Column(name = "standby2")
+	public double getStandby2() {
+		return standby2;
+	}
+
+	public void setStandby2(double standby2) {
+		this.standby2 = standby2;
+	}
+
+	@Column(name = "standby3")
+	public int getStandby3() {
+		return standby3;
+	}
+
+	public void setStandby3(int standby3) {
+		this.standby3 = standby3;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "scale")

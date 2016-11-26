@@ -17,7 +17,14 @@
 		    </div> 
 		    <div>   
 		        <label for="product.id" class="add_edit_form_label">产品：</label>  
-		        <input class="easyui-combobox" name="product.id" style="width: 216px;"	data-options="valueField:'id',textField:'text',editable:false,url:'investpro!queryProductByCombobox.do',panelHeight:'auto',required:'true',missingMessage:'请选择产品！'" />
+		        <input class="easyui-combobox" name="product.id" style="width: 216px;"	data-options="valueField:'id',textField:'text',editable:false,url:'investpro!queryProductByCombobox.do?id=${entity.product.id}',panelHeight:'auto',required:'true',missingMessage:'请选择产品！'" />
+		    </div> 
+		    <div>   
+		        <label for="singleOrSet" class="add_edit_form_label">标类型：</label>  
+		        <select class="easyui-combobox" name="singleOrSet" style="width: 216px;" data-options="panelHeight:'auto'">   
+				    <option value="2" selected="selected">集合项目</option>   
+				    <option value="1">普通项目</option>   
+				</select>  
 		    </div> 
 		    <div>   
 		        <label for="beginTime" class="add_edit_form_label">开标时间：</label>  
@@ -48,9 +55,13 @@
 		        <input class="easyui-validatebox" name="revenueAdd" value="${entity.revenueAdd }" data-options="required:false,validType:'intOrFloat',missingMessage:''" /> 
 		    </div>
 		    <div>   
-		        <label for="maxLimit" class="add_edit_form_label">单笔限额：</label>  
-		        <input class="easyui-validatebox" name="maxLimit" value="${entity.maxLimit }" data-options="required:true,validType:'intOrFloat',missingMessage:'请输入单笔限额'" /> 
+		        <label for="maxLimit" class="add_edit_form_label">单笔最高限额：</label>  
+		        <input class="easyui-validatebox" name="maxLimit" value="${entity.maxLimit }" data-options="required:true,validType:'intOrFloat',missingMessage:'请输入单笔最高限额'" /> 
 		    </div> 
+		     <div>   
+		        <label for="minLimit" class="add_edit_form_label">单笔最低限额：</label>  
+		        <input class="easyui-validatebox" name="minLimit" value="${entity.minLimit}" data-options="required:true,validType:'intOrFloat',missingMessage:'请输入单笔最低限额'" /> 
+		    </div>
 		    <div>   
 		        <label for="returnStyle" class="add_edit_form_label">还款方式：</label>  
 		        <select class="easyui-combobox" name="returnStyle" style="width: 216px;" data-options="panelHeight:'auto'">   
@@ -119,11 +130,6 @@
     	</div>
 	</div>  
 	<script type="text/javascript">
-		$(function(){
-			var data = '{"product.id":"${entity.product.id}","useTicket":"${entity.useTicket}","transfer":"${entity.transfer}","scoreBonus":"${entity.scoreBonus}"}';
-			$("#scale_edit_form").form('load', eval('(' + data + ')'));
-		});
-		
 		$("#scale_edit_form_submitbtn").on("click", function(){
 			if(!$("#scale_edit_form").form('validate')){
 				return false;

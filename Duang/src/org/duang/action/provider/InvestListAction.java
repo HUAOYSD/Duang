@@ -95,7 +95,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 						Product product = scale.getProduct();
 						map.put("id", scale.getId());
 						map.put("day", product.getDays());
-						map.put("min", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
+						map.put("min", scale.getMinLimit());
+						map.put("singleOrSet", scale.getSingleOrSet());
 						map.put("revenue", scale.getRevenue()*100);
 						map.put("revenueAdd", scale.getRevenueAdd()*100);
 						map.put("yetmoney", scale.getYetMoney());
@@ -384,7 +385,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 						int investMemberNum = investListService.count("scale.id", fk2.getId());
 						resultMap.put("investMemberNum", investMemberNum);
 						resultMap.put("investing", pk.getMoney()*(fk2.getRevenueAdd()+fk2.getRevenue())/365D*fk2.getProduct().getDays());
-						resultMap.put("minMoney", ReadProperties.getStringValue(ReadProperties.initPrperties("sumapayURL.properties"), "minInvestMoney"));
+						resultMap.put("minMoney", fk2.getMinLimit());
+						resultMap.put("singleOrSet", fk2.getSingleOrSet());
 					}
 					listMap.add(resultMap);
 				}
@@ -449,7 +451,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 				resultMap.put("productDetails", fk2.getProduct().getDetails());
 				int days = (int) ((new Date().getTime() - pk.getCalcBeginDate().getTime()) / (3600000L*24));
 				double profit = (fk2.getRevenue()+fk2.getRevenueAdd())*pk.getMoney() / 365D * days;
-				
+				resultMap.put("minMoney", fk2.getMinLimit());
+				resultMap.put("singleOrSet", fk2.getSingleOrSet());
 				
 				resultMap.put("profitMoney", profit);
 				resultMap.put("proCategory", fk2.getProduct().getCategory());
@@ -516,7 +519,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 								.append("\t\n----remainInvestmentSum:"+remainInvestmentSum)
 								.append("\t\n----signature:"+signature);
 				
-				//LoggerUtils.info(backStringBuffer.toString(), this.getClass());
+				LoggerUtils.info(backStringBuffer.toString(), this.getClass());
 				
 				StringBuffer signatureStr = new StringBuffer();
 				signatureStr.append(requestId);

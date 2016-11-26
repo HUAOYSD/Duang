@@ -83,6 +83,9 @@ public class InvestProductAction extends BaseAction<Product>{
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("id", temp.getId());
 				map.put("text", temp.getNameZh()+"（"+(Category.valueOf("C"+temp.getCategory()).toString())+"）");
+				if(temp.getId().equals(entity.getId())){
+					map.put("selected", true);
+				}
 				listMap.add(map);
 			}
 			json = JSONArray.fromObject(listMap).toString();

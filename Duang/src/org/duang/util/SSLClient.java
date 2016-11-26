@@ -19,6 +19,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.poi.ss.formula.functions.Value;
 import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 import org.duang.common.logger.LoggerUtils;
 import org.json.JSONArray;
@@ -76,11 +77,17 @@ public class SSLClient{
 		StringBuffer paramBuffer = new StringBuffer();
         if (map != null && !map.isEmpty()) {
            for (Map.Entry<String, String> entry : map.entrySet()) {
+        	   String value ="";
+        	   if(entry.getKey().equals("subledgerList")){
+        		   value=entry.getValue();
+        	   }else{
+        		   value = URLEncoder.encode(entry.getValue(), "gbk");
+        	   }
         	   paramBuffer.append(entry.getKey())
                       .append("=")
-                      .append(URLEncoder.encode(entry.getValue(), "gbk"))
+                      .append(value)
                       .append("&");
-        	   LoggerUtils.info("\t\n---------"+entry.getKey()+":"+URLEncoder.encode(entry.getValue(), "gbk"), new SSLClient().getClass());
+        	   LoggerUtils.info("\t\n---------"+entry.getKey()+":"+value, new SSLClient().getClass());
            }
            paramBuffer.deleteCharAt(paramBuffer.length() - 1);
         }
