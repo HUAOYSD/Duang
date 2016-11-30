@@ -1,7 +1,6 @@
 package org.duang.task;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.Date;
@@ -47,7 +46,7 @@ public class BackUpDB {
 		// 创建执行的批处理
 		FileOutputStream fout = null;
 		OutputStreamWriter writer = null;
-		String batFile = "E:\\backup_databae.bat";
+		String batFile = "D:\\backup_databae.bat";
 		fout = new FileOutputStream(batFile);
 		writer = new OutputStreamWriter(fout, "utf8");
 		StringBuffer sb = new StringBuffer("");
