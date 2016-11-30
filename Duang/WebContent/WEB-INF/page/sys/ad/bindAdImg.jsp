@@ -35,7 +35,7 @@
 			<div>   
 				<form id="uploadBindAdImgForm">
 					   <label for="photoImg1" class="from_label">广告图片：</label>
-		               <input type="file" id="file" name="file" accept=".jpg,.jpeg,.png,.gif"> 
+		               <input type="file" id="file" name="imageAddress" accept=".jpg,.jpeg,.png,.gif"> 
 		               <input style="width:45px;" type="button" value="上传" onclick="doUpload()" id="btn_submit_bindAdImg"/>
 			    </form> 
 		 	</div>
@@ -96,7 +96,7 @@
 	        		 var formData = new FormData($( "#uploadBindAdImgForm" )[0]); 
 	        		 layer.load();
 	    		     $.ajax({  
-	    		          url: 'fileUpload!uploadAdImg.do?id=${entity.id}',  
+	    		          url: 'ad!uploadAdImg.do?id=${entity.id}',  
 	    		          type: 'POST',  
 	    		          data: formData,  
 	    		          async: false,  
@@ -108,10 +108,11 @@
 	    		        	  $("#btn_submit_bindCardImg").attr("disabled", false);
 	    		        	  data = JSON.parse(data);
 	    		              if(data.result==true){
+	    		            	  	layer.msg("上传成功！",{icon: 1});
 	    				    		window.parent.reloadDataGrid();
-	    				    		parent.layer.closeAll();
+	    				    		parent.layer.closeAll('iframe');
 	    				    	}else{
-	    				    		layer.msg(data.msg, {time: 3000});
+	    				    		layer.msg(data.msg, {icon: 2});
 	    				    	}
 	    		          },
 	    		          error: function(data){

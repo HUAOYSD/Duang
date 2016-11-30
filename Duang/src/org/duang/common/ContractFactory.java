@@ -8,8 +8,10 @@ import java.util.Map;
 
 import org.duang.entity.InvestList;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.UploadFile;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.duang.util.ReadProperties;
 
 import com.lowagie.text.Cell;
 import com.lowagie.text.Chunk;
@@ -85,6 +87,11 @@ public class ContractFactory extends Thread{
 		//
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(fullPath+"\\"+contractNo+".pdf")));
 		writer.setViewerPreferences(PdfWriter.HideMenubar);
+		//备份
+		String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+		String backUpPath=DataUtils.fileUploadPath(backupPath, UploadFile.PATH.getVal(UploadFile.CONTRACT.getVal())+"\\", contractNo+".pdf");
+		PdfWriter backUpwriter = PdfWriter.getInstance(document, new FileOutputStream(new File(backUpPath)));
+		backUpwriter.setViewerPreferences(PdfWriter.HideMenubar);
 		//
 		document.open();
 		/**

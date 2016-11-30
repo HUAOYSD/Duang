@@ -20,9 +20,12 @@ import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.Ad;
 import org.duang.enums.If;
+import org.duang.enums.UploadFile;
 import org.duang.service.AdService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.duang.util.ImageString;
+import org.duang.util.ReadProperties;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -379,6 +382,53 @@ public class AdAction extends BaseAction<Ad> {
 			LoggerUtils.error("跳转到上传广告图片页面错误：" + e.getLocalizedMessage(), this.getClass());
 		} 
 		return "bingadimg";
+	}
+	
+	/**
+	 * 上传广告轮播图片
+	 * @Title: uploadAdImg   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月30日 下午2:15:14
+	 * @return: void      
+	 * @throws
+	 */
+	public void uploadAdImg(){
+		boolean success=false;
+		try{
+			Ad ad = adService.findById(getRequest().getParameter("id"));
+			if (ad != null) {
+				//基本根路径
+				String temPath = getRequest().getSession().getServletContext().getRealPath("/");
+				//详细路径
+				String suffPath = UploadFile.PATH.getVal(UploadFile.AD.getVal())+"\\";
+				//文件名称
+				String fileName = DataUtils.randomUUID()+".jpg";
+				String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
+				success = ImageString.generateImage(entity.getImageAddress(), fullpath);
+				//备份
+				String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+				ImageString.generateImage(entity.getImageAddress(), DataUtils.fileUploadPath(backupPath, suffPath, fileName));
+				
+				LoggerUtils.info("广告上传:"+fileName+"----------------上传广告："+success, this.getClass());
+				if(success){
+					ad.setImageAddress(fileName);
+					success = adService.updateEntity(ad);
+				}
+			}else{
+				msg = "缺少参数,请补充";
+			}
+		}catch(Exception e){
+			success = false;
+			msg="上传失败";
+			e.printStackTrace();
+			LoggerUtils.error("AdAction uploadAdImg：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("AdAction uploadAdImg：" + e.getLocalizedMessage(), this.getClass());
+		}    
+		jsonObject.put("result", success);
+		jsonObject.put("msg", msg);
+		printJsonResult();
 	}
 	
 }
