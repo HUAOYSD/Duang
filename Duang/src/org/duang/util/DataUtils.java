@@ -1,5 +1,6 @@
 package org.duang.util; 
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
+import org.duang.enums.UploadFile;
 
 /** 
  * 数据工具类
@@ -203,6 +206,18 @@ public class DataUtils {
 		return contractNo.toString();
 	}
 
+	/**
+	 * 字符转换
+	 * @Title: ISO2UTF8   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param str
+	 * @param: @return
+	 * @param: @throws UnsupportedEncodingException  
+	 * @author LiYonghui    
+	 * @date 2016年11月29日 下午6:53:01
+	 * @return: String      
+	 * @throws
+	 */
 	public static String ISO2UTF8(String str) throws UnsupportedEncodingException{
 		if(notEmpty(str)){
 			return new String(str.getBytes("ISO-8859-1"),"UTF-8");
@@ -212,5 +227,29 @@ public class DataUtils {
 
 	}
 
+	/**
+	 * 文件上传路径
+	 * @Title: fileUploadBackUpPath   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param basicPath
+	 * @param: @param suffPath
+	 * @param: @param fileName
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2016年11月29日 下午6:57:27
+	 * @return: String      
+	 * @throws
+	 */
+	public static String fileUploadPath(String basicPath,String suffPath,String fileName){
+		String fullpath = basicPath+suffPath;
+		// 如果保存的路径不存在,则新建
+		File savefile = new File(new File(fullpath),fileName);
+		if (!savefile.getParentFile().exists()) {
+			savefile.getParentFile().mkdirs();
+		}
+		fullpath+=fileName;
+		return fullpath;
+	}
+	
 }
 
