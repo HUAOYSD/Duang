@@ -1243,18 +1243,19 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				String id = MemberCollection.getInstance(token, service).getMainField(token);
 				if (DataUtils.notEmpty(id)) {
 					MemberInfo memberInfo = service.findById(id);
+					//基本根路径
 					String temPath = getRequest().getSession().getServletContext().getRealPath("/");
-					String fullpath = temPath+UploadFile.PATH.getVal(UploadFile.HEAD.getVal(memberInfo.getId()))+"\\";
+					//详细路径
+					String suffPath = UploadFile.PATH.getVal(UploadFile.HEAD.getVal(memberInfo.getId()))+"\\";
 					//文件名称
 					String fileName = DataUtils.randomUUID()+".jpg";
-					// 如果保存的路径不存在,则新建
-					File savefile = new File(new File(fullpath),fileName);
-					if (!savefile.getParentFile().exists()) {
-						savefile.getParentFile().mkdirs();
-					}
-					fullpath+=fileName;
+					String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
 					jsonObject.put("path", UploadFile.HEAD.appPath()+memberInfo.getId()+"/head/"+fileName);
 					success = ImageString.generateImageBase64(imgdata, fullpath);
+					//备份
+					String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+					ImageString.generateImageBase64(imgdata, DataUtils.fileUploadPath(backupPath, suffPath, fileName));
+					
 					LoggerUtils.info("userId:"+id+"----------------上传头像："+success, this.getClass());
 					if(success){
 						memberInfo.setUserImg(fileName);
