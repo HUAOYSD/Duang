@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import org.duang.enums.UploadFile;
-
 /** 
  * 数据工具类
  * @ClassName: DataUtils 

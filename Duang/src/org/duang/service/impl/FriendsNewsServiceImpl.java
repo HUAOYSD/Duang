@@ -1,6 +1,5 @@
 package org.duang.service.impl;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ import org.duang.service.FriendsNewsService;
 import org.duang.util.DataUtils;
 import org.duang.util.ImageString;
 import org.duang.util.PageUtil;
+import org.duang.util.ReadProperties;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 
@@ -344,8 +344,12 @@ public class FriendsNewsServiceImpl implements FriendsNewsService {
 		boolean success = false;
 		success = dao.saveEntity(friendsNews);
 		if (success) {
+			//跟路径
 			String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
-			String fullpath = temPath + UploadFile.PATH.getVal(UploadFile.MOMENTS.getVal(friendsNews.getMemberInfo().getId())) + "\\";
+			//详细路径
+			String suffPath = UploadFile.PATH.getVal(UploadFile.MOMENTS.getVal(friendsNews.getMemberInfo().getId()))+"\\";
+			//备份跟路径
+			String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
 			// 遍历图片数量
 			ArrayList<String> imgDataList = new ArrayList<String>();
 			imgDataList.add(friendsNews.getImg_1());
@@ -358,16 +362,11 @@ public class FriendsNewsServiceImpl implements FriendsNewsService {
 			imgDataList.add(friendsNews.getImg_8());
 			imgDataList.add(friendsNews.getImg_9());
 			for (int i = 0; i < friendsNews.getNum(); i++) {
-				String path ="";
-				// 文件名称
-				String fileName = DataUtils.randomUUID() + ".jpg";
-				// 如果保存的路径不存在,则新建
-				File savefile = new File(new File(fullpath), fileName);
-				if (!savefile.getParentFile().exists()) {
-					savefile.getParentFile().mkdirs();
-				}
-				path=fullpath+fileName;
-				success = ImageString.generateImage(imgDataList.get(i), path);
+				//文件名称
+				String fileName = DataUtils.randomUUID()+".jpg";
+				String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
+				success = ImageString.generateImage(imgDataList.get(i), fullpath);
+				ImageString.generateImage(imgDataList.get(i), DataUtils.fileUploadPath(backupPath, suffPath, fileName));
 				LoggerUtils.info("userId:" + friendsNews.getMemberInfo().getId() + "----------------上传朋友圈：" + success, this.getClass());
 				if (success) {
 					FriendsNewsImg friendsNewsImg = new FriendsNewsImg(DataUtils.randomUUID(), friendsNews, 

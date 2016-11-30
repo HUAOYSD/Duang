@@ -35,7 +35,7 @@
 			<div>   
 				<form id="uploadBindAdImgForm">
 					   <label for="photoImg1" class="from_label">广告图片：</label>
-		               <input type="file" id="file" name="file" accept=".jpg,.jpeg,.png,.gif"> 
+		               <input type="file" id="file" name="img" accept=".jpg,.jpeg,.png,.gif"> 
 		               <input style="width:45px;" type="button" value="上传" onclick="doUpload()" id="btn_submit_bindAdImg"/>
 			    </form> 
 		 	</div>
@@ -96,7 +96,7 @@
 	        		 var formData = new FormData($( "#uploadBindAdImgForm" )[0]); 
 	        		 layer.load();
 	    		     $.ajax({  
-	    		          url: 'fileUpload!uploadNewsImg.do?id=${entity.id}',  
+	    		          url: 'news!uploadNewsImg.do?id=${entity.id}',  
 	    		          type: 'POST',  
 	    		          data: formData,  
 	    		          async: false,  

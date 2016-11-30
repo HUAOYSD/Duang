@@ -49,46 +49,6 @@ public class UploadAction extends BaseAction<FileUpload>{
 	public void setService(MemberInfoService sysMemberInfoService) {
 		this.sysMemberInfoService = sysMemberInfoService;
 	}
-	
-	/**
-	 * 上传文件头像
-	 * @Title: uploadMemberHeadImg   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author LiYonghui    
-	 * @date 2016年10月24日 下午6:05:12
-	 * @return: void      
-	 * @throws
-	 */
-	public void uploadMemberHeadImg(){
-		boolean success = false;
-		try {
-			String userId = getRequest().getParameter("id");
-			if (DataUtils.notEmpty(userId)) {
-				// 1.获取文件名称
-				reSetFileName();
-				MemberInfo memberInfo = sysMemberInfoService.findById(userId);
-				memberInfo.setUserImg(entity.getNewFileName());
-				setUploadPathByType(userId);
-				String temPath = getRequest().getSession().getServletContext().getRealPath("/");
-				entity.setPath(temPath+UploadFile.PATH.getVal(UploadFile.HEAD.getVal(userId)));
-				success = sysMemberInfoService.updateEntity(memberInfo);
-				if (success) {
-					success = upload();
-					msg="设置成功";
-					jsonObject.put("path", UploadFile.PATH.getVal(UploadFile.HEAD.getVal(userId))+entity.getNewFileName());
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("UploadAction——uploadMemberHeadImg方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("UploadAction——uploadMemberHeadImg方法错误：" + e.getLocalizedMessage(), this.getClass());
-			msg = "服务器维护，请稍后再试";
-		}
-		jsonObject.put("msg", msg);
-		jsonObject.put("success", success);
-		printJsonResult();
-	}
 
 	/**   
 	 * ios上传
