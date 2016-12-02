@@ -300,12 +300,14 @@ $("#loan_btn_scale").on("click",function(){
 		layer.msg("不是满标，不能进行放款操作",{time:1500});
 		return;
 	}
-	$.ajax({
-	   type: "POST",
-	   url: "scale!loanFullScaleToUser.do",
-	   data: "id="+selectedRow.id,
-	   success: function(msg){
-	     alert( "Data Saved: " + msg );
-	   }
-	});
+	//选择放款人
+	layer.open({
+		type: 2,
+		title: '选择放款人<span style="font-size:12px;color:#f72143;">&nbsp;&nbsp;请填写选择对象的放款金额</span>',
+		shadeClose: true,
+		maxmin:true,
+		shade: 0.8,
+		area: ['50%', '80%'],
+		content: 'memberMiddle!openDialog.do?path=selectUser&scaleId='+selectedRow.id
+	}); 
 });

@@ -24,7 +24,6 @@ import org.duang.service.ScaleService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
-import org.duang.util.ReadProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -206,7 +205,7 @@ public class ScaleAction extends BaseAction<Scale>{
 			String id = getRequest().getParameter("id");
 			if(DataUtils.notEmpty(id)){
 				StringBuffer sql = new StringBuffer();
-				sql.append(" SELECT SCALE.* FROM SCALE where id="+id);
+				sql.append(" SELECT SCALE.* FROM SCALE where id='"+id+"'");
 				List<Scale> list = scaleService.queryBySQL(sql.toString(), null, null, true);
 				success = true;
 				jsonObject.put("result", fillDatagridCons(list));

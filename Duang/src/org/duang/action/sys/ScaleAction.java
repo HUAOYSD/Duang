@@ -2,7 +2,8 @@ package org.duang.action.sys;
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,8 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.BillInvest;
 import org.duang.entity.LoanList;
+import org.duang.entity.MemberInfo;
 import org.duang.entity.Product;
 import org.duang.entity.Scale;
 import org.duang.enums.Has;
@@ -31,8 +32,8 @@ import org.duang.enums.May;
 import org.duang.enums.ResultCode;
 import org.duang.enums.product.Category;
 import org.duang.enums.scale.Status;
-import org.duang.service.BillInvestService;
 import org.duang.service.LoanListService;
+import org.duang.service.MemberInfoService;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -81,12 +82,12 @@ public class ScaleAction extends BaseAction<Scale> {
 	public void setLoanListService(LoanListService loanListService) {
 		this.loanListService = loanListService;
 	}
-	private BillInvestService billInvestService;
-	@Resource
-	public void setBillInvestService(BillInvestService billInvestService) {
-		this.billInvestService = billInvestService;
-	}
 	
+	private MemberInfoService memberInfoService;
+	@Resource
+	public void setMemberInfoService(MemberInfoService memberInfoService) {
+		this.memberInfoService = memberInfoService;
+	}
 	/**   
 	 * 根据分页查询理财标
 	 * @Title: queryScaleByPage   
@@ -361,7 +362,7 @@ public class ScaleAction extends BaseAction<Scale> {
     }
 	
 	/**
-	 * 满标放款操作
+	 * 满标后台人工放款操作
 	 * @Title: loanFullScaleToUser   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
@@ -371,20 +372,52 @@ public class ScaleAction extends BaseAction<Scale> {
 	 * @throws
 	 */
 	public void loanFullScaleToUser(){
+		boolean success=false;
+		List<String> errorMemberInfo = new ArrayList<String>();
 		try{
-			String id = getRequest().getParameter("id");
-			Scale scale = service.findById(id);
-			//2.查询满标中借贷列表
-			List<LoanList> loanLists = queryLoanListByScale(id);
+			String scaleId = getRequest().getParameter("scaleId");
+			//获取中间人信息
+			String userNames = getRequest().getParameter("userNames");
+			String idcards = getRequest().getParameter("idcards");
+			String sums = getRequest().getParameter("sums");
+			List<String> userNameList =  Arrays.asList(userNames.split(","));
+			List<String> idcardsList = Arrays.asList(idcards.split(","));
+			List<String> sumsList = Arrays.asList(sums.split(","));
+			Scale scale = service.findById(scaleId);
+			LoggerUtils.info("\t\n------------满标放款  表名称： "+scale.getName(), this.getClass());
 			//3.进行
-			for(LoanList loanList : loanLists){
-				fullScaleLoanMoney(loanList,scale);
+			for(int i=0;i<userNameList.size();i++){
+				double sum = Double.parseDouble(sumsList.get(i));
+				String idcard = idcardsList.get(i);
+				String userName = userNameList.get(i);
+				//分账列表
+				String subledgerStr = getSubledgerList(userName,idcard,sum);
+				if(!subledgerStr.equals("false")){
+					//放款
+					success = fullScaleLoanMoney(scale,sum,subledgerStr);
+					if(!success){
+						errorMemberInfo.add(idcardsList.get(i));
+						msg="放款失败";
+					}
+				}else {
+					msg="放款失败";
+					errorMemberInfo.add(idcardsList.get(i));
+					continue;
+				}
 			}
 		}catch(Exception e){
+			success = false;
 			e.printStackTrace();
 			LoggerUtils.error("理财标 ACTION 方法loanFullScaleToUser错误："+e.getMessage(), this.getClass());
 			LoggerUtils.error("理财标 ACTION 方法loanFullScaleToUser错误："+e.getLocalizedMessage(), this.getClass());
 		}
+		finally 
+		{ 
+			jsonObject.put("msg", msg);
+			jsonObject.put("errorMemberInfo", errorMemberInfo);
+			jsonObject.put("result", success);
+			printJsonResult();
+		} 
 	}
 	
 	/**
@@ -399,32 +432,36 @@ public class ScaleAction extends BaseAction<Scale> {
      * @return: String      返回拼接好的参数类型   a=b&c=d 
      * @throws
      */
-    private String getSubledgerList(String memberInfoId) throws Exception{
-    	memberInfoId = "da5d2a3f259c4a2994ba22ab8b9d2d5f";
-    	//List<BillInvest> billInvests = billInvestService.queryEntity("memberInfo.id", memberInfoId, null, Order.desc("optTime"));
-    	StringBuffer paramBuffer = new StringBuffer("[{");
-    	//if(DataUtils.notEmpty(billInvests)){
-    		//BillInvest billInvest = billInvests.get(0);
-    		 paramBuffer.append("\"roleType\"")
-             .append(":")
-             .append("\"0\"")
-             .append(",")
-             .append("\"roleCode\"")
-             .append(":")
-             .append("\""+memberInfoId+"\"")
-             .append(",")
-             .append("\"inOrOut\"")
-             .append(":")
-             .append("\"0\"")
-             .append(",")
-             .append("\"sum\"")
-             .append(":")
-             .append("\"500\"")
-    		 .append("}")
-    		 .append("]");
-    		 
-    	//}
-    	return paramBuffer.toString();
+    private String getSubledgerList(String userName,String idcard,double sum) throws Exception{
+    	Map<String, Object> paramMap = new HashMap<String, Object>();
+    	paramMap.put("realName", userName);
+    	paramMap.put("idCard", idcard);
+    	MemberInfo memberInfo = memberInfoService.findEntity(paramMap);
+    	if(memberInfo != null){
+	    	String memberInfoId = memberInfo.getId();
+	    	StringBuffer paramBuffer = new StringBuffer("[{");
+			 paramBuffer.append("\"roleType\"")
+	         .append(":")
+	         .append("\"0\"")
+	         .append(",")
+	         .append("\"roleCode\"")
+	         .append(":")
+	         .append("\""+memberInfoId+"\"")
+	         .append(",")
+	         .append("\"inOrOut\"")
+	         .append(":")
+	         .append("\"0\"")
+	         .append(",")
+	         .append("\"sum\"")
+	         .append(":")
+	         .append("\""+sum+"\"")
+			 .append("}")
+			 .append("]");
+			 return paramBuffer.toString();
+    	}else{
+    		return "false";
+    	}	 
+    	
     }
     
     /**
@@ -462,26 +499,6 @@ public class ScaleAction extends BaseAction<Scale> {
     }
     
     /**
-     * 查询借贷列表
-     * @Title: queryLoanListByScale   
-     * @Description: TODO(这里用一句话描述这个方法的作用)   
-     * @param: @param scaleId
-     * @param: @return
-     * @param: @throws Exception  
-     * @author LiYonghui    
-     * @date 2016年11月11日 下午2:07:29
-     * @return: List<InvestList>      
-     * @throws
-     */
-    private double queryLoanListMoney(String scaleId) throws Exception{
-    	String sql = "select sum(get_money-yet_money) from loan_list ll  left join scale_loan_list sll on ll.id=sll.loan_list where sll.scale='"+scaleId
-    			+"' and apply_state=2 and loan_state=1";
-    	List<?> loanLists = loanListService.queryBySQL(sql, null, null,false);
-    	return Double.parseDouble(loanLists.get(0).toString());
-    }
-    
-    
-    /**
      * 满标，进行放款
      * @throws Exception 
      * @Title: failScaleBackInvestorMoney   
@@ -492,20 +509,17 @@ public class ScaleAction extends BaseAction<Scale> {
      * @return: void      
      * @throws
      */
-    private void fullScaleLoanMoney(LoanList loanList,Scale scale) throws Exception{
-    	LoggerUtils.info("\t\n------------满标放款  "+scale.getName()+"  退回"+loanList.getMemberInfo().getRealName()+"的投资金额", this.getClass());
+    private boolean fullScaleLoanMoney(Scale scale, double num ,String subledgerList) throws Exception{
+		boolean success=false;	
     	//生成一个流水号
 		String requestId = DataUtils.randomUUID();
-		//放款金额
-		double prinMoney = 500;
 		//获取分账列表
-		String subledgerList = getSubledgerList(loanList.getMemberInfo().getId());
 		Map<String , String> keyMap = getURLCodeAkey("fullScaleURL","fullScaleCallbackURL");
 		//数字签名字符串
 		//规范请求流水号(requestId)+商户编号(merchantCode)+项目编号(projectCode)+本息到账金额(sum)+手续费收取方式(payType)+
 		//分账列表(subledgerList)+异步通知地址(noticeUrl)+主账户类型(mainAccountType)+主账户编码(mainAccountCode)
 		StringBuffer signatureBuffer = new StringBuffer();
-		signatureBuffer.append(requestId).append(keyMap.get("merchantCode")).append(scale.getId()).append(prinMoney).append(keyMap.get("fee"))
+		signatureBuffer.append(requestId).append(keyMap.get("merchantCode")).append(scale.getId()).append(num).append(keyMap.get("fee"))
 					   .append(subledgerList).append(keyMap.get("noticeURL"));
 		LoggerUtils.info("\t\n------------满标放款 数字签名字符串："+signatureBuffer.toString(), this.getClass());
 		//加密后的数字签名
@@ -516,7 +530,7 @@ public class ScaleAction extends BaseAction<Scale> {
 		map.put("requestId",requestId);
 		map.put("merchantCode",keyMap.get("merchantCode"));
 		map.put("projectCode",scale.getId());
-		map.put("sum",String.valueOf(prinMoney));
+		map.put("sum",String.valueOf(num));
 		map.put("payType",keyMap.get("fee"));
 		map.put("subledgerList",subledgerList);
 		map.put("noticeUrl",keyMap.get("noticeURL"));
@@ -540,6 +554,7 @@ public class ScaleAction extends BaseAction<Scale> {
 			LoggerUtils.info("\t\n------------返回数据签名字符串加密："+back_data_sign, this.getClass());		
 			
 			if(back_data_sign.equals(back_signature)){
+				success = true;
 				LoggerUtils.info("\t\n------------请求流水号："+back_requestId, this.getClass());
 				LoggerUtils.info("\t\n------------项目编号："+back_projectCode, this.getClass());
 				LoggerUtils.info("\t\n------------处理结果："+back_result, this.getClass());
@@ -550,10 +565,13 @@ public class ScaleAction extends BaseAction<Scale> {
 				LoggerUtils.info("\t\n------------数字签名："+jsonObjectData.get("signature"), this.getClass());
 			}else{
 				LoggerUtils.info("\t\n------------签名不一致", this.getClass());
+				success = false;
 			}
 		}else{
+			success = false;
 			LoggerUtils.info("\t\n------------满标放款失败 ，原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, back_result)), this.getClass());
 		}
+		return success;
     }
 	
 	
@@ -580,7 +598,7 @@ public class ScaleAction extends BaseAction<Scale> {
 				//项目编号
 				String projectCode = getRequest().getParameter("projectCode");
 				//项目总余额
-				String projectSum = getRequest().getParameter("projectSum");
+				//String projectSum = getRequest().getParameter("projectSum");
 				String signature = getRequest().getParameter("signature");
 				
 				//返回数据进行签名拼接
@@ -630,11 +648,11 @@ public class ScaleAction extends BaseAction<Scale> {
 				//项目编号
 				projectCode = getRequest().getParameter("projectCode");
 				//项目还款账户余额
-				String mainAccountCode = getRequest().getParameter("mainAccountCode");
+				//String mainAccountCode = getRequest().getParameter("mainAccountCode");
 				//主账户编码
-				String mainAccountType = getRequest().getParameter("mainAccountType");
+				//String mainAccountType = getRequest().getParameter("mainAccountType");
 				//手续费收取方式
-				String payType = getRequest().getParameter("payType");
+				//String payType = getRequest().getParameter("payType");
 	
 				String signature = getRequest().getParameter("signature");
 				
