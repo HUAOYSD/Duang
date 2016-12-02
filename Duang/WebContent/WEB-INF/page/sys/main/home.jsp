@@ -19,12 +19,17 @@ function login() {
 	location.href="<%=path%>/sys!goLoginView.do";
 }
 </script>
+<style type="text/css">
+	a{
+		text-decorationnone;
+	}
+</style>
 </head>
 <body class="easyui-layout">
 	<!-- 头部标题 -->
-	<div data-options="region:'north',border:false"
-		style="height: 60px; padding: 5px; background: #F3F3F3">
-		<a href="http://localhost:8080/Duang/provider_friends!getFairlysMember.do" target="_blank"><span class="northTitle">www.baidu.com</span></a>
+	<div data-options="region:'north',border:false" style="height: 80px; padding: 5px;background:#fff;">
+		<a href="http://localhost:8080/Duang" target="_blank"><img src="resources/image/logo.png" alt="logo" style="width:40px;height:40px;margin:10px 0px 10px 10px;"></a>
+		<div style="margin-left:60px;margin-top:-35px;"></div>
 		<c:choose>
 			<c:when test="${sessionScope.sysUser == null}">
 				<span class="loginInfo">
@@ -37,11 +42,11 @@ function login() {
 			</c:when>
 			<c:otherwise>
 					<span class="loginInfo">
-						<font font-size="15" style="color:rgb(72,139,209);" >用户：[${sessionScope.sysUser.name}]</font>&nbsp;&nbsp;&nbsp;&nbsp;
-						<font font-size="15" style="color:rgb(72,139,209);" >角色：[${sessionScope.sysUser.sysRole.roleName}]</font>&nbsp;&nbsp;&nbsp;&nbsp;
+						<font font-size="15" style="color:#000;" >当前用户：${sessionScope.sysUser.name} ，欢迎登录</font>
+						<font font-size="15" style="color:#000;" >系统角色：${sessionScope.sysUser.sysRole.roleName}</font>&nbsp;&nbsp;
 					    <a onclick="$.messager.confirm('注销','您确定要退出么?',function(r){if(r){logout()};});"  href="javascript:void(0);"> 
-					   		<strong style="color:rgb(72,139,209);font-weight:normal;" >注销 </strong>
-					   	</a> 
+					   		<strong style="color:#000;font-weight:normal;">注销 </strong>
+					   	</a>&nbsp;&nbsp; 
 				   </span>
 			</c:otherwise>
 		</c:choose>
