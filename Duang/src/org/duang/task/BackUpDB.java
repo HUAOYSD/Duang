@@ -51,7 +51,7 @@ public class BackUpDB {
 		// 创建执行的批处理
 		FileOutputStream fout = null;
 		OutputStreamWriter writer = null;
-		String batFile = "D:\\backup_databae.bat";
+		String batFile = ReadProperties.getStringValue(pr, "bat").trim();
 		fout = new FileOutputStream(batFile);
 		writer = new OutputStreamWriter(fout, "utf8");
 		StringBuffer sb = new StringBuffer("");
