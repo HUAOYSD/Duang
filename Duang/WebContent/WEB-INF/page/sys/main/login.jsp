@@ -127,7 +127,7 @@
 		<div id="register-info-describe" align="center">
 			<div id="register-info">
 				<div class="info" align="center" style="margin-top:20px;">
-					<form action="<%=path %>/sys!login.do" method="post" id="loginForm">
+					<form action="<%=path %>/sys!login.do" method="get" id="loginForm" >
 						<div class="col-lg-12">
 							<div class="form-group">
 								<input style="height:40px;width:320px;" type="text" class="form-control" name="name" id="name" placeholder="用户名">
@@ -163,7 +163,7 @@
 							<label id="vcMsg" style="display: none;" class="text-danger error-text">（验证码不能为空）</label>
 						</div>
 						<div class="col-lg-12" style="padding-top:15px;padding-left:0px;padding-right:0px;">
-							<input style="height:40px;width:100%;" type="button" onclick="return loginSubmit();" class="btn btn-success" value="登录">
+							<input style="height:40px;width:100%;" type="button" onclick="loginSubmit();" class="btn btn-success" value="登录">
 						</div>
 					</form>
 				</div>
@@ -190,7 +190,6 @@ function loginSubmit(){
 		  $("#nameMsg").show();
 		  $("#name").addClass("error-input");
 		  $("#name").focus();
-		  return false;
 	  }
 	  
 	  if(password.isNotNull()){
@@ -200,7 +199,6 @@ function loginSubmit(){
 		  $("#pwdMsg").show();
 		  $("#password").addClass("error-input");
 		  $("#password").focus();
-		  return false;
 	  }
 	  
 	  if(validateCode.isNotNull()){
@@ -217,8 +215,9 @@ function loginSubmit(){
 	         		$("#vcMsg").show();
 	  			    $("#validateCode").addClass("error-input");
 	  			  	$("#validateCode").focus();
-	  			    return false;
 	         	 }else{
+	         		  name = $("#name").val();
+	         		  password = $("#password").val();
 	         		$("#loginForm").submit();
 	         	 }
 	   		  },
@@ -231,9 +230,7 @@ function loginSubmit(){
 		  $("#vcMsg").show();
 		  $("#validateCode").addClass("error-input");
 		  $("#validateCode").focus();
-		  return false;
 	  }
-	  return true;
 }
 
 document.onkeydown=function(event){
