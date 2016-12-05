@@ -28,7 +28,7 @@ public class MemberMiddleRecordsServiceImpl implements MemberMiddleRecordsServic
 
 	private MemberMiddleRecordsDao dao;
 
-	@Resource(name="MemberMiddleRecordsdaoimpl")
+	@Resource(name="membermiddlerecordsdaoimpl")
 	public void setDao(MemberMiddleRecordsDao dao) {
 		this.dao = dao;
 	}
