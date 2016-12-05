@@ -163,10 +163,15 @@ public class MemberMiddleAction extends BaseAction<MemberMiddle> {
 				map.put("state", memberMiddle.getState());
 				map.put("createUser", memberMiddle.getCreateUser());
 				map.put("createUserName", sysUserService.findById(memberMiddle.getCreateUser()).getName());
+				map.put("modifyUser", memberMiddle.getModifyUser());
+				map.put("modifyUserName", DataUtils.notEmpty(memberMiddle.getModifyUser())?sysUserService.findById(memberMiddle.getModifyUser()).getName():"");
+				
 				map.put("idcard", memberMiddle.getIdcard());
 				map.put("payType", memberMiddle.getPayType());
 				map.put("userName", memberMiddle.getUserName());
 				map.put("isAuth", memberMiddle.getIsAuth());
+				map.put("totalSum", memberMiddle.getTotalSum());
+				map.put("lastSum", memberMiddle.getLastSum());
 				listMap.add(map);
 			}
 		} catch (Exception e) {
@@ -256,6 +261,8 @@ public class MemberMiddleAction extends BaseAction<MemberMiddle> {
 					entity.setCreateUser(((SysUser)getRequest().getSession().getAttribute(SessionTools.SYSUSER)).getId());
 					entity.setState(TRUE_STATE);
 					entity.setIsAuth(String.valueOf(If.If1.getVal()));
+					entity.setTotalSum(0);
+					entity.setLastSum(0);
 					result = memberMiddleService.saveEntity(entity);
 					if(!result){
 						jsonObject.put("success", false);
@@ -299,6 +306,8 @@ public class MemberMiddleAction extends BaseAction<MemberMiddle> {
 			if(entity != null && DataUtils.notEmpty(entity.getId())){
 				entity = memberMiddleService.findById(entity.getId());
 				entity.setState(FALSE_STATE);
+				entity.setModifyTime(new Date());
+				entity.setModifyUser(((SysUser)getRequest().getSession().getAttribute(SessionTools.SYSUSER)).getId());
 				result = memberMiddleService.updateEntity(entity);
 				if(!result){
 					jsonObject.put("success", false);

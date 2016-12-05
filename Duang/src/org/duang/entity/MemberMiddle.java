@@ -1,10 +1,15 @@
 package org.duang.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -33,7 +38,9 @@ public class MemberMiddle implements java.io.Serializable {
 	private String payType;
 	private String isAuth;
 	private String  token;
-	// Constructors
+	private double totalSum;
+	private double lastSum;
+	private Set<MemberMiddleRecords> memberMiddleRecords = new HashSet<MemberMiddleRecords>(0);
 
 	/** default constructor */
 	public MemberMiddle() {
@@ -45,7 +52,7 @@ public class MemberMiddle implements java.io.Serializable {
 	}
 
 	public MemberMiddle(String id, String userName, String idcard, Date createTime, Date modifyTime, String state, 
-			String createUser, String modifyUser, String payType) {
+			String createUser, String modifyUser, String payType, double totalSum, double lastSum) {
 		this.id = id;
 		this.userName = userName;
 		this.idcard = idcard;
@@ -55,6 +62,8 @@ public class MemberMiddle implements java.io.Serializable {
 		this.createUser = createUser;
 		this.modifyUser = modifyUser;
 		this.payType = payType;
+		this.totalSum = totalSum;
+		this.lastSum = lastSum;
 	}
 
 	// Property accessors
@@ -155,5 +164,32 @@ public class MemberMiddle implements java.io.Serializable {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+	
+	@Column(name = "totalSum")
+	public double getTotalSum() {
+		return totalSum;
+	}
+
+	public void setTotalSum(double totalSum) {
+		this.totalSum = totalSum;
+	}
+	
+	@Column(name = "lastSum")
+	public double getLastSum() {
+		return lastSum;
+	}
+
+	public void setLastSum(double lastSum) {
+		this.lastSum = lastSum;
+	}
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
+	public Set<MemberMiddleRecords> getMemberMiddleRecords() {
+		return this.memberMiddleRecords;
+	}
+
+	public void setMemberMiddleRecords(Set<MemberMiddleRecords> memberMiddleRecords) {
+		this.memberMiddleRecords = memberMiddleRecords;
 	}
 }

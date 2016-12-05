@@ -11,7 +11,6 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * InviteCode entity. @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "invite_code", catalog = "duang")
 @DynamicInsert(true)

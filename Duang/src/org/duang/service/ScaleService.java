@@ -1,6 +1,7 @@
 package org.duang.service;
 
 import org.duang.baseInterface.CommonInterface;
+import org.duang.entity.MemberMiddle;
 import org.duang.entity.Scale;
 
 /**   
@@ -27,7 +28,7 @@ public interface ScaleService extends CommonInterface<Scale>{
 	public abstract int findScaleState(String id) throws Exception;
 	
 	/**
-	 * 满标放款操作
+	 * 满标自动放款操作
 	 * @Title: fullScaleLoanMoney   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param scaleId
@@ -55,4 +56,20 @@ public interface ScaleService extends CommonInterface<Scale>{
 	 * @throws
 	 */
 	public abstract boolean failScaleBackMoney(String scaleId, double money) throws Exception;
+	
+	/**
+	 * 标满，手动放款
+	 * @Title: fullScaleLoanMoney   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param scale
+	 * @param: @param num
+	 * @param: @param subledgerList
+	 * @param: @return
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年12月5日 上午11:39:08
+	 * @return: boolean      
+	 * @throws
+	 */
+	public abstract boolean fullScaleLoanMoney(Scale scale, double num ,String subledgerList, MemberMiddle memberMiddle) throws Exception;
 }

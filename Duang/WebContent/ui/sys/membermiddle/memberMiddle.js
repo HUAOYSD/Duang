@@ -68,6 +68,16 @@ function loadmemberMiddle(url, dataObj){
 					              }  
 					         }
 			             },
+			             {field : "totalSum", title : "放款总额", width : 300, align : "center",
+			            	 formatter: function(value,row,index){
+			            			 return value+"元";
+			            	 } 
+			             },
+			             {field : "lastSum", title : "最后一次放款总额", width : 250, align : "center",
+			            	 formatter: function(value,row,index){
+			            			 return value+"元";
+			            	 } 
+			             },
 			             {field : "payType", title : "手续费付款方式", width : 450, align : "center",
 			            	 formatter: function(value,row,index){
 			            		 if(value==0)
