@@ -184,7 +184,7 @@ public class MemberMiddle implements java.io.Serializable {
 		this.lastSum = lastSum;
 	}
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "memberMiddle")
 	public Set<MemberMiddleRecords> getMemberMiddleRecords() {
 		return this.memberMiddleRecords;
 	}
