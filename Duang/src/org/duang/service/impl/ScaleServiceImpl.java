@@ -1,9 +1,12 @@
 package org.duang.service.impl;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -15,6 +18,8 @@ import org.duang.dao.InvestListDao;
 import org.duang.dao.InvestMemberDao;
 import org.duang.dao.LoanListDao;
 import org.duang.dao.LoanMemberDao;
+import org.duang.dao.MemberMiddleDao;
+import org.duang.dao.MemberMiddleRecordsDao;
 import org.duang.dao.ScaleDao;
 import org.duang.dao.ScaleLoanListDao;
 import org.duang.entity.BillLoan;
@@ -23,15 +28,22 @@ import org.duang.entity.InvestList;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanList;
 import org.duang.entity.LoanMember;
+import org.duang.entity.MemberMiddle;
+import org.duang.entity.MemberMiddleRecords;
 import org.duang.entity.Scale;
 import org.duang.entity.ScaleLoanList;
+import org.duang.enums.ResultCode;
 import org.duang.enums.invest.Status;
 import org.duang.enums.loan.Apply;
 import org.duang.enums.loan.LoanStatus;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
+import org.duang.util.MD5Utils;
 import org.duang.util.PageUtil;
+import org.duang.util.ReadProperties;
+import org.duang.util.SSLClient;
 import org.hibernate.criterion.Order;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 /**   
@@ -50,6 +62,18 @@ public class ScaleServiceImpl implements ScaleService{
 	@Resource
 	public void setDao(ScaleDao dao) {
 		this.dao = dao;
+	}
+	
+	private MemberMiddleRecordsDao memberMiddleRecordsDao;
+	@Resource
+	public void setMemberMiddleRecordsDao(MemberMiddleRecordsDao memberMiddleRecordsDao) {
+		this.memberMiddleRecordsDao = memberMiddleRecordsDao;
+	}
+	
+	private MemberMiddleDao memberMiddleDao;
+	@Resource
+	public void setMemberMiddleDao(MemberMiddleDao memberMiddleDao) {
+		this.memberMiddleDao = memberMiddleDao;
 	}
 	
 	public ScaleServiceImpl(){
@@ -487,4 +511,127 @@ public class ScaleServiceImpl implements ScaleService{
 		return success;
 	}
 
+	private Properties properties;
+	/**
+     * 获取 url，商户号，秘钥，手续费
+     * 
+     * @Title: getURLCodeAkey   
+     * @Description: TODO(这里用一句话描述这个方法的作用)   
+     * @param: @return
+     * @param: @throws IOException  
+     * @author LiYonghui    
+     * @date 2016年11月11日 下午2:41:37
+     * @return: Map<String,String>      
+     * @throws
+     */
+    private Map<String, String> getURLCodeAkey(String urlKey,String noticeURLKey) throws IOException{
+    	properties = ReadProperties.initPrperties("sumapayURL.properties");
+		//本息到账url
+		String urlStr = ReadProperties.getStringValue(properties, urlKey);
+		//商户号
+		String merchantCode = ReadProperties.getStringValue(properties, "merchantCode");
+		//秘钥
+		String akey = ReadProperties.getStringValue(properties, "akey");
+		//手续费
+		String fee = ReadProperties.getStringValue(properties, "fee");
+		//noticeURL
+		String noticeURL = ReadProperties.getStringValue(properties, noticeURLKey);
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("url", urlStr);
+		map.put("merchantCode", merchantCode);
+		map.put("akey", akey);
+		map.put("fee", fee);
+		map.put("noticeURL", noticeURL);
+		return map;
+    }
+	
+	
+	/**
+     * 满标，手动放款
+     * @throws Exception 
+     * @Title: failScaleBackInvestorMoney   
+     * @Description: TODO(这里用一句话描述这个方法的作用)   
+     * @param: @param investLists  
+     * @author LiYonghui    
+     * @date 2016年11月11日 下午2:47:02
+     * @return: void      
+     * @throws
+     */
+    public boolean fullScaleLoanMoney(Scale scale, double num ,String subledgerList, MemberMiddle memberMiddle) throws Exception{
+		boolean success=false;	
+    	//生成一个流水号
+		String requestId = DataUtils.randomUUID();
+		//获取分账列表
+		Map<String , String> keyMap = getURLCodeAkey("fullScaleURL","fullScaleCallbackURL");
+		//数字签名字符串
+		//规范请求流水号(requestId)+商户编号(merchantCode)+项目编号(projectCode)+本息到账金额(sum)+手续费收取方式(payType)+
+		//分账列表(subledgerList)+异步通知地址(noticeUrl)+主账户类型(mainAccountType)+主账户编码(mainAccountCode)
+		StringBuffer signatureBuffer = new StringBuffer();
+		signatureBuffer.append(requestId).append(keyMap.get("merchantCode")).append(scale.getId()).append(num).append(keyMap.get("fee"))
+					   .append(subledgerList).append(keyMap.get("noticeURL"));
+		LoggerUtils.info("\t\n------------满标放款 数字签名字符串："+signatureBuffer.toString(), this.getClass());
+		//加密后的数字签名
+		String signature_sign=MD5Utils.hmacSign(signatureBuffer.toString(), keyMap.get("akey"));
+		LoggerUtils.info("\t\n------------满标放款 签名加密："+signature_sign.toString(), this.getClass());
+		//封装map参数
+		Map<String,String> map = new HashMap<String, String>();
+		map.put("requestId",requestId);
+		map.put("merchantCode",keyMap.get("merchantCode"));
+		map.put("projectCode",scale.getId());
+		map.put("sum",String.valueOf(num));
+		map.put("payType",keyMap.get("fee"));
+		map.put("subledgerList",subledgerList);
+		map.put("noticeUrl",keyMap.get("noticeURL"));
+		map.put("signature",signature_sign);
+		//获取转换的参数
+		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(keyMap.get("url"),map,"GBK");
+		//result 查询结果  00000代表成功
+		String back_result = jsonObjectData.get("result").toString();
+		if(back_result.equals(ResultCode.SUCCESS.getVal())){
+			LoggerUtils.info("\t\n------------满标放款受理成功", this.getClass());
+			String back_projectCode = jsonObjectData.get("projectCode").toString();
+			String back_requestId = jsonObjectData.get("requestId").toString();
+			//返回的签名
+			String back_signature = jsonObjectData.get("signature").toString();
+			//返回数据进行签名拼接
+			StringBuffer back_data_str = new StringBuffer();
+			back_data_str.append(back_requestId).append(back_projectCode).append(back_result);
+			LoggerUtils.info("\t\n------------返回数据签名字符串拼接："+back_data_str, this.getClass());
+			//返回数据加密后的签名
+			String back_data_sign = MD5Utils.hmacSign(back_data_str.toString(), keyMap.get("akey"));
+			LoggerUtils.info("\t\n------------返回数据签名字符串加密："+back_data_sign, this.getClass());		
+			
+			if(back_data_sign.equals(back_signature)){
+				success = true;
+				LoggerUtils.info("\t\n------------请求流水号："+back_requestId, this.getClass());
+				LoggerUtils.info("\t\n------------项目编号："+back_projectCode, this.getClass());
+				LoggerUtils.info("\t\n------------处理结果："+back_result, this.getClass());
+				LoggerUtils.info("\t\n------------手续费收取方式："+jsonObjectData.get("payType"), this.getClass());
+				LoggerUtils.info("\t\n------------主账户类型："+jsonObjectData.get("mainAccountType"), this.getClass());
+				LoggerUtils.info("\t\n------------主账户编码："+jsonObjectData.get("mainAccountCode"), this.getClass());
+				LoggerUtils.info("\t\n------------放款金额："+jsonObjectData.get("sum"), this.getClass());
+				LoggerUtils.info("\t\n------------数字签名："+jsonObjectData.get("signature"), this.getClass());
+				//记录放款金额
+				MemberMiddleRecords memberMiddleRecords = new MemberMiddleRecords();
+				memberMiddleRecords.setId(DataUtils.randomUUID());
+				memberMiddleRecords.setCreateTime(new Date());
+				memberMiddleRecords.setMoney(num);
+				memberMiddleRecords.setMemberMiddle(memberMiddle);
+				memberMiddleRecordsDao.saveEntity(memberMiddleRecords);
+				//修改中间的总放款和最后一次放款金额
+				memberMiddle.setTotalSum(memberMiddle.getTotalSum()+num);
+				memberMiddle.setLastSum(num);
+				memberMiddleDao.updateEntity(memberMiddle);
+			}else{
+				LoggerUtils.info("\t\n------------签名不一致", this.getClass());
+				success = false;
+			}
+		}else{
+			success = false;
+			LoggerUtils.info("\t\n------------满标放款失败 ，原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, back_result)), this.getClass());
+		}
+		return success;
+    }
+	
 }
