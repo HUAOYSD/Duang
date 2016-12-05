@@ -110,7 +110,7 @@ $("#btn_select_memberMiddle").on("click",function(){
 	$.ajax({
 		   type: "POST",
 		   url: "scale!loanFullScaleToUser.do",
-		   data: "scaleId="+scaleId+"&userNames"+userNames+"&idcards="+idcards+"&sums="+sums,
+		   data: "scaleId="+scaleId+"&userNames="+userNames+"&idcards="+idcards+"&sums="+sums,
 		   success: function(msg){
 			    $.messager.progress("close");	
 				var result = eval('(' + msg + ')');
