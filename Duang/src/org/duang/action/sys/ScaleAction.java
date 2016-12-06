@@ -518,8 +518,8 @@ public class ScaleAction extends BaseAction<Scale> {
 	}
 	
 	/**
-	 * 满标放款处理结果异步返回
-	 * @Title: fullLoanMoneyCallback   
+	 * 普通标 满标手动放款处理结果异步返回
+	 * @Title: fullSingleScaleLoanMoneyCallback   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
 	 * @author LiYonghui    
@@ -527,8 +527,8 @@ public class ScaleAction extends BaseAction<Scale> {
 	 * @return: void      
 	 * @throws
 	 */
-	public void fullLoanMoneyCallback(){
-		LoggerUtils.info("\t\n---------------------------------------满标放款异步回调处理", this.getClass());
+	public void fullSingleScaleLoanMoneyCallback(){
+		LoggerUtils.info("\t\n---------------------------------------满标放款 普通标异步回调处理", this.getClass());
 		String projectCode = "";
 		try{
 			//读取配置文件中
@@ -552,6 +552,62 @@ public class ScaleAction extends BaseAction<Scale> {
 				//返回数据进行签名拼接
 				StringBuffer back_data_str = new StringBuffer();
 				back_data_str.append(requestId).append(projectCode).append(result);
+				LoggerUtils.info("\t\n------------请求编号："+requestId+"  返回数据签名字符串拼接："+back_data_str, this.getClass());
+				//返回数据加密后的签名
+				String back_data_sign = MD5Utils.hmacSign(back_data_str.toString(), ReadProperties.getStringValue(properties, "akey"));
+				LoggerUtils.info("\t\n------------请求编号："+requestId+"  返回数据签名字符串加密："+back_data_sign, this.getClass());		
+				if(back_data_sign.equals(signature)){
+					service.fullScaleLoanMoney(projectCode, DataUtils.str2double(sum, 6));
+				}else{
+					LoggerUtils.info("\t\n------------满标放款 普通标 签名不一致 ，请求编号："+requestId, this.getClass());
+				}
+			}else{
+				LoggerUtils.info("满标放款 普通标失败，标的id:"+projectCode+"原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)), this.getClass());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction realNameAuthCallback：" + e.getLocalizedMessage(), this.getClass());
+		}
+	}
+	
+	
+	/**
+	 * 集合标 满标手动放款处理结果异步返回
+	 * @Title: fullSetScaleCallbackURL   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月22日 下午1:52:11
+	 * @return: void      
+	 * @throws
+	 */
+	public void fullSetScaleCallbackURL(){
+		LoggerUtils.info("\t\n---------------------------------------集合标 满标放款异步回调处理", this.getClass());
+		String projectCode = "";
+		try{
+			//读取配置文件中
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			String result = getRequest().getParameter("result");
+			if(result.equals(ResultCode.SUCCESS.getVal())){
+				String requestId = getRequest().getParameter("requestId");
+				//本息到账金额
+				String sum = getRequest().getParameter("sum");
+				//项目编号
+				projectCode = getRequest().getParameter("projectCode");
+				//项目还款账户余额
+				String mainRoleCode = getRequest().getParameter("mainRoleCode");
+				//主账户编码
+				String mainRoleType = getRequest().getParameter("mainRoleType");
+				//手续费收取方式
+				String feeType = getRequest().getParameter("feeType");
+	
+				String signature = getRequest().getParameter("signature");
+				
+				//返回数据进行签名拼接
+				StringBuffer back_data_str = new StringBuffer();
+				back_data_str.append(requestId).append(projectCode).append(sum).append(feeType).append(mainRoleType)
+								.append(mainRoleCode).append("result");
 				LoggerUtils.info("\t\n------------请求编号："+requestId+"  返回数据签名字符串拼接："+back_data_str, this.getClass());
 				//返回数据加密后的签名
 				String back_data_sign = MD5Utils.hmacSign(back_data_str.toString(), ReadProperties.getStringValue(properties, "akey"));
