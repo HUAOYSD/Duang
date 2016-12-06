@@ -128,17 +128,12 @@ function loadscale(url, dataObj){
 			] ],
 			onSelect:function(rowIndex, rowData){
 				selectedRow = $("#scale").datagrid('getSelected');
+				//查询标的放款情况
+				checkLoanSum();
 				$('#edit_btn_scale').linkbutton('enable');
 				$('#info_btn_scale').linkbutton('enable');
 				$('#allot_btn_scale').linkbutton('enable');
 				$('#match_btn_scale').linkbutton('enable');
-				//查询标的放款情况
-				checkLoanSum();
-				if(rowData.status =='满标'){
-					$('#loan_btn_scale').linkbutton('enable');
-				}else{
-					$('#loan_btn_scale').linkbutton('disable');
-				}
 			},
 			onUnselect:function(rowIndex, rowData){
 				$('#edit_btn_scale').linkbutton('disable');
@@ -170,7 +165,7 @@ function checkLoanSum(){
 		   success: function(msg){
 				var obj = eval('(' + msg + ')');
 				loanSum = obj.sum;
-				if(sum<selectedRow.yetMoney){
+				if(selectedRow.status =='满标' && (selectedRow.yetMoney-loanSum)>0){
 					$('#loan_btn_scale').linkbutton('enable');
 				}else{
 					$('#loan_btn_scale').linkbutton('disable');
@@ -326,11 +321,11 @@ $("#loan_btn_scale").on("click",function(){
 	//选择放款人
 	layer.open({
 		type: 2,
-		title: '选择放款人<span style="font-size:12px;color:#f72143;">&nbsp;&nbsp;请填写选择对象的放款金额     最多可放款金额：'+(selectedRow-loanSum)+'</span>',
+		title: '选择放款人<span style="font-size:12px;color:#f72143;">&nbsp;&nbsp;请填写选择对象的放款金额     最多可放款金额：'+(selectedRow.yetMoney-loanSum)+'</span>',
 		shadeClose: true,
 		maxmin:true,
 		shade: 0.8,
 		area: ['50%', '80%'],
-		content: 'memberMiddle!openDialog.do?path=selectUser&scaleId='+selectedRow.id+'&alowedSum='+(selectedRow-loanSum)
+		content: 'memberMiddle!openDialog.do?path=selectUser&scaleId='+selectedRow.id+'&alowedSum='+(selectedRow.yetMoney-loanSum)
 	}); 
 });

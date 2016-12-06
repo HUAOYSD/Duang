@@ -51,7 +51,12 @@ public class MemberMiddleRecordsAction extends BaseAction<MemberMiddleRecords> {
 			String scaleId = getRequest().getParameter("scaleId");
 			String sql="select SUM(money) from member_middle_records where scale_id='"+scaleId+"'";
 			List<?> sumMoney = memberMiddleRecordsService.queryBySQL(sql, null, null, false);
-			jsonObject.put("sum", ((Object[])(sumMoney.get(0)))[0]);
+			if(sumMoney.get(0)!=null){
+				jsonObject.put("sum", sumMoney.get(0));
+			}else{
+				jsonObject.put("sum", 0);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			LoggerUtils.error("根据标放款总金额 MemberMiddleRecordsAction查询错误：" + e.getMessage(), this.getClass());

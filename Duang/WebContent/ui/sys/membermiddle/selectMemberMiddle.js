@@ -78,7 +78,7 @@ function reloadDataGrid(){
 }
 
 /**
- * 打开借贷记录详情
+ * 放款
  */
 $("#btn_select_memberMiddle").on("click",function(){
 	var selectedRows = $('#select_memberMiddle').datagrid('getSelections');
@@ -103,15 +103,16 @@ $("#btn_select_memberMiddle").on("click",function(){
 		userNames+=selectedRows[i].userName;
 		idcards+=selectedRows[i].idcard;
 		sums+=selectedRows[i].sum;
-		totalSum+=selectedRows[i].sum;
+		totalSum+=Number(selectedRows[i].sum);
 		if(i<selectedRows.length-1){
 			userNames+=",";
 			idcards+=",";
 			sums+=",";
 		}
 	}
+	alert(totalSum);
 	if(totalSum>alowedSum){
-		layer.msg("超出最大可放款金额"+totalSum,{icon:2});
+		layer.msg("超出最大可放款金额:"+alowedSum,{icon:2});
 		return;
 	}else{
 		$.ajax({
