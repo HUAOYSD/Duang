@@ -36,6 +36,7 @@ import org.duang.enums.ResultCode;
 import org.duang.enums.invest.Status;
 import org.duang.enums.loan.Apply;
 import org.duang.enums.loan.LoanStatus;
+import org.duang.enums.scale.SingleOrSet;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
 import org.duang.util.MD5Utils;
@@ -562,8 +563,17 @@ public class ScaleServiceImpl implements ScaleService{
 		boolean success=false;	
     	//生成一个流水号
 		String requestId = DataUtils.randomUUID();
+		String fullScaleURL = "";
+		String fullScaleCallbackURL="";
+		if(scale.getSingleOrSet().equals(SingleOrSet.S2.getVal())){
+			fullScaleURL = "fullSetScaleURL";
+			fullScaleCallbackURL="fullSetScaleCallbackURL";
+		}else if(scale.getSingleOrSet().equals(SingleOrSet.S1.getVal())){
+			fullScaleURL = "fullSingleScaleURL";
+			fullScaleCallbackURL="fullSingleScaleCallbackURL";
+		}
 		//获取分账列表
-		Map<String , String> keyMap = getURLCodeAkey("fullScaleURL","fullScaleCallbackURL");
+		Map<String , String> keyMap = getURLCodeAkey(fullScaleURL,fullScaleCallbackURL);
 		//数字签名字符串
 		//规范请求流水号(requestId)+商户编号(merchantCode)+项目编号(projectCode)+本息到账金额(sum)+手续费收取方式(payType)+
 		//分账列表(subledgerList)+异步通知地址(noticeUrl)+主账户类型(mainAccountType)+主账户编码(mainAccountCode)
