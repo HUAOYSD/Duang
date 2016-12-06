@@ -1,5 +1,7 @@
 package org.duang.service;
 
+import java.util.Map;
+
 import org.duang.baseInterface.CommonInterface;
 import org.duang.entity.MemberMiddle;
 import org.duang.entity.Scale;
@@ -71,5 +73,5 @@ public interface ScaleService extends CommonInterface<Scale>{
 	 * @return: boolean      
 	 * @throws
 	 */
-	public abstract boolean fullScaleLoanMoney(Scale scale, double num ,String subledgerList, MemberMiddle memberMiddle) throws Exception;
+	public abstract Map<String, Object> fullScaleLoanMoney(Scale scale, double num ,String subledgerList, MemberMiddle memberMiddle) throws Exception;
 }

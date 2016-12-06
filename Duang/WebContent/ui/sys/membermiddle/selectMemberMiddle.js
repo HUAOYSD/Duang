@@ -113,9 +113,9 @@ $("#btn_select_memberMiddle").on("click",function(){
 		   data: "scaleId="+scaleId+"&userNames="+userNames+"&idcards="+idcards+"&sums="+sums,
 		   success: function(msg){
 			    $.messager.progress("close");	
-				var result = eval('(' + msg + ')');
-				if(result.errorMemberInfo.length>0){
-					layer.msg(errorMemberInfo+"放款失败!",{icon:2});
+				var obj = eval('(' + msg + ')');
+				if(!obj.result){
+					layer.msg(obj.msg,{icon:2});
 				}else{
 					layer.msg("放款成功!",{icon:1});
 				}

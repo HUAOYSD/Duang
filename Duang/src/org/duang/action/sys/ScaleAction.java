@@ -399,19 +399,26 @@ public class ScaleAction extends BaseAction<Scale> {
 				if(!subledgerStr.equals("false")){
 					//放款
 					MemberMiddle memberMiddle = memberMiddleService.findEntity("idcard", idcard);
-					success = service.fullScaleLoanMoney(scale,sum,subledgerStr,memberMiddle);
-					if(!success){
+					Map<String,Object> resultMap = service.fullScaleLoanMoney(scale,sum,subledgerStr,memberMiddle);
+					if(!(boolean) resultMap.get("success")){
 						errorMemberInfo.add(idcardsList.get(i));
-						msg="放款失败";
+						LoggerUtils.error("手控放款错误，原因："+resultMap.get("msg"), this.getClass());
+						msg=(String) resultMap.get("msg");
+						success = false;
+					}else {
+						success=true;
 					}
 				}else {
-					msg="放款失败";
+					success = false;
+					msg="系统错误，请联系管理员";
+					LoggerUtils.error("手控放款错误，原因：分账列表拼接时，未查到放款对象人idcard:"+idcard, this.getClass());
 					errorMemberInfo.add(idcardsList.get(i));
 					continue;
 				}
 			}
 		}catch(Exception e){
 			success = false;
+			msg="系统发生错误，请联系管理员";
 			e.printStackTrace();
 			LoggerUtils.error("理财标 ACTION 方法loanFullScaleToUser错误："+e.getMessage(), this.getClass());
 			LoggerUtils.error("理财标 ACTION 方法loanFullScaleToUser错误："+e.getLocalizedMessage(), this.getClass());

@@ -559,8 +559,9 @@ public class ScaleServiceImpl implements ScaleService{
      * @return: void      
      * @throws
      */
-    public boolean fullScaleLoanMoney(Scale scale, double num ,String subledgerList, MemberMiddle memberMiddle) throws Exception{
-		boolean success=false;	
+    public Map<String, Object> fullScaleLoanMoney(Scale scale, double num ,String subledgerList, MemberMiddle memberMiddle) throws Exception{
+		boolean success=false;
+		String msg="";
     	//生成一个流水号
 		String requestId = DataUtils.randomUUID();
 		String fullScaleURL = "";
@@ -667,12 +668,14 @@ public class ScaleServiceImpl implements ScaleService{
 											  "\t\n------------------------phone:"+loanList.getMemberInfo().getPhone()+
 											  "\t\n---------------------nickName:"+loanList.getMemberInfo().getNickname()+
 											  "\t\n---------------------放款操作中，保存放款记录失败", this.getClass());
+		    				msg="系统错误，请联系管理员";
 		    			}
 		    		}else{
 		    			LoggerUtils.error("\t\n-------------------------name:"+loanList.getMemberInfo().getRealName()+
 		    							  "\t\n------------------------phone:"+loanList.getMemberInfo().getPhone()+
 		    							  "\t\n---------------------nickName:"+loanList.getMemberInfo().getNickname()+
 		    							  "\t\n---------------------放款操作中，更新借贷列表失败", this.getClass());
+		    			msg="系统错误，请联系管理员";
 		    		}
 		    	}
 		    	
@@ -687,12 +690,17 @@ public class ScaleServiceImpl implements ScaleService{
 			}else{
 				LoggerUtils.info("\t\n------------签名不一致", this.getClass());
 				success = false;
+				msg="系统错误，请联系管理员";
 			}
 		}else{
 			success = false;
+			msg=DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, back_result));
 			LoggerUtils.info("\t\n------------满标放款失败 ，原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, back_result)), this.getClass());
 		}
-		return success;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("success", success);
+		resultMap.put("msg", msg);
+		return resultMap;
     }
 	
 }
