@@ -228,7 +228,9 @@ public class MemberMiddleAction extends BaseAction<MemberMiddle> {
 			if(ResultPath.ADD.equals(path)) {
 				return ResultPath.ADD;
 			}else if("selectUser".equals(path)){
-				getRequest().setAttribute("scaleId", getRequest().getParameter("scaleId"));;
+				getRequest().setAttribute("scaleId", getRequest().getParameter("scaleId"));
+				//最多可放款金额
+				getRequest().setAttribute("alowedSum", getRequest().getParameter("alowedSum"));
 				return "selectUser";
 			}
 		} catch (Exception e) {
@@ -292,7 +294,7 @@ public class MemberMiddleAction extends BaseAction<MemberMiddle> {
 	
 	/**
 	 * 禁用
-	 * @Title: add   
+	 * @Title: updateIsUse   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
 	 * @author LiYonghui    

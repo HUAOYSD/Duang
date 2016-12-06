@@ -33,6 +33,7 @@ window.onresize = function(){
 	setTimeout(domresize,300);
 };
 
+var selectedRow;
 
 /**
  * 加载列表
@@ -126,10 +127,13 @@ function loadscale(url, dataObj){
 			             {field : "tags", title : "标签", width : 150, align : "center" }
 			] ],
 			onSelect:function(rowIndex, rowData){
+				selectedRow = $("#scale").datagrid('getSelected');
 				$('#edit_btn_scale').linkbutton('enable');
 				$('#info_btn_scale').linkbutton('enable');
 				$('#allot_btn_scale').linkbutton('enable');
 				$('#match_btn_scale').linkbutton('enable');
+				//查询标的放款情况
+				checkLoanSum();
 				if(rowData.status =='满标'){
 					$('#loan_btn_scale').linkbutton('enable');
 				}else{
@@ -153,6 +157,27 @@ function loadscale(url, dataObj){
 		});
 }
 
+/**
+ * 判断放款金额是否和投入金额相等
+ */
+var loanSum=0;
+function checkLoanSum(){
+	//查询标的放款情况
+	$.ajax({
+		   type: "POST",
+		   url: "middleRecords!getTotalSumByScaleId.do",
+		   data: "scaleId="+selectedRow.id,
+		   success: function(msg){
+				var obj = eval('(' + msg + ')');
+				loanSum = obj.sum;
+				if(sum<selectedRow.yetMoney){
+					$('#loan_btn_scale').linkbutton('enable');
+				}else{
+					$('#loan_btn_scale').linkbutton('disable');
+				}
+		   }
+	});
+}
 
 /**
  * 查询
@@ -202,7 +227,6 @@ $("#add_btn_scale").on("click",function(){
  * @param {Object} memberId
  */
 $("#edit_btn_scale").on("click",function(){
-	var selectedRow = $("#scale").datagrid('getSelected');
 	if(selectedRow==null){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
@@ -222,7 +246,6 @@ $("#edit_btn_scale").on("click",function(){
  * 打开详情页面 
  */
 $("#info_btn_scale").on("click",function(){
-	var selectedRow = $("#scale").datagrid('getSelected');
 	if(selectedRow==null){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
@@ -243,7 +266,6 @@ $("#info_btn_scale").on("click",function(){
  * 打开借贷分配 
  */
 $("#allot_btn_scale").on("click",function(){
-	var selectedRow = $("#scale").datagrid('getSelected');
 	if(selectedRow==null){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
@@ -268,7 +290,6 @@ $("#allot_btn_scale").on("click",function(){
  * 打开借贷记录详情
  */
 $("#match_btn_scale").on("click",function(){
-	var selectedRow = $("#scale").datagrid('getSelected');
 	if(selectedRow==null){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
@@ -292,22 +313,24 @@ $("#match_btn_scale").on("click",function(){
  * 放款
  */
 $("#loan_btn_scale").on("click",function(){
-	var selectedRow = $("#scale").datagrid('getSelected');
 	if(selectedRow==null){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
 	}else if(selectedRow.status != '满标'){
 		layer.msg("不是满标，不能进行放款操作",{time:1500});
 		return;
+	}else if(loanSum>=selectedRow.yetMoney){
+		layer.msg("已经全部放款！",{time:1500});
+		return;
 	}
 	//选择放款人
 	layer.open({
 		type: 2,
-		title: '选择放款人<span style="font-size:12px;color:#f72143;">&nbsp;&nbsp;请填写选择对象的放款金额</span>',
+		title: '选择放款人<span style="font-size:12px;color:#f72143;">&nbsp;&nbsp;请填写选择对象的放款金额     最多可放款金额：'+(selectedRow-loanSum)+'</span>',
 		shadeClose: true,
 		maxmin:true,
 		shade: 0.8,
 		area: ['50%', '80%'],
-		content: 'memberMiddle!openDialog.do?path=selectUser&scaleId='+selectedRow.id
+		content: 'memberMiddle!openDialog.do?path=selectUser&scaleId='+selectedRow.id+'&alowedSum='+(selectedRow-loanSum)
 	}); 
 });

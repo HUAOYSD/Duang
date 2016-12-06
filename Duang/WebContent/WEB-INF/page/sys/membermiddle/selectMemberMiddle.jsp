@@ -11,6 +11,8 @@
 	</div>
 	<script type="text/javascript">
 		var scaleId="${scaleId}";
+		//可放款金额
+		var alowedSum="${alowedSum}";
 	</script>
 	<script type="text/javascript" src="<%=path %>/ui/sys/membermiddle/selectMemberMiddle.js"></script>
 </body>

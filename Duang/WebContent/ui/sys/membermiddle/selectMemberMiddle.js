@@ -89,6 +89,8 @@ $("#btn_select_memberMiddle").on("click",function(){
 	var userNames='';
 	var idcards='';
 	var sums='';
+	//放款金额
+	var totalSum=0;
 	for(var i=0;i<selectedRows.length;i++){
 		var selectRowIndex = $('#select_memberMiddle').datagrid('getRowIndex',selectedRows[i]);
 		$('#select_memberMiddle').datagrid('endEdit',selectRowIndex);
@@ -101,25 +103,30 @@ $("#btn_select_memberMiddle").on("click",function(){
 		userNames+=selectedRows[i].userName;
 		idcards+=selectedRows[i].idcard;
 		sums+=selectedRows[i].sum;
+		totalSum+=selectedRows[i].sum;
 		if(i<selectedRows.length-1){
 			userNames+=",";
 			idcards+=",";
 			sums+=",";
 		}
 	}
-	$.ajax({
-		   type: "POST",
-		   url: "scale!loanFullScaleToUser.do",
-		   data: "scaleId="+scaleId+"&userNames="+userNames+"&idcards="+idcards+"&sums="+sums,
-		   success: function(msg){
-			    $.messager.progress("close");	
-				var obj = eval('(' + msg + ')');
-				if(!obj.result){
-					layer.msg(obj.msg,{icon:2});
-				}else{
-					layer.msg("放款成功!",{icon:1});
-				}
-		   }
-	});
+	if(totalSum>alowedSum){
+		layer.msg("超出最大可放款金额"+totalSum,{icon:2});
+		return;
+	}else{
+		$.ajax({
+			   type: "POST",
+			   url: "scale!loanFullScaleToUser.do",
+			   data: "scaleId="+scaleId+"&userNames="+userNames+"&idcards="+idcards+"&sums="+sums,
+			   success: function(msg){
+					var obj = eval('(' + msg + ')');
+					if(!obj.result){
+						layer.msg(obj.msg,{icon:2});
+					}else{
+						layer.msg("放款成功!",{icon:1});
+					}
+			   }
+		});
+	}
 	
 });
