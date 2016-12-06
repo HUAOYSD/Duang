@@ -19,6 +19,7 @@ public class MemberMiddleRecords implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	// Fields
 	private String id;
+	private String scaleId;
 	private MemberMiddle memberMiddle;
 	private Double money;
 	private Date createTime;
@@ -33,8 +34,9 @@ public class MemberMiddleRecords implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public MemberMiddleRecords(String id, MemberMiddle memberMiddle, Double money, Date createTime) {
+	public MemberMiddleRecords(String id, String scaleId, MemberMiddle memberMiddle, Double money, Date createTime) {
 		this.id = id;
+		this.scaleId = scaleId;
 		this.memberMiddle = memberMiddle;
 		this.money = money;
 		this.createTime = createTime;
@@ -50,7 +52,16 @@ public class MemberMiddleRecords implements java.io.Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	@Column(name = "scaleId", length = 36)
+	public String getScaleId() {
+		return this.scaleId;
+	}
 
+	public void setScaleId(String scaleId) {
+		this.scaleId = scaleId;
+	}
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "middle_id")
 	public MemberMiddle getMemberMiddle() {

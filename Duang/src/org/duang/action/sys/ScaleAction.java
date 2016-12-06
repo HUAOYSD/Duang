@@ -557,7 +557,7 @@ public class ScaleAction extends BaseAction<Scale> {
 				String back_data_sign = MD5Utils.hmacSign(back_data_str.toString(), ReadProperties.getStringValue(properties, "akey"));
 				LoggerUtils.info("\t\n------------请求编号："+requestId+"  返回数据签名字符串加密："+back_data_sign, this.getClass());		
 				if(back_data_sign.equals(signature)){
-					service.fullScaleLoanMoney(projectCode, DataUtils.str2double(sum, 6));
+					//service.fullScaleLoanMoney(projectCode, DataUtils.str2double(sum, 6));
 				}else{
 					LoggerUtils.info("\t\n------------满标放款 普通标 签名不一致 ，请求编号："+requestId, this.getClass());
 				}
@@ -613,7 +613,8 @@ public class ScaleAction extends BaseAction<Scale> {
 				String back_data_sign = MD5Utils.hmacSign(back_data_str.toString(), ReadProperties.getStringValue(properties, "akey"));
 				LoggerUtils.info("\t\n------------请求编号："+requestId+"  返回数据签名字符串加密："+back_data_sign, this.getClass());		
 				if(back_data_sign.equals(signature)){
-					service.fullScaleLoanMoney(projectCode, DataUtils.str2double(sum, 6));
+					LoggerUtils.info("\t\n=======================集合标 放款异步返回成功！=======================", this.getClass());
+					//service.fullScaleLoanMoney(projectCode, DataUtils.str2double(sum, 6));
 				}else{
 					LoggerUtils.info("\t\n------------满标放款 签名不一致 ，请求编号："+requestId, this.getClass());
 				}

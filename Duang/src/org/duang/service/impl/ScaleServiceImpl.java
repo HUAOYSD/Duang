@@ -628,11 +628,62 @@ public class ScaleServiceImpl implements ScaleService{
 				memberMiddleRecords.setCreateTime(new Date());
 				memberMiddleRecords.setMoney(num);
 				memberMiddleRecords.setMemberMiddle(memberMiddle);
+				memberMiddleRecords.setScaleId(back_projectCode);
 				memberMiddleRecordsDao.saveEntity(memberMiddleRecords);
 				//修改中间的总放款和最后一次放款金额
 				memberMiddle.setTotalSum(memberMiddle.getTotalSum()+num);
 				memberMiddle.setLastSum(num);
 				memberMiddleDao.updateEntity(memberMiddle);
+				
+				//查询标的借贷列表
+				String sql = "select * from loan_list ll  left join scale_loan_list sll on ll.id=sll.loan_list where sll.scale='"+back_projectCode
+		    			+"' and apply_state=2 and loan_state=1";
+		    	List<LoanList> loanLists = loanListDao.queryBySQL(sql, null, null,true);
+		    	for(LoanList loanList : loanLists){
+		    		loanList.setYetMoney(loanList.getGetMoney());
+		    		loanList.setLoanState(3);
+		    		//1.修改借贷列表
+		    		success = loanListDao.updateEntity(loanList);
+		    		if(success){
+		    			//2.生成放款记录
+		    			//获取BindCard
+		    			BindCard bindCard = bindCardDao.findEntity("memberInfo.id", loanList.getMemberInfo().getId());
+		    			BillLoan billLoan = new BillLoan(DataUtils.randomUUID());
+		    			billLoan.setBindCard(bindCard);
+		    			//状态，1操作中，2成功，3失败
+		    			billLoan.setBillStatus(2);
+		    			billLoan.setLoanList(loanList);
+		    			billLoan.setMemberInfo(loanList.getMemberInfo());
+		    			billLoan.setOptTime(new Date());
+		    			billLoan.setStatus(LoanStatus.S1.getVal());
+		    			billLoan.setMoney(+num);
+		    			billLoan.setDoneMoney(num);
+		    			//方式，1线下，2Android，3IOS，4平台系统
+		    			billLoan.setStyle(4);
+		    			billLoan.setRemark("放款");
+		    			success = billLoanDao.saveEntity(billLoan);
+		    			if(!success){
+		    				LoggerUtils.error("\t\n-------------------------name:"+loanList.getMemberInfo().getRealName()+
+											  "\t\n------------------------phone:"+loanList.getMemberInfo().getPhone()+
+											  "\t\n---------------------nickName:"+loanList.getMemberInfo().getNickname()+
+											  "\t\n---------------------放款操作中，保存放款记录失败", this.getClass());
+		    			}
+		    		}else{
+		    			LoggerUtils.error("\t\n-------------------------name:"+loanList.getMemberInfo().getRealName()+
+		    							  "\t\n------------------------phone:"+loanList.getMemberInfo().getPhone()+
+		    							  "\t\n---------------------nickName:"+loanList.getMemberInfo().getNickname()+
+		    							  "\t\n---------------------放款操作中，更新借贷列表失败", this.getClass());
+		    		}
+		    	}
+		    	
+		    	List<InvestList> investLists = investListDao.queryEntity("scale.id", back_projectCode, null, null);
+		    	for(InvestList investList : investLists){
+		    		investList.setStatus(Status.S2.getVal());
+		    		investList.setCalcBeginDate(new Date());
+		    		investList.setCalcEndDate(getDate(investList.getCalcBeginDate(),investList.getDays()));
+		    		//1.修改投标列表状态
+		    		success = investListDao.updateEntity(investList);
+		    	}
 			}else{
 				LoggerUtils.info("\t\n------------签名不一致", this.getClass());
 				success = false;
