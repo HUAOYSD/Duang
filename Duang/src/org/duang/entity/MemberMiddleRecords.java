@@ -53,7 +53,7 @@ public class MemberMiddleRecords implements java.io.Serializable {
 		this.id = id;
 	}
 	
-	@Column(name = "scaleId", length = 36)
+	@Column(name = "scale_id", length = 36)
 	public String getScaleId() {
 		return this.scaleId;
 	}
