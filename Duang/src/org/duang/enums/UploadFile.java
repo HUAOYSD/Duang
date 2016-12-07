@@ -120,9 +120,9 @@ public enum UploadFile {
 		@Override
 		public String getVal(String userId) {
 			if(DataUtils.notEmpty(userId)){
-				return "\\"+userId+"\\idcard";
+				return userId+"\\idcard";
 			}else{
-				return "\\idcard";
+				return "idcard";
 			}
 		}
 
@@ -133,13 +133,12 @@ public enum UploadFile {
 
 		@Override
 		public String getVal() {
-			return "\\idcard";
+			return "idcard";
 		}
 
 		@Override
 		public String appPath() {
-			// TODO Auto-generated method stub
-			return null;
+			return "resources/file/basic/";
 		}
 
 	},
@@ -252,6 +251,148 @@ public enum UploadFile {
 			return "resources/file/basic/";
 		}
 
+	},
+	//车贷个人资料
+	DATUMS_CAR{
+		@Override
+		public String getVal() {
+			return "\\datums\\car";
+		}
+
+		@Override
+		public String toString() {
+			return "车贷个人资料";
+		}
+
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\datums\\car";
+			}else{
+				return "\\datums\\car";
+			}
+		}
+
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+
+	},
+	//信贷个人资料
+	ASSET_CAR{
+		@Override
+		public String getVal() {
+			return "\\asset\\car";
+		}
+		@Override
+		public String toString() {
+			return "车贷个人证明";
+		}
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\asset\\car";
+			}else{
+				return "\\asset\\car";
+			}
+		}
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+	},
+	//车贷个人资料
+	DATUMS_HOUSE{
+		@Override
+		public String getVal() {
+			return "\\datums\\house";
+		}
+		@Override
+		public String toString() {
+			return "房贷个人资料";
+		}
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\datums\\house";
+			}else{
+				return "\\datums\\house";
+			}
+		}
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+	},
+	//信贷个人资料
+	ASSET_HOUSE{
+		@Override
+		public String getVal() {
+			return "\\asset\\house";
+		}
+		@Override
+		public String toString() {
+			return "房贷个人证明";
+		}
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\asset\\house";
+			}else{
+				return "\\asset\\house";
+			}
+		}
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+	},
+	//信贷个人资料
+	DATUMS_CREDIT{
+		@Override
+		public String getVal() {
+			return "\\datums\\credit";
+		}
+		@Override
+		public String toString() {
+			return "信贷个人资料";
+		}
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\datums\\credit";
+			}else{
+				return "\\datums\\credit";
+			}
+		}
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+	},
+	//信贷个人资料
+	ASSET_CREDIT{
+		@Override
+		public String getVal() {
+			return "\\asset\\credit";
+		}
+		@Override
+		public String toString() {
+			return "信贷个人证明";
+		}
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\asset\\credit";
+			}else{
+				return "\\asset\\credit";
+			}
+		}
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
 	},
 	//广告
 	AD{

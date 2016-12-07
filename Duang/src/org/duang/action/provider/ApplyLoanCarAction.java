@@ -1,6 +1,9 @@
 package org.duang.action.provider;
+import java.util.ArrayList;
+
 import javax.annotation.Resource;
 
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
@@ -11,6 +14,7 @@ import org.duang.common.system.MemberCollection;
 import org.duang.entity.ApplyLoanCar;
 import org.duang.entity.LoanList;
 import org.duang.entity.MemberInfo;
+import org.duang.enums.UploadFile;
 import org.duang.enums.loan.Apply;
 import org.duang.enums.loan.BackMoney;
 import org.duang.enums.loan.Poundage;
@@ -20,6 +24,8 @@ import org.duang.service.ApplyLoanCarService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
+import org.duang.util.ImageString;
+import org.duang.util.ReadProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -168,4 +174,137 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 		printJsonResult();
 	}
 	
+	/**
+	 * 上传个人资料
+	 * @Title: uploadUseDatums   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年12月7日 上午10:05:16
+	 * @return: void      
+	 * @throws
+	 */
+	public void uploadUserDatums(){
+		boolean success=false;
+		try{
+			String id = getRequest().getParameter("id");
+			String token = getRequest().getParameter("token");
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id)) {
+				String memberInfoId = MemberCollection.getInstance(token, memberInfoService).getMainField(token);
+				//跟路径
+				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
+				//详细路径
+				String suffPath = UploadFile.PATH.getVal(UploadFile.DATUMS_CAR.getVal(memberInfoId))+"\\";
+				//备份跟路径
+				String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+				// 遍历图片数量
+				ArrayList<String> imgDataList = new ArrayList<String>();
+				imgDataList.add(entity.getImg_1());
+				imgDataList.add(entity.getImg_2());
+				imgDataList.add(entity.getImg_3());
+				imgDataList.add(entity.getImg_4());
+				imgDataList.add(entity.getImg_5());
+				imgDataList.add(entity.getImg_6());
+				imgDataList.add(entity.getImg_7());
+				imgDataList.add(entity.getImg_8());
+				imgDataList.add(entity.getImg_9());
+				//拼接资料文件名字
+				StringBuffer datumsData = new StringBuffer("");
+				for (int i = 0; i < entity.getNum(); i++) {
+					//文件名称
+					String fileName = DataUtils.randomUUID()+".jpg";
+					String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
+					success = ImageString.generateImage(imgDataList.get(i), fullpath);
+					//备份路径
+					ImageString.generateImage(imgDataList.get(i), DataUtils.fileUploadPath(backupPath, suffPath, fileName));
+					LoggerUtils.info("userId:" + memberInfoId + "----------------上传车贷资料：" + success, this.getClass());
+					if (success) {
+						datumsData.append(fileName);
+						if(i<entity.getNum()-1){
+							datumsData.append(";");
+						}
+					}
+				}
+				ApplyLoanCar applyLoanCar = applyLoanCarService.findById(id);
+				applyLoanCar.setDatums(applyLoanCar.getDatums()+";"+datumsData.toString());
+				success = applyLoanCarService.updateEntity(applyLoanCar);
+			}else{
+				msg = "缺少参数,请补充";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("ApplyLoanCarAction uploadUseDatums：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanCarAction uploadUseDatums：" + e.getLocalizedMessage(), this.getClass());
+		}    
+		jsonObject.put("success", success);
+		jsonObject.put("success", msg);
+		printJsonResult();
+	}
+	
+	/**
+	 * 上传个人证明
+	 * @Title: uploadUserAsset   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年12月7日 上午10:05:16
+	 * @return: void      
+	 * @throws
+	 */
+	public void uploadUserAsset(){
+		boolean success=false;
+		try{
+			String id = getRequest().getParameter("id");
+			String token = getRequest().getParameter("token");
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id)) {
+				String memberInfoId = MemberCollection.getInstance(token, memberInfoService).getMainField(token);
+				//跟路径
+				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
+				//详细路径
+				String suffPath = UploadFile.PATH.getVal(UploadFile.ASSET_CAR.getVal(memberInfoId))+"\\";
+				//备份跟路径
+				String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+				// 遍历图片数量
+				ArrayList<String> imgDataList = new ArrayList<String>();
+				imgDataList.add(entity.getImg_1());
+				imgDataList.add(entity.getImg_2());
+				imgDataList.add(entity.getImg_3());
+				imgDataList.add(entity.getImg_4());
+				imgDataList.add(entity.getImg_5());
+				imgDataList.add(entity.getImg_6());
+				imgDataList.add(entity.getImg_7());
+				imgDataList.add(entity.getImg_8());
+				imgDataList.add(entity.getImg_9());
+				//拼接资料文件名字
+				StringBuffer datumsData = new StringBuffer("");
+				for (int i = 0; i < entity.getNum(); i++) {
+					//文件名称
+					String fileName = DataUtils.randomUUID()+".jpg";
+					String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
+					success = ImageString.generateImage(imgDataList.get(i), fullpath);
+					//备份路径
+					ImageString.generateImage(imgDataList.get(i), DataUtils.fileUploadPath(backupPath, suffPath, fileName));
+					LoggerUtils.info("userId:" + memberInfoId + "----------------上传车贷证明：" + success, this.getClass());
+					if (success) {
+						datumsData.append(fileName);
+						if(i<entity.getNum()-1){
+							datumsData.append(";");
+						}
+					}
+				}
+				ApplyLoanCar applyLoanCar = applyLoanCarService.findById(id);
+				applyLoanCar.setAssetCertificates(applyLoanCar.getAssetCertificates()+";"+datumsData.toString());
+				success = applyLoanCarService.updateEntity(applyLoanCar);
+			}else{
+				msg = "缺少参数,请补充";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("ApplyLoanCarAction uploadUserAsset：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanCarAction uploadUserAsset：" + e.getLocalizedMessage(), this.getClass());
+		}    
+		jsonObject.put("success", success);
+		jsonObject.put("success", msg);
+		printJsonResult();
+	}
 }

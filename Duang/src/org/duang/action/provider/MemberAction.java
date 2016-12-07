@@ -1275,4 +1275,110 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		jsonObject.put("success", msg);
 		printJsonResult();
 	}
+	
+	/**
+	 * 上传身份证前照
+	 * @Title: uploadUseIDcard   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年12月7日 上午9:28:19
+	 * @return: void      
+	 * @throws
+	 */
+	public void uploadUseIDcard_a(){
+		boolean success=false;
+		try{
+			String token = getRequest().getParameter("token");
+			String imgdata = getRequest().getParameter("imgdata");
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(imgdata)) {
+				String id = MemberCollection.getInstance(token, service).getMainField(token);
+				if (DataUtils.notEmpty(id)) {
+					MemberInfo memberInfo = service.findById(id);
+					//基本根路径
+					String temPath = getRequest().getSession().getServletContext().getRealPath("/");
+					//详细路径
+					String suffPath = UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(memberInfo.getId()))+"\\";
+					//文件名称
+					String fileName = DataUtils.randomUUID()+".jpg";
+					String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
+					jsonObject.put("path", UploadFile.IDCARD.appPath()+memberInfo.getId()+"/idcard/"+fileName);
+					success = ImageString.generateImageBase64(imgdata, fullpath);
+					//备份
+					String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+					ImageString.generateImageBase64(imgdata, DataUtils.fileUploadPath(backupPath, suffPath, fileName));
+					
+					LoggerUtils.info("userId:"+id+"----------------上传身份证照片："+success, this.getClass());
+					if(success){
+						memberInfo.setIdCardImg1(fileName);
+						success = service.updateEntity(memberInfo);
+					}
+				}else{
+					msg = "登录失效";
+				}
+			}else{
+				msg = "缺少参数,请补充";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction uploadUseIDcard_a：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction uploadUseIDcard_a：" + e.getLocalizedMessage(), this.getClass());
+		}    
+		jsonObject.put("success", success);
+		jsonObject.put("success", msg);
+		printJsonResult();
+	}
+	
+	/**
+	 * 上传身份证后照
+	 * @Title: uploadUseIDcard   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年12月7日 上午9:28:19
+	 * @return: void      
+	 * @throws
+	 */
+	public void uploadUseIDcard_b(){
+		boolean success=false;
+		try{
+			String token = getRequest().getParameter("token");
+			String imgdata = getRequest().getParameter("imgdata");
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(imgdata)) {
+				String id = MemberCollection.getInstance(token, service).getMainField(token);
+				if (DataUtils.notEmpty(id)) {
+					MemberInfo memberInfo = service.findById(id);
+					//基本根路径
+					String temPath = getRequest().getSession().getServletContext().getRealPath("/");
+					//详细路径
+					String suffPath = UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(memberInfo.getId()))+"\\";
+					//文件名称
+					String fileName = DataUtils.randomUUID()+".jpg";
+					String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
+					jsonObject.put("path", UploadFile.IDCARD.appPath()+memberInfo.getId()+"/idcard/"+fileName);
+					success = ImageString.generateImageBase64(imgdata, fullpath);
+					//备份
+					String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+					ImageString.generateImageBase64(imgdata, DataUtils.fileUploadPath(backupPath, suffPath, fileName));
+					
+					LoggerUtils.info("userId:"+id+"----------------上传身份证照片："+success, this.getClass());
+					if(success){
+						memberInfo.setIdCardImg2(fileName);
+						success = service.updateEntity(memberInfo);
+					}
+				}else{
+					msg = "登录失效";
+				}
+			}else{
+				msg = "缺少参数,请补充";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("MemberAction uploadUseIDcard_b：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction uploadUseIDcard_b：" + e.getLocalizedMessage(), this.getClass());
+		}    
+		jsonObject.put("success", success);
+		jsonObject.put("success", msg);
+		printJsonResult();
+	}
 }

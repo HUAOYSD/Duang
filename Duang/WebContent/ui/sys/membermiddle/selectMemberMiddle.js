@@ -110,7 +110,6 @@ $("#btn_select_memberMiddle").on("click",function(){
 			sums+=",";
 		}
 	}
-	alert(totalSum);
 	if(totalSum>alowedSum){
 		layer.msg("超出最大可放款金额:"+alowedSum,{icon:2});
 		return;
