@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.duang.common.logger.LoggerUtils;
+import org.duang.util.JDBCDES;
 import org.duang.util.ReadProperties;
 
 public class BackUpDB {
@@ -43,8 +44,8 @@ public class BackUpDB {
 		dbName = dbName.replaceAll(":", "_");
 		dbName = dbName.replaceAll(" ", "_");
 		pr = ReadProperties.initPrperties("backupdb.properties");
-		String user = ReadProperties.getStringValue(pr, "jdbc.username").trim();
-		String password = ReadProperties.getStringValue(pr, "jdbc.password").trim();
+		String user = JDBCDES.getDecryptString(ReadProperties.getStringValue(pr, "jdbc.username").trim());
+		String password = JDBCDES.getDecryptString(ReadProperties.getStringValue(pr, "jdbc.password").trim());
 		String database = ReadProperties.getStringValue(pr, "jdbc.database").trim();
 		String filepath = ReadProperties.getStringValue(pr, "jdbc.backupPath").trim() + dbName;
 
