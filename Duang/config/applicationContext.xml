@@ -11,13 +11,9 @@
 	<context:component-scan base-package="org.duang.*" />
 	<context:annotation-config></context:annotation-config>	
 
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath:jdbc.properties</value>
-			</list>
-		</property>
+	<bean id="propertyConfigurer" class="org.duang.util.EncryptPropertyPlaceholderConfigurer" p:location="classpath:jdbc.properties">
 	</bean>
+	
 	<!-- <context:property-placeholder location="classpath:jdbc.properties"/> -->
 
 	<!-- - - - - - - - Apache 连接池 - - - - - - - -->
