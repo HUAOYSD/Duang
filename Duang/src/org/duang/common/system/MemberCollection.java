@@ -2,15 +2,12 @@ package org.duang.common.system;
 
 import java.util.HashMap;
 
-import javax.annotation.Resource;
+import net.sf.json.JSONObject;
 
 import org.duang.entity.MemberInfo;
 import org.duang.service.MemberInfoService;
-import org.duang.service.impl.MemberInfoServiceImpl;
 import org.duang.util.DataUtils;
 import org.springframework.stereotype.Component;
-
-import net.sf.json.JSONObject;
 
 /**   
  * App登录的会员用户集合

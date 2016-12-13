@@ -1,5 +1,6 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -7,9 +8,23 @@ import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.BillLoanDao;
+import org.duang.dao.BindCardDao;
+import org.duang.dao.InvestMemberDao;
 import org.duang.dao.LoanListDao;
+import org.duang.dao.LoanMemberDao;
+import org.duang.dao.MemberInfoDao;
+import org.duang.entity.BillLoan;
+import org.duang.entity.BindCard;
+import org.duang.entity.InvestMember;
 import org.duang.entity.LoanList;
+import org.duang.entity.LoanMember;
+import org.duang.entity.MemberInfo;
+import org.duang.enums.billloan.BillStatus;
+import org.duang.enums.billloan.UseType;
+import org.duang.enums.loan.ReturnStatus;
 import org.duang.service.LoanListService;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -27,11 +42,47 @@ public class LoanListServiceImpl implements LoanListService{
 
 	private LoanListDao dao;
 
-	@Resource()
+	@Resource
 	public void setDao(LoanListDao dao) {
 		this.dao = dao;
 	}
 
+	private MemberInfoDao memberInfoDao;
+	@Resource
+	public void setMemberInfoDao(MemberInfoDao memberInfoDao) {
+		this.memberInfoDao = memberInfoDao;
+	}
+	
+	private BindCardDao bindCardDao;
+	@Resource
+	public void setBindCardDao(BindCardDao bindCardDao) {
+		this.bindCardDao = bindCardDao;
+	}
+	
+	private LoanMemberDao loanMemberDao;
+	@Resource
+	public void setLoanMemberDao(LoanMemberDao loanMemberDao) {
+		this.loanMemberDao = loanMemberDao;
+	}
+	
+	private InvestMemberDao investMemberDao;
+	@Resource
+	public void setInvestMemberDao(InvestMemberDao investMemberDao) {
+		this.investMemberDao = investMemberDao;
+	}
+	
+	private BillLoanDao billLoanDao;
+	@Resource
+	public void setBillLoanDao(BillLoanDao billLoanDao) {
+		this.billLoanDao = billLoanDao;
+	}
+	private LoanListDao loanListDao;
+	@Resource
+	public void setLoanListDao(LoanListDao loanListDao) {
+		this.loanListDao = loanListDao;
+	}
+	
+	
 	public LoanListServiceImpl(){
 		LoggerUtils.info("注入LoanListServiceImpl服务层", this.getClass());
 	}
@@ -281,5 +332,71 @@ public class LoanListServiceImpl implements LoanListService{
 	 */
 	public boolean deleteEntity(LoanList t) throws Exception {
 		return dao.deleteEntity(t);
+	}
+
+	/**
+	 * 还款成功后操作
+	 * <p>Title: memberInfoRepay</p>   
+	 * <p>Description: </p>  
+	 * @author LiYonghui
+	 * @date 2016年12月12日 下午4:20:03
+	 * @param sum
+	 * @param memberInfoId
+	 * @param scaleId
+	 * @param loanList
+	 * @param style
+	 * @return
+	 * @throws Exception   
+	 * @see org.duang.service.LoanListService#memberInfoRepay(double, java.lang.String, java.lang.String, org.duang.entity.LoanList, int)
+	 */
+	@Override
+	public boolean memberInfoRepay(double sum, String memberInfoId, String scaleId, LoanList loanList, int style) throws Exception {
+		boolean success = false;
+		LoggerUtils.info("\t\n---------------用户还款成功，修改数据参数", this.getClass());
+		//基本账户信息
+		MemberInfo memberInfo = memberInfoDao.findById(memberInfoId);
+		//绑定的银行卡
+		BindCard bindCard = bindCardDao.findEntity("memberInfo.id", memberInfoId);
+		//借贷账户
+		LoanMember loanMember = loanMemberDao.findEntity("memberInfo.id", memberInfoId);
+		//1.记录还款
+		BillLoan billLoan = new BillLoan(DataUtils.randomUUID());
+		billLoan.setBillStatus(BillStatus.BS2.getVal());
+		if(bindCard != null){
+			billLoan.setBindCard(bindCard);
+		}
+		billLoan.setDoneMoney(loanMember.getResidueMoney()-sum);
+		billLoan.setLoanList(loanList);
+		billLoan.setMemberInfo(memberInfo);
+		billLoan.setMoney(-sum);
+		billLoan.setOptTime(new Date());
+		billLoan.setRemark("还款");
+		billLoan.setStatus(UseType.UT2.getVal());
+		billLoan.setStyle(style);
+		success = billLoanDao.saveEntity(billLoan);
+		if(success){
+			//2.修改理财账户金额（账户余额）
+			InvestMember investMember = investMemberDao.findEntity("memberInfo.id",memberInfoId);
+			investMember.setBalance(investMember.getBalance()-sum);
+			success = investMemberDao.updateEntity(investMember);
+			if(success){
+				//3.修改借贷账户的金额
+				//总还款
+				loanMember.setBackMoney(loanMember.getBackMoney()+sum);
+				//当前借款
+				loanMember.setCurMoney(loanMember.getCurMoney()-sum);
+				//剩余还款
+				loanMember.setResidueMoney(loanMember.getResidueMoney()-sum);
+				success = loanMemberDao.updateEntity(loanMember);
+				
+				//4.修改借贷记录为已完成
+				loanList.setYetReturnMoney(loanList.getYetReturnMoney()+sum);
+				if(success && loanList.getYetReturnMoney()==loanList.getReturnMoney()){
+					loanList.setReturnStatus(ReturnStatus.B4.getVal());
+				}
+				success = loanListDao.updateEntity(loanList);
+			}
+		}
+		return success;
 	}
 }

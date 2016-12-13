@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 
@@ -37,7 +38,6 @@ public class MemberInfo implements java.io.Serializable {
 	private String phone;
 	private String idCard;
 	private String idCardImg1;
-	private String idCardImg2;
 	private String miDescribe;
 	private String isdelete;
 	private Date createTime;
@@ -85,8 +85,102 @@ public class MemberInfo implements java.io.Serializable {
 	private Set<BillLoan> billLoans = new HashSet<BillLoan>(0);
 	private Set<BillInvest> billInvests = new HashSet<BillInvest>(0);
 	
+	
+	//图片信息，只用于接收，不保存数据库表中
+	private String img_1;
+	private String img_2;
+	private String img_3;
+	private String img_4;
+	private String img_5;
+	private String img_6;
+	private String img_7;
+	private String img_8;
+	private String img_9;
+	private int num;
+	@Transient
+	public String getImg_1() {
+		return img_1;
+	}
+
+	public void setImg_1(String img_1) {
+		this.img_1 = img_1;
+	}
+	@Transient
+	public String getImg_2() {
+		return img_2;
+	}
+
+	public void setImg_2(String img_2) {
+		this.img_2 = img_2;
+	}
+	@Transient
+	public String getImg_3() {
+		return img_3;
+	}
+
+	public void setImg_3(String img_3) {
+		this.img_3 = img_3;
+	}
+	@Transient
+	public String getImg_4() {
+		return img_4;
+	}
+
+	public void setImg_4(String img_4) {
+		this.img_4 = img_4;
+	}
+	@Transient
+	public String getImg_5() {
+		return img_5;
+	}
+
+	public void setImg_5(String img_5) {
+		this.img_5 = img_5;
+	}
+	@Transient
+	public String getImg_6() {
+		return img_6;
+	}
+
+	public void setImg_6(String img_6) {
+		this.img_6 = img_6;
+	}
+	@Transient
+	public String getImg_7() {
+		return img_7;
+	}
+
+	public void setImg_7(String img_7) {
+		this.img_7 = img_7;
+	}
+	@Transient
+	public String getImg_8() {
+		return img_8;
+	}
+
+	public void setImg_8(String img_8) {
+		this.img_8 = img_8;
+	}
+	@Transient
+	public String getImg_9() {
+		return img_9;
+	}
+
+	public void setImg_9(String img_9) {
+		this.img_9 = img_9;
+	}
+	@Transient
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+	
+	
 	public MemberInfo(String id, CustomerManager customerManager, MemberInfo memberInfo, String loginName, String realName, String nickname, String email, String age, String sex, String phone, String idCard, 
-			String idCardImg1, String idCardImg2, String miDescribe, String isdelete, Date createTime, Date modifyTime, String createuser, String modifyuser, String userImg, 
+			String idCardImg1, String miDescribe, String isdelete, Date createTime, Date modifyTime, String createuser, String modifyuser, String userImg, 
 			Integer isEliteAccount, String level, String price, String password, String payPassword, String handPassword, Integer isFreeze, String myQr, 
 			Integer registerStyle, String cusmembername, Set<MemberInvestTicket> memberInvestTickets, Set<InvestMember> investMembers, 
 			Set<LoanMember> loanMembers, Set<Message> messagesForReceiver, Set<InvestList> investLists, Set<ScoreList> scoreLists,
@@ -105,7 +199,6 @@ public class MemberInfo implements java.io.Serializable {
 		this.phone = phone;
 		this.idCard = idCard;
 		this.idCardImg1 = idCardImg1;
-		this.idCardImg2 = idCardImg2;
 		this.miDescribe = miDescribe;
 		this.isdelete = isdelete;
 		this.createTime = createTime;
@@ -170,7 +263,7 @@ public class MemberInfo implements java.io.Serializable {
 	/** full constructor */
 	public MemberInfo(String id, String loginName, String realName,
 			String nickname, String email, String age, String sex,
-			String phone, String idCard, String idCardImg1, String idCardImg2,
+			String phone, String idCard, String idCardImg1, 
 			String miDescribe, String isdelete, Date createTime,
 			Date modifyTime, String createuser, String modifyuser,
 			String userImg, int isEliteAccount, String level,
@@ -192,7 +285,6 @@ public class MemberInfo implements java.io.Serializable {
 		this.idCard = idCard;
 		this.loanLists = loanLists;
 		this.idCardImg1 = idCardImg1;
-		this.idCardImg2 = idCardImg2;
 		this.miDescribe = miDescribe;
 		this.isdelete = isdelete;
 		this.createTime = createTime;
@@ -322,15 +414,6 @@ public class MemberInfo implements java.io.Serializable {
 
 	public void setIdCardImg1(String idCardImg1) {
 		this.idCardImg1 = idCardImg1;
-	}
-
-	@Column(name = "id_card_img2", length = 500)
-	public String getIdCardImg2() {
-		return this.idCardImg2;
-	}
-
-	public void setIdCardImg2(String idCardImg2) {
-		this.idCardImg2 = idCardImg2;
 	}
 
 	@Column(name = "mi_describe", length = 16777215)

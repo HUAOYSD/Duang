@@ -87,38 +87,6 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 	public String loanMemberList() {
 		return ResultPath.LIST;
 	}
-	/**
-	 * 跳转到上传理财客户图片的页面
-	 * 
-	 * @Title: touUpload
-	 * @Description: TODO(这里用一句话描述这个方法的作用)
-	 * @param: @return
-	 * @author LiYonghui
-	 * @date 2016年7月30日 下午11:18:08
-	 * @return: String
-	 * @throws
-	 */
-	public String touUpload() {
-		try{
-			String type =  getRequest().getParameter("type");
-			getRequest().setAttribute("type", getRequest().getParameter("type"));
-			MemberInfo memberInfo = sysMemberInfoService.findById(entity.getId());
-			getRequest().setAttribute("memberInfo", memberInfo);
-			//返回身份证前照和后照的具体路径
-			if(IDCard.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
-				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
-			}else if(IDCard.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
-				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
-			}else {
-				getRequest().setAttribute("path", "");
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("跳转到上传文件页面错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("跳转到上传文件页面错误：" + e.getLocalizedMessage(), this.getClass());
-		} 
-		return "uploadInvestMemberImg";
-	}
 	
 	/**
 	 * 仅仅展示上传的图片，不能上传图片
@@ -141,7 +109,7 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 			if(IDCard.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
 				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
 			}else if(IDCard.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
-				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
+				//getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
 			}else {
 				getRequest().setAttribute("path", "");
 			}
@@ -291,7 +259,6 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 				map.put("idCard", memberInfo.getIdCard());
 				map.put("miDescribe", memberInfo.getMiDescribe());
 				map.put("idCardImg1", memberInfo.getIdCardImg1());
-				map.put("idCardImg2", memberInfo.getIdCardImg2());
 				map.put("myQr", memberInfo.getMyQr());
 				listMap.add(map);
 			}
@@ -381,7 +348,6 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 					jsonObject.put("memberInfo.idCard", memberInfo.getIdCard());
 					jsonObject.put("memberInfo.miDescribe", memberInfo.getMiDescribe());
 					jsonObject.put("memberInfo.idCardImg1", memberInfo.getIdCardImg1());
-					jsonObject.put("memberInfo.idCardImg2", memberInfo.getIdCardImg2());
 					jsonObject.put("memberInfo.myQr", memberInfo.getMyQr());
 				}
 			}

@@ -225,7 +225,6 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 				map.put("idCard", memberInfo.getIdCard());
 				map.put("miDescribe", memberInfo.getMiDescribe());
 				map.put("idCardImg1", memberInfo.getIdCardImg1());
-				map.put("idCardImg2", memberInfo.getIdCardImg2());
 				map.put("myQr", memberInfo.getMyQr());
 				map.put("registerStyle", memberInfo.getRegisterStyle());
 				map.put("useableScore", memberInfo.getUseableScore());
@@ -302,7 +301,6 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 					map.put("idCard", memberInfo.getIdCard());
 					map.put("miDescribe", memberInfo.getMiDescribe());
 					map.put("idCardImg1", memberInfo.getIdCardImg1());
-					map.put("idCardImg2", memberInfo.getIdCardImg2());
 					map.put("myQr", memberInfo.getMyQr());
 					map.put("registerStyle", memberInfo.getRegisterStyle());
 					map.put("useableScore", memberInfo.getUseableScore());
@@ -415,8 +413,6 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 			//返回身份证前照和后照的具体路径
 			if(IDCard.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
 				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
-			}else if(IDCard.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg2())){
-				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
 			}else {
 				getRequest().setAttribute("path", "");
 			}
@@ -448,8 +444,6 @@ public class MemberInfoAction extends BaseAction<MemberInfo>{
 			//返回身份证前照和后照的具体路径
 			if(IDCard.IDCARD1.getVal()==Integer.parseInt(type) && DataUtils.notEmpty(memberInfo.getIdCardImg1())){
 				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg1());
-			}else if(IDCard.IDCARD2.getVal()==Integer.parseInt(type) &&  DataUtils.notEmpty(memberInfo.getIdCardImg1())){
-				getRequest().setAttribute("path", "/resources/file/basic/"+memberInfo.getId()+"/idcard/"+memberInfo.getIdCardImg2());
 			}else {
 				getRequest().setAttribute("path", "");
 			}

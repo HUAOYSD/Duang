@@ -57,6 +57,7 @@ public class LoanList implements java.io.Serializable {
 	private String applyContent;
 	private int loanStyle;
 	private int backStyle;
+	private Date returnDate;
 	private CustomerManager customerManager;
 	private Set<Stock> stocks = new HashSet<Stock>(0);
 	private Set<ScaleLoanList> scaleLoanLists = new HashSet<ScaleLoanList>(0);
@@ -86,7 +87,7 @@ public class LoanList implements java.io.Serializable {
 			double realMoney, double manageCost, double poundage, double getMoney, double yetMoney, double returnMoney, double agoMoney, 
 			double yetReturnMoney, int returnStatus, int loanState, int applyState, String loanUse, double loanInterest, Date createTime, 
 			Date signDate, Date beginReturnDate, Date endReturnDate, Date doneReturnDate, int loanStyle, int backStyle,
-			CustomerManager customerManager,Set<Stock> stocks, Date passTime,
+			CustomerManager customerManager,Set<Stock> stocks, Date passTime, Date returnDate,
 			String applyContent, Set<ScaleLoanList> scaleLoanLists, Set<BillLoan> billLoans, Set<ApplyLoanInfo> applyLoanInfos, Set<ApplyLoanHouse> applyLoanHouses, Set<ApplyLoanCar> applyLoanCars) {
 		this.id = id;
 		this.memberInfo = memberInfo;
@@ -125,6 +126,7 @@ public class LoanList implements java.io.Serializable {
 		this.applyLoanHouses = applyLoanHouses;
 		this.applyLoanCars = applyLoanCars;
 		this.customerManager = customerManager;
+		this.returnDate = returnDate;
 	}
 
 	
@@ -346,6 +348,15 @@ public class LoanList implements java.io.Serializable {
 
 	public void setSignDate(Date signDate) {
 		this.signDate = signDate;
+	}
+	
+	@Column(name = "return_date", length = 19)
+	public Date getReturnDate() {
+		return this.returnDate;
+	}
+
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
 	}
 
 	@Column(name = "begin_return_date", length = 19)

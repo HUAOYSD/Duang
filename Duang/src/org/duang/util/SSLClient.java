@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
@@ -19,10 +18,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.poi.ss.formula.functions.Value;
-import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 import org.duang.common.logger.LoggerUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class SSLClient{

@@ -1,4 +1,5 @@
 package org.duang.action.provider;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.LoanList;
 import org.duang.enums.loan.Apply;
-import org.duang.enums.loan.BackMoney;
+import org.duang.enums.loan.ReturnStatus;
 import org.duang.enums.loan.BackStyle;
 import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Poundage;
@@ -224,8 +225,8 @@ public class LoanListAction extends BaseAction<LoanList>{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("FriendsAction——addFriends方法错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("LoanListAction——findLoanInfo方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("LoanListAction——findLoanInfo方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
@@ -233,6 +234,58 @@ public class LoanListAction extends BaseAction<LoanList>{
 		printJsonResult();
 	}
 	
+	/**
+	 * 查询用户的借贷记录
+	 * @Title: getLoanSumByMember   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年12月13日 下午4:18:29
+	 * @return: void      
+	 * @throws
+	 */
+	public void getLoanSumByMember(){
+		boolean success = false;
+		//借款金额
+		double sum = 0;
+		try {
+			String token = getRequest().getParameter("token");
+			String id = null;
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,memberInfoService).getMainField(token))) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("memberInfo.id", id);
+				map.put("returnStatus", ReturnStatus.B2.getVal());
+				LoanList loanList = service.findEntity(map);
+				success = true;
+				if(loanList != null){
+					//等额本息
+					if(loanList.getBackStyle()==BackStyle.B1.getVal()){
+						sum=loanList.getReturnMoney()/loanList.getDays()*30;
+					}else if(loanList.getBackStyle()==BackStyle.B2.getVal()){
+					//到期一次性结清
+						sum=loanList.getReturnMoney();
+					}else{
+						success = false;
+						msg = "服务器维护，请稍后再试";
+					}
+				}else{
+					sum = 0;
+				}
+			}else {
+				msg = "登录失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("LoanListAction——getLoanSumByMember方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("LoanListAction——getLoanSumByMember方法错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		DecimalFormat df=new DecimalFormat(".##");
+		jsonObject.put("sum", df.format(sum));
+		jsonObject.put("msg", msg);
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
 	
 	/**   
 	 * 填充数据
@@ -258,7 +311,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 		jsonObject.put("returnMoney", loanlist.getReturnMoney());
 		jsonObject.put("agoMoney", loanlist.getAgoMoney());
 		jsonObject.put("yetReturnMoney", loanlist.getYetReturnMoney());
-		jsonObject.put("returnStatus", BackMoney.valueOf("B"+loanlist.getReturnStatus()).toString());
+		jsonObject.put("returnStatus", ReturnStatus.valueOf("B"+loanlist.getReturnStatus()).toString());
 		jsonObject.put("loanState", TakeMoney.valueOf("T"+loanlist.getLoanState()).toString());
 		jsonObject.put("applyStateint", Apply.valueOf("A"+loanlist.getApplyState()).toString());
 		jsonObject.put("loanType", LoanMode.valueOf("M"+loanlist.getLoanType()).toString());
@@ -266,6 +319,7 @@ public class LoanListAction extends BaseAction<LoanList>{
 		jsonObject.put("loanInterest", loanlist.getLoanInterest());
 		jsonObject.put("createTime", DateUtils.date2Str(loanlist.getCreateTime(), "yyyy-MM-dd"));
 		jsonObject.put("signDate", DateUtils.date2Str(loanlist.getSignDate(), "yyyy-MM-dd"));
+		jsonObject.put("returnDate", DateUtils.date2Str(loanlist.getReturnDate(), "yyyy-MM-dd"));
 		jsonObject.put("beginReturnDate", DateUtils.date2Str(loanlist.getBeginReturnDate(), "yyyy-MM-dd"));
 		jsonObject.put("endReturnDate", DateUtils.date2Str(loanlist.getEndReturnDate(), "yyyy-MM-dd"));
 		jsonObject.put("doneReturnDate", DateUtils.date2Str(loanlist.getDoneReturnDate(), "yyyy-MM-dd"));

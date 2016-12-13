@@ -371,7 +371,7 @@ public enum UploadFile {
 			return "resources/file/basic/";
 		}
 	},
-	//信贷个人资料
+	//信贷个人证明
 	ASSET_CREDIT{
 		@Override
 		public String getVal() {
@@ -387,6 +387,29 @@ public enum UploadFile {
 				return userId+"\\asset\\credit";
 			}else{
 				return "\\asset\\credit";
+			}
+		}
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+	},
+	//信贷征信报告
+	FILE_CREDIT{
+		@Override
+		public String getVal() {
+			return "\\creditFile";
+		}
+		@Override
+		public String toString() {
+			return "信贷征信报告";
+		}
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\creditFile";
+			}else{
+				return "\\creditFile";
 			}
 		}
 		@Override

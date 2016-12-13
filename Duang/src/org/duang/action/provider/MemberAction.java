@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
@@ -619,7 +620,6 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				map.put("idCard", memberInfo.getIdCard());
 				map.put("miDescribe", memberInfo.getMiDescribe());
 				map.put("idCardImg1", memberInfo.getIdCardImg1());
-				map.put("idCardImg2", memberInfo.getIdCardImg2());
 				map.put("myQr", memberInfo.getMyQr());
 				map.put("registerStyle", memberInfo.getRegisterStyle());
 				map.put("useableScore", memberInfo.getUseableScore());
@@ -1277,7 +1277,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	}
 	
 	/**
-	 * 上传身份证前照
+	 * 上传身份证照
 	 * @Title: uploadUseIDcard   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
@@ -1286,99 +1286,60 @@ public class MemberAction extends BaseAction<MemberInfo>{
 	 * @return: void      
 	 * @throws
 	 */
-	public void uploadUseIDcard_a(){
+	public void uploadUserIDcardImg(){
 		boolean success=false;
 		try{
 			String token = getRequest().getParameter("token");
-			String imgdata = getRequest().getParameter("imgdata");
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(imgdata)) {
-				String id = MemberCollection.getInstance(token, service).getMainField(token);
-				if (DataUtils.notEmpty(id)) {
-					MemberInfo memberInfo = service.findById(id);
-					//基本根路径
-					String temPath = getRequest().getSession().getServletContext().getRealPath("/");
-					//详细路径
-					String suffPath = UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(memberInfo.getId()))+"\\";
+			if (DataUtils.notEmpty(token)) {
+				String memberInfoId = MemberCollection.getInstance(token, service).getMainField(token);
+				//跟路径
+				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
+				//详细路径
+				String suffPath = UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(memberInfoId))+"\\";
+				//备份跟路径
+				String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+				// 遍历图片数量
+				ArrayList<String> imgDataList = new ArrayList<String>();
+				imgDataList.add(entity.getImg_1());
+				imgDataList.add(entity.getImg_2());
+				imgDataList.add(entity.getImg_3());
+				imgDataList.add(entity.getImg_4());
+				imgDataList.add(entity.getImg_5());
+				imgDataList.add(entity.getImg_6());
+				imgDataList.add(entity.getImg_7());
+				imgDataList.add(entity.getImg_8());
+				imgDataList.add(entity.getImg_9());
+				//拼接资料文件名字
+				StringBuffer idcardData = new StringBuffer("");
+				for (int i = 0; i < entity.getNum(); i++) {
 					//文件名称
 					String fileName = DataUtils.randomUUID()+".jpg";
 					String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
-					jsonObject.put("path", UploadFile.IDCARD.appPath()+memberInfo.getId()+"/idcard/"+fileName);
-					success = ImageString.generateImageBase64(imgdata, fullpath);
-					//备份
-					String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
-					ImageString.generateImageBase64(imgdata, DataUtils.fileUploadPath(backupPath, suffPath, fileName));
-					
-					LoggerUtils.info("userId:"+id+"----------------上传身份证照片："+success, this.getClass());
-					if(success){
-						memberInfo.setIdCardImg1(fileName);
-						success = service.updateEntity(memberInfo);
+					success = ImageString.generateImage(imgDataList.get(i), fullpath);
+					//备份路径
+					ImageString.generateImage(imgDataList.get(i), DataUtils.fileUploadPath(backupPath, suffPath, fileName));
+					LoggerUtils.info("userId:" + memberInfoId + "----------------上传身份证照片：" + success, this.getClass());
+					if (success) {
+						idcardData.append(fileName);
+						if(i<entity.getNum()-1){
+							idcardData.append(";");
+						}
 					}
-				}else{
-					msg = "登录失效";
 				}
+				MemberInfo memberInfo = service.findById(memberInfoId);
+				memberInfo.setIdCardImg1(memberInfo.getIdCardImg1()+";"+idcardData);
+				success = service.updateEntity(memberInfo);
 			}else{
 				msg = "缺少参数,请补充";
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			LoggerUtils.error("MemberAction uploadUseIDcard_a：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("MemberAction uploadUseIDcard_a：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("MemberAction uploadUserIDcardImg：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("MemberAction uploadUserIDcardImg：" + e.getLocalizedMessage(), this.getClass());
 		}    
 		jsonObject.put("success", success);
 		jsonObject.put("success", msg);
 		printJsonResult();
 	}
 	
-	/**
-	 * 上传身份证后照
-	 * @Title: uploadUseIDcard   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author LiYonghui    
-	 * @date 2016年12月7日 上午9:28:19
-	 * @return: void      
-	 * @throws
-	 */
-	public void uploadUseIDcard_b(){
-		boolean success=false;
-		try{
-			String token = getRequest().getParameter("token");
-			String imgdata = getRequest().getParameter("imgdata");
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(imgdata)) {
-				String id = MemberCollection.getInstance(token, service).getMainField(token);
-				if (DataUtils.notEmpty(id)) {
-					MemberInfo memberInfo = service.findById(id);
-					//基本根路径
-					String temPath = getRequest().getSession().getServletContext().getRealPath("/");
-					//详细路径
-					String suffPath = UploadFile.PATH.getVal(UploadFile.IDCARD.getVal(memberInfo.getId()))+"\\";
-					//文件名称
-					String fileName = DataUtils.randomUUID()+".jpg";
-					String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
-					jsonObject.put("path", UploadFile.IDCARD.appPath()+memberInfo.getId()+"/idcard/"+fileName);
-					success = ImageString.generateImageBase64(imgdata, fullpath);
-					//备份
-					String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
-					ImageString.generateImageBase64(imgdata, DataUtils.fileUploadPath(backupPath, suffPath, fileName));
-					
-					LoggerUtils.info("userId:"+id+"----------------上传身份证照片："+success, this.getClass());
-					if(success){
-						memberInfo.setIdCardImg2(fileName);
-						success = service.updateEntity(memberInfo);
-					}
-				}else{
-					msg = "登录失效";
-				}
-			}else{
-				msg = "缺少参数,请补充";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			LoggerUtils.error("MemberAction uploadUseIDcard_b：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("MemberAction uploadUseIDcard_b：" + e.getLocalizedMessage(), this.getClass());
-		}    
-		jsonObject.put("success", success);
-		jsonObject.put("success", msg);
-		printJsonResult();
-	}
 }

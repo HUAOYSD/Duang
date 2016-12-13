@@ -643,6 +643,17 @@ public class ScaleServiceImpl implements ScaleService{
 		    	for(LoanList loanList : loanLists){
 		    		loanList.setYetMoney(loanList.getGetMoney());
 		    		loanList.setLoanState(3);
+		    		if(scale.getSingleOrSet().equals(SingleOrSet.S2.getVal())){
+		    			//计算还款日
+		    			Calendar c = Calendar.getInstance();
+		    		    c.add(Calendar.MONTH, +1);
+		    		    loanList.setReturnDate(c.getTime());
+		    		}else if(scale.getSingleOrSet().equals(SingleOrSet.S1.getVal())){
+		    			Calendar c = Calendar.getInstance();
+		    		    c.add(Calendar.DATE, +loanList.getDays());
+		    		    loanList.setReturnDate(c.getTime());
+		    		}
+		    		
 		    		//1.修改借贷列表
 		    		success = loanListDao.updateEntity(loanList);
 		    		if(success){

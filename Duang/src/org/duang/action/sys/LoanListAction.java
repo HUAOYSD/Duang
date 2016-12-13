@@ -26,7 +26,7 @@ import org.duang.entity.LoanList;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.Platform;
 import org.duang.enums.loan.Apply;
-import org.duang.enums.loan.BackMoney;
+import org.duang.enums.loan.ReturnStatus;
 import org.duang.enums.loan.BackStyle;
 import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Poundage;
@@ -145,8 +145,8 @@ public class LoanListAction extends BaseAction<LoanList> {
 	 */  
 	public void queryByPage() {
 		try {
-			condsUtils.addProperties(true, "memberInfo", "customerManager", "order");
-			condsUtils.addValues(true, new Object[]{"memberAlias","as"}, new Object[]{"customerAlias","as"}, Order.desc("createTime"));
+			condsUtils.addProperties(true, "memberInfo", "order");
+			condsUtils.addValues(true, new Object[]{"memberAlias","as"}, Order.desc("createTime"));
 			if (DataUtils.notEmpty(getRequest().getParameter("loanMemberName"))) {
 				condsUtils.concat("memberAlias.realName", URLDecoder.decode(getRequest().getParameter("loanMemberName"),"UTF-8"));
 			}
@@ -158,11 +158,11 @@ public class LoanListAction extends BaseAction<LoanList> {
 			}
 			
 			if (DataUtils.notEmpty(getRequest().getParameter("customerId"))) {
-				condsUtils.concat("customerAlias.id", URLDecoder.decode(getRequest().getParameter("customerId"),"UTF-8"));
+				condsUtils.concat("customerManager.id", URLDecoder.decode(getRequest().getParameter("customerId"),"UTF-8"));
 			}
 			
 			if (DataUtils.notEmpty(getRequest().getParameter("customerManagerName"))) {
-				condsUtils.concat("customerAlias.name", URLDecoder.decode(getRequest().getParameter("customerManagerName"),"UTF-8"));
+				condsUtils.concat("customerManager.name", URLDecoder.decode(getRequest().getParameter("customerManagerName"),"UTF-8"));
 			}
 			if (entity.getLoanType() != 0) {
 				condsUtils.concat("loanType", entity.getLoanType());
@@ -223,9 +223,8 @@ public class LoanListAction extends BaseAction<LoanList> {
 			for(Object temp : list) {
 				if (temp instanceof Object[]) {
 					Map<String,Object> resultMap = new HashMap<String,Object>();
-					LoanList pk = (LoanList)((Object[])temp)[2];
-					MemberInfo fk = (MemberInfo)((Object[])temp)[1];
-					CustomerManager fk2 = (CustomerManager)((Object[])temp)[0];
+					LoanList pk = (LoanList)((Object[])temp)[1];
+					MemberInfo fk = (MemberInfo)((Object[])temp)[0];
 					if (pk != null) {
 						resultMap.put("id", pk.getId());
 						resultMap.put("loanType", LoanMode.valueOf("M"+pk.getLoanType()).toString());
@@ -242,7 +241,7 @@ public class LoanListAction extends BaseAction<LoanList> {
 						resultMap.put("returnMoney", pk.getReturnMoney());
 						resultMap.put("agoMoney", pk.getAgoMoney());
 						resultMap.put("yetReturnMoney", pk.getYetReturnMoney());
-						resultMap.put("returnStatus", BackMoney.valueOf("B"+pk.getReturnStatus()).toString());
+						resultMap.put("returnStatus", ReturnStatus.valueOf("B"+pk.getReturnStatus()).toString());
 						resultMap.put("loanState", TakeMoney.valueOf("T"+pk.getLoanState()).toString());
 						resultMap.put("applyState", Apply.valueOf("A"+pk.getApplyState()).toString());
 						resultMap.put("loanUse", pk.getLoanUse());
@@ -256,15 +255,13 @@ public class LoanListAction extends BaseAction<LoanList> {
 						resultMap.put("applyContent", pk.getApplyContent());
 						resultMap.put("loanStyle", Platform.valueOf("P"+pk.getLoanStyle()).toString());
 						resultMap.put("backStyle", BackStyle.valueOf("B"+pk.getBackStyle()).toString());
+						resultMap.put("customerManagerName", pk.getCustomerManager()!=null?pk.getCustomerManager().getName():"");
 					}
 					if (fk != null) {
 						resultMap.put("loanMemberName", fk.getRealName());
 						resultMap.put("loanMemberNickName", fk.getNickname());
 						resultMap.put("loanMemberPhone", fk.getPhone());
 						resultMap.put("loanMemberIdcard", fk.getIdCard());
-					}
-					if (fk2 != null) {
-						resultMap.put("customerManagerName", fk2.getName());
 					}
 					listMap.add(resultMap);
 				}
