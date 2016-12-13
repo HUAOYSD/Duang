@@ -9,7 +9,7 @@ import org.duang.util.DataUtils;
  * @author 5y
  * @date 2016年8月11日 上午10:12:28      
  */  
-public enum BackMoney {
+public enum ReturnStatus {
 	B0 {
 		@Override
 		public int getVal() {
