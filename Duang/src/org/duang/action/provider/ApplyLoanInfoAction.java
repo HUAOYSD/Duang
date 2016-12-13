@@ -16,8 +16,10 @@ import org.duang.entity.LoanList;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.UploadFile;
 import org.duang.enums.loan.Apply;
-import org.duang.enums.loan.BackMoney;
+import org.duang.enums.loan.BackStyle;
+import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Poundage;
+import org.duang.enums.loan.ReturnStatus;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
 import org.duang.service.ApplyLoanInfoService;
@@ -65,34 +67,32 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 	 * @return: ApplyLoanInfo      
 	 * @throws
 	 */
-	private ApplyLoanInfo getApplyLoanInfo() throws Exception{
+	private ApplyLoanInfo getApplyLoanInfo(String token) throws Exception{
 		ApplyLoanInfo applyLoanInfo = new ApplyLoanInfo(DataUtils.randomUUID());
 		
 		LoanList loanList = new LoanList(DataUtils.randomUUID());
 		loanList.setIsSell(Scale.S1.getVal());
 		loanList.setPoundageState(Poundage.P1.getVal());
-		loanList.setReturnStatus(BackMoney.B1.getVal());
+		loanList.setReturnStatus(ReturnStatus.B1.getVal());
 		loanList.setLoanState(TakeMoney.T1.getVal());
 		loanList.setApplyState(Apply.A1.getVal());
+		loanList.setLoanType(LoanMode.M3.getVal());
+		loanList.setBackStyle(BackStyle.B1.getVal());
 		if(DataUtils.notEmpty(getRequest().getParameter("p_days"))){
-			loanList.setDays(DataUtils.str2int((DES.decryptDES(getRequest().getParameter("p_days")))));
+			loanList.setDays(DataUtils.str2int(DES.decryptDES(getRequest().getParameter("p_days"))));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_loanStyle"))){
-			loanList.setLoanStyle(DataUtils.str2int((getRequest().getParameter("p_loanStyle"))));
+			loanList.setLoanStyle(DataUtils.str2int(DES.decryptDES(getRequest().getParameter("p_loanStyle"))));
 		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_backStyle"))){
-			loanList.setBackStyle(DataUtils.str2int((getRequest().getParameter("p_backStyle"))));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("token"))){
-			MemberInfo memberInfo = new MemberInfo();
-			memberInfo.setId(MemberCollection.getInstance(getRequest().getParameter("token"),memberInfoService).getMainField(getRequest().getParameter("token")));
-			loanList.setMemberInfo(memberInfo);
-		}
+		MemberInfo memberInfo = new MemberInfo();
+		memberInfo.setId(MemberCollection.getInstance(DES.decryptDES(token),memberInfoService).getMainField(DES.decryptDES(token)));
+		loanList.setMemberInfo(memberInfo);
+		
 		if(DataUtils.notEmpty(getRequest().getParameter("p_money"))){
 			loanList.setMoney(DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_money")), 6));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_loanUse"))){
-			loanList.setLoanUse(getRequest().getParameter("p_loanUse"));
+			loanList.setLoanUse(DES.decryptDES(getRequest().getParameter("p_loanUse")));
 		}
 		
 		applyLoanInfo.setLoanList(loanList);
@@ -126,63 +126,57 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 			applyLoanInfo.setAddress(DES.decryptDES(getRequest().getParameter("p_address")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_liveStyle"))){
-			applyLoanInfo.setLiveStyle(getRequest().getParameter("p_liveStyle"));
+			applyLoanInfo.setLiveStyle(DES.decryptDES(getRequest().getParameter("p_liveStyle")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_education"))){
-			applyLoanInfo.setEducation(getRequest().getParameter("p_education"));
+			applyLoanInfo.setEducation(DES.decryptDES(getRequest().getParameter("p_education")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_marriage"))){
-			applyLoanInfo.setMarriage(getRequest().getParameter("p_marriage"));
+			applyLoanInfo.setMarriage(DES.decryptDES(getRequest().getParameter("p_marriage")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_house"))){
-			applyLoanInfo.setHouse(getRequest().getParameter("p_house"));
+			applyLoanInfo.setHouse(DES.decryptDES(getRequest().getParameter("p_house")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_hasCreditchar"))){
-			applyLoanInfo.setHasCredit(getRequest().getParameter("p_hasCreditchar"));
+			applyLoanInfo.setHasCredit(DES.decryptDES(getRequest().getParameter("p_hasCreditchar")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_creditCardchar"))){
 			applyLoanInfo.setHasCredit(DES.decryptDES(getRequest().getParameter("p_creditCardchar")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_industry"))){
-			applyLoanInfo.setIndustry(getRequest().getParameter("p_industry"));
+			applyLoanInfo.setIndustry(DES.decryptDES(getRequest().getParameter("p_industry")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_jobStyle"))){
-			applyLoanInfo.setJobStyle(getRequest().getParameter("p_jobStyle"));
+			applyLoanInfo.setJobStyle(DES.decryptDES(getRequest().getParameter("p_jobStyle")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_job"))){
-			applyLoanInfo.setJob(getRequest().getParameter("p_job"));
+			applyLoanInfo.setJob(DES.decryptDES(getRequest().getParameter("p_job")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_jobCity"))){
-			applyLoanInfo.setJobCity(getRequest().getParameter("p_jobCity"));
+			applyLoanInfo.setJobCity(DES.decryptDES(getRequest().getParameter("p_jobCity")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_company"))){
-			applyLoanInfo.setCompany(getRequest().getParameter("p_company"));
+			applyLoanInfo.setCompany(DES.decryptDES(getRequest().getParameter("p_company")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_publicTelchar"))){
-			applyLoanInfo.setPublicTel(getRequest().getParameter("p_publicTelchar"));
+			applyLoanInfo.setPublicTel(DES.decryptDES(getRequest().getParameter("p_publicTelchar")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_salaryFromBankchar"))){
-			applyLoanInfo.setSalaryFromBank(getRequest().getParameter("p_salaryFromBankchar"));
+			applyLoanInfo.setSalaryFromBank(DES.decryptDES(getRequest().getParameter("p_salaryFromBankchar")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_yearIncome"))){
-			applyLoanInfo.setYearIncome(getRequest().getParameter("p_yearIncome"));
+			applyLoanInfo.setYearIncome(DES.decryptDES(getRequest().getParameter("p_yearIncome")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_monthBack"))){
-			applyLoanInfo.setMonthBack(DataUtils.str2double(getRequest().getParameter("p_monthBack"), 6));
+			applyLoanInfo.setMonthBack(DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_monthBack")), 6));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_urgencyPerson"))){
-			applyLoanInfo.setUrgencyPerson(getRequest().getParameter("p_urgencyPerson"));
+			applyLoanInfo.setUrgencyPerson(DES.decryptDES(getRequest().getParameter("p_urgencyPerson")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_urgencyPhone"))){
-			applyLoanInfo.setUrgencyPhone(getRequest().getParameter("p_urgencyPhone"));
+			applyLoanInfo.setUrgencyPhone(DES.decryptDES(getRequest().getParameter("p_urgencyPhone")));
 		}
 		
-		if(DataUtils.notEmpty(getRequest().getParameter("p_datums"))){
-			applyLoanInfo.setDatums(getRequest().getParameter("p_datums"));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_assetCertificates"))){
-			applyLoanInfo.setAssetCertificates(getRequest().getParameter("p_assetCertificates"));
-		}
 		return applyLoanInfo;
 	}
 	
@@ -199,15 +193,17 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 	 */  
 	public void insertApplyLoanInfo(){
 		boolean success = false;
+		LoggerUtils.info("\t\n-------------借贷申请开始", this.getClass());
 		try {
 			String token = getRequest().getParameter("token");
 			//判断参数是否为空
 			if(DataUtils.notEmpty(token)){
-				ApplyLoanInfo applyLoanInfo = getApplyLoanInfo();
+				ApplyLoanInfo applyLoanInfo = getApplyLoanInfo(token);
 				success = applyLoanInfoService.saveEntity(applyLoanInfo);
 				if(!success){
 					msg = "服务器超时，请稍后重试";
 				}
+				jsonObject.put("id", applyLoanInfo.getId());
 			}else{
 				msg = "用户token为空";
 			}
@@ -217,6 +213,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 			LoggerUtils.error("ApplyLoanInfoAction——insertApplyLoanInfo方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
+		LoggerUtils.info("\t\n-------------借贷申请结束："+success, this.getClass());
 		jsonObject.put("msg", msg);
 		jsonObject.put("success", success);
 		printJsonResult();
@@ -274,12 +271,20 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 					}
 				}
 				ApplyLoanInfo applyLoanInfo = applyLoanInfoService.findById(id);
-				applyLoanInfo.setDatums(applyLoanInfo.getDatums()+";"+datumsData.toString());
-				success = applyLoanInfoService.updateEntity(applyLoanInfo);
+				
+				String datumsFile="";
+				if(DataUtils.notEmpty(applyLoanInfo.getDatums())){
+					datumsFile = applyLoanInfo.getDatums()+";"+datumsData.toString();
+				}else{
+					datumsFile = datumsData.toString();
+				}
+				String sql = "UPDATE apply_loan_info SET datums='"+datumsFile+"' where id='"+id+"'";
+				success = applyLoanInfoService.executeSql(sql);
 			}else{
 				msg = "缺少参数,请补充";
 			}
 		}catch(Exception e){
+			msg = "服务器维护，请稍后再试";
 			e.printStackTrace();
 			LoggerUtils.error("ApplyLoanInfoAction uploadUseDatums：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("ApplyLoanInfoAction uploadUseDatums：" + e.getLocalizedMessage(), this.getClass());
@@ -341,12 +346,20 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 					}
 				}
 				ApplyLoanInfo applyLoanInfo = applyLoanInfoService.findById(id);
-				applyLoanInfo.setAssetCertificates(applyLoanInfo.getAssetCertificates()+";"+datumsData.toString());
-				success = applyLoanInfoService.updateEntity(applyLoanInfo);
+				
+				String assetFile="";
+				if(DataUtils.notEmpty(applyLoanInfo.getAssetCertificates())){
+					assetFile = applyLoanInfo.getAssetCertificates()+";"+datumsData.toString();
+				}else{
+					assetFile = datumsData.toString();
+				}
+				String sql = "UPDATE apply_loan_info SET asset_certificates='"+assetFile+"' where id='"+id+"'";
+				success = applyLoanInfoService.executeSql(sql);
 			}else{
 				msg = "缺少参数,请补充";
 			}
 		}catch(Exception e){
+			msg = "服务器维护，请稍后再试";
 			e.printStackTrace();
 			LoggerUtils.error("ApplyLoanInfoAction uploadUserAttest：" + e.getMessage(), this.getClass());
 			LoggerUtils.error("ApplyLoanInfoAction uploadUserAttest：" + e.getLocalizedMessage(), this.getClass());
@@ -356,4 +369,77 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		printJsonResult();
 	}
 	
+	/**
+	 * 上传征信报告
+	 * @Title: uploadUserCreditFile   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年12月7日 上午10:05:16
+	 * @return: void      
+	 * @throws
+	 */
+	public void uploadUserCreditFile(){
+		boolean success=false;
+		try{
+			String id = getRequest().getParameter("id");
+			String token = getRequest().getParameter("token");
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id)) {
+				String memberInfoId = MemberCollection.getInstance(token, memberInfoService).getMainField(token);
+				//跟路径
+				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
+				//详细路径
+				String suffPath = UploadFile.PATH.getVal(UploadFile.FILE_CREDIT.getVal(memberInfoId))+"\\";
+				//备份跟路径
+				String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+				// 遍历图片数量
+				ArrayList<String> imgDataList = new ArrayList<String>();
+				imgDataList.add(entity.getImg_1());
+				imgDataList.add(entity.getImg_2());
+				imgDataList.add(entity.getImg_3());
+				imgDataList.add(entity.getImg_4());
+				imgDataList.add(entity.getImg_5());
+				imgDataList.add(entity.getImg_6());
+				imgDataList.add(entity.getImg_7());
+				imgDataList.add(entity.getImg_8());
+				imgDataList.add(entity.getImg_9());
+				//拼接资料文件名字
+				StringBuffer datumsData = new StringBuffer("");
+				for (int i = 0; i < entity.getNum(); i++) {
+					//文件名称
+					String fileName = DataUtils.randomUUID()+".jpg";
+					String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
+					success = ImageString.generateImage(imgDataList.get(i), fullpath);
+					//备份路径
+					ImageString.generateImage(imgDataList.get(i), DataUtils.fileUploadPath(backupPath, suffPath, fileName));
+					LoggerUtils.info("userId:" + memberInfoId + "----------------上传信贷征信报告：" + success, this.getClass());
+					if (success) {
+						datumsData.append(fileName);
+						if(i<entity.getNum()-1){
+							datumsData.append(";");
+						}
+					}
+				}
+				ApplyLoanInfo applyLoanInfo = applyLoanInfoService.findById(id);
+				String creditFile="";
+				if(DataUtils.notEmpty(applyLoanInfo.getCreditFile())){
+					creditFile = applyLoanInfo.getCreditFile()+";"+datumsData.toString();
+				}else{
+					creditFile = datumsData.toString();
+				}
+				String sql = "UPDATE apply_loan_info SET credit_file='"+creditFile+"' where id='"+id+"'";
+				success = applyLoanInfoService.executeSql(sql);
+			}else{
+				msg = "缺少参数,请补充";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("ApplyLoanInfoAction uploadUserCreditFile：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanInfoAction uploadUserCreditFile：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}    
+		jsonObject.put("success", success);
+		jsonObject.put("success", msg);
+		printJsonResult();
+	}
 }

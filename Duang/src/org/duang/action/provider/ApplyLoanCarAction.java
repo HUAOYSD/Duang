@@ -16,7 +16,9 @@ import org.duang.entity.LoanList;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.UploadFile;
 import org.duang.enums.loan.Apply;
-import org.duang.enums.loan.BackMoney;
+import org.duang.enums.loan.BackStyle;
+import org.duang.enums.loan.ReturnStatus;
+import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Poundage;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
@@ -73,9 +75,11 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 		LoanList loanList = new LoanList(DataUtils.randomUUID());
 		loanList.setIsSell(Scale.S1.getVal());
 		loanList.setPoundageState(Poundage.P1.getVal());
-		loanList.setReturnStatus(BackMoney.B1.getVal());
+		loanList.setReturnStatus(ReturnStatus.B1.getVal());
 		loanList.setLoanState(TakeMoney.T1.getVal());
 		loanList.setApplyState(Apply.A1.getVal());
+		loanList.setLoanType(LoanMode.M1.getVal());
+		loanList.setBackStyle(BackStyle.B2.getVal());
 		if(DataUtils.notEmpty(getRequest().getParameter("p_days"))){
 			loanList.setDays(DataUtils.str2int((DES.decryptDES(getRequest().getParameter("p_days")))));
 		}
@@ -84,9 +88,6 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_loanUse"))){
 			loanList.setLoanUse((getRequest().getParameter("p_loanUse")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_backStyle"))){
-			loanList.setBackStyle(DataUtils.str2int((getRequest().getParameter("p_backStyle"))));
 		}
 		String token = getRequest().getParameter("token");
 		if(DataUtils.notEmpty(token)){
@@ -129,12 +130,6 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 		if(DataUtils.notEmpty(getRequest().getParameter("carProperty"))){
 			applyLoanCar.setCarProperty(DES.decryptDES(getRequest().getParameter("carProperty")));
 		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_datums"))){
-			applyLoanCar.setDatums(getRequest().getParameter("p_datums"));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_assetCertificates"))){
-			applyLoanCar.setAssetCertificates(getRequest().getParameter("p_assetCertificates"));
-		}
 		return applyLoanCar;
 	}
 	
@@ -160,6 +155,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 				if(!success){
 					msg = "服务器超时，请稍后重试";
 				}
+				jsonObject.put("id", applyLoanCar.getId());
 			}else{
 				msg = "用户token为空";
 			}
@@ -226,7 +222,13 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 					}
 				}
 				ApplyLoanCar applyLoanCar = applyLoanCarService.findById(id);
-				applyLoanCar.setDatums(applyLoanCar.getDatums()+";"+datumsData.toString());
+				String oldValue="";
+				if(DataUtils.notEmpty(applyLoanCar.getDatums())){
+					oldValue = applyLoanCar.getDatums()+";"+datumsData.toString();
+				}else{
+					oldValue = datumsData.toString();
+				}
+				applyLoanCar.setDatums(oldValue);
 				success = applyLoanCarService.updateEntity(applyLoanCar);
 			}else{
 				msg = "缺少参数,请补充";
@@ -293,7 +295,13 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 					}
 				}
 				ApplyLoanCar applyLoanCar = applyLoanCarService.findById(id);
-				applyLoanCar.setAssetCertificates(applyLoanCar.getAssetCertificates()+";"+datumsData.toString());
+				String oldValue="";
+				if(DataUtils.notEmpty(applyLoanCar.getAssetCertificates())){
+					oldValue = applyLoanCar.getAssetCertificates()+";"+datumsData.toString();
+				}else{
+					oldValue = datumsData.toString();
+				}
+				applyLoanCar.setAssetCertificates(oldValue);
 				success = applyLoanCarService.updateEntity(applyLoanCar);
 			}else{
 				msg = "缺少参数,请补充";

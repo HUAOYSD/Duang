@@ -16,7 +16,9 @@ import org.duang.entity.LoanList;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.UploadFile;
 import org.duang.enums.loan.Apply;
-import org.duang.enums.loan.BackMoney;
+import org.duang.enums.loan.BackStyle;
+import org.duang.enums.loan.ReturnStatus;
+import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Poundage;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
@@ -71,9 +73,11 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 		LoanList loanList = new LoanList(DataUtils.randomUUID());
 		loanList.setIsSell(Scale.S1.getVal());
 		loanList.setPoundageState(Poundage.P1.getVal());
-		loanList.setReturnStatus(BackMoney.B1.getVal());
+		loanList.setReturnStatus(ReturnStatus.B1.getVal());
 		loanList.setLoanState(TakeMoney.T1.getVal());
 		loanList.setApplyState(Apply.A1.getVal());
+		loanList.setLoanType(LoanMode.M1.getVal());
+		loanList.setBackStyle(BackStyle.B2.getVal());
 		if(DataUtils.notEmpty(getRequest().getParameter("p_days"))){
 			loanList.setDays(DataUtils.str2int((DES.decryptDES(getRequest().getParameter("p_days")))));
 		}
@@ -82,9 +86,6 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_loanUse"))){
 			loanList.setLoanUse((getRequest().getParameter("p_loanUse")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_backStyle"))){
-			loanList.setBackStyle(DataUtils.str2int((getRequest().getParameter("p_backStyle"))));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("token"))){
 			MemberInfo memberInfo = new MemberInfo();
@@ -118,12 +119,6 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 		if(DataUtils.notEmpty(getRequest().getParameter("p_houseNumber"))){
 			applyLoanHouse.setHouseNumber(DES.decryptDES(getRequest().getParameter("p_houseNumber")));
 		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_datums"))){
-			applyLoanHouse.setDatums(getRequest().getParameter("p_datums"));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_assetCertificates"))){
-			applyLoanHouse.setAssetCertificates(getRequest().getParameter("p_assetCertificates"));
-		}
 		return applyLoanHouse;
 	}
 	
@@ -149,6 +144,7 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 				if(!success){
 					msg = "服务器超时，请稍后重试";
 				}
+				jsonObject.put("id", applyLoanHouse.getId());
 			}else{
 				msg = "用户token为空";
 			}
@@ -216,7 +212,15 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 					}
 				}
 				ApplyLoanHouse applyLoanHouse = applyLoanHouseService.findById(id);
-				applyLoanHouse.setDatums(applyLoanHouse.getDatums()+";"+datumsData.toString());
+				
+				String oldValue="";
+				if(DataUtils.notEmpty(applyLoanHouse.getDatums())){
+					oldValue = applyLoanHouse.getDatums()+";"+datumsData.toString();
+				}else{
+					oldValue = datumsData.toString();
+				}
+				
+				applyLoanHouse.setDatums(oldValue);
 				success = applyLoanHouseService.updateEntity(applyLoanHouse);
 			}else{
 				msg = "缺少参数,请补充";
@@ -283,7 +287,15 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 					}
 				}
 				ApplyLoanHouse applyLoanHouse = applyLoanHouseService.findById(id);
-				applyLoanHouse.setAssetCertificates(applyLoanHouse.getAssetCertificates()+";"+datumsData.toString());
+				
+				String oldValue="";
+				if(DataUtils.notEmpty(applyLoanHouse.getAssetCertificates())){
+					oldValue = applyLoanHouse.getAssetCertificates()+";"+datumsData.toString();
+				}else{
+					oldValue = datumsData.toString();
+				}
+				
+				applyLoanHouse.setAssetCertificates(oldValue);
 				success = applyLoanHouseService.updateEntity(applyLoanHouse);
 			}else{
 				msg = "缺少参数,请补充";

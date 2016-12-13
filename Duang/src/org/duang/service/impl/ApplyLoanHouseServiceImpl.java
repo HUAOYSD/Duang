@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.ApplyLoanHouseDao;
+import org.duang.dao.LoanListDao;
 import org.duang.entity.ApplyLoanHouse;
 import org.duang.service.ApplyLoanHouseService;
 import org.duang.util.PageUtil;
@@ -31,7 +32,13 @@ public class ApplyLoanHouseServiceImpl implements ApplyLoanHouseService{
 	public void setDao(ApplyLoanHouseDao dao) {
 		this.dao = dao;
 	}
+	private LoanListDao loanListDao;
 
+	@Resource(name="loanlistdaoimpl")
+	public void setLoanListDao(LoanListDao loanListDao) {
+		this.loanListDao = loanListDao;
+	}
+	
 	public ApplyLoanHouseServiceImpl(){
 		LoggerUtils.info("注入ApplyLoanHouseServiceImpl服务层", this.getClass());
 	}
@@ -126,7 +133,11 @@ public class ApplyLoanHouseServiceImpl implements ApplyLoanHouseService{
 	 * @return   是否增加成功
 	 */
 	public boolean saveEntity(ApplyLoanHouse t) throws Exception{
-		return dao.saveEntity(t);
+		if(loanListDao.saveEntity(t.getLoanList())){
+			return dao.saveEntity(t);
+		}else {
+			return false;
+		}
 	}
 
 

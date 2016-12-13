@@ -73,7 +73,8 @@ public class ApplyLoanInfo implements java.io.Serializable {
 	private String datums;
 	//收入证明用;隔开
 	private String assetCertificates;
-
+	//征信报告;隔开
+	private String creditFile;
 	//个人资料
 	//图片信息，只用于接收，不保存数据库表中
 	private String img_1;
@@ -511,5 +512,13 @@ public class ApplyLoanInfo implements java.io.Serializable {
 	public void setAssetCertificates(String assetCertificates) {
 		this.assetCertificates = assetCertificates;
 	}
+	
+	@Column(name = "credit_file", length = 16777215)
+	public String getCreditFile() {
+		return this.creditFile;
+	}
 
+	public void setCreditFile(String creditFile) {
+		this.creditFile = creditFile;
+	}
 }
