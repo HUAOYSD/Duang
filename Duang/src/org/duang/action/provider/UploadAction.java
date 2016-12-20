@@ -18,7 +18,6 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.FileUpload;
-import org.duang.entity.MemberInfo;
 import org.duang.enums.UploadFile;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DataUtils;
@@ -71,7 +70,7 @@ public class UploadAction extends BaseAction<FileUpload>{
 				//现将文件放到缓冲区
 				ServletFileUpload upload = initUpload(num);
 				//获取文件
-				@SuppressWarnings("unchecked")
+				@SuppressWarnings({ "unchecked", "rawtypes" })
 				List<FileUpload> list = (List)upload.parseRequest(getRequest());
 				for(FileUpload fileUpload : list){
 					entity = fileUpload;
@@ -123,7 +122,7 @@ public class UploadAction extends BaseAction<FileUpload>{
 				//现将文件放到缓冲区
 				ServletFileUpload upload = initUpload(num);
 				//获取文件
-				@SuppressWarnings("unchecked")
+				@SuppressWarnings({ "unchecked", "rawtypes" })
 				List<FileUpload> list = (List)upload.parseRequest(getRequest());
 				for(FileUpload fileUpload : list){
 					entity = fileUpload;

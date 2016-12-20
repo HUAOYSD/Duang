@@ -11,6 +11,7 @@ import org.duang.common.system.MemberCollection;
 import org.duang.entity.LoanMemberExtraInfo;
 import org.duang.service.LoanMemberExtraInfoService;
 import org.duang.service.MemberInfoService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.springframework.context.annotation.Scope;
@@ -58,66 +59,66 @@ public class LoanMemberExtraInfoAction extends BaseAction<LoanMemberExtraInfo>{
 		LoanMemberExtraInfo loanMemberExtraInfo = new LoanMemberExtraInfo(DataUtils.randomUUID());
 		String token = getRequest().getParameter("token");
 		if(DataUtils.notEmpty(token)){
-			String memberInfoId = MemberCollection.getInstance(token,memberInfoService).getMainField(token);
+			String memberInfoId = MemberCollection.getInstance(DES.decryptDES(token),memberInfoService).getMainField(DES.decryptDES(token));
 			loanMemberExtraInfo.setMemberId(memberInfoId);
 		}
 		
 		if(DataUtils.notEmpty(getRequest().getParameter("compName"))){
-			loanMemberExtraInfo.setCompName(getRequest().getParameter("compName"));
+			loanMemberExtraInfo.setCompName(DES.decryptDES(getRequest().getParameter("compName")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("compAddress"))){
-			loanMemberExtraInfo.setCompAddress(getRequest().getParameter("compAddress"));
+			loanMemberExtraInfo.setCompAddress(DES.decryptDES(getRequest().getParameter("compAddress")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("compType"))){
-			loanMemberExtraInfo.setCompType(getRequest().getParameter("compType"));
+			loanMemberExtraInfo.setCompType(DES.decryptDES(getRequest().getParameter("compType")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("compPhone"))){
-			loanMemberExtraInfo.setCompPhone(getRequest().getParameter("compPhone"));
+			loanMemberExtraInfo.setCompPhone(DES.decryptDES(getRequest().getParameter("compPhone")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("jobDepart"))){
-			loanMemberExtraInfo.setJobDepart(getRequest().getParameter("jobDepart"));
+			loanMemberExtraInfo.setJobDepart(DES.decryptDES(getRequest().getParameter("jobDepart")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("jobEntryTime"))){
-			loanMemberExtraInfo.setJobEntryTime(DateUtils.str2Date(getRequest().getParameter("jobEntryTime"), "yyyy-MM-dd"));
+			loanMemberExtraInfo.setJobEntryTime(DateUtils.str2Date(DES.decryptDES(getRequest().getParameter("jobEntryTime")), "yyyy-MM-dd"));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("jobIncome"))){
-			loanMemberExtraInfo.setJobIncome(getRequest().getParameter("jobIncome"));
+			loanMemberExtraInfo.setJobIncome(DES.decryptDES(getRequest().getParameter("jobIncome")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("jobSalaryDate"))){
-			loanMemberExtraInfo.setJobSalaryDate(DateUtils.str2Date(getRequest().getParameter("jobSalaryDate"), "yyyy-MM-dd"));
+			loanMemberExtraInfo.setJobSalaryDate(DateUtils.str2Date(DES.decryptDES(getRequest().getParameter("jobSalaryDate")), "yyyy-MM-dd"));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("familyName"))){
-			loanMemberExtraInfo.setFamilyName(getRequest().getParameter("familyName"));
+			loanMemberExtraInfo.setFamilyName(DES.decryptDES(getRequest().getParameter("familyName")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("familyType"))){
-			loanMemberExtraInfo.setFamilyType(getRequest().getParameter("familyType"));
+			loanMemberExtraInfo.setFamilyType(DES.decryptDES(getRequest().getParameter("familyType")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("familyPhone"))){
-			loanMemberExtraInfo.setFamilyPhone(getRequest().getParameter("familyPhone"));
+			loanMemberExtraInfo.setFamilyPhone(DES.decryptDES(getRequest().getParameter("familyPhone")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("familyCompName"))){
-			loanMemberExtraInfo.setFamilyCompName(getRequest().getParameter("familyCompName"));
+			loanMemberExtraInfo.setFamilyCompName(DES.decryptDES(getRequest().getParameter("familyCompName")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("compColleName"))){
-			loanMemberExtraInfo.setCompColleName(getRequest().getParameter("compColleName"));
+			loanMemberExtraInfo.setCompColleName(DES.decryptDES(getRequest().getParameter("compColleName")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("compCollePost"))){
-			loanMemberExtraInfo.setCompCollePost(getRequest().getParameter("compCollePost"));
+			loanMemberExtraInfo.setCompCollePost(DES.decryptDES(getRequest().getParameter("compCollePost")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("compCollePhone"))){
-			loanMemberExtraInfo.setCompCollePhone(getRequest().getParameter("compCollePhone"));
+			loanMemberExtraInfo.setCompCollePhone(DES.decryptDES(getRequest().getParameter("compCollePhone")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("otherName"))){
-			loanMemberExtraInfo.setOtherName(getRequest().getParameter("otherName"));
+			loanMemberExtraInfo.setOtherName(DES.decryptDES(getRequest().getParameter("otherName")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("otherType"))){
-			loanMemberExtraInfo.setOtherType(getRequest().getParameter("otherType"));
+			loanMemberExtraInfo.setOtherType(DES.decryptDES(getRequest().getParameter("otherType")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("otherPhone"))){
-			loanMemberExtraInfo.setOtherPhone(getRequest().getParameter("otherPhone"));
+			loanMemberExtraInfo.setOtherPhone(DES.decryptDES(getRequest().getParameter("otherPhone")));
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("otherComp"))){
-			loanMemberExtraInfo.setOtherComp(getRequest().getParameter("otherComp"));
+			loanMemberExtraInfo.setOtherComp(DES.decryptDES(getRequest().getParameter("otherComp")));
 		}
 		return loanMemberExtraInfo;
 	}
@@ -140,11 +141,17 @@ public class LoanMemberExtraInfoAction extends BaseAction<LoanMemberExtraInfo>{
 			String token = getRequest().getParameter("token");
 			//判断参数是否为空
 			if(DataUtils.notEmpty(token)){
-				LoanMemberExtraInfo loanMemberExtraInfo = getLoanMemberExtraInfo();
-				success = loanMemberExtraInfoService.saveEntity(loanMemberExtraInfo);
-				if(!success){
+				 entity= getLoanMemberExtraInfo();
+				 LoanMemberExtraInfo loanMemberExtraInfo = loanMemberExtraInfoService.findEntity("memberId", entity.getMemberId());
+				 if(loanMemberExtraInfo != null){
+					 entity.setId(loanMemberExtraInfo.getId()); 
+					 success = loanMemberExtraInfoService.updateEntity(entity);
+				 }else {
+					 success = loanMemberExtraInfoService.saveEntity(entity);
+				 }
+				 if(!success){
 					msg = "服务器超时，请稍后重试";
-				}
+				 }
 			}else{
 				msg = "用户token为空";
 			}

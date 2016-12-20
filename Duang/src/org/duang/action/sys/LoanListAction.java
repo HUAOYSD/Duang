@@ -161,9 +161,9 @@ public class LoanListAction extends BaseAction<LoanList> {
 				condsUtils.concat("customerManager.id", URLDecoder.decode(getRequest().getParameter("customerId"),"UTF-8"));
 			}
 			
-			if (DataUtils.notEmpty(getRequest().getParameter("customerManagerName"))) {
+			/*if (DataUtils.notEmpty(getRequest().getParameter("customerManagerName"))) {
 				condsUtils.concat("customerManager.name", URLDecoder.decode(getRequest().getParameter("customerManagerName"),"UTF-8"));
-			}
+			}*/
 			if (entity.getLoanType() != 0) {
 				condsUtils.concat("loanType", entity.getLoanType());
 			}
@@ -294,8 +294,8 @@ public class LoanListAction extends BaseAction<LoanList> {
 			String begin_date = getRequest().getParameter("begin_date");
 			String end_date = getRequest().getParameter("end_date");
 			//审核通过且未起标
-			condsUtils.addProperties(true, "customerManager", "memberInfo", "applyState", "isSell", "order");
-			condsUtils.addValues(true, new Object[]{"customerAlias","as"}, new Object[]{"memberAlias","as"}, Apply.A2.getVal(), Scale.S1.getVal(), Order.desc("createTime"));
+			condsUtils.addProperties(true,  "memberInfo", "applyState", "isSell", "order");
+			condsUtils.addValues(true, new Object[]{"memberAlias","as"}, Apply.A2.getVal(), Scale.S1.getVal(), Order.desc("createTime"));
 			if (DataUtils.notEmpty(begin_date) && DataUtils.notEmpty(end_date)) {
 				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("begin_date")+" 00:00:00"), "ge"});
 				condsUtils.concat("passTime", new Object[]{DateUtils.str2Date(getRequest().getParameter("end_date")+" 23:59:59"), "le"});

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -23,16 +24,21 @@ import org.duang.common.system.SessionTools;
 import org.duang.entity.CustomerManager;
 import org.duang.entity.InvestList;
 import org.duang.entity.MemberInfo;
+import org.duang.entity.RequestFlow;
 import org.duang.entity.Scale;
 import org.duang.enums.If;
 import org.duang.enums.Platform;
+import org.duang.enums.ResultCode;
 import org.duang.enums.invest.Status;
 import org.duang.enums.invest.TurnStatus;
 import org.duang.enums.invest.UseTicket;
 import org.duang.service.CustomerManagerService;
 import org.duang.service.InvestListService;
+import org.duang.service.RequestFlowService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
+import org.duang.util.MD5Utils;
+import org.duang.util.ReadProperties;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -66,6 +72,13 @@ public class InvestListAction extends BaseAction<InvestList> {
 		this.service = service;
 	}
 
+	private RequestFlowService requestFlowService;
+
+	@Resource(name="requestflowserviceimpl")
+	public void setRequestFlowService(RequestFlowService requestFlowService) {
+		this.requestFlowService = requestFlowService;
+	}
+	
 	private CustomerManagerService customerManagerService;
 	@Resource(name = "customermanagerserviceimpl")
 	public void setService(CustomerManagerService customerManagerService) {
@@ -266,5 +279,74 @@ public class InvestListAction extends BaseAction<InvestList> {
 			LoggerUtils.error("理财记录ACTION方法openDialog错误："+e.getLocalizedMessage(), this.getClass());
 		}
 		return ResultPath.LIST;
+	}
+	
+	/**
+	 * 普通、集合项目中本息到账异步返回处理
+	 * @Title: transactionForFTCallback   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年12月15日 下午2:56:09
+	 * @return: void      
+	 * @throws
+	 */
+	public void transactionForFTCallback(){
+		try{
+			String requestId = getRequest().getParameter("requestId");
+			//读取配置文件中
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			//项目编号
+			String projectCode = getRequest().getParameter("projectCode");
+			String result = getRequest().getParameter("result");
+			//项目还款账户余额
+			//String accountBalance = getRequest().getParameter("accountBalance");
+			//本息到账金额
+			String sum = getRequest().getParameter("sum");
+			//主账户类型
+			//String mainAccountType = getRequest().getParameter("mainAccountType");
+			//主账户类型
+			//String mainAccountCode = getRequest().getParameter("mainAccountCode");
+			//手续费收取方式
+			//String payType = getRequest().getParameter("payType");
+			//请求时间
+			String requestTime = getRequest().getParameter("requestTime");
+			//处理时间
+			//String dealTime = getRequest().getParameter("dealTime");
+			//数字签名
+			String signature = getRequest().getParameter("signature");
+			StringBuffer signatureStr = new StringBuffer();
+			signatureStr.append(requestId).append(projectCode).append(result);
+			//获取返回数据的加密数据用于与签名校验
+			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			LoggerUtils.info("\t\n---------------------------本息到账异步返回 数字签名："+dataSign, this.getClass());
+			//请求成功
+			if(result.equals(ResultCode.SUCCESS.getVal())){
+				if(signature.equals(dataSign)){
+					//查询memberId的借贷数据
+					InvestList investList = service.findEntity("cbRequestid",requestId);
+					service.transactionForFTCallback(investList,DataUtils.str2double(sum, 6));
+					//修改请求结果
+					RequestFlow requestFlow = requestFlowService.findEntity("requestId", requestId);
+					if(requestFlow != null){
+						requestFlow.setResult("成功");
+					}else{
+						requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, 
+								investList.getMemberInfo().getId(), DateUtils.getDate(requestTime,"yyyy-MM-dd HH:mm:ss"), "本息到账", "成功");
+						requestFlowService.saveEntity(requestFlow);
+					}
+				}else {
+					//签名不匹配
+					LoggerUtils.error("\t\n---------------------------本息到账异步 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+				}
+				
+			}else{
+				LoggerUtils.error("\t\n---------------------------本息到账异步返回 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("InvestListAction transactionForFTCallback：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("InvestListAction transactionForFTCallback：" + e.getLocalizedMessage(), this.getClass());
+		}
 	}
 }

@@ -24,7 +24,9 @@ public class RequestFlow implements java.io.Serializable {
 	private String requestId;
 	private String memberInfoId;
 	private Date optTime;
-
+	private String describe;
+	private String result;
+	
 	public RequestFlow() {
 		super();
 	}
@@ -34,11 +36,13 @@ public class RequestFlow implements java.io.Serializable {
 	}
 	
 	public RequestFlow(String id, String requestId, String memberInfoId,
-			Date optTime) {
+			Date optTime, String describe, String result) {
 		this.id = id;
 		this.requestId = requestId;
 		this.memberInfoId = memberInfoId;
 		this.optTime = optTime;
+		this.describe= describe;
+		this.result = result;
 	}
 	
 	// Property accessors
@@ -66,6 +70,23 @@ public class RequestFlow implements java.io.Serializable {
 	public void setRequestId(String requestId) {
 		this.requestId = requestId;
 	}
+	
+	@Column(name = "describe")
+	public String getDescribe() {
+		return describe;
+	}
+	public void setDescribe(String describe) {
+		this.describe = describe;
+	}
+	
+	@Column(name = "result")
+	public String getResult() {
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
+	}
+	
 	@Column(name = "memberInfo_id")
 	public String getMemberInfoId() {
 		return memberInfoId;

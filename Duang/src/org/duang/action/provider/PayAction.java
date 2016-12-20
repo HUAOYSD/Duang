@@ -34,7 +34,6 @@ import org.duang.util.DataUtils;
 import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
 import org.duang.util.SSLClient;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -84,240 +83,6 @@ public class PayAction extends BaseAction<BillInvest>{
 	public void setInvestListService(InvestListService investListService){
 		this.investListService = investListService;
 	}
-	/**   
-	 * 充值 <成功回调> 
-	 * @Title: deposit   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author 5y    
-	 * @date 2016年9月9日 下午3:39:54
-	 * @return: void      
-	 * @throws   
-	 *//*  
-	public void deposit(){
-		boolean success = false;
-		try {
-			String token = getRequest().getParameter("token");
-			String pushMany = getRequest().getParameter("p_pushMany");
-			String bankid = getRequest().getParameter("p_bankid");
-			String platform = getRequest().getParameter("p_platform");
-			String pk = DataUtils.randomUUID();
-			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
-				double pushManyVal = DataUtils.str2double(pushMany, 6);
-				if (pushManyVal > 0) {
-					entity = new BillInvest(pk, new MemberInfo(id), null, new BindCard(bankid), UseType.UT1.getVal(), pushManyVal, 0, 0, BillStatus.BS1.getVal(), new Date(), "充值", DataUtils.str2int(platform));
-					if (service.saveEntity(entity)) {
-						jsonObject.put("id", pk);
-						success = true;
-					}else {
-						msg = "添加失败";
-					}
-				}else{
-					msg = "充值金额需为正数";
-				}
-			}else{
-				msg = "登录失效";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("PayAction——deposit方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("PayAction——deposit方法错误：" + e.getLocalizedMessage(), this.getClass());
-			msg = "服务器维护，请稍后再试";
-		}
-		jsonObject.put("msg", msg);
-		jsonObject.put("success", success);
-		printJsonResult();
-	}*/
-
-
-	/**   
-	 * 充值成功回调
-	 * @Title: depositCallBack   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author 5y    
-	 * @date 2016年9月23日 上午11:23:30
-	 * @return: void      
-	 * @throws   
-	 */  
-	/*public void depositCallBack(){
-		boolean success = false;
-		try {
-			String token = getRequest().getParameter("token");
-			String pkid = getRequest().getParameter("p_id");
-			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
-				final InvestMember investMember = investMemberService.findEntity("memberInfo.id", id);
-				String sql = "SELECT BALANCE,ASSET  FROM BILL_INVEST WHERE MEMBER_INFO = '"+id+"' AND STATUS = "+BillStatus.BS2.getVal()+" ORDER BY OPT_TIME DESC";
-				List<?> list = service.queryBySQL(sql, null, null, false);
-				if (investMember == null || DataUtils.isEmpty(list)) {
-					msg = "记录未找到";
-				}else {
-					double balance = DataUtils.str2double(investMember.getBalance()+"", 6);
-					double asset = DataUtils.str2double(investMember.getTotalMoney()+"", 6);
-					if (balance == DataUtils.str2double(((Object[])list.get(0))[0].toString(), 6) && asset == DataUtils.str2double(((Object[])list.get(0))[1].toString(), 6)) {
-						entity = service.findById(pkid);
-						entity.setBalance(balance + entity.getMoney());
-						entity.setAsset(asset + entity.getMoney());
-						entity.setStatus(BillStatus.BS2.getVal());
-						entity.setOptTime(new Date());
-						investMember.setBalance(entity.getBalance());
-						investMember.setTotalMoney(entity.getAsset());
-						synchronized(this){
-							if (service.updateBill(entity, investMember)) {
-								success = true;
-							}
-						}
-					}else {
-						msg = "资金未同步";
-					}
-				}
-			}else{
-				msg = "登录失效";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("PayAction——deposit方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("PayAction——deposit方法错误：" + e.getLocalizedMessage(), this.getClass());
-			msg = "服务器维护，请稍后再试";
-		}
-		jsonObject.put("msg", msg);
-		jsonObject.put("success", success);
-		printJsonResult();
-	}*/
-
-
-	/**   
-	 * 提现 <成功回调>
-	 * @Title: withdrawals   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author 5y    
-	 * @date 2016年9月9日 下午3:40:45
-	 * @return: void      
-	 * @throws   
-	 */  
-	/*public void withdrawals(){
-		boolean success = false;
-		try {
-			String token = getRequest().getParameter("token");
-			String p_fetchMany = getRequest().getParameter("p_fetchMany");
-			String bankid = getRequest().getParameter("p_bankid");
-			String platform = getRequest().getParameter("p_platform");
-			String pk = DataUtils.randomUUID();
-			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(platform) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
-				double fetchManyVal = DataUtils.str2double(p_fetchMany, 6);
-				if (fetchManyVal > 0) {
-					entity = new BillInvest(pk, new MemberInfo(id), null, new BindCard(bankid), UseType.UT2.getVal(), fetchManyVal, 0, 0, BillStatus.BS1.getVal(), new Date(), "提现", DataUtils.str2int(platform));
-					if (service.saveEntity(entity)) {
-						jsonObject.put("id", pk);
-						success = true;
-					}else {
-						msg = "添加失败";
-					}
-				}else{
-					msg = "提现金额需为正数";
-				}
-			}else{
-				msg = "登录失效";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("PayAction——withdrawals方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("PayAction——withdrawals方法错误：" + e.getLocalizedMessage(), this.getClass());
-			msg = "服务器维护，请稍后再试";
-		}
-		jsonObject.put("msg", msg);
-		jsonObject.put("success", success);
-		printJsonResult();
-	}
-*/
-
-	/**   
-	 * 提现 <成功回调>
-	 * @Title: withdrawalsCallBack   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author 5y    
-	 * @date 2016年9月23日 下午3:22:13
-	 * @return: void      
-	 * @throws   
-	 */  
-	/*public void withdrawalsCallBack(){
-		boolean success = false;
-		try {
-			String token = getRequest().getParameter("token");
-			String pkid = getRequest().getParameter("p_id");
-			String id = "";
-			if (DataUtils.notEmpty(token) && DataUtils.notEmpty((id = MemberCollection.getInstance(token,memberInfoService).getMainField(token)))) {
-				final InvestMember investMember = investMemberService.findEntity("memberInfo.id", id);
-				String sql = "SELECT BALANCE,ASSET  FROM BILL_INVEST WHERE MEMBER_INFO = '"+id+"' AND STATUS = "+BillStatus.BS2.getVal()+" ORDER BY OPT_TIME DESC";
-				List<?> list = service.queryBySQL(sql, null, null, false);
-				if (investMember == null || DataUtils.isEmpty(list)) {
-					msg = "记录未找到";
-				}else {
-					double balance = DataUtils.str2double(investMember.getBalance()+"", 6);
-					double asset = DataUtils.str2double(investMember.getTotalMoney()+"", 6);
-					if (balance == DataUtils.str2double(((Object[])list.get(0))[0].toString(), 6) && asset == DataUtils.str2double(((Object[])list.get(0))[1].toString(), 6)) {
-						entity = service.findById(pkid);
-						entity.setBalance(balance - entity.getMoney());
-						entity.setAsset(asset - entity.getMoney());
-						entity.setStatus(BillStatus.BS2.getVal());
-						entity.setOptTime(new Date());
-						investMember.setBalance(entity.getBalance());
-						investMember.setTotalMoney(entity.getAsset());
-						synchronized(this){
-							if (service.updateBill(entity, investMember)) {
-								success = true;
-							}
-						}
-					}else {
-						msg = "资金未同步";
-					}
-				}
-			}else{
-				msg = "登录失效";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LoggerUtils.error("PayAction——withdrawalsCallBack方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("PayAction——withdrawalsCallBack方法错误：" + e.getLocalizedMessage(), this.getClass());
-			msg = "服务器维护，请稍后再试";
-		}
-		jsonObject.put("msg", msg);
-		jsonObject.put("success", success);
-		printJsonResult();
-	}
-*/
-
-	/**   
-	 * 支付————理财订单 <成功回调>
-	 * @Title: payInvest   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author 5y    
-	 * @date 2016年9月9日 下午3:41:36
-	 * @return: void      
-	 * @throws   
-	 */  
-	public void payInvest(){
-	}
-
-	/**   
-	 * 赎回————理财订单 <成功回调>
-	 * @Title: redemptiveInvest   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param:   
-	 * @author 5y    
-	 * @date 2016年9月9日 下午3:42:33
-	 * @return: void      
-	 * @throws   
-	 */  
-	public void redemptiveInvest(){
-
-	}
 
 	@Resource
 	private RequestFlowService requestFlowService;
@@ -342,14 +107,11 @@ public class PayAction extends BaseAction<BillInvest>{
 			}
 			//读取配置文件
 			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
-
-
 			String noticeType = getRequest().getParameter("noticeType");
 			String result = getRequest().getParameter("result");
 			//充值金额
 			String sum = getRequest().getParameter("sum");
 			String userIdIdentity = getRequest().getParameter("userIdIdentity");
-
 			//未结金额
 			String unsettledBalance = getRequest().getParameter("unsettledBalance");
 			//账户总额
@@ -395,8 +157,10 @@ public class PayAction extends BaseAction<BillInvest>{
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
 			LoggerUtils.info("/t/n---------------------------充值回调  本地加密后的签名:"+dataSign, this.getClass());
+			String resultStr = "失败";
 			if(dataSign.equals(signature)){
 				if(result.equals(ResultCode.SUCCESS.getVal())){
+					resultStr="成功";
 					//修改数据库
 					investMemberService.depositFFCallBackUpdateInvest(userIdIdentity,DataUtils.str2double(withdrawableBalance, 6),
 							DataUtils.str2double(userBalance, 6),DataUtils.str2double(frozenBalance, 6),DataUtils.str2double(unsettledBalance, 6),
@@ -408,7 +172,7 @@ public class PayAction extends BaseAction<BillInvest>{
 				LoggerUtils.error(name+"充值,原因：秘钥校验错误", this.getClass());
 			}
 
-			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date());
+			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date(),"充值回调",resultStr);
 			requestFlowService.saveEntity(requestFlow);
 
 			LoggerUtils.info("\t\n------------------------充值回调结束-------------------------------------\t\n", this.getClass());
@@ -489,8 +253,10 @@ public class PayAction extends BaseAction<BillInvest>{
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
 			LoggerUtils.info("\t\n---------------------------提现回调本地加密签名："+dataSign, this.getClass());
+			String resultStr = "失败";
 			if(dataSign.equals(signature)){
 				if(result.equals(ResultCode.SUCCESS.getVal())){
+					resultStr = "成功";
 					//修改数据库
 					investMemberService.withdrawalsFFCallBackUpdateInvest(userIdIdentity,DataUtils.str2double(withdrawableBalance, 6),
 							DataUtils.str2double(userBalance, 6),DataUtils.str2double(frozenBalance, 6),DataUtils.str2double(sum, 6),bankAccount);
@@ -500,7 +266,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			}else{
 				LoggerUtils.error(name+"提现,原因：秘钥校验错误", this.getClass());
 			}
-			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date());
+			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date(),"提现回调",resultStr);
 			requestFlowService.saveEntity(requestFlow);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -617,7 +383,7 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @return: void      
 	 * @throws
 	 */
-	private  void  withdrawSingScaleSuccess(JSONObject jsonObjectData,String akey) throws JSONException{
+	/*private  void  withdrawSingScaleSuccess(JSONObject jsonObjectData,String akey) throws JSONException{
 		String requestId = jsonObjectData.get("requestId").toString();
 		String projectCode = jsonObjectData.get("projectCode").toString();
 		String bidRequestId = jsonObjectData.get("bidRequestId").toString();
@@ -657,8 +423,24 @@ public class PayAction extends BaseAction<BillInvest>{
 			jsonObject.put("result", false);
 			jsonObject.put("msg", "签名不一致");
 		}
-	}
+	}*/
 
+	/**
+	 * 获取配置信息
+	 * @Title: getParamValBykey   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param properties
+	 * @param: @param urlKey
+	 * @param: @param noticeUrlKey
+	 * @param: @param successReturnUrl
+	 * @param: @param failReturnUrl
+	 * @param: @return
+	 * @param: @throws IOException  
+	 * @author LiYonghui    
+	 * @date 2016年12月16日 上午9:45:39
+	 * @return: Map<String,String>      
+	 * @throws
+	 */
 	private  Map<String, String> getParamValBykey(Properties properties,String urlKey,String noticeUrlKey, String successReturnUrl, String failReturnUrl) throws IOException{
 		Map<String,String> map = new HashMap<String,String>();
 		//请求受理成功，正在处理，需要主动查询

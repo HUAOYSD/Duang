@@ -1,5 +1,6 @@
 package org.duang.action.provider;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -78,6 +79,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		loanList.setApplyState(Apply.A1.getVal());
 		loanList.setLoanType(LoanMode.M3.getVal());
 		loanList.setBackStyle(BackStyle.B1.getVal());
+		loanList.setCreateTime(new Date());
 		if(DataUtils.notEmpty(getRequest().getParameter("p_days"))){
 			loanList.setDays(DataUtils.str2int(DES.decryptDES(getRequest().getParameter("p_days"))));
 		}
@@ -290,7 +292,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 			LoggerUtils.error("ApplyLoanInfoAction uploadUseDatums：" + e.getLocalizedMessage(), this.getClass());
 		}    
 		jsonObject.put("success", success);
-		jsonObject.put("success", msg);
+		jsonObject.put("msg", msg);
 		printJsonResult();
 	}
 	
@@ -354,7 +356,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 					assetFile = datumsData.toString();
 				}
 				String sql = "UPDATE apply_loan_info SET asset_certificates='"+assetFile+"' where id='"+id+"'";
-				success = applyLoanInfoService.executeSql(sql);
+				applyLoanInfoService.executeSql(sql);
 			}else{
 				msg = "缺少参数,请补充";
 			}
@@ -365,7 +367,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 			LoggerUtils.error("ApplyLoanInfoAction uploadUserAttest：" + e.getLocalizedMessage(), this.getClass());
 		}    
 		jsonObject.put("success", success);
-		jsonObject.put("success", msg);
+		jsonObject.put("msg", msg);
 		printJsonResult();
 	}
 	
@@ -428,7 +430,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 					creditFile = datumsData.toString();
 				}
 				String sql = "UPDATE apply_loan_info SET credit_file='"+creditFile+"' where id='"+id+"'";
-				success = applyLoanInfoService.executeSql(sql);
+				applyLoanInfoService.executeSql(sql);
 			}else{
 				msg = "缺少参数,请补充";
 			}
@@ -439,7 +441,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 			msg = "服务器维护，请稍后再试";
 		}    
 		jsonObject.put("success", success);
-		jsonObject.put("success", msg);
+		jsonObject.put("msg", msg);
 		printJsonResult();
 	}
 }

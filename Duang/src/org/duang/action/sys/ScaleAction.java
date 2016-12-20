@@ -21,7 +21,6 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.ResultPath;
 import org.duang.common.logger.LoggerUtils;
-import org.duang.entity.LoanList;
 import org.duang.entity.MemberInfo;
 import org.duang.entity.MemberMiddle;
 import org.duang.entity.Product;
@@ -32,7 +31,6 @@ import org.duang.enums.May;
 import org.duang.enums.ResultCode;
 import org.duang.enums.product.Category;
 import org.duang.enums.scale.Status;
-import org.duang.service.LoanListService;
 import org.duang.service.MemberInfoService;
 import org.duang.service.MemberMiddleService;
 import org.duang.service.ScaleService;
@@ -75,11 +73,6 @@ public class ScaleAction extends BaseAction<Scale> {
 	@Resource
 	public void setService(ScaleService service) {
 		this.service = service;
-	}
-	private LoanListService loanListService;
-	@Resource
-	public void setLoanListService(LoanListService loanListService) {
-		this.loanListService = loanListService;
 	}
 	
 	private MemberInfoService memberInfoService;
@@ -347,25 +340,6 @@ public class ScaleAction extends BaseAction<Scale> {
 	}
 	
 	/**
-     * 查询借贷列表
-     * @Title: queryLoanListByScale   
-     * @Description: TODO(这里用一句话描述这个方法的作用)   
-     * @param: @param scaleId
-     * @param: @return
-     * @param: @throws Exception  
-     * @author LiYonghui    
-     * @date 2016年11月11日 下午2:07:29
-     * @return: List<InvestList>      
-     * @throws
-     */
-    private List<LoanList> queryLoanListByScale(String scaleId) throws Exception{
-    	String sql = "select * from loan_list ll  left join scale_loan_list sll on ll.id=sll.loan_list where sll.scale='"+scaleId
-    			+"' and apply_state=2 and loan_state=1";
-    	List<LoanList> loanLists = loanListService.queryBySQL(sql, null, null,true);
-    	return loanLists;
-    }
-	
-	/**
 	 * 满标后台人工放款操作
 	 * @Title: loanFullScaleToUser   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -544,7 +518,7 @@ public class ScaleAction extends BaseAction<Scale> {
 			if(result.equals(ResultCode.SUCCESS.getVal())){
 				String requestId = getRequest().getParameter("requestId");
 				//本息到账金额
-				String sum = getRequest().getParameter("sum");
+				//String sum = getRequest().getParameter("sum");
 				//项目编号
 				projectCode = getRequest().getParameter("projectCode");
 				//项目还款账户余额

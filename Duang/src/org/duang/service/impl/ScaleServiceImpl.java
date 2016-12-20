@@ -18,6 +18,7 @@ import org.duang.dao.InvestListDao;
 import org.duang.dao.InvestMemberDao;
 import org.duang.dao.LoanListDao;
 import org.duang.dao.LoanMemberDao;
+import org.duang.dao.LoanMemberRepayDateDao;
 import org.duang.dao.MemberMiddleDao;
 import org.duang.dao.MemberMiddleRecordsDao;
 import org.duang.dao.ScaleDao;
@@ -459,6 +460,11 @@ public class ScaleServiceImpl implements ScaleService{
 	public void setLoanMemberDao(LoanMemberDao loanMemberDao) {
 		this.loanMemberDao = loanMemberDao;
 	}
+	private LoanMemberRepayDateDao loanMemberRepayDateDao;
+	@Resource
+	public void setLoanMemberRepayDateDao(LoanMemberRepayDateDao loanMemberRepayDateDao) {
+		this.loanMemberRepayDateDao = loanMemberRepayDateDao;
+	}
 	/**
 	 * 流标赎回操作
 	 * @Title: fullScaleLoanMoney   
@@ -643,17 +649,6 @@ public class ScaleServiceImpl implements ScaleService{
 		    	for(LoanList loanList : loanLists){
 		    		loanList.setYetMoney(loanList.getGetMoney());
 		    		loanList.setLoanState(3);
-		    		if(scale.getSingleOrSet().equals(SingleOrSet.S2.getVal())){
-		    			//计算还款日
-		    			Calendar c = Calendar.getInstance();
-		    		    c.add(Calendar.MONTH, +1);
-		    		    loanList.setReturnDate(c.getTime());
-		    		}else if(scale.getSingleOrSet().equals(SingleOrSet.S1.getVal())){
-		    			Calendar c = Calendar.getInstance();
-		    		    c.add(Calendar.DATE, +loanList.getDays());
-		    		    loanList.setReturnDate(c.getTime());
-		    		}
-		    		
 		    		//1.修改借贷列表
 		    		success = loanListDao.updateEntity(loanList);
 		    		if(success){
@@ -688,6 +683,9 @@ public class ScaleServiceImpl implements ScaleService{
 		    							  "\t\n---------------------放款操作中，更新借贷列表失败", this.getClass());
 		    			msg="系统错误，请联系管理员";
 		    		}
+		    		
+		    		//保存还款日期
+		    		loanMemberRepayDateDao.addRepayLoanDate(scale,loanList);
 		    	}
 		    	
 		    	List<InvestList> investLists = investListDao.queryEntity("scale.id", back_projectCode, null, null);
@@ -713,5 +711,4 @@ public class ScaleServiceImpl implements ScaleService{
 		resultMap.put("msg", msg);
 		return resultMap;
     }
-	
 }

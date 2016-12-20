@@ -1,5 +1,6 @@
 package org.duang.action.provider;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -78,6 +79,7 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 		loanList.setApplyState(Apply.A1.getVal());
 		loanList.setLoanType(LoanMode.M1.getVal());
 		loanList.setBackStyle(BackStyle.B2.getVal());
+		loanList.setCreateTime(new Date());
 		if(DataUtils.notEmpty(getRequest().getParameter("p_days"))){
 			loanList.setDays(DataUtils.str2int((DES.decryptDES(getRequest().getParameter("p_days")))));
 		}
@@ -231,7 +233,7 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 			LoggerUtils.error("ApplyLoanHouseAction uploadUseDatums：" + e.getLocalizedMessage(), this.getClass());
 		}    
 		jsonObject.put("success", success);
-		jsonObject.put("success", msg);
+		jsonObject.put("msg", msg);
 		printJsonResult();
 	}
 	
@@ -245,7 +247,7 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 	 * @return: void      
 	 * @throws
 	 */
-	public void uploadUserAsset(){
+	public void uploadUserAttest(){
 		boolean success=false;
 		try{
 			String id = getRequest().getParameter("id");
@@ -306,7 +308,7 @@ public class ApplyLoanHouseAction extends BaseAction<ApplyLoanHouse>{
 			LoggerUtils.error("ApplyLoanHouseAction uploadUseAsset：" + e.getLocalizedMessage(), this.getClass());
 		}    
 		jsonObject.put("success", success);
-		jsonObject.put("success", msg);
+		jsonObject.put("msg", msg);
 		printJsonResult();
 	}
 }

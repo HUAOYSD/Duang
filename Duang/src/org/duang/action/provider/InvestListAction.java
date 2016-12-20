@@ -483,7 +483,6 @@ public class InvestListAction extends BaseAction<InvestList>{
 		try{
 			String requestId = getRequest().getParameter("requestId");
 			entity = investListService.findEntity("requestid", requestId);
-			System.out.println("[[[[[[[[[[[[[[[[[[[[[[[[[[["+requestId+"]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
 			if (entity==null) {
 				//读取配置文件中
 				Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
@@ -529,10 +528,14 @@ public class InvestListAction extends BaseAction<InvestList>{
 				//获取返回数据的加密数据用于与签名校验
 				String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
 				LoggerUtils.info("\t\n---------------------------投标回调 本地加密签名："+dataSign, this.getClass());
+				String resultStr ="失败";
 				if(signature.equals(dataSign)){
 					//请求成功
 					if(result.equals(ResultCode.SUCCESS.getVal())){
 						success = investListService.investFFCallback(projectCode, userIdIdentity, DataUtils.str2double(sum, 6), 3, DataUtils.str2double(giftSum, 6), requestId);
+						if(success){
+							resultStr = "成功";
+						}
 					}else{
 						LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 					}
@@ -540,7 +543,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 					//签名不匹配
 					LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
-				RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date());
+				RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date(),"投标回调",resultStr);
 				requestFlowService.saveEntity(requestFlow);
 			}
 		}catch(Exception e){

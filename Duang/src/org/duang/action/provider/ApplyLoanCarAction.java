@@ -1,5 +1,6 @@
 package org.duang.action.provider;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -13,6 +14,7 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.ApplyLoanCar;
 import org.duang.entity.LoanList;
+import org.duang.entity.LoanListRate;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.UploadFile;
 import org.duang.enums.loan.Apply;
@@ -23,6 +25,7 @@ import org.duang.enums.loan.Poundage;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
 import org.duang.service.ApplyLoanCarService;
+import org.duang.service.LoanListRateService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -58,6 +61,11 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 		this.memberInfoService = memberInfoService;
 	}
 	
+	private LoanListRateService loanListRateService;
+	@Resource
+	public void setLoanListRateService(LoanListRateService loanListRateService) {
+		this.loanListRateService = loanListRateService;
+	}
 	/**
 	 * 封装参数
 	 * @Title: getApplyLoanInfo   
@@ -80,6 +88,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 		loanList.setApplyState(Apply.A1.getVal());
 		loanList.setLoanType(LoanMode.M1.getVal());
 		loanList.setBackStyle(BackStyle.B2.getVal());
+		loanList.setCreateTime(new Date());
 		if(DataUtils.notEmpty(getRequest().getParameter("p_days"))){
 			loanList.setDays(DataUtils.str2int((DES.decryptDES(getRequest().getParameter("p_days")))));
 		}
@@ -96,7 +105,17 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 			loanList.setMemberInfo(memberInfo);
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_money"))){
-			loanList.setMoney(DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_money")), 6));
+			double money = DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_money")), 6);
+			loanList.setMoney(money);
+			loanList.setRealMoney(money);
+			LoanListRate loanListRate = loanListRateService.getLoanListRate();
+			if(loanListRate != null){
+				loanList.setManageCost(loanListRate.getPlatformRate()*money);
+				loanList.setPoundage(loanListRate.getHandRate()*money);
+				loanList.setLoanInterest(loanListRate.getLoanRate()*money);
+				loanList.setGetMoney(money);
+				loanList.setReturnMoney(DataUtils.str2double(String.valueOf(money+loanList.getManageCost()+loanList.getPoundage()+loanList.getLoanInterest()), 6));
+			}
 		}
 		applyLoanCar.setLoanList(loanList);
 		
@@ -239,7 +258,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 			LoggerUtils.error("ApplyLoanCarAction uploadUseDatums：" + e.getLocalizedMessage(), this.getClass());
 		}    
 		jsonObject.put("success", success);
-		jsonObject.put("success", msg);
+		jsonObject.put("msg", msg);
 		printJsonResult();
 	}
 	
@@ -253,7 +272,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 	 * @return: void      
 	 * @throws
 	 */
-	public void uploadUserAsset(){
+	public void uploadUserAttest(){
 		boolean success=false;
 		try{
 			String id = getRequest().getParameter("id");
@@ -312,7 +331,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 			LoggerUtils.error("ApplyLoanCarAction uploadUserAsset：" + e.getLocalizedMessage(), this.getClass());
 		}    
 		jsonObject.put("success", success);
-		jsonObject.put("success", msg);
+		jsonObject.put("msg", msg);
 		printJsonResult();
 	}
 }

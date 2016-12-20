@@ -525,4 +525,38 @@ public class InvestListServiceImpl implements InvestListService{
 		return true;
 	}
 
+	/**
+	 * 集合、普通项目本息到账返回处理方法
+	 * <p>Title: transactionForFTCallback</p>   
+	 * <p>Description: </p>  
+	 * @author LiYonghui
+	 * @date 2016年12月15日 下午4:23:43
+	 * @param scaleid
+	 * @param memberinfoid
+	 * @param money
+	 * @param investStyle
+	 * @param giftSum
+	 * @param requestid
+	 * @return
+	 * @throws Exception   
+	 * @see org.duang.service.InvestListService#transactionForFTCallback(java.lang.String, java.lang.String, double, int, double, java.lang.String)
+	 */
+	@Override
+	public boolean transactionForFTCallback(InvestList investList,double sum) throws Exception {
+		boolean success = false;
+		investList.setBackIncome(investList.getIncome());
+		investList.setBackMoney(investList.getTotalMoney()-investList.getIncome());
+		investList.setBackDate(new Date());
+		investList.setStatus(Status.S5.getVal());
+		success = dao.updateEntity(investList);
+		String memberInfoId = investList.getMemberInfo().getId();
+		InvestMember investMember = investMemberDao.findEntity("memberInfo.id", memberInfoId);
+		investMember.setBalance(investMember.getBalance()+sum);
+		investMember.setInvesting(investMember.getInvesting()-investList.getMoney());
+		investMember.setTotalIncome(investMember.getTotalIncome()+investList.getIncome());
+		investMember.setTotalMoney(investMember.getBalance()+investMember.getInvesting());
+		success = investMemberDao.updateEntity(investMember);
+		return success;
+	}
+
 }

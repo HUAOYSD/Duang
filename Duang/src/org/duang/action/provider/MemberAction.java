@@ -692,10 +692,11 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			.append("----payType:"+payType)
 			.append("----mobileNo:"+mobileNo)
 			.append("----signature:"+signature);
-
 			LoggerUtils.info(backStringBuffer.toString(), this.getClass());
+			String resultString="失败";
 			if(result.equals(ResultCode.SUCCESS.getVal())){
 				success = true;
+				resultString="成功";
 			}else{
 				LoggerUtils.error("----------开户回调 流程号："+requestId+"，原因："+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 			}
@@ -708,7 +709,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 				service.updateEntity(memberInfo);
 			}
 
-			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date());
+			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date(),"开户回调",resultString);
 			requestFlowService.saveEntity(requestFlow);
 
 		}catch(Exception e){
@@ -769,12 +770,14 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			//获取返回数据的加密数据用于与签名校验
 			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
 			LoggerUtils.info("----------实名认证回调 本地加密签名"+dataSign, this.getClass());
+			String resultStr ="失败";
 			if(signature.equals(dataSign)){
 				//请求成功
 				if(result.equals(ResultCode.SUCCESS.getVal())){
 					//0表示身份证与姓名一致
 					if(status.equals(String.valueOf(If.If0.getVal()))){
 						success = true;
+						resultStr ="成功";
 					}else{ //不一致
 						LoggerUtils.error("----------实名认证回调  流程号："+requestId+",原因"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 					}
@@ -791,7 +794,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 			if(success){
 				realNameAuthMemberInfo(merBizRequestId,userName,idNumber,payType);
 			}
-			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, null, new Date());
+			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, null, new Date(),"实名认证",resultStr);
 			requestFlowService.saveEntity(requestFlow);
 
 		}catch(Exception e){

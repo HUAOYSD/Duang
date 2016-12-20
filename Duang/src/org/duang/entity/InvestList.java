@@ -59,7 +59,7 @@ public class InvestList implements java.io.Serializable {
 	
 	private int sevenactivity;
 	private String requestid;
-
+	private String cbRequestid;
 	
 
 	// Constructors
@@ -92,6 +92,15 @@ public class InvestList implements java.io.Serializable {
 		this.requestid = requestid;
 	}
 
+	@Column(name = "cb_requestid")
+	public String getCbRequestid() {
+		return cbRequestid;
+	}
+
+	public void setCbRequestid(String cbRequestid) {
+		this.cbRequestid = cbRequestid;
+	}
+	
 	public InvestList(String id, Scale scale, InvestTicket investTicket, MemberInfo memberInfo, double money, double backIncome, double backMoney, int useTicket, int isTurn, int turnStatus, double totalMoney, double income, double ticketBonus, int status, Date openDate, Date backDate, Date calcBeginDate, Date calcEndDate, String pactNumber, int investStyle, double poundageTurn, double poundagePrivilege, double giftSum, int days, Set<Stock> stocksForInvestListId, Set<MemberTicketRecord> memberTicketRecords, Set<BillInvest> billInvests, Set<Stock> stocksForTurnInvestListId, Set<Scale> scales,int sevenactivity,String requestid) {
 		super();
 		this.id = id;

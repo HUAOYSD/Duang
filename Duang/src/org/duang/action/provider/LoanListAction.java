@@ -1,5 +1,6 @@
 package org.duang.action.provider;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +19,14 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.LoanList;
 import org.duang.enums.loan.Apply;
-import org.duang.enums.loan.ReturnStatus;
 import org.duang.enums.loan.BackStyle;
 import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Poundage;
+import org.duang.enums.loan.ReturnStatus;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
 import org.duang.service.LoanListService;
+import org.duang.service.LoanMemberRepayDateService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -60,6 +62,11 @@ public class LoanListAction extends BaseAction<LoanList>{
 	@Resource
 	public void setMemberInfoService(MemberInfoService memberInfoService) {
 		this.memberInfoService = memberInfoService;
+	}
+	private LoanMemberRepayDateService loanMemberRepayDateService;
+	@Resource
+	public void setLoanMemberRepayDateService(LoanMemberRepayDateService loanMemberRepayDateService) {
+		this.loanMemberRepayDateService = loanMemberRepayDateService;
 	}
 //	/**   
 //	 * 查询申请中的借款记录
@@ -234,8 +241,44 @@ public class LoanListAction extends BaseAction<LoanList>{
 		printJsonResult();
 	}
 	
+	/**   
+	 * 查找用户是否有未清算的借款记录 true：有，false：未有
+	 * @Title: findLoanListByMemberInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author 5y    
+	 * @date 2016年9月9日 下午4:30:13
+	 * @return: void      
+	 * @throws   
+	 */  
+	public void isAppliedLoanListByMemberInfo(){
+		boolean success = false;
+		try {
+			String token = getRequest().getParameter("token");
+			String id = null;
+			if (DataUtils.notEmpty(token) && DataUtils.notEmpty(id = MemberCollection.getInstance(token,memberInfoService).getMainField(token))) {
+				String sql = "select * from loan_list where member_info='"+id+"' and return_status !="+ReturnStatus.B4.getVal()+
+						     "  AND apply_state in("+Apply.A1.getVal()+","+Apply.A2.getVal()+")";
+				List<LoanList> loanLists = service.queryBySQL(sql, null, null, true);
+				if(DataUtils.notEmpty(loanLists)){
+					success = true;
+				}
+			}else {
+				msg = "登录失效";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("LoanListAction——isAppliedLoanListByMemberInfo方法，查找用户是否已经存在借款记录错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("LoanListAction——isAppliedLoanListByMemberInfo方法，查找用户是否已经存在借款记录错误：" + e.getLocalizedMessage(), this.getClass());
+			msg = "服务器维护，请稍后再试";
+		}
+		jsonObject.put("success", success);
+		printJsonResult();
+	}
+	
+	
 	/**
-	 * 查询用户的借贷记录
+	 * 查询用户的还款金额
 	 * @Title: getLoanSumByMember   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
@@ -246,8 +289,12 @@ public class LoanListAction extends BaseAction<LoanList>{
 	 */
 	public void getLoanSumByMember(){
 		boolean success = false;
-		//借款金额
+		//本期还款金额
 		double sum = 0;
+		//最后还款日期
+		String lastDate="";
+		//上期还款情况信息
+		String b_msg = "";
 		try {
 			String token = getRequest().getParameter("token");
 			String id = null;
@@ -262,12 +309,24 @@ public class LoanListAction extends BaseAction<LoanList>{
 					if(loanList.getBackStyle()==BackStyle.B1.getVal()){
 						sum=loanList.getReturnMoney()/loanList.getDays()*30;
 					}else if(loanList.getBackStyle()==BackStyle.B2.getVal()){
-					//到期一次性结清
+						//到期一次性结清
 						sum=loanList.getReturnMoney();
 					}else{
 						success = false;
 						msg = "服务器维护，请稍后再试";
 					}
+					
+					Map<String,Object> repayMap = loanMemberRepayDateService.getThisLoanRepayDate(loanList);
+					if(repayMap.get("date") == null){
+						msg="无贷款";
+					}else{
+						lastDate = DateUtils.date2Str((Date)repayMap.get("date"),"yyyy-MM-dd");
+						b_msg = (String) repayMap.get("b_msg");
+						msg = (String) repayMap.get("msg");
+						double overDueSum = (double) repayMap.get("overDueSum");
+						sum+=overDueSum+sum;
+					}
+					
 				}else{
 					sum = 0;
 				}
@@ -282,7 +341,9 @@ public class LoanListAction extends BaseAction<LoanList>{
 		}
 		DecimalFormat df=new DecimalFormat(".##");
 		jsonObject.put("sum", df.format(sum));
+		jsonObject.put("lastDate", lastDate);
 		jsonObject.put("msg", msg);
+		jsonObject.put("b_msg", b_msg);
 		jsonObject.put("success", success);
 		printJsonResult();
 	}
@@ -319,7 +380,6 @@ public class LoanListAction extends BaseAction<LoanList>{
 		jsonObject.put("loanInterest", loanlist.getLoanInterest());
 		jsonObject.put("createTime", DateUtils.date2Str(loanlist.getCreateTime(), "yyyy-MM-dd"));
 		jsonObject.put("signDate", DateUtils.date2Str(loanlist.getSignDate(), "yyyy-MM-dd"));
-		jsonObject.put("returnDate", DateUtils.date2Str(loanlist.getReturnDate(), "yyyy-MM-dd"));
 		jsonObject.put("beginReturnDate", DateUtils.date2Str(loanlist.getBeginReturnDate(), "yyyy-MM-dd"));
 		jsonObject.put("endReturnDate", DateUtils.date2Str(loanlist.getEndReturnDate(), "yyyy-MM-dd"));
 		jsonObject.put("doneReturnDate", DateUtils.date2Str(loanlist.getDoneReturnDate(), "yyyy-MM-dd"));

@@ -55,12 +55,12 @@
 		        <label for="minLimit" class="add_edit_form_label">单笔最低限额：</label>  
 		        <input class="easyui-validatebox" name="minLimit" data-options="required:true,validType:'intOrFloat',missingMessage:'请输入单笔最低限额'" /> 
 		    </div> 
-		    <div>   
+		   <!--  <div>   
 		        <label for="returnStyle" class="add_edit_form_label">还款方式：</label>  
 		        <select class="easyui-combobox" name="returnStyle" style="width: 216px;" data-options="panelHeight:'auto'">   
 				    <option value="1" selected="selected">到期一次还本付息</option>   
 				</select>  
-		    </div> 
+		    </div>  -->
 		    <div>   
 		        <label for="useTicket" class="add_edit_form_label">可使用理财券：</label>  
 		        <select class="easyui-combobox" name="useTicket" style="width: 216px;" data-options="panelHeight:'auto'">   

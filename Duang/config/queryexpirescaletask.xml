@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">  
 <beans>  
- 	<!-- 查询到期标 赎回-->  
+ 	<!--本息到账-->  
     <!-- 定时服务定义 -->  
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
         <!-- 自动启动 -->  
@@ -20,8 +20,8 @@
             <ref bean="jobDetailBean" />  
         </property>  
         <property name="cronExpression">  
-            <!-- 凌晨3点开始-->  
-            <value>0 0 3 * * ?</value>  
+            <!-- 凌晨0点开始-->  
+            <value>0 0 0 * * ?</value>  
         </property>  
     </bean>  
       

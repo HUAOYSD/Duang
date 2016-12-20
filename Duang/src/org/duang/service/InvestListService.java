@@ -33,4 +33,15 @@ public interface InvestListService extends CommonInterface<InvestList>{
 	 */
 	public abstract boolean investFFCallback(String scaleid, String memberinfoid, double money, int investStyle, double giftSum, String requestid) throws Exception;
 	
+	/**
+	 * 集合、普通项目本息到账回调
+	 * @Title: investFFCallback   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月3日 下午7:32:03
+	 * @return: void      
+	 * @throws
+	 */
+	public abstract boolean transactionForFTCallback(InvestList investList,double sum) throws Exception;
 }
