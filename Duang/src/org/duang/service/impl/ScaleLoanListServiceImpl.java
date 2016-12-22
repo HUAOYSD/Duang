@@ -76,7 +76,7 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 	 * @return: boolean      
 	 * @throws   
 	 */  
-	public boolean matchScaleLoanRecords(String scaleId, String[] loanListIds) throws Exception{
+	public boolean matchScaleLoanRecords(Scale scale, String[] loanListIds) throws Exception{
 		if (loanListIds == null || loanListIds.length == 0) {
 			return false;
 		}
@@ -93,7 +93,6 @@ public class ScaleLoanListServiceImpl implements ScaleLoanListService{
 		List<LoanList> loanLists = loanListDao.queryByHQL(hql,null, null);
 
 		//2、找到理财标对象scale
-		Scale scale = scaleDao.findById(scaleId);
 		if (scale == null) {
 			return false;
 		}

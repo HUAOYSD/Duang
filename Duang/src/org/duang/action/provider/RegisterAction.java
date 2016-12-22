@@ -175,8 +175,8 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 	}
 	
 	/**
-	 * 生成一个6位数字的邀请码
-	 * @Title: getSelfEntityCode   
+	 * 通过邀请码，查询用户
+	 * @Title: getMemberInfoByEntityCode   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param: @param entityCode
 	 * @param: @return
@@ -223,7 +223,7 @@ public class RegisterAction extends BaseAction<MemberInfo>{
 						entity.setId(id);
 						entity.setPhone(phone);
 						entity.setPassword(password);
-						entity.setNickname("手机用户"+phone);
+						entity.setNickname(phone);
 						entity.setLoginName(phone);
 						entity.setRegisterStyle(Integer.parseInt(registerStyle));
 						entity.setCreateTime(new Date());

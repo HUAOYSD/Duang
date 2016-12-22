@@ -14,6 +14,7 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.ApplyLoanInfo;
 import org.duang.entity.LoanList;
+import org.duang.entity.LoanListRate;
 import org.duang.entity.MemberInfo;
 import org.duang.enums.UploadFile;
 import org.duang.enums.loan.Apply;
@@ -24,6 +25,7 @@ import org.duang.enums.loan.ReturnStatus;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
 import org.duang.service.ApplyLoanInfoService;
+import org.duang.service.LoanListRateService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
@@ -56,6 +58,11 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 	@Resource
 	public void setMemberInfoService(MemberInfoService memberInfoService) {
 		this.memberInfoService = memberInfoService;
+	}
+	private LoanListRateService loanListRateService;
+	@Resource
+	public void setLoanListRateService(LoanListRateService loanListRateService) {
+		this.loanListRateService = loanListRateService;
 	}
 	/**
 	 * 封装参数
@@ -91,7 +98,17 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		loanList.setMemberInfo(memberInfo);
 		
 		if(DataUtils.notEmpty(getRequest().getParameter("p_money"))){
-			loanList.setMoney(DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_money")), 6));
+			double  money  = DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_money")), 6);
+			loanList.setMoney(money);
+			loanList.setRealMoney(money);
+			LoanListRate loanListRate = loanListRateService.getLoanListRate();
+			if(loanListRate != null){
+				loanList.setManageCost(loanListRate.getPlatformRate()*money);
+				loanList.setPoundage(loanListRate.getHandRate()*money);
+				loanList.setLoanInterest(loanListRate.getLoanRate()*money);
+				loanList.setGetMoney(money);
+				loanList.setReturnMoney(DataUtils.str2double(String.valueOf(money+loanList.getManageCost()+loanList.getPoundage()+loanList.getLoanInterest()), 6));
+			}
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_loanUse"))){
 			loanList.setLoanUse(DES.decryptDES(getRequest().getParameter("p_loanUse")));

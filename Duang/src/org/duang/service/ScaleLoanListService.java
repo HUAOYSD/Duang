@@ -1,6 +1,7 @@
 package org.duang.service;
 
 import org.duang.baseInterface.CommonInterface;
+import org.duang.entity.Scale;
 import org.duang.entity.ScaleLoanList;
 
 
@@ -25,6 +26,6 @@ public interface ScaleLoanListService extends CommonInterface<ScaleLoanList>{
 	 * @return: boolean      
 	 * @throws   
 	 */  
-	public abstract boolean matchScaleLoanRecords(String scaleId, String[] loanListIds) throws Exception;
+	public abstract boolean matchScaleLoanRecords(Scale scale, String[] loanListIds) throws Exception;
 	
 }

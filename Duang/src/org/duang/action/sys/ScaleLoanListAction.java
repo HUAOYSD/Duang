@@ -23,7 +23,9 @@ import org.duang.enums.Platform;
 import org.duang.enums.loan.BackStyle;
 import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Scale;
+import org.duang.enums.scale.SingleOrSet;
 import org.duang.service.ScaleLoanListService;
+import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
 import org.hibernate.criterion.Order;
@@ -58,6 +60,12 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 		this.service = service;
 	}
 
+	private ScaleService scaleService;
+
+	@Resource
+	public void setScaleService(ScaleService scaleService) {
+		this.scaleService = scaleService;
+	}
 
 	/**   
 	 * 借贷分配
@@ -76,8 +84,14 @@ public class ScaleLoanListAction extends BaseAction<ScaleLoanList> {
 			if(DataUtils.notEmpty(loanListIds)){
 				String[] loanListIdsArray = loanListIds.split(","); 
 				if (DataUtils.notEmpty(scaleId) && loanListIdsArray!=null && loanListIdsArray.length>0) {
-					if (service.matchScaleLoanRecords(scaleId, loanListIdsArray)) {
+					org.duang.entity.Scale scale = scaleService.findById(scaleId);
+					if (service.matchScaleLoanRecords(scale, loanListIdsArray)) {
 						jsonObject.put("success", true);
+						//如果是普通标，则投标的单笔最低和最高限额都要和标的总额一直。只能一个人投标
+						if(scale.getSingleOrSet()== SingleOrSet.S1.getVal()){
+							scale.setMaxLimit(scale.getTotalMoney());
+							scale.setMinLimit(scale.getTotalMoney());
+						}
 					}else{
 						jsonObject.put("success", false);
 					}

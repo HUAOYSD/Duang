@@ -148,18 +148,18 @@ public class SysLoginAction extends BaseAction<SysUser>{
 		try {
 			jsonObject.put("success", true);
 			//先取消验证码
-			//			String validateCode = getRequest().getParameter("validateCode");
-			//			if (DataUtils.notEmpty(validateCode)) {
-			//				String readVal = (String) SessionTools.getSessionValue(SessionTools.RANDOMCODEKEY);
-			//				if (readVal.equalsIgnoreCase(validateCode)) {
-			//					SessionTools.removeSession(SessionTools.RANDOMCODEKEY);
-			//					jsonObject.put("success", true);
-			//				}else{
-			//					jsonObject.put("success", false);
-			//				}
-			//			}else {
-			//				jsonObject.put("success", false);
-			//			}
+			String validateCode = getRequest().getParameter("validateCode");
+			if (DataUtils.notEmpty(validateCode)) {
+				String readVal = (String) SessionTools.getSessionValue(SessionTools.RANDOMCODEKEY);
+				if (readVal.equalsIgnoreCase(validateCode)) {
+					SessionTools.removeSession(SessionTools.RANDOMCODEKEY);
+					jsonObject.put("success", true);
+				}else{
+					jsonObject.put("success", false);
+				}
+			}else {
+				jsonObject.put("success", false);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

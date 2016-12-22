@@ -14,7 +14,7 @@
 		    </div>
 		    <div>   
 		        <label for="singleOrSet" class="add_edit_form_label">标类型：</label>  
-		        <select class="easyui-combobox" name="singleOrSet" style="width: 216px;" data-options="panelHeight:'auto'">   
+		        <select id="singleOrSet" class="easyui-combobox" name="singleOrSet" style="width: 216px;" data-options="panelHeight:'auto'">   
 				    <option value="2" selected="selected">集合项目</option>   
 				    <option value="1">普通项目</option>   
 				</select>  
@@ -47,13 +47,13 @@
 		        <label for="revenueAdd" class="add_edit_form_label">附收益率：</label>  
 		        <input class="easyui-validatebox" name="revenueAdd" data-options="required:false,validType:'intOrFloat',missingMessage:''" /> 
 		    </div>
-		    <div>   
+		    <div id="div_maxLimit">   
 		        <label for="maxLimit" class="add_edit_form_label">单笔最高限额：</label>  
-		        <input class="easyui-validatebox" name="maxLimit" data-options="required:true,validType:'intOrFloat',missingMessage:'请输入单笔最高限额'" /> 
+		        <input id="maxLimit" class="easyui-numberbox" name="maxLimit" data-options="required:true,validType:'intOrFloat',missingMessage:'请输入单笔最高限额'" /> 
 		    </div>
-		    <div>   
+		    <div id="div_minLimit">   
 		        <label for="minLimit" class="add_edit_form_label">单笔最低限额：</label>  
-		        <input class="easyui-validatebox" name="minLimit" data-options="required:true,validType:'intOrFloat',missingMessage:'请输入单笔最低限额'" /> 
+		        <input id="minLimit" class="easyui-numberbox" name="minLimit" data-options="required:true,validType:'intOrFloat',missingMessage:'请输入单笔最低限额'" /> 
 		    </div> 
 		   <!--  <div>   
 		        <label for="returnStyle" class="add_edit_form_label">还款方式：</label>  
@@ -143,5 +143,21 @@
 				} 
 			});
 		});
+		
+		$('#singleOrSet').combobox({
+			onSelect: function(record){
+				if(record.value==1){
+					$("#div_maxLimit").hide();
+					$("#div_minLimit").hide();
+					$('#maxLimit').numberbox('setValue', 0);
+					$('#minLimit').numberbox('setValue', 0);
+				}else if(record.value==2){
+					$("#div_maxLimit").show();
+					$("#div_minLimit").show();
+				}
+			}
+		});
+
+		
 	</script>
 </body>
