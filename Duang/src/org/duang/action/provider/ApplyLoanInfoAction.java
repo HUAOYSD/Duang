@@ -88,7 +88,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		loanList.setBackStyle(BackStyle.B1.getVal());
 		loanList.setCreateTime(new Date());
 		if(DataUtils.notEmpty(getRequest().getParameter("p_days"))){
-			loanList.setDays(DataUtils.str2int(DES.decryptDES(getRequest().getParameter("p_days"))));
+			loanList.setDays(DataUtils.str2int(DES.decryptDES(getRequest().getParameter("p_days")))*30);
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_loanStyle"))){
 			loanList.setLoanStyle(DataUtils.str2int(DES.decryptDES(getRequest().getParameter("p_loanStyle"))));

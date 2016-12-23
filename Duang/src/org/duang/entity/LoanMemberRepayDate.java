@@ -65,7 +65,7 @@ public class LoanMemberRepayDate implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "repayDate", length = 19)
+	@Column(name = "repay_date", length = 19)
 	public Date getRepayDate() {
 		return this.repayDate;
 	}
@@ -81,7 +81,7 @@ public class LoanMemberRepayDate implements java.io.Serializable {
 		this.loanListId = loanListId;
 	}
 	
-	@Column(name = "repayIndex")
+	@Column(name = "repay_index")
 	public int getRepayIndex() {
 		return repayIndex;
 	}

@@ -324,7 +324,9 @@ public class LoanListAction extends BaseAction<LoanList>{
 						b_msg = (String) repayMap.get("b_msg");
 						msg = (String) repayMap.get("msg");
 						double overDueSum = (double) repayMap.get("overDueSum");
-						sum+=overDueSum+sum;
+						if(overDueSum != 0){
+							sum+=overDueSum+sum;
+						}
 					}
 					
 				}else{

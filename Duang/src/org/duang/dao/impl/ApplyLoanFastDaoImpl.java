@@ -1,22 +1,13 @@
 package org.duang.dao.impl; 
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.duang.common.logger.LoggerUtils;
-import org.duang.dao.LoanMemberRepayDateDao;
+import org.duang.dao.ApplyLoanFastDao;
 import org.duang.dao.base.BaseDao;
-import org.duang.entity.LoanList;
-import org.duang.entity.LoanMemberRepayDate;
-import org.duang.entity.Scale;
-import org.duang.enums.loan.RepayState;
-import org.duang.enums.loan.RepayStatus;
-import org.duang.enums.scale.SingleOrSet;
-import org.duang.util.DataUtils;
-import org.duang.util.DateUtils;
+import org.duang.entity.ApplyLoanFast;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -24,18 +15,18 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * 赎回日期和还款日期
- * @ClassName:  LoanMemberRepayDateDaoImpl   
+ * 急速贷款信息实现类  
+ * @ClassName:  ApplyLoanFastDaoImpl   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
- * @date 2016年12月15日 下午5:47:34
+ * @date 2016年12月22日 上午10:29:23
  */
-@Repository("loanmemberrepaydatedaoimpl")
-public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> implements LoanMemberRepayDateDao{
+@Repository("applyloanfastdaoimpl")
+public class ApplyLoanFastDaoImpl extends BaseDao<ApplyLoanFast> implements ApplyLoanFastDao{
 
 
-	public LoanMemberRepayDateDaoImpl(){
-		LoggerUtils.info("注入LoanMemberRepayDateDaoImpl层", this.getClass());
+	public ApplyLoanFastDaoImpl(){
+		LoggerUtils.info("注入ApplyLoanFastDaoImpl层", this.getClass());
 	}
 
 	/**
@@ -75,7 +66,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<LoanMemberRepayDate> queryAllEntity(Order order) throws Exception {
+	public List<ApplyLoanFast> queryAllEntity(Order order) throws Exception {
 		return super.queryByCriteria(super.getCriteria(), order);
 	}
 
@@ -85,7 +76,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<LoanMemberRepayDate> queryAllEntity(PageUtil<LoanMemberRepayDate> page, Order order) throws Exception{
+	public List<ApplyLoanFast> queryAllEntity(PageUtil<ApplyLoanFast> page, Order order) throws Exception{
 		return super.queryAll(page, order);
 	}
 
@@ -97,7 +88,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<LoanMemberRepayDate> queryEntity(String field, Object value, PageUtil<LoanMemberRepayDate> page, Order order) throws Exception{
+	public List<ApplyLoanFast> queryEntity(String field, Object value, PageUtil<ApplyLoanFast> page, Order order) throws Exception{
 		return super.query(field, value, page, order);
 	}
 
@@ -109,7 +100,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @param page        是否分页          null表示不分页
 	 * @return 			    返回操作实体类的泛型集合
 	 */
-	public List<LoanMemberRepayDate> queryEntity(List<String> properties, List<Object> values, PageUtil<LoanMemberRepayDate> page) throws Exception{
+	public List<ApplyLoanFast> queryEntity(List<String> properties, List<Object> values, PageUtil<ApplyLoanFast> page) throws Exception{
 		DetachedCriteria detachedCriteria = super.fillDtCriteria(properties, values);
 		return super.queryByDetachedCriteria(detachedCriteria, page);
 	}
@@ -120,7 +111,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @param id ID值
 	 * @return   返回的类对象
 	 */
-	public LoanMemberRepayDate findById(Serializable id) throws Exception{
+	public ApplyLoanFast findById(Serializable id) throws Exception{
 		return super.find(id);
 	}
 
@@ -130,13 +121,8 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @param t  实体对象
 	 * @return   是否增加成功
 	 */
-	public boolean saveEntity(LoanMemberRepayDate t) throws Exception{
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("loanListId", t.getLoanListId());
-		map.put("repayDate", DateUtils.getDate(DateUtils.date2Str(t.getRepayDate(), "yyyy-MM-dd"), "yyyy-MM-dd"));
-		if(find(map)==null){
-			super.save(t);
-		}
+	public boolean saveEntity(ApplyLoanFast t) throws Exception{
+		super.save(t);
 		return true;
 	}
 
@@ -146,7 +132,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @param t  实体对象
 	 * @return   是否修改成功
 	 */
-	public boolean updateEntity(LoanMemberRepayDate t) throws Exception{
+	public boolean updateEntity(ApplyLoanFast t) throws Exception{
 		super.update(t);
 		return true;
 	}
@@ -157,7 +143,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @param t  实体对象
 	 * @return   是否删除成功
 	 */
-	public boolean deleteEntity(LoanMemberRepayDate t) throws Exception{
+	public boolean deleteEntity(ApplyLoanFast t) throws Exception{
 		super.delete(t);
 		return true;
 	}
@@ -262,7 +248,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @return
 	 * @throws Exception
 	 */
-	public LoanMemberRepayDate findEntity(String property, Object value) throws Exception{
+	public ApplyLoanFast findEntity(String property, Object value) throws Exception{
 		return super.find(property, value);
 	}
 
@@ -273,7 +259,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @return
 	 * @throws Exception
 	 */
-	public LoanMemberRepayDate findEntity(Map<String, Object> params) throws Exception{
+	public ApplyLoanFast findEntity(Map<String, Object> params) throws Exception{
 		return super.find(params);
 	}
 
@@ -286,7 +272,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanMemberRepayDate> queryByHQL(String hql, String countHql, PageUtil<LoanMemberRepayDate> page, Object... params) throws Exception{
+	public List<ApplyLoanFast> queryByHQL(String hql, String countHql, PageUtil<ApplyLoanFast> page, Object... params) throws Exception{
 		return super.queryByHQL(hql, countHql, page, params);
 	}
 
@@ -299,44 +285,8 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LoanMemberRepayDate> queryBySQL(String sql, String countSql, PageUtil<LoanMemberRepayDate> page, boolean convert, Object... params) throws Exception{
+	public List<ApplyLoanFast> queryBySQL(String sql, String countSql, PageUtil<ApplyLoanFast> page, boolean convert, Object... params) throws Exception{
 		return super.queryBySQL(sql, countSql, convert, page, params);
-	}
-
-	/**
-	 * 添加日期信息（借贷的还款日期）
-	 * <p>Title: addRepayDate</p>   
-	 * <p>Description: </p>  
-	 * @author LiYonghui
-	 * @date 2016年12月16日 上午9:36:47
-	 * @param scale
-	 * @param loanList
-	 * @throws Exception   
-	 * @see org.duang.dao.LoanMemberRepayDateDao#addRepayDate(org.duang.entity.Scale, org.duang.entity.LoanList)
-	 */
-	@Override
-	public void addRepayLoanDate(Scale scale, LoanList loanList) throws Exception {
-    	Calendar c = Calendar.getInstance();
-    	c.add(Calendar.DATE, -1);
-    	if(scale.getSingleOrSet().equals(SingleOrSet.S2.getVal())){
-			//计算还款日
-			for(int i=0;i<loanList.getDays()/30;i++){
-    		    c.add(Calendar.MONTH, +1);
-    		    LoanMemberRepayDate loanMemberRepayDate = new LoanMemberRepayDate(DataUtils.randomUUID(), 
-    		    		loanList.getId(), c.getTime(), i, RepayState.STA0.getVal(), RepayStatus.STU1.getVal());
-		    	saveEntity(loanMemberRepayDate);
-		    	LoggerUtils.info("\t\n-------------------LoanListId:"+loanList.getId()+"\t标名称："+scale.getName()
-		    		+ "\t还款日期:"+c.getTime(), this.getClass());
-			}
-		    
-		}else if(scale.getSingleOrSet().equals(SingleOrSet.S1.getVal())){
-		    c.add(Calendar.DATE, +loanList.getDays());
-		    LoanMemberRepayDate loanMemberRepayDate = new LoanMemberRepayDate(DataUtils.randomUUID(), 
-		    		loanList.getId(), c.getTime(), 0, RepayState.STA0.getVal(), RepayStatus.STU1.getVal());
-	    	saveEntity(loanMemberRepayDate);
-	    	LoggerUtils.info("\t\n-------------------LoanListId:"+loanList.getId()+"\t标名称："+scale.getName()
-	    		+ "\t还款日期:"+c.getTime(), this.getClass());
-		}
 	}
 
 }

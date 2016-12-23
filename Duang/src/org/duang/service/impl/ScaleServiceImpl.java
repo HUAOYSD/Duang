@@ -37,6 +37,7 @@ import org.duang.enums.ResultCode;
 import org.duang.enums.invest.Status;
 import org.duang.enums.loan.Apply;
 import org.duang.enums.loan.LoanStatus;
+import org.duang.enums.loan.ReturnStatus;
 import org.duang.enums.scale.SingleOrSet;
 import org.duang.service.ScaleService;
 import org.duang.util.DataUtils;
@@ -644,11 +645,14 @@ public class ScaleServiceImpl implements ScaleService{
 				
 				//查询标的借贷列表
 				String sql = "select * from loan_list ll  left join scale_loan_list sll on ll.id=sll.loan_list where sll.scale='"+back_projectCode
-		    			+"' and apply_state=2 and loan_state=1";
+		    			+"' and apply_state="+Apply.A2.getVal()+" and loan_state=2";
 		    	List<LoanList> loanLists = loanListDao.queryBySQL(sql, null, null,true);
 		    	for(LoanList loanList : loanLists){
 		    		loanList.setYetMoney(loanList.getGetMoney());
-		    		loanList.setLoanState(3);
+		    		if(loanList.getGetMoney()==loanList.getYetMoney()){
+		    			loanList.setLoanState(3);
+		    			loanList.setReturnStatus(ReturnStatus.B2.getVal());
+		    		}
 		    		//1.修改借贷列表
 		    		success = loanListDao.updateEntity(loanList);
 		    		if(success){
@@ -669,6 +673,10 @@ public class ScaleServiceImpl implements ScaleService{
 		    			billLoan.setStyle(4);
 		    			billLoan.setRemark("放款");
 		    			success = billLoanDao.saveEntity(billLoan);
+		    			
+		    			//保存还款日期
+			    		loanMemberRepayDateDao.addRepayLoanDate(scale,loanList);
+		    			
 		    			if(!success){
 		    				LoggerUtils.error("\t\n-------------------------name:"+loanList.getMemberInfo().getRealName()+
 											  "\t\n------------------------phone:"+loanList.getMemberInfo().getPhone()+
@@ -683,9 +691,6 @@ public class ScaleServiceImpl implements ScaleService{
 		    							  "\t\n---------------------放款操作中，更新借贷列表失败", this.getClass());
 		    			msg="系统错误，请联系管理员";
 		    		}
-		    		
-		    		//保存还款日期
-		    		loanMemberRepayDateDao.addRepayLoanDate(scale,loanList);
 		    	}
 		    	
 		    	List<InvestList> investLists = investListDao.queryEntity("scale.id", back_projectCode, null, null);

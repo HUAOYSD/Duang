@@ -279,7 +279,57 @@ public enum UploadFile {
 		}
 
 	},
-	//信贷个人资料
+	//快速借贷个人资料
+	DATUMS_FAST{
+		@Override
+		public String getVal() {
+			return "\\datums\\fast";
+		}
+
+		@Override
+		public String toString() {
+			return "快速借贷个人资料";
+		}
+
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\datums\\fast";
+			}else{
+				return "\\datums\\fast";
+			}
+		}
+
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+
+	},
+	//快速借贷个证明
+	ASSET_FAST{
+		@Override
+		public String getVal() {
+			return "\\asset\\fast";
+		}
+		@Override
+		public String toString() {
+			return "快速借贷个人证明";
+		}
+		@Override
+		public String getVal(String userId) {
+			if(DataUtils.notEmpty(userId)){
+				return userId+"\\asset\\fast";
+			}else{
+				return "\\asset\\fast";
+			}
+		}
+		@Override
+		public String appPath() {
+			return "resources/file/basic/";
+		}
+	},
+	//车贷个人资料
 	ASSET_CAR{
 		@Override
 		public String getVal() {

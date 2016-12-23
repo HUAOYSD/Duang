@@ -5,7 +5,7 @@
 	<div class="body" id="body_loanlist" region="center" style="border:0px;" align="center">
 		<div align="center" style="margin-top:40px;width:500px;">
 			<table id="loanlistrate_table" class="easyui-propertygrid" style="width:500px"   
-	        data-options="url:'http://localhost:8080/Duang/loanlistrate!query.do',showGroup:true,scrollbarSize:0"></table> 
+	        data-options="url:'loanlistrate!query.do',showGroup:true,scrollbarSize:0"></table> 
         </div>	
 	</div>
 	<script type="text/javascript">

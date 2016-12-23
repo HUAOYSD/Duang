@@ -27,7 +27,7 @@ public class LoanListRate implements java.io.Serializable {
 	private double handRate;
 	private double loanRate;
 	private double overRate;
-
+    private double fastLoanMaxSum;
 	/** default constructor */
 	public LoanListRate() {
 	}
@@ -38,13 +38,14 @@ public class LoanListRate implements java.io.Serializable {
 	}
 	
 
-	public LoanListRate(String id, double platformRate, double handRate, double loanRate, double overRate) {
+	public LoanListRate(String id, double platformRate, double handRate, double loanRate, double overRate, double fastLoanMaxSum) {
 		super();
 		this.id = id;
 		this.platformRate = platformRate;
 		this.handRate = handRate;
 		this.loanRate = loanRate;
 		this.overRate = overRate;
+		this.fastLoanMaxSum = fastLoanMaxSum;
 	}
 
 	@Id
@@ -87,9 +88,16 @@ public class LoanListRate implements java.io.Serializable {
 	public double getOverRate() {
 		return overRate;
 	}
-
 	public void setOverRate(double overRate) {
 		this.overRate = overRate;
+	}
+	
+	@Column(name = "fast_loan_max_sum")
+	public double getFastLoanMaxSum() {
+		return fastLoanMaxSum;
+	}
+	public void setFastLoanMaxSum(double fastLoanMaxSum) {
+		this.fastLoanMaxSum = fastLoanMaxSum;
 	}
 	
 }

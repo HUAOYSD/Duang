@@ -16,7 +16,6 @@ import org.apache.struts2.convention.annotation.Results;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.entity.LoanListRate;
-import org.duang.entity.SMS;
 import org.duang.service.LoanListRateService;
 import org.duang.util.DataUtils;
 import org.duang.util.ReadProperties;
@@ -24,8 +23,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
 /**
- * 短信 action
- * @ClassName:  SMSAction   
+ * 基数 action
+ * @ClassName:  LoanListRateAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author LiYonghui
  * @date 2016年9月19日 上午10:50:51
@@ -37,7 +36,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Results(value = { 
 			@Result(name = "list", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/loanListRate.jsp"),
 			@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") })
-public class LoanListRateAction extends BaseAction<SMS> {
+public class LoanListRateAction extends BaseAction<LoanListRate> {
 	private static final long serialVersionUID = 1L;
 	
 	private LoanListRateService loanListRateService;
@@ -99,6 +98,8 @@ public class LoanListRateAction extends BaseAction<SMS> {
 				sql+=" loan_rate = ";
 			}else if(name.equals(DataUtils.ISO2UTF8(ReadProperties.getStringValue(props, "handRate")))){
 				sql+=" hand_rate = ";
+			}else if(name.equals(DataUtils.ISO2UTF8(ReadProperties.getStringValue(props, "fastLoanMaxSum")))){
+				sql+=" fast_loan_max_sum = ";
 			}
 			sql+=value;
 			success = loanListRateService.executeSql(sql);
@@ -153,7 +154,14 @@ public class LoanListRateAction extends BaseAction<SMS> {
 					map.put("value", loanListRate.getHandRate());
 					map.put("group", loanRate);
 					map.put("editor", "text");
-					listMap.add(map);
+					listMap.add(map);	
+					
+					map = new HashMap<String, Object>();
+					map.put("name", DataUtils.ISO2UTF8(ReadProperties.getStringValue(props, "fastLoanMaxSum")));
+					map.put("value", loanListRate.getFastLoanMaxSum());
+					map.put("group", loanRate);
+					map.put("editor", "text");
+					listMap.add(map);	
 				}
 		} catch (Exception e) {
 			e.printStackTrace();

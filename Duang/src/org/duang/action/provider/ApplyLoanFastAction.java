@@ -12,7 +12,7 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
-import org.duang.entity.ApplyLoanCar;
+import org.duang.entity.ApplyLoanFast;
 import org.duang.entity.LoanList;
 import org.duang.entity.LoanListRate;
 import org.duang.entity.MemberInfo;
@@ -24,7 +24,7 @@ import org.duang.enums.loan.LoanMode;
 import org.duang.enums.loan.Poundage;
 import org.duang.enums.loan.Scale;
 import org.duang.enums.loan.TakeMoney;
-import org.duang.service.ApplyLoanCarService;
+import org.duang.service.ApplyLoanFastService;
 import org.duang.service.LoanListRateService;
 import org.duang.service.MemberInfoService;
 import org.duang.util.DES;
@@ -36,8 +36,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 
 
 /**   
- * 接口开发————车产模式贷款的申请信息Action
- * @ClassName:  ApplyLoanCarAction   
+ * 接口开发————急速模式贷款的申请信息Action
+ * @ClassName:  ApplyLoanFastAction   
  * @Description:TODO(这里用一句话描述这个类的作用)   
  * @author 5y
  * @date 2016年9月5日 上午10:54:16      
@@ -46,13 +46,13 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Scope(value = "prototype", proxyMode = ScopedProxyMode.NO)
 @Namespaces({ @Namespace("/") })
 @ParentPackage("provider")
-@Action(value = "provider_applyCarLoanInfo")
-public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
+@Action(value = "provider_applyloanfast")
+public class ApplyLoanFastAction extends BaseAction<ApplyLoanFast>{
 
-	private ApplyLoanCarService applyLoanCarService;
-	@Resource(name = "applyloancarserviceimpl")
-	public void setService(ApplyLoanCarService applyLoanCarService) {
-		this.applyLoanCarService = applyLoanCarService;
+	private ApplyLoanFastService applyLoanFastService;
+	@Resource(name = "applyloanfastserviceimpl")
+	public void setService(ApplyLoanFastService applyLoanFastService) {
+		this.applyLoanFastService = applyLoanFastService;
 	}
 	
 	private MemberInfoService memberInfoService;
@@ -77,8 +77,8 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 	 * @return: ApplyLoanInfo      
 	 * @throws
 	 */
-	private ApplyLoanCar getApplyLoanCar() throws Exception{
-		ApplyLoanCar applyLoanCar = new ApplyLoanCar(DataUtils.randomUUID());
+	private ApplyLoanFast getApplyLoanFast() throws Exception{
+		ApplyLoanFast applyLoanFast = new ApplyLoanFast(DataUtils.randomUUID());
 		
 		LoanList loanList = new LoanList(DataUtils.randomUUID());
 		loanList.setIsSell(Scale.S1.getVal());
@@ -86,7 +86,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 		loanList.setReturnStatus(ReturnStatus.B1.getVal());
 		loanList.setLoanState(TakeMoney.T1.getVal());
 		loanList.setApplyState(Apply.A1.getVal());
-		loanList.setLoanType(LoanMode.M1.getVal());
+		loanList.setLoanType(LoanMode.M4.getVal());
 		loanList.setBackStyle(BackStyle.B2.getVal());
 		loanList.setCreateTime(new Date());
 		if(DataUtils.notEmpty(getRequest().getParameter("p_days"))){
@@ -103,6 +103,9 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 			MemberInfo memberInfo = new MemberInfo();
 			memberInfo.setId(MemberCollection.getInstance(token,memberInfoService).getMainField(token));
 			loanList.setMemberInfo(memberInfo);
+			applyLoanFast.setName(memberInfo.getRealName());
+			applyLoanFast.setIdcard(memberInfo.getIdCard());
+			applyLoanFast.setPhone(memberInfo.getPhone());
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_money"))){
 			double money = DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_money")), 6);
@@ -117,44 +120,13 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 				loanList.setReturnMoney(DataUtils.str2double(String.valueOf(money+loanList.getManageCost()+loanList.getPoundage()+loanList.getLoanInterest()), 6));
 			}
 		}
-		applyLoanCar.setLoanList(loanList);
-		
-		if(DataUtils.notEmpty(getRequest().getParameter("p_name"))){
-			applyLoanCar.setName(DES.decryptDES(getRequest().getParameter("p_name")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_phone"))){
-			applyLoanCar.setPhone(DES.decryptDES(getRequest().getParameter("p_phone")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_idcard"))){
-			applyLoanCar.setIdcard(DES.decryptDES(getRequest().getParameter("p_idcard")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_province"))){
-			applyLoanCar.setProvince(DES.decryptDES(getRequest().getParameter("p_province")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_city"))){
-			applyLoanCar.setCity(DES.decryptDES(getRequest().getParameter("p_city")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_brand"))){
-			applyLoanCar.setBrand(DES.decryptDES(getRequest().getParameter("p_brand")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_age"))){
-			applyLoanCar.setAge(DES.decryptDES(getRequest().getParameter("p_age")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_limit"))){
-			applyLoanCar.setLimit(DES.decryptDES(getRequest().getParameter("p_limit")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_engine"))){
-			applyLoanCar.setEngine(DES.decryptDES(getRequest().getParameter("p_engine")));
-		}
-		if(DataUtils.notEmpty(getRequest().getParameter("carProperty"))){
-			applyLoanCar.setCarProperty(DES.decryptDES(getRequest().getParameter("carProperty")));
-		}
-		return applyLoanCar;
+		applyLoanFast.setLoanList(loanList);
+		return applyLoanFast;
 	}
 	
 	
 	/**   
-	 * 增加车产模式的借贷信息
+	 * 增加急速模式的借贷信息
 	 * @Title: insertApplyCarLoanInfo   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
 	 * @param:   
@@ -163,25 +135,25 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 	 * @return: void      
 	 * @throws   
 	 */  
-	public void insertApplyCarLoanInfo(){
+	public void insertApplyFastLoanInfo(){
 		boolean success = false;
 		try {
 			String token = getRequest().getParameter("token");
 			//判断参数是否为空
 			if(DataUtils.notEmpty(token)){
-				ApplyLoanCar applyLoanCar = getApplyLoanCar();
-				success = applyLoanCarService.saveEntity(applyLoanCar);
+				ApplyLoanFast applyLoanFast = getApplyLoanFast();
+				success = applyLoanFastService.saveEntity(applyLoanFast);
 				if(!success){
 					msg = "服务器超时，请稍后重试";
 				}
-				jsonObject.put("id", applyLoanCar.getId());
+				jsonObject.put("id", applyLoanFast.getId());
 			}else{
 				msg = "用户token为空";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LoggerUtils.error("ApplyLoanCarAction——insertApplyCarLoanInfo方法错误：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("ApplyLoanCarAction——insertApplyCarLoanInfo方法错误：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanFastAction——insertApplyFastLoanInfo方法错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanFastAction——insertApplyFastLoanInfo方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
 		jsonObject.put("msg", msg);
@@ -209,7 +181,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 				//跟路径
 				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
 				//详细路径
-				String suffPath = UploadFile.PATH.getVal(UploadFile.DATUMS_CAR.getVal(memberInfoId))+"\\";
+				String suffPath = UploadFile.PATH.getVal(UploadFile.DATUMS_FAST.getVal(memberInfoId))+"\\";
 				//备份跟路径
 				String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
 				// 遍历图片数量
@@ -232,7 +204,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 					success = ImageString.generateImage(imgDataList.get(i), fullpath);
 					//备份路径
 					ImageString.generateImage(imgDataList.get(i), DataUtils.fileUploadPath(backupPath, suffPath, fileName));
-					LoggerUtils.info("userId:" + memberInfoId + "----------------上传车贷资料：" + success, this.getClass());
+					LoggerUtils.info("userId:" + memberInfoId + "----------------上传快速借贷资料：" + success, this.getClass());
 					if (success) {
 						datumsData.append(fileName);
 						if(i<entity.getNum()-1){
@@ -240,22 +212,22 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 						}
 					}
 				}
-				ApplyLoanCar applyLoanCar = applyLoanCarService.findById(id);
+				ApplyLoanFast applyLoanFast = applyLoanFastService.findById(id);
 				String oldValue="";
-				if(DataUtils.notEmpty(applyLoanCar.getDatums())){
-					oldValue = applyLoanCar.getDatums()+";"+datumsData.toString();
+				if(DataUtils.notEmpty(applyLoanFast.getDatums())){
+					oldValue = applyLoanFast.getDatums()+";"+datumsData.toString();
 				}else{
 					oldValue = datumsData.toString();
 				}
-				applyLoanCar.setDatums(oldValue);
-				success = applyLoanCarService.updateEntity(applyLoanCar);
+				applyLoanFast.setDatums(oldValue);
+				success = applyLoanFastService.updateEntity(applyLoanFast);
 			}else{
 				msg = "缺少参数,请补充";
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			LoggerUtils.error("ApplyLoanCarAction uploadUseDatums：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("ApplyLoanCarAction uploadUseDatums：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanFastAction uploadUseDatums：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanFastAction uploadUseDatums：" + e.getLocalizedMessage(), this.getClass());
 		}    
 		jsonObject.put("success", success);
 		jsonObject.put("msg", msg);
@@ -282,7 +254,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 				//跟路径
 				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/");
 				//详细路径
-				String suffPath = UploadFile.PATH.getVal(UploadFile.ASSET_CAR.getVal(memberInfoId))+"\\";
+				String suffPath = UploadFile.PATH.getVal(UploadFile.ASSET_FAST.getVal(memberInfoId))+"\\";
 				//备份跟路径
 				String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
 				// 遍历图片数量
@@ -305,7 +277,7 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 					success = ImageString.generateImage(imgDataList.get(i), fullpath);
 					//备份路径
 					ImageString.generateImage(imgDataList.get(i), DataUtils.fileUploadPath(backupPath, suffPath, fileName));
-					LoggerUtils.info("userId:" + memberInfoId + "----------------上传车贷证明：" + success, this.getClass());
+					LoggerUtils.info("userId:" + memberInfoId + "----------------上传快速借贷证明：" + success, this.getClass());
 					if (success) {
 						datumsData.append(fileName);
 						if(i<entity.getNum()-1){
@@ -313,22 +285,22 @@ public class ApplyLoanCarAction extends BaseAction<ApplyLoanCar>{
 						}
 					}
 				}
-				ApplyLoanCar applyLoanCar = applyLoanCarService.findById(id);
+				ApplyLoanFast applyLoanFast = applyLoanFastService.findById(id);
 				String oldValue="";
-				if(DataUtils.notEmpty(applyLoanCar.getAssetCertificates())){
-					oldValue = applyLoanCar.getAssetCertificates()+";"+datumsData.toString();
+				if(DataUtils.notEmpty(applyLoanFast.getAssetCertificates())){
+					oldValue = applyLoanFast.getAssetCertificates()+";"+datumsData.toString();
 				}else{
 					oldValue = datumsData.toString();
 				}
-				applyLoanCar.setAssetCertificates(oldValue);
-				success = applyLoanCarService.updateEntity(applyLoanCar);
+				applyLoanFast.setAssetCertificates(oldValue);
+				success = applyLoanFastService.updateEntity(applyLoanFast);
 			}else{
 				msg = "缺少参数,请补充";
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			LoggerUtils.error("ApplyLoanCarAction uploadUserAsset：" + e.getMessage(), this.getClass());
-			LoggerUtils.error("ApplyLoanCarAction uploadUserAsset：" + e.getLocalizedMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanFastAction uploadUserAsset：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("ApplyLoanFastAction uploadUserAsset：" + e.getLocalizedMessage(), this.getClass());
 		}    
 		jsonObject.put("success", success);
 		jsonObject.put("msg", msg);
