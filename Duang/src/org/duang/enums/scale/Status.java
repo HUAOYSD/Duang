@@ -18,7 +18,7 @@ public enum Status {
 
 		@Override
 		public String getDesc() {
-			return "新建标";
+			return "新标";
 		}
 
 		@Override
@@ -33,7 +33,7 @@ public enum Status {
 		
 		@Override
 		public String toString() {
-			return "新建标";
+			return "新标";
 		}
 		
 	},
@@ -73,7 +73,7 @@ public enum Status {
 
 	},
 	S2 {
-		private String desc = "可投入";
+		private String desc = "投入";
 		
 		@Override
 		public int getVal() {
@@ -97,13 +97,13 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "可投入";
+			this.desc = "可投";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "可投入";
+			return "可投";
 		}
 		
 	},
@@ -142,7 +142,7 @@ public enum Status {
 		}
 		
 	},S4 {
-		private String desc = "已结束";
+		private String desc = "结束";
 		
 		@Override
 		public int getVal() {
@@ -166,13 +166,13 @@ public enum Status {
 
 		@Override
 		public Object setDefaultDesc() {
-			this.desc = "已结束";
+			this.desc = "结束";
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "已结束";
+			return "结束";
 		}
 		
 	};

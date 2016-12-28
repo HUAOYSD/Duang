@@ -10,10 +10,10 @@
 					  <table border="0">
 						<tr height="35px">
 						  	<td class="showRight"><span class="investPro-search">标名称：</span></td>
-						  	<td><input name="name"/></td>
+						  	<td><input name="name"/>&nbsp;&nbsp;</td>
 						 	<td class="showRight"><span class="investPro-search">产品名称：</span></td>
-						  	<td><input name="productName"/></td>
-						  	<td class="showRight"><span class="investPro-search">新品：</span></td>
+						  	<td><input name="productName"/>&nbsp;&nbsp;</td>
+						  	<!-- <td class="showRight"><span class="investPro-search">新品：</span></td>
 						  	<td><select style="width: 140px;" class="easyui-combobox" name="productNew" data-options="panelHeight:'auto'">   
 								    <option value="null" selected="selected">--请选择--</option>   
 								    <option value="0">否</option>   
@@ -26,30 +26,7 @@
 								    <option value="0">否</option>   
 					    			<option value="1">是</option>
 								</select> 
-						  	</td>
-						</tr>
-						<tr height="35px">
-						  	<td class="showRight"><span class="investPro-search">可用理财券：</span></td>
-						  	<td><select style="width: 140px;" class="easyui-combobox" name="useTicket" data-options="panelHeight:'auto'">   
-								    <option value="null" selected="selected">--请选择--</option>   
-								    <option value="0">不可以</option>   
-					    			<option value="1">可以</option>
-								</select> 
-						  	</td>
-						  	<td class="showRight"><span class="investPro-search">可转让：</span></td>
-						  	<td><select style="width: 140px;" class="easyui-combobox" name="transfer" data-options="panelHeight:'auto'">   
-								    <option value="null" selected="selected">--请选择--</option>   
-								    <option value="0">不可以</option>   
-					    			<option value="1">可以</option>
-								</select> 
-						  	</td>
-						  	<td class="showRight"><span class="investPro-search">转让标：</span></td>
-						  	<td><select style="width: 140px;" class="easyui-combobox" name="isTurn" data-options="panelHeight:'auto'">   
-								    <option value="null" selected="selected">--请选择--</option>   
-								    <option value="0">不是</option>   
-					    			<option value="1">是</option>
-								</select> 
-						  	</td>
+						  	</td> -->
 						  	<td class="showRight"><span class="investPro-search">状态：</span></td>
 						  	<td><select style="width: 140px;" class="easyui-combobox" name="status" data-options="panelHeight:'auto'">   
 								    <option value="null" selected="selected">--请选择--</option>   
@@ -59,6 +36,22 @@
 					    			<option value="3">已完成</option>
 								</select> 
 						  	</td>
+						  	<td colspan="2">&nbsp;&nbsp;
+								<a id="scaleQueryForm_Btn" class="easyui-linkbutton my-search-button" iconCls="icon-2012092109942" plain="true">查询</a>&nbsp;
+						  		<a onclick="javascript:$('#scaleQueryForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true">重置</a>
+						  	</td>
+						</tr>
+						<!--<tr height="35px">
+						  	
+						  	
+						  	<td class="showRight"><span class="investPro-search">转让标：</span></td>
+						  	<td><select style="width: 140px;" class="easyui-combobox" name="isTurn" data-options="panelHeight:'auto'">   
+								    <option value="null" selected="selected">--请选择--</option>   
+								    <option value="0">不是</option>   
+					    			<option value="1">是</option>
+								</select> 
+						  	</td>
+						  	
 						</tr>
 						<tr height="35px">
 							<td class="showRight"><span class="investPro-search">标签：</span></td>
@@ -67,11 +60,7 @@
 						  	<td><input name="beginDate1" type="text" class="easyui-datebox"></input></td>
 						  	<td>&nbsp;&nbsp;——&nbsp;&nbsp;</td>
 						  	<td><input name="beginDate2" type="text" class="easyui-datebox"></input></td>
-						  	<td colspan="2">&nbsp;&nbsp;
-								<a id="scaleQueryForm_Btn" class="easyui-linkbutton my-search-button" iconCls="icon-2012092109942" plain="true">查询</a>&nbsp;&nbsp;
-						  		<a onclick="javascript:$('#scaleQueryForm').form('reset');" class="easyui-linkbutton my-search-button" iconCls="icon-reset" plain="true">重置</a>
-						  	</td>
-						</tr>
+						</tr> -->
 					  </table>
 				</form>
 		    </div>

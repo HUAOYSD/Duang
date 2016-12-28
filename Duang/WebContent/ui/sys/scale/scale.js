@@ -64,41 +64,75 @@ function loadscale(url, dataObj){
 			frozenColumns: [[
 			                 {field:'id',checkbox:true},
 				             {field : "name", title : "标名称", width : 115, align : "center" },
-				             {field : "beginTime", title : "开标时间", width : 150, align : "center",
-				            	 formatter: function(value,row,index){
-				            		 if(value==0)
-				            			 return "-&nbsp;&nbsp;-";
-				            		 else	   
-				            			 return new Date(value).format("yyyy-MM-dd");
+				             {field : "productName", title : "产品", width : 120, align : "center" },
+				             {field : "productCategory", title : "产品类型", width : 120, align : "center" },
+				             {field : "singleOrSet", title : "集合/普通", width : 115, align : "center",
+				            	 styler: function(value,row,index){
+				     				if (value == 1){
+				     					return 'background-color:#739905;color:#fff;';
+				     				}else{
+				     					return 'background-color:#028252;color:#fff;';
+				     				}
+				     			 },
+				     			formatter: function(value,row,index){
+				            		 if(value == 1){
+				            			 return "普通";
+				            		 }else{	   
+				            			 return "集合";
+				            		 }
 				            	 }
 				             },
-				             {field : "endTime", title : "结标时间", width : 150, align : "center",
-				            	 formatter: function(value,row,index){
-				            		 if(value==0)
-				            			 return "-&nbsp;&nbsp;-";
-				            		 else	   
-				            			 return new Date(value).format("yyyy-MM-dd");
-				            	 }
+				             {field : "status", title : "状态", width : 100, align : "center",
+				            	 styler: function(value,row,index){
+					     				if (value == '满标'){
+					     					return 'background-color:#E39F70;color:#fff;';
+					     				}else if(value == '可投'){
+					     					return 'background-color:#98CC92;color:#fff;';
+					     				}else if(value == '流标'){
+					     					return 'background-color:#EBE66D;color:#fff;';
+					     				}else if(value == '新标'){
+					     					return 'background-color:#8FA9D3;color:#fff;';
+					     				}else if(value == '结束'){
+					     					return 'background-color:#D9868A;color:#fff;';
+					     				}else{
+					     					return 'background-color:#9D8ACA;color:#fff;';
+					     				}
+					     			 }
 				             }
+				             
 			 ]],
 			columns : [ [
-			             {field : "productName", title : "产品", width : 120, align : "center" },
-			             {field : "productCategory", title : "产品类型", width : 120, align : "center" },
-			             {field : "productNew", title : "新产品", width : 120, align : "center" },
-			             {field : "productRecommend", title : "推荐产品", width : 120, align : "center" },
-			             {field : "timeLimit", title : "时长", width : 120, align : "center" },
-			             {field : "revenue", title : "收益率", width : 130, align : "center" },
-			             {field : "revenueAdd", title : "附收益率", width : 100, align : "center" },
-			             {field : "maxLimit", title : "单笔限额", width : 100, align : "center" },
-			             {field : "returnStyle", title : "还款方式", width : 100, align : "center" },
-			             {field : "useTicket", title : "可理财券", width : 100, align : "center" },
 			             {field : "totalMoney", title : "标总额", width : 100, align : "center" },
 			             {field : "residueMoney", title : "可投金额", width : 100, align : "center" },
 			             {field : "yetMoney", title : "已入金额", width : 100, align : "center" },
+			             {field : "revenue", title : "收益率", width : 130, align : "center" },
+			             {field : "revenueAdd", title : "附收益率", width : 100, align : "center" },
+			             {field : "maxLimit", title : "单笔最高限额", width : 100, align : "center" },
+			             {field : "minLimit", title : "单笔最低限额", width : 100, align : "center" },
+			             {field : "productNew", title : "新产品", width : 120, align : "center" },
+			             {field : "productRecommend", title : "推荐产品", width : 120, align : "center" },
+			             {field : "timeLimit", title : "时长", width : 120, align : "center" },
+			             {field : "returnStyle", title : "还款方式", width : 100, align : "center" },
+			             {field : "useTicket", title : "可理财券", width : 100, align : "center" },
 			             {field : "scoreBonus", title : "积分反馈", width : 100, align : "center" },
 			             {field : "onesScore", title : "单位积分", width : 100, align : "center" },
-			             {field : "status", title : "状态", width : 100, align : "center" },
 			             {field : "transfer", title : "可转让", width : 100, align : "center" },
+			             {field : "beginTime", title : "开标时间", width : 150, align : "center",
+			            	 formatter: function(value,row,index){
+			            		 if(value==0)
+			            			 return "-&nbsp;&nbsp;-";
+			            		 else	   
+			            			 return new Date(value).format("yyyy-MM-dd");
+			            	 }
+			             },
+			             {field : "endTime", title : "结标时间", width : 150, align : "center",
+			            	 formatter: function(value,row,index){
+			            		 if(value==0)
+			            			 return "-&nbsp;&nbsp;-";
+			            		 else	   
+			            			 return new Date(value).format("yyyy-MM-dd");
+			            	 }
+			             },
 			             {field : "turnDate", title : "最早转让日期", width : 150, align : "center",
 			            	 formatter: function(value,row,index){
 			            		 if(value==0)

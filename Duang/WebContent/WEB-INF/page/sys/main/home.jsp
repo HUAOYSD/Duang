@@ -27,7 +27,8 @@ function login() {
 </head>
 <body class="easyui-layout">
 	<!-- 头部标题 -->
-	<div data-options="region:'north',border:false" style="height: 80px; padding: 5px;background:#fff;">
+	<div data-options="region:'north',border:false" style="height: 80px; padding: 5px;background-image: url(''); background-repeat:no-repeat;
+		background-attachment: fixed;background-size:cover;">
 		<a href="http://localhost:8080/Duang" target="_blank"><img src="resources/image/logo.png" alt="logo" style="width:40px;height:40px;margin:10px 0px 10px 10px;"></a>
 		<div style="margin-left:60px;margin-top:-35px;"></div>
 		<c:choose>
