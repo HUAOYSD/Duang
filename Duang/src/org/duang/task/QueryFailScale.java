@@ -212,7 +212,7 @@ public class QueryFailScale{
 		map.put("noticeUrl",map.get("noticeUrl"));
 		map.put("signature",signature_sign);
 		//获取转换的参数
-		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(keyMap.get("url"),map,"GBK");
+		JSONObject jsonObjectData = (JSONObject) SSLClient.getJsonObjectByUrl(keyMap.get("url"),map,"GBK");
 		//result 查询结果  00000代表成功
 		String back_result = jsonObjectData.get("result").toString();
 		if(back_result.equals(ResultCode.SUCCESS.getVal())){

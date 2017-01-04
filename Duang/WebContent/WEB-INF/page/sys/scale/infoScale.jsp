@@ -2,7 +2,7 @@
 <%@ include file="/page/inc/inc.jsp"%>
 <% String path = request.getContextPath();%>
 <body style="background-color:#fff;">
-	<div class="operate_div_form">
+	<div class="">
 	  	<form id="scale_info_form" method="post" style="margin-bottom: 45px;"> 
 	  		<div class="row0">   
 		        <label for="name" class="infolabel from_label label_member">名称：</label>  

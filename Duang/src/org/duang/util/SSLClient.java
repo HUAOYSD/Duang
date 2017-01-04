@@ -56,7 +56,7 @@ public class SSLClient{
 	 * @return: void      
 	 * @throws
 	 */
-	public static JSONObject getJsonObjectByUrl(String url,Map<String, String> map,String charset) throws Exception{
+	public static Object getJsonObjectByUrl(String url,Map<String, String> map,String charset) throws Exception{
 		LoggerUtils.info("\t\n---------------开始调用平台 URL:"+url, new SSLClient().getClass());
 		OutputStream outputStream = null;
 		URL reqURL = new URL(url); //创建URL对象
@@ -104,7 +104,6 @@ public class SSLClient{
         String result = ""; 
 		//取得该连接的输入流，以读取响应内容
 		InputStream is = httpsConn.getInputStream();
-		JSONObject jsonObject = null;
 		if (is != null) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is,"gbk"));
             String line = "";
@@ -112,9 +111,12 @@ public class SSLClient{
                 result += line;
             }
             LoggerUtils.info("\t\n---------返回结果"+result,new SSLClient().getClass());
-			jsonObject = new JSONObject(result);
 		}
-		return jsonObject;	
+		if(url.contains("/user/")){
+        	return result;
+        }else{
+        	return new JSONObject(result);
+        }
 	}
 //	public static void main(String[] args) {
 //		try {

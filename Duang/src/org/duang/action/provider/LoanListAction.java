@@ -18,6 +18,7 @@ import org.duang.action.base.BaseAction;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.common.system.MemberCollection;
 import org.duang.entity.LoanList;
+import org.duang.entity.ScaleLoanList;
 import org.duang.enums.loan.Apply;
 import org.duang.enums.loan.BackStyle;
 import org.duang.enums.loan.LoanMode;
@@ -28,6 +29,7 @@ import org.duang.enums.loan.TakeMoney;
 import org.duang.service.LoanListService;
 import org.duang.service.LoanMemberRepayDateService;
 import org.duang.service.MemberInfoService;
+import org.duang.service.ScaleLoanListService;
 import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -63,6 +65,13 @@ public class LoanListAction extends BaseAction<LoanList>{
 	public void setMemberInfoService(MemberInfoService memberInfoService) {
 		this.memberInfoService = memberInfoService;
 	}
+	
+	private ScaleLoanListService scaleLoanListService;
+	@Resource
+	public void setScaleLoanListService(ScaleLoanListService scaleLoanListService) {
+		this.scaleLoanListService = scaleLoanListService;
+	}
+	
 	private LoanMemberRepayDateService loanMemberRepayDateService;
 	@Resource
 	public void setLoanMemberRepayDateService(LoanMemberRepayDateService loanMemberRepayDateService) {
@@ -305,17 +314,6 @@ public class LoanListAction extends BaseAction<LoanList>{
 				LoanList loanList = service.findEntity(map);
 				success = true;
 				if(loanList != null){
-					//等额本息
-					if(loanList.getBackStyle()==BackStyle.B1.getVal()){
-						sum=loanList.getReturnMoney()/loanList.getDays()*30;
-					}else if(loanList.getBackStyle()==BackStyle.B2.getVal()){
-						//到期一次性结清
-						sum=loanList.getReturnMoney();
-					}else{
-						success = false;
-						msg = "服务器维护，请稍后再试";
-					}
-					
 					Map<String,Object> repayMap = loanMemberRepayDateService.getThisLoanRepayDate(loanList);
 					if(repayMap.get("date") == null){
 						msg="无贷款";
@@ -324,14 +322,22 @@ public class LoanListAction extends BaseAction<LoanList>{
 						b_msg = (String) repayMap.get("b_msg");
 						msg = (String) repayMap.get("msg");
 						double overDueSum = (double) repayMap.get("overDueSum");
+						sum = (double) repayMap.get("sum");
 						if(overDueSum != 0){
-							sum+=overDueSum+sum;
+							sum+=overDueSum;
 						}
 					}
-					
 				}else{
 					sum = 0;
 				}
+				
+				//获取标信息
+				ScaleLoanList scaleLoanList = scaleLoanListService.findEntity("loanList.id", loanList.getId());
+				if(scaleLoanList != null){
+					jsonObject.put("singleOrSet", scaleLoanList.getScale().getSingleOrSet());
+					jsonObject.put("projectCode", scaleLoanList.getScale().getId());
+				}
+				
 			}else {
 				msg = "登录失效";
 			}

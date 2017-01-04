@@ -603,7 +603,7 @@ public class ScaleServiceImpl implements ScaleService{
 		map.put("noticeUrl",keyMap.get("noticeURL"));
 		map.put("signature",signature_sign);
 		//获取转换的参数
-		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(keyMap.get("url"),map,"GBK");
+		JSONObject jsonObjectData = (JSONObject) SSLClient.getJsonObjectByUrl(keyMap.get("url"),map,"GBK");
 		//result 查询结果  00000代表成功
 		String back_result = jsonObjectData.get("result").toString();
 		if(back_result.equals(ResultCode.SUCCESS.getVal())){

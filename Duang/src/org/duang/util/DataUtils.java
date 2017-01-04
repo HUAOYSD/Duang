@@ -1,6 +1,8 @@
 package org.duang.util; 
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -250,19 +252,30 @@ public class DataUtils {
 	}
 	
 	/**
-	 * 计算逾期钱数
-	 * @Title: getOverdueSum   
-	 * @Description: TODO(这里用一句话描述这个方法的作用)   
-	 * @param: @param sum 剩余的金额
-	 * @param: @param days 逾期天数
-	 * @param: @return  
-	 * @author LiYonghui    
-	 * @date 2016年12月16日 下午6:02:14
-	 * @return: double      
-	 * @throws
-	 */
-	public static double getOverdueSum(double sum, int days){
-		return str2double(String.valueOf(sum*0.0175*days), 6);
-	}
+	  * 传入文件名以及字符串, 将字符串信息保存到文件中
+	  *
+	  * @param strFilename
+	  * @param strBuffer
+	  */
+	  public static void textToFile(final String strFilename, final String strBuffer)
+	  {
+		  try
+		  {
+			  // 创建文件对象
+			  File fileText = new File(strFilename);
+			  // 向文件写入对象写入信息
+			  FileWriter fileWriter = new FileWriter(fileText);
+			  // 写文件
+			  fileWriter.write(strBuffer);
+			  // 关闭
+			  fileWriter.close();
+		  }
+		  catch (IOException e)
+		  {
+			  //
+			  e.printStackTrace();
+		  }
+	  }
+	
 }
 

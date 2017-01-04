@@ -2,16 +2,23 @@ package org.duang.dao.impl;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.LoanListRateDao;
 import org.duang.dao.LoanMemberRepayDateDao;
 import org.duang.dao.base.BaseDao;
 import org.duang.entity.LoanList;
 import org.duang.entity.LoanMemberRepayDate;
 import org.duang.entity.Scale;
+import org.duang.enums.If;
+import org.duang.enums.loan.BackStyle;
 import org.duang.enums.loan.RepayState;
 import org.duang.enums.loan.RepayStatus;
 import org.duang.enums.scale.SingleOrSet;
@@ -38,6 +45,13 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 		LoggerUtils.info("注入LoanMemberRepayDateDaoImpl层", this.getClass());
 	}
 
+	private LoanListRateDao loanListRateDao;
+
+	@Resource(name="loanlistratedaoimpl")
+	public void setLoanListRateDao(LoanListRateDao loanListRateDao) {
+		this.loanListRateDao = loanListRateDao;
+	}
+	
 	/**
 	 * 计数总数全部
 	 * @return 			    计数值
@@ -323,7 +337,7 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 			for(int i=0;i<loanList.getDays()/30;i++){
     		    c.add(Calendar.MONTH, +1);
     		    LoanMemberRepayDate loanMemberRepayDate = new LoanMemberRepayDate(DataUtils.randomUUID(), 
-    		    		loanList.getId(), c.getTime(), i, RepayState.STA0.getVal(), RepayStatus.STU1.getVal());
+    		    		loanList.getId(), c.getTime(), i, RepayState.STA0.getVal(), RepayStatus.STU1.getVal(), DataUtils.str2double(String.valueOf(loanList.getReturnMoney()/loanList.getDays()*30), 6) );
 		    	saveEntity(loanMemberRepayDate);
 		    	LoggerUtils.info("\t\n-------------------LoanListId:"+loanList.getId()+"\t标名称："+scale.getName()
 		    		+ "\t还款日期:"+c.getTime(), this.getClass());
@@ -332,12 +346,122 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 		}else if(scale.getSingleOrSet().equals(SingleOrSet.S1.getVal())){
 		    c.add(Calendar.DATE, +loanList.getDays());
 		    LoanMemberRepayDate loanMemberRepayDate = new LoanMemberRepayDate(DataUtils.randomUUID(), 
-		    		loanList.getId(), c.getTime(), 0, RepayState.STA0.getVal(), RepayStatus.STU1.getVal());
+		    		loanList.getId(), c.getTime(), 0, RepayState.STA0.getVal(), RepayStatus.STU1.getVal(), DataUtils.str2double(String.valueOf(loanList.getReturnMoney()), 6) );
 	    	saveEntity(loanMemberRepayDate);
 	    	LoggerUtils.info("\t\n-------------------LoanListId:"+loanList.getId()+"\t标名称："+scale.getName()
 	    		+ "\t还款日期:"+c.getTime(), this.getClass());
 		}
 	}
 
+	
+	/**
+	 * 获取本次的还款日期
+	 * <p>Title: getThisRepayDate</p>   
+	 * <p>Description: </p>  
+	 * @author LiYonghui
+	 * @date 2016年12月16日 上午10:36:09
+	 * @return
+	 * @throws Exception   
+	 * @see org.duang..LoanMemberRepayDateDao#getThisRepayDate()
+	 */
+	@Override
+	public Map<String, Object> updateLoanMemberRepayDateByRepay(double sum, LoanList loanList, String memberInfoId) throws Exception {
+		boolean success = false;
+		double overSum = 0;
+		Map<String,Object> map = new HashMap<String,Object>();
+		CondsUtils condsUtils = new CondsUtils();
+		condsUtils.addProperties(true, "loanListId","status","state","order");
+		condsUtils.addValues(true, loanList.getId(),RepayStatus.STU1.getVal(),RepayState.STA0.getVal(),Order.asc("repayIndex"));
+		List<LoanMemberRepayDate> loanMemberRepayDates = queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+		int count = count("loanListId", loanList.getId());
+		boolean isBreak = false;
+		//定额本息
+		if(count > 1){
+			for(int i=0;i<loanMemberRepayDates.size();i++){
+				LoanMemberRepayDate loanMemberRepayDate = loanMemberRepayDates.get(i);
+				loanMemberRepayDate = updateLoanMemberRepayDate(loanMemberRepayDate,loanList,BackStyle.B1.getVal());
+				success = updateEntity(loanMemberRepayDate);
+				overSum +=loanMemberRepayDate.getOverSum();
+				//还款日
+				Date repayDate = loanMemberRepayDate.getRepayDate();
+				//如果系统日期在还款日以后，就让跳出，说明这个就是下期的还款日了
+				if(!(repayDate.getTime() < DateUtils.getDate(DateUtils.date2Str(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd").getTime())){
+					isBreak = true;
+				}
+				if(isBreak){
+					break;
+				}
+			}
+		}else if(count ==1){ //到期一次性还清
+			LoanMemberRepayDate loanMemberRepayDate = loanMemberRepayDates.get(0);
+			loanMemberRepayDate = updateLoanMemberRepayDate(loanMemberRepayDate,loanList,BackStyle.B2.getVal());
+			success = updateEntity(loanMemberRepayDate);
+			overSum +=loanMemberRepayDate.getOverSum();
+		}
+		if(success){
+			map.put("overSum", overSum);
+			map.put("success", success);
+		}
+		return map;
+	}
+	
+	/**
+	 * 修改实体参数
+	 * @param loanMemberRepayDate
+	 * @param loanList
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
+	private LoanMemberRepayDate updateLoanMemberRepayDate(LoanMemberRepayDate loanMemberRepayDate,LoanList loanList,int type) throws Exception{
+		//还款日
+		Date repayDate = loanMemberRepayDate.getRepayDate();
+		//改为已还款
+		loanMemberRepayDate.setState(RepayState.STA1.getVal());
+		//还款日期
+		loanMemberRepayDate.setReRepayDate(DateUtils.str2Date(DateUtils.getCurrentDate("yyyy-MM-dd"),"yyyy-MM-dd"));
+		//逾期
+		if(repayDate.getTime() < DateUtils.getDate(DateUtils.date2Str(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd").getTime()){
+			//计算逾期天数
+			int days = getOverDays(loanMemberRepayDate,type);
+			loanMemberRepayDate.setIsOver(If.If1.getVal());
+			loanMemberRepayDate.setOverDays(Integer.parseInt(String.valueOf(days)));
+			//剩余应还金额
+			double exprSum = loanList.getReturnMoney()-loanList.getYetReturnMoney();
+			double overRate = loanListRateDao.getLoanListRate().getOverRate();
+			loanMemberRepayDate.setOverSum(DataUtils.str2double(String.valueOf(exprSum*overRate*days), 6));
+			loanMemberRepayDate.setRepayRealSum(loanMemberRepayDate.getRepaySum()+loanMemberRepayDate.getOverSum());
+		}else{
+			//本期金额
+			loanMemberRepayDate.setIsOver(If.If0.getVal());
+			loanMemberRepayDate.setRepayRealSum(loanMemberRepayDate.getRepaySum());
+		}
+		return loanMemberRepayDate;
+	}
+	
+	/**
+	 * 预期天数,计算天数，
+	 * @param loanMemberRepayDate
+	 * @param type   还款方式   如果是1，则表示按月还款，如果>30就按30天算，多余的放在下期天数中，   如果是2，则表示一次性还清
+	 * @return
+	 */
+	private int getOverDays(LoanMemberRepayDate loanMemberRepayDate,int type){
+		//计算逾期天数
+		long days = 0;
+		//如果逾期还款，即在下一期还款之前还款。
+		if(loanMemberRepayDate.getReRepayDate() != null){
+			//逾期天数
+			days = (loanMemberRepayDate.getReRepayDate().getTime()-loanMemberRepayDate.getRepayDate().getTime())/1000/(24*3600);
+		}else{
+			//否则是系统时间与应还日期的时间差
+			days = (new Date().getTime()-loanMemberRepayDate.getRepayDate().getTime())/1000/(24*3600);
+		}
+		if(type == BackStyle.B1.getVal()){
+			return Integer.parseInt(String.valueOf(days))>30?30:Integer.parseInt(String.valueOf(days));
+		}else{
+			return Integer.parseInt(String.valueOf(days));
+		}
+	}
+	
 }
 

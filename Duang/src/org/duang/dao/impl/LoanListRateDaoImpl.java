@@ -8,6 +8,7 @@ import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.LoanListRateDao;
 import org.duang.dao.base.BaseDao;
 import org.duang.entity.LoanListRate;
+import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -287,6 +288,15 @@ public class LoanListRateDaoImpl extends BaseDao<LoanListRate> implements LoanLi
 	 */
 	public List<LoanListRate> queryBySQL(String sql, String countSql, PageUtil<LoanListRate> page, boolean convert, Object... params) throws Exception{
 		return super.queryBySQL(sql, countSql, convert, page, params);
+	}
+
+	@Override
+	public LoanListRate getLoanListRate() throws Exception {
+		List<LoanListRate> loanListRates = queryAllEntity(null);
+		if(DataUtils.notEmpty(loanListRates)){
+			return loanListRates.get(0);
+		}
+		return null;
 	}
 
 }

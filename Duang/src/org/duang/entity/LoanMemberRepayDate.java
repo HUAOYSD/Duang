@@ -34,6 +34,17 @@ public class LoanMemberRepayDate implements java.io.Serializable {
 	private int overDays;
 	private Date reRepayDate;
 	private double overSum;
+	
+	/**
+	 * 本期应该还款金额，不包含逾期费
+	 */
+	private double repaySum;
+	
+	/**
+	 * 实际还款金额
+	 */
+	private double repayRealSum;
+	
 	// Constructors
 
 	/** default constructor */
@@ -45,7 +56,7 @@ public class LoanMemberRepayDate implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public LoanMemberRepayDate(String id, String loanListId, Date repayDate, int repayIndex, int state, int status) {
+	public LoanMemberRepayDate(String id, String loanListId, Date repayDate, int repayIndex, int state, int status, double repaySum) {
 		super();
 		this.id = id;
 		this.loanListId = loanListId;
@@ -53,6 +64,7 @@ public class LoanMemberRepayDate implements java.io.Serializable {
 		this.repayIndex = repayIndex;
 		this.state = state;
 		this.status = status;
+		this.repaySum = repaySum;
 	}
 
 	// Property accessors
@@ -139,6 +151,24 @@ public class LoanMemberRepayDate implements java.io.Serializable {
 
 	public void setOverSum(double overSum) {
 		this.overSum = overSum;
+	}
+	
+	@Column(name = "repay_sum")
+	public double getRepaySum() {
+		return repaySum;
+	}
+
+	public void setRepaySum(double repaySum) {
+		this.repaySum = repaySum;
+	}
+	
+	@Column(name = "repay_real_sum")
+	public double getRepayRealSum() {
+		return repayRealSum;
+	}
+
+	public void setRepayRealSum(double repayRealSum) {
+		this.repayRealSum = repayRealSum;
 	}
 	
 }

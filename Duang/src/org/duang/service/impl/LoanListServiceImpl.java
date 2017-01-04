@@ -13,6 +13,7 @@ import org.duang.dao.BindCardDao;
 import org.duang.dao.InvestMemberDao;
 import org.duang.dao.LoanListDao;
 import org.duang.dao.LoanMemberDao;
+import org.duang.dao.LoanMemberRepayDateDao;
 import org.duang.dao.MemberInfoDao;
 import org.duang.entity.BillLoan;
 import org.duang.entity.BindCard;
@@ -76,12 +77,18 @@ public class LoanListServiceImpl implements LoanListService{
 	public void setBillLoanDao(BillLoanDao billLoanDao) {
 		this.billLoanDao = billLoanDao;
 	}
+	
 	private LoanListDao loanListDao;
 	@Resource
 	public void setLoanListDao(LoanListDao loanListDao) {
 		this.loanListDao = loanListDao;
 	}
 	
+	private LoanMemberRepayDateDao loanMemberRepayDateDao;
+	@Resource
+	public void setLoanMemberRepayDateDao(LoanMemberRepayDateDao loanMemberRepayDateDao) {
+		this.loanMemberRepayDateDao = loanMemberRepayDateDao;
+	}
 	
 	public LoanListServiceImpl(){
 		LoggerUtils.info("注入LoanListServiceImpl服务层", this.getClass());
@@ -380,7 +387,13 @@ public class LoanListServiceImpl implements LoanListService{
 			investMember.setBalance(investMember.getBalance()-sum);
 			success = investMemberDao.updateEntity(investMember);
 			if(success){
-				//3.修改借贷账户的金额
+				
+				//3.修改每期的还款状态
+				if(success){
+					Map<String,Object> repayMap = loanMemberRepayDateDao.updateLoanMemberRepayDateByRepay(sum, loanList, memberInfoId);
+					loanList.setAgoMoney(loanList.getAgoMoney()+(double)repayMap.get("overSum"));
+				}
+				//4.修改借贷账户的金额
 				//总还款
 				loanMember.setBackMoney(loanMember.getBackMoney()+sum);
 				//当前借款
@@ -388,8 +401,7 @@ public class LoanListServiceImpl implements LoanListService{
 				//剩余还款
 				loanMember.setResidueMoney(loanMember.getResidueMoney()-sum);
 				success = loanMemberDao.updateEntity(loanMember);
-				
-				//4.修改借贷记录为已完成
+				//5.修改借贷记录为已完成
 				loanList.setYetReturnMoney(loanList.getYetReturnMoney()+sum);
 				if(success && loanList.getYetReturnMoney()==loanList.getReturnMoney()){
 					loanList.setReturnStatus(ReturnStatus.B4.getVal());

@@ -57,6 +57,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 		@Result(name = "allot", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/allotLoanlist.jsp"),
 		@Result(name = "review", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/reviewLoanList.jsp"),
 		@Result(name = "confirm", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/confirmLoanlist.jsp"),
+		@Result(name = "inputPayPassword", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/inputPayPassword.jsp"),
 		@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") 
 })
 public class LoanListAction extends BaseAction<LoanList> {
@@ -84,6 +85,10 @@ public class LoanListAction extends BaseAction<LoanList> {
 		this.customerManagerService = customerManagerService;
 	}
 
+	public String inputPayPassword(){
+		return "inputPayPassword";
+	}
+	
 	/**   
 	 * 根据id获取借贷信息
 	 * @Title: queryLoanListInfoByIds   

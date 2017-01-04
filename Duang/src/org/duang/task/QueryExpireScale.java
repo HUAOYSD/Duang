@@ -187,7 +187,7 @@ public class QueryExpireScale {
 			requestFlowService.saveEntity(requestFlow);
 			
 			// 获取转换的参数
-			JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
+			JSONObject jsonObjectData = (JSONObject) SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
 			//将赎回request保存
 			investList.setCbRequestid(requestId);
 			investListService.updateEntity(investList);

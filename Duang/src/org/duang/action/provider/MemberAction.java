@@ -879,7 +879,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		map.put("eDate",DateUtils.getCurrentDate("yyyyMMdd"));
 		map.put("signature",signature_sign);
 		//获取转换的参数
-		JSONObject jsonObject = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
+		JSONObject jsonObject = (JSONObject) SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
 		//result 查询结果  00000代表成功
 		String resultCallbace = jsonObject.get("result").toString();
 		if(resultCallbace.equals(ResultCode.SUCCESS)){
@@ -1000,7 +1000,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		map.put("idNumber",idNumber);
 		map.put("signature",signature_sign);
 		//获取转换的参数
-		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
+		JSONObject jsonObjectData = (JSONObject) SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
 		//result 查询结果  00000代表成功
 		String resultCallbace = jsonObjectData.get("result").toString();
 		if(resultCallbace.equals(ResultCode.SUCCESS.getVal())){
@@ -1141,7 +1141,7 @@ public class MemberAction extends BaseAction<MemberInfo>{
 		LoggerUtils.info(sendDataStringBuffer.toString(), this.getClass());
 
 		//获取转换的参数
-		JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
+		JSONObject jsonObjectData = (JSONObject) SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
 		//result 查询结果  00000代表成功
 		String resultCallbace = jsonObjectData.get("result").toString();
 		if(resultCallbace.equals(ResultCode.SUCCESS.getVal())){

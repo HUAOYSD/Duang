@@ -70,6 +70,11 @@ public class InvestListAction extends BaseAction<InvestList>{
 		this.memberInfoService = memberInfoService;
 	}
 	
+	private RequestFlowService requestFlowService;
+	@Resource
+	public void setRequestFlowService(RequestFlowService requestFlowService) {
+		this.requestFlowService = requestFlowService;
+	}
 	/**   
 	 * 获取首页推荐标信息
 	 * @Title: getHomeRecommendScale   
@@ -543,7 +548,8 @@ public class InvestListAction extends BaseAction<InvestList>{
 					//签名不匹配
 					LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
-				RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date(),"投标回调",resultStr);
+				requestFlowService.executeSql("");
+				RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date(),"投标",resultStr);
 				requestFlowService.saveEntity(requestFlow);
 			}
 		}catch(Exception e){
@@ -556,8 +562,4 @@ public class InvestListAction extends BaseAction<InvestList>{
 		jsonObject.put("msg", msg);
 		printJsonResult();
 	}
-	
-	@Resource
-	private RequestFlowService requestFlowService;
-	
 }

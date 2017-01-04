@@ -65,23 +65,41 @@ function loadloanlist(url, dataObj){
 		                 {field:'id',checkbox:true},
 			             {field : "loanMemberName", title : "借款人", width : 115, align : "center" },
 			             {field : "loanMemberNickName", title : "用户名", width : 115, align : "center" },
-			             {field : "loanType", title : "借款模式", width : 100, align : "center" },
-			             {field : "customerManagerName", title : "客户经理", width : 115, align : "center" },
+			             {field : "loanType", title : "借款模式", width : 100, align : "center",
+			            	 styler: function(value,row,index){
+				     				if (value == '信用模式'){
+				     					return 'background-color:#E39F70;color:#fff;';
+				     				}else if(value == '普通模式'){
+				     					return 'background-color:#98CC92;color:#fff;';
+				     				}else if(value == '产权模式'){
+				     					return 'background-color:#EBE66D;color:#fff;';
+				     				}else if(value == '急速模式'){
+				     					return 'background-color:#D9868A;color:#fff;';
+				     				}else{
+				     					return 'background-color:#9D8ACA;color:#fff;';
+				     				}
+				     		 }
+			             },
+			             {field : "applyState", title : "申请状态", width : 100, align : "center" },
 		 ]],
 		columns : [ [
 		             {field : "loanMemberPhone", title : "手机号", width : 120, align : "center" },
 		             {field : "loanMemberIdcard", title : "身份证", width : 130, align : "center" },
-		             {field : "backStyle", title : "还款方式", width : 110, align : "center" },
-		             {field : "applyState", title : "申请状态", width : 100, align : "center" },
-		             {field : "loanState", title : "放款状态", width : 100, align : "center" },
+		             {field : "customerManagerName", title : "客户经理", width : 115, align : "center" },
 		             {field : "money", title : "申请借款金额", width : 100, align : "center" },
 		             {field : "realMoney", title : "审核金额", width : 100, align : "center" },
 		             {field : "manageCost", title : "管理费", width : 100, align : "center" },
 		             {field : "loanInterest", title : "借款利息", width : 100, align : "center" },
 		             {field : "poundage", title : "手续费", width : 100, align : "center" },
-		             {field : "poundageState", title : "手续费状态", width : 100, align : "center" },
 		             {field : "getMoney", title : "应该放款金额", width : 100, align : "center" },
 		             {field : "yetMoney", title : "已放款金额", width : 100, align : "center" },
+		             {field : "returnMoney", title : "应还款金额", width : 100, align : "center" },
+		             {field : "yetReturnMoney", title : "已还款金额", width : 100, align : "center" },
+		             {field : "agoMoney", title : "总逾期费", width : 100, align : "center" },
+		             
+		             {field : "backStyle", title : "还款方式", width : 110, align : "center" },
+		             {field : "loanState", title : "放款状态", width : 100, align : "center" },
+		             {field : "poundageState", title : "手续费状态", width : 100, align : "center" },
 		             {field : "isSell", title : "起售状态", width : 100, align : "center" },
 		             {field : "days", title : "周期", width : 150, align : "center",
 		            	 formatter: function(value,row,index){
@@ -89,9 +107,6 @@ function loadloanlist(url, dataObj){
 		            	 }
 		             }, 
 		             {field : "returnStatus", title : "还款状态", width : 100, align : "center" },
-		             {field : "returnMoney", title : "应还款金额", width : 100, align : "center" },
-		             {field : "agoMoney", title : "逾期费", width : 100, align : "center" },
-		             {field : "yetReturnMoney", title : "已还款金额", width : 100, align : "center" },
 		             {field : "loanStyle", title : "平台", width : 100, align : "center" },
 		             {field : "pactNumber", title : "合同编号", width : 150, align : "center" },
 		             {field : "signDate", title : "签约日", width : 150, align : "center",

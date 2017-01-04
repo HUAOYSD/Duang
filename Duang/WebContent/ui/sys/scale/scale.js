@@ -298,7 +298,7 @@ $("#allot_btn_scale").on("click",function(){
 	if(selectedRow==null){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
-	}else if("新建标"!=selectedRow.status){
+	}else if("新标"!=selectedRow.status){
 		layer.msg("该标已分配，请查寻借贷匹配详情",{time:2000});
 		return;
 	}
@@ -322,7 +322,7 @@ $("#match_btn_scale").on("click",function(){
 	if(selectedRow==null){
 		layer.msg("请选择一个理财标",{time:1500});
 		return;
-	}else if("新建标"==selectedRow.status){
+	}else if("新标"==selectedRow.status){
 		layer.msg("该标未分配，请分配借贷",{time:2000});
 		return;
 	}

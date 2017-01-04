@@ -15,7 +15,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "sms_verification_code", catalog = "duang")
 @DynamicInsert(true)
-@SuppressWarnings("serial")
 public class SMSVerificationCode implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

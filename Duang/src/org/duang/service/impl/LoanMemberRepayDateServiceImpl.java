@@ -1,6 +1,5 @@
 package org.duang.service.impl;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +10,7 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
+import org.duang.dao.LoanListRateDao;
 import org.duang.dao.LoanMemberRepayDateDao;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanList;
@@ -19,6 +19,7 @@ import org.duang.enums.loan.RepayState;
 import org.duang.enums.loan.RepayStatus;
 import org.duang.service.LoanMemberRepayDateService;
 import org.duang.util.DataUtils;
+import org.duang.util.DateUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,14 @@ public class LoanMemberRepayDateServiceImpl implements LoanMemberRepayDateServic
 	public void setDao(LoanMemberRepayDateDao dao) {
 		this.dao = dao;
 	}
+	
+	private LoanListRateDao loanListRateDao;
+
+	@Resource(name="loanlistratedaoimpl")
+	public void setLoanListRateDao(LoanListRateDao loanListRateDao) {
+		this.loanListRateDao = loanListRateDao;
+	}
+	
 	public LoanMemberRepayDateServiceImpl(){
 		LoggerUtils.info("注入LoanMemberRepayDateServiceImpl服务层", this.getClass());
 	}
@@ -311,40 +320,35 @@ public class LoanMemberRepayDateServiceImpl implements LoanMemberRepayDateServic
 		Map<String, Object> map = new HashMap<String, Object>();
 		//上期账单还款情况信息
 		String  b_msg="上期无账单";
-		String msg="本期未结账单";
+		String msg="本期无账单";
 		//最后还款日期
 		Date date = null;
 		//逾期金额
 		double overDueSum = 0;
+		//本期还款金额
+		double sum = 0;
 		CondsUtils condsUtils = new CondsUtils();
-		condsUtils.addProperties(true, "loanListId","status","order");
-		condsUtils.addValues(true, loanList.getId(),RepayStatus.STU1.getVal(),Order.asc("repayIndex"));
-		List<LoanMemberRepayDate> loanMemberRepayDates = dao.queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
-		for(int i=0;i<loanMemberRepayDates.size();i++){
-			LoanMemberRepayDate loanMemberRepayDate = loanMemberRepayDates.get(i);
-			//还款日
-			Date repayDate = loanMemberRepayDate.getRepayDate();
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(repayDate);
-			//逾期
-			if(repayDate.before(new Date())){
-				if(loanMemberRepayDate.getState()==RepayState.STA0.getVal()){
+		condsUtils.addProperties(true, "loanListId","status","state","order");
+		condsUtils.addValues(true, loanList.getId(),RepayStatus.STU1.getVal(),RepayState.STA0.getVal(),Order.asc("repayIndex"));
+		List<LoanMemberRepayDate> loanMemberRepayDates = queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+		if(DataUtils.notEmpty(loanMemberRepayDates)){
+			for(int i=0;i<loanMemberRepayDates.size();i++){
+				LoanMemberRepayDate loanMemberRepayDate = loanMemberRepayDates.get(i);
+				//还款日
+				Date repayDate = loanMemberRepayDate.getRepayDate();
+				//逾期
+				if(repayDate.getTime() < DateUtils.getDate(DateUtils.date2Str(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd").getTime()){
 					b_msg="上期账单已逾期";
 					//剩余应还金额
 					double exprSum = loanList.getReturnMoney()-loanList.getYetReturnMoney();
 					//逾期金额
-					overDueSum = getOverDueSum(loanMemberRepayDate,exprSum);
-				}else{
-					b_msg="上期账单已还清";
+					overDueSum += getOverDueSum(loanMemberRepayDate,exprSum);
+					sum+=loanMemberRepayDate.getRepaySum();
+				}else {
+					date = repayDate;
+					sum+=loanMemberRepayDate.getRepaySum();
+					break;
 				}
-			}else {
-				if(loanMemberRepayDate.getState()==RepayState.STA0.getVal()){
-					msg="未结算";
-				}else{
-					msg="以还清";
-				}
-				date = repayDate;
-				break;
 			}
 		}
 		//如果date == null 说明无贷款。
@@ -355,10 +359,12 @@ public class LoanMemberRepayDateServiceImpl implements LoanMemberRepayDateServic
 		map.put("msg", msg);
 		//逾期金额
 		map.put("overDueSum", overDueSum);
+		//本应还金额
+		map.put("sum", sum);
 		return map;
 	}
 	
-	private double getOverDueSum(LoanMemberRepayDate loanMemberRepayDate,double exprSum){
+	private double getOverDueSum(LoanMemberRepayDate loanMemberRepayDate,double exprSum) throws Exception{
 		//计算逾期天数
 		long days = 0;
 		//如果逾期还款，即在下一期还款之前还款。
@@ -367,9 +373,11 @@ public class LoanMemberRepayDateServiceImpl implements LoanMemberRepayDateServic
 			days = (loanMemberRepayDate.getReRepayDate().getTime()-loanMemberRepayDate.getRepayDate().getTime())/1000/(24*3600);
 		}else{
 			//否则是系统时间与应还日期的时间差
-			days = (new Date().getTime()-loanMemberRepayDate.getRepayDate().getTime())/1000/(24*3600);
+			days = (new Date().getTime() - loanMemberRepayDate.getRepayDate().getTime())/1000/(24*3600);
 		}
-		return DataUtils.getOverdueSum(exprSum, Integer.parseInt(String.valueOf(days)));
+		days = days>30?30:days;
+		double overRate = loanListRateDao.getLoanListRate().getOverRate();
+		return DataUtils.str2double(String.valueOf(exprSum*overRate*days), 6);
 	}
 	
 }

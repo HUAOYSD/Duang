@@ -8,10 +8,9 @@ import javax.annotation.Resource;
 import org.duang.annotation.ServiceLog;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.LoanListRateDao;
-import org.duang.entity.LoanListRate;
 import org.duang.entity.InvestMember;
+import org.duang.entity.LoanListRate;
 import org.duang.service.LoanListRateService;
-import org.duang.util.DataUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -290,10 +289,6 @@ public class LoanListRateServiceImpl implements LoanListRateService{
 	}
 	@Override
 	public LoanListRate getLoanListRate() throws Exception {
-		List<LoanListRate> loanListRates = dao.queryAllEntity(null);
-		if(DataUtils.notEmpty(loanListRates)){
-			return loanListRates.get(0);
-		}
-		return null;
+		return dao.getLoanListRate();
 	}
 }

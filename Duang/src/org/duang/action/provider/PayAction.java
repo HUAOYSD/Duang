@@ -5,9 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
@@ -30,6 +33,7 @@ import org.duang.service.LoanListService;
 import org.duang.service.MemberInfoService;
 import org.duang.service.RequestFlowService;
 import org.duang.service.ScaleLoanListService;
+import org.duang.util.DES;
 import org.duang.util.DataUtils;
 import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
@@ -37,6 +41,7 @@ import org.duang.util.SSLClient;
 import org.json.JSONObject;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.web.util.HtmlUtils;
 
 
 /**   
@@ -65,13 +70,6 @@ public class PayAction extends BaseAction<BillInvest>{
 	public void setMemberInfoService(MemberInfoService memberInfoService) {
 		this.memberInfoService = memberInfoService;
 	}
-	
-	private ScaleLoanListService scaleLoanListService;
-	@Resource
-	public void setScaleLoanListService(ScaleLoanListService scaleLoanListService){
-		this.scaleLoanListService = scaleLoanListService;
-	}
-	
 	private LoanListService loanListService;
 	@Resource
 	public void setLoanListService(LoanListService loanListService){
@@ -84,9 +82,18 @@ public class PayAction extends BaseAction<BillInvest>{
 		this.investListService = investListService;
 	}
 
-	@Resource
 	private RequestFlowService requestFlowService;
-
+	@Resource
+	public void setRequestFlowService(RequestFlowService requestFlowService){
+		this.requestFlowService = requestFlowService;
+	}
+	
+	private ScaleLoanListService scaleLoanListService;
+	@Resource
+	public void setScaleLoanListService(ScaleLoanListService scaleLoanListService){
+		this.scaleLoanListService = scaleLoanListService;
+	}
+	
 	/**
 	 * 丰付充值回调
 	 * @Title: depositFFCallBack   
@@ -346,7 +353,7 @@ public class PayAction extends BaseAction<BillInvest>{
 				map.put("noticeUrl",noticeUrl);
 				map.put("signature",signature_sign);
 				//获取转换的参数
-				JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
+				JSONObject jsonObjectData = (JSONObject) SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
 				//result 查询结果  00000代表成功
 				String resultCallbace = jsonObjectData.get("result").toString();
 				if(resultCallbace.equals(ResultCode.SUCCESS.getVal())){
@@ -424,6 +431,7 @@ public class PayAction extends BaseAction<BillInvest>{
 			jsonObject.put("msg", "签名不一致");
 		}
 	}*/
+	
 
 	/**
 	 * 获取配置信息
@@ -499,17 +507,16 @@ public class PayAction extends BaseAction<BillInvest>{
 				loanListParamMap.put("memberInfo.id", memberInfoId);
 				loanListParamMap.put("returnStatus", ReturnStatus.B2.getVal());
 				LoanList loanList = loanListService.findEntity(loanListParamMap);
-				
 				//项目编号
 				ScaleLoanList scaleLoanList = scaleLoanListService.findEntity("loanList.id",loanList.getId());
 				Scale scale = scaleLoanList.getScale();
 				String projectCode  = scale.getId();
-				if(scale.getSingleOrSet()==SingleOrSet.S1.getVal()){
+				if(scale.getSingleOrSet().equals(SingleOrSet.S1.getVal())){
 					repayUrl="memberInfoRepaySetScale";
 					noticeUrl="memberInfoRepaySetScale_noticeUrl";
 					successReturnUrl="memberInfoRepaySetScale_success";
 					failReturnUrl="memberInfoRepaySetScale_fail";
-				}else if(scale.getSingleOrSet()==SingleOrSet.S2.getVal()){
+				}else if(scale.getSingleOrSet().equals(SingleOrSet.S2.getVal())){
 					repayUrl="memberInfoRepaySetScale";
 					noticeUrl="memberInfoRepaySetScale_noticeUrl";
 					successReturnUrl="memberInfoRepaySetScale_success";
@@ -517,16 +524,16 @@ public class PayAction extends BaseAction<BillInvest>{
 				}
 				Map<String, String> keyMap = getParamValBykey(properties,repayUrl,noticeUrl,successReturnUrl,failReturnUrl);
 				//还款金额
-				sum = new DecimalFormat("#.00").format(sum);
+				double r_sum = DataUtils.str2double(sum, 6);
 				//数字签名字符串
 				StringBuffer signatureBuffer = new StringBuffer();
 				signatureBuffer.append(requestId);
 				signatureBuffer.append(keyMap.get("merchantCode"));
 				signatureBuffer.append(memberInfoId);
 				signatureBuffer.append(projectCode);
-				signatureBuffer.append(sum);
-				signatureBuffer.append(keyMap.get(successReturnUrl));
-				signatureBuffer.append(keyMap.get(failReturnUrl));
+				signatureBuffer.append(r_sum);
+				signatureBuffer.append(keyMap.get("successReturnUrl"));
+				signatureBuffer.append(keyMap.get("failReturnUrl"));
 
 				StringBuffer sendStringBuffer = new StringBuffer("\t\n---------------------------个人用户存管账户还款 send2FF的字符串：");
 				sendStringBuffer.append("\t\n----requestId:"+requestId)
@@ -554,21 +561,19 @@ public class PayAction extends BaseAction<BillInvest>{
 				map.put("noticeUrl",keyMap.get("noticeUrl"));
 				map.put("signature",signature_sign);
 				//获取转换的参数
-				JSONObject jsonObjectData = SSLClient.getJsonObjectByUrl(keyMap.get("urlStr"),map,"GBK");
-				//result 查询结果  00000代表成功
-				String resultCallbace = jsonObjectData.get("result").toString();
-				if(resultCallbace.equals(ResultCode.SUCCESS.getVal())){
-					LoggerUtils.info("\t\n----------------------------------"+memberInfoId+"还款处理结果成功", this.getClass());
-					success = true;
-					msg = "还款成功";
-				}else if(resultCallbace.equals(ResultCode.Doing.getVal())){
-					success = true;
-					msg="正在处理";
-				}else{
-					success=false;
-					msg = DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace));
-					LoggerUtils.error("流程号："+requestId+"------个人用户存管账户还款 失败,原因 错误码"+resultCallbace+"===="+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, resultCallbace)),this.getClass());
-				}
+				String stringData = (String) SSLClient.getJsonObjectByUrl(keyMap.get("urlStr"),map,"GBK");
+				String sumapayURL = ReadProperties.getStringValue(properties, "sumapayURL");
+				
+				stringData = stringData.replaceAll("//\\s*[\u4E00-\u9FA5]", "");
+				//stringData = stringData.replace(" ", "&nbsp;").replace("\r", "<br/>");
+				//String htmlDocument = "<%@ page language=\"java\" contentType=\"text/html; charset=GBK\" pageEncoding=\"UTF-8\"%><% String path = request.getContextPath();%><%@ include file=\"/page/inc/inc.jsp\"%>";
+				stringData = stringData.replace("/user/", sumapayURL+"/user/");
+				System.out.println(stringData);
+				String temPath = ServletActionContext.getRequest().getSession().getServletContext().getRealPath("/")+"WEB-INF/page/sys/loanlist/inputPayPassword.jsp";
+				DataUtils.textToFile(temPath, stringData);
+				jsonObject.put("inputPayPassword", ReadProperties.getStringValue(properties, "baseURL")+"loanlist!inputPayPassword.do");
+				jsonObject.put("htmlData",stringData);
+				success=true;
 			}else{
 				msg = "数据丢失，请重新登录";
 			}
@@ -579,7 +584,6 @@ public class PayAction extends BaseAction<BillInvest>{
 			msg = "服务器维护，请稍后再试";
 		} finally {
 			jsonObject.put("success", success);
-			jsonObject.put("msg", msg);
 			printJsonResult();
 		}
 	}

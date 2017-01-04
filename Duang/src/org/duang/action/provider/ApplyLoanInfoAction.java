@@ -108,6 +108,8 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 				loanList.setLoanInterest(loanListRate.getLoanRate()*money);
 				loanList.setGetMoney(money);
 				loanList.setReturnMoney(DataUtils.str2double(String.valueOf(money+loanList.getManageCost()+loanList.getPoundage()+loanList.getLoanInterest()), 6));
+				
+				applyLoanInfo.setMonthBack(DataUtils.str2double(String.valueOf(loanList.getReturnMoney()/loanList.getDays()),6));
 			}
 		}
 		if(DataUtils.notEmpty(getRequest().getParameter("p_loanUse"))){
@@ -186,9 +188,7 @@ public class ApplyLoanInfoAction extends BaseAction<ApplyLoanInfo>{
 		if(DataUtils.notEmpty(getRequest().getParameter("p_yearIncome"))){
 			applyLoanInfo.setYearIncome(DES.decryptDES(getRequest().getParameter("p_yearIncome")));
 		}
-		if(DataUtils.notEmpty(getRequest().getParameter("p_monthBack"))){
-			applyLoanInfo.setMonthBack(DataUtils.str2double(DES.decryptDES(getRequest().getParameter("p_monthBack")), 6));
-		}
+		
 		if(DataUtils.notEmpty(getRequest().getParameter("p_urgencyPerson"))){
 			applyLoanInfo.setUrgencyPerson(DES.decryptDES(getRequest().getParameter("p_urgencyPerson")));
 		}

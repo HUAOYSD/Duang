@@ -18,7 +18,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "sign", catalog = "duang")
 @DynamicInsert(true)
-@SuppressWarnings("serial")
 public class Sign implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
