@@ -29,4 +29,6 @@ public interface LoanListService extends CommonInterface<LoanList>{
 	 * @throws
 	 */
 	public abstract boolean memberInfoRepay(double sum,String memberInfoId,String scaleId,LoanList loanList,int style) throws Exception;
+	
+	public abstract String findLoanListIdByPhoneOrRealName(String phone,String realName) throws Exception;
 }	

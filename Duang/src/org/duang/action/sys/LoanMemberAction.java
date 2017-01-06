@@ -48,6 +48,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ParentPackage("sys")
 @Results(value = { 
 		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/loanmember/loanMemberList.jsp"),
+		@Result(name = "repay", type = "dispatcher", location = "WEB-INF/page/sys/loanmember/loanMemberRepay.jsp"),
 		@Result(name = "addLoanMember", type = "dispatcher", location = "WEB-INF/page/sys/loanmember/addLoanMember.jsp"),
 		@Result(name = "editLoanMember", type = "dispatcher", location = "WEB-INF/page/sys/loanmember/editLoanMember.jsp"),
 		@Result(name = "uploadLoanMemberImg", type = "dispatcher", location = "WEB-INF/page/sys/loanmember/uploadLoanMemberImg.jsp"),
@@ -499,5 +500,19 @@ public class LoanMemberAction extends BaseAction<LoanMember> {
 			LoggerUtils.error("借贷客户ACTION查询错误：" + e.getLocalizedMessage(), this.getClass());
 		} 
 	}
-
+	
+	/**
+	 * 跳转到还款记录
+	 * @Title: repayList   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return  
+	 * @author LiYonghui    
+	 * @date 2017年1月4日 下午5:29:01
+	 * @return: String      
+	 * @throws
+	 */
+	public String repayList(){
+		return "repay";
+	}
+	
 }

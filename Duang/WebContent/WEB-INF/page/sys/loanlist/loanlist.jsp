@@ -115,7 +115,8 @@
 	          <a id="detail_btn_loanlist" class="easyui-linkbutton" iconCls="icon-application_form_magnify" plain="true">查看详细</a>
 	          <a id="review_btn_loanlist" class="easyui-linkbutton" iconCls="icon-shield" plain="true">审核</a>
 	          <a id="datums_btn_loanlist" class="easyui-linkbutton" iconCls="idcard_grey" plain="true">个人资料</a>
-	           <a id="asset_btn_loanlist" class="easyui-linkbutton" iconCls="icon-20130410120031302_easyicon_net_16" plain="true">收入证明</a>
+	          <a id="asset_btn_loanlist" class="easyui-linkbutton" iconCls="icon-20130410120031302_easyicon_net_16" plain="true">收入证明</a>
+	          <a id="repay_btn_loanlist" class="easyui-linkbutton" iconCls="icon-award_star_bronze_1" plain="true">还款详情</a>
 	  	  </div>
 	</div>
 	<script type="text/javascript" src="<%=path %>/ui/sys/loanlist/loanlist.js"></script>

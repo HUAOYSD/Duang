@@ -55,6 +55,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @Results(value = { 
 		@Result(name = ResultPath.LIST, type = "dispatcher", location = "WEB-INF/page/sys/loanlist/loanlist.jsp"),
 		@Result(name = "allot", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/allotLoanlist.jsp"),
+		@Result(name = "repay", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/loanMemberRepayInfo.jsp"),
 		@Result(name = "review", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/reviewLoanList.jsp"),
 		@Result(name = "confirm", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/confirmLoanlist.jsp"),
 		@Result(name = "inputPayPassword", type = "dispatcher", location = "WEB-INF/page/sys/loanlist/inputPayPassword.jsp"),
@@ -346,6 +347,9 @@ public class LoanListAction extends BaseAction<LoanList> {
 			}else if("review".equals(path)){
 				entity = service.findById(entity.getId());
 				return "review";
+			}else if("repay".equals(path)){
+				getRequest().setAttribute("loanListId", entity.getId());
+				return "repay";
 			}
 			
 			//判断是否是客户经理查看会员理财列表

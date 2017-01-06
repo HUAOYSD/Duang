@@ -1,6 +1,7 @@
 package org.duang.service.impl;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -410,5 +411,24 @@ public class LoanListServiceImpl implements LoanListService{
 			}
 		}
 		return success;
+	}
+
+	@Override
+	public String findLoanListIdByPhoneOrRealName(String phone, String realName) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(DataUtils.notEmpty(phone)){
+			map.put("phone",phone);
+		}
+		if(DataUtils.notEmpty(realName)){
+			map.put("realName",realName);
+		}
+		MemberInfo memberInfo = memberInfoDao.findEntity(map);
+		if(memberInfo != null){
+			LoanList loanList = loanListDao.findEntity("memberInfo.id", memberInfo.getId());
+			if(loanList != null){
+				return loanList.getId();
+			}
+		}
+		return null;
 	}
 }

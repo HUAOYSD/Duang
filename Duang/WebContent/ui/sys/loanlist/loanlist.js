@@ -315,6 +315,26 @@ $("#detail_btn_loanlist").on("click",function(){
 	}
 });
 
+/**
+ * 还款详情
+ */
+$("#repay_btn_loanlist").on("click",function(){
+	var selectedRow = $("#loanlist").datagrid('getSelected');
+	if(selectedRow==null){
+		layer.msg("请选择一条记录",{time:1500});
+		return;
+	}
+	layer.open({
+		type: 2,
+		title: '还款详情',
+		shadeClose: true,
+		maxmin:true,
+		shade: 0.8,
+		area: ['75%', '60%'],
+		content: 'loanlist!openDialog.do?path=repay&id='+selectedRow.id
+	}); 
+	
+});
 
 /**
  * 个人资料
@@ -392,3 +412,4 @@ function showDatumsAndAsset(selectedRow,id,type){
 		});
 	}
 }
+
