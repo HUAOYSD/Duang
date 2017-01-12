@@ -11,6 +11,7 @@ import org.duang.dao.RequestFlowDao;
 import org.duang.entity.RequestFlow;
 import org.duang.entity.InvestMember;
 import org.duang.service.RequestFlowService;
+import org.duang.util.DateUtils;
 import org.duang.util.PageUtil;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
@@ -287,5 +288,12 @@ public class RequestFlowServiceImpl implements RequestFlowService{
 	@Override
 	public boolean deleteEntity(RequestFlow t) throws Exception {
 		return dao.deleteEntity(t);
+	}
+
+	@Override
+	public boolean executeObject(RequestFlow requestFlow) throws Exception {
+		String sql ="insert into request_flow(id,requestId,memberInfo_id,optTime,desInfo,result) values('"+requestFlow.getId()+"','"+requestFlow.getRequestId()+"','"+requestFlow.getMemberInfoId()+"'"
+				+ ",'"+DateUtils.date2Str(requestFlow.getOptTime())+"','"+requestFlow.getDescribe()+"','"+requestFlow.getResult()+"')";
+		return executeSql(sql);
 	}
 }

@@ -548,7 +548,6 @@ public class InvestListAction extends BaseAction<InvestList>{
 					//签名不匹配
 					LoggerUtils.error("\t\n---------------------------投标回调 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
 				}
-				requestFlowService.executeSql("");
 				RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date(),"投标",resultStr);
 				requestFlowService.saveEntity(requestFlow);
 			}

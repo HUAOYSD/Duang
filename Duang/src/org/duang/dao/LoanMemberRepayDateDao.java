@@ -1,5 +1,6 @@
 package org.duang.dao; 
 
+import java.util.List;
 import java.util.Map;
 
 import org.duang.baseInterface.CommonInterface;
@@ -42,5 +43,19 @@ public interface LoanMemberRepayDateDao extends CommonInterface<LoanMemberRepayD
 	 * @throws
 	 */
 	public abstract Map<String, Object> updateLoanMemberRepayDateByRepay(double sum, LoanList loanList, String memberInfoId) throws Exception;
+	
+	/**
+	 * 添加日期信息（借贷的还款日期）
+	 * @Title: addRepayDate   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param scale
+	 * @param: @param loanList
+	 * @param: @throws Exception  
+	 * @author LiYonghui    
+	 * @date 2016年12月16日 上午9:36:13
+	 * @return: void      
+	 * @throws
+	 */
+	public abstract List<LoanMemberRepayDate> queryUnrepayRepayLoanDateByLoanList(String loanListId) throws Exception;
 }
 

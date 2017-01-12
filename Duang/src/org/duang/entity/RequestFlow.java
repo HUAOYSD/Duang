@@ -71,7 +71,7 @@ public class RequestFlow implements java.io.Serializable {
 		this.requestId = requestId;
 	}
 	
-	@Column(name = "describe")
+	@Column(name = "desInfo")
 	public String getDescribe() {
 		return describe;
 	}

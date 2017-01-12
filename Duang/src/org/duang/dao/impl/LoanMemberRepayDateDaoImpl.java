@@ -369,34 +369,33 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 		boolean success = false;
 		double overSum = 0;
 		Map<String,Object> map = new HashMap<String,Object>();
-		CondsUtils condsUtils = new CondsUtils();
-		condsUtils.addProperties(true, "loanListId","status","state","order");
-		condsUtils.addValues(true, loanList.getId(),RepayStatus.STU1.getVal(),RepayState.STA0.getVal(),Order.asc("repayIndex"));
-		List<LoanMemberRepayDate> loanMemberRepayDates = queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
-		int count = count("loanListId", loanList.getId());
-		boolean isBreak = false;
-		//定额本息
-		if(count > 1){
-			for(int i=0;i<loanMemberRepayDates.size();i++){
-				LoanMemberRepayDate loanMemberRepayDate = loanMemberRepayDates.get(i);
-				loanMemberRepayDate = updateLoanMemberRepayDate(loanMemberRepayDate,loanList,BackStyle.B1.getVal());
+		List<LoanMemberRepayDate> loanMemberRepayDates = queryUnrepayRepayLoanDateByLoanList(loanList.getId());
+		if(DataUtils.notEmpty(loanMemberRepayDates)){
+			int count = count("loanListId", loanList.getId());
+			boolean isBreak = false;
+			//定额本息
+			if(count > 1){
+				for(int i=0;i<loanMemberRepayDates.size();i++){
+					LoanMemberRepayDate loanMemberRepayDate = loanMemberRepayDates.get(i);
+					loanMemberRepayDate = updateLoanMemberRepayDate(loanMemberRepayDate,loanList,BackStyle.B1.getVal());
+					success = updateEntity(loanMemberRepayDate);
+					overSum +=loanMemberRepayDate.getOverSum();
+					//还款日
+					Date repayDate = loanMemberRepayDate.getRepayDate();
+					//如果系统日期在还款日以后，就让跳出，说明这个就是下期的还款日了
+					if(!(repayDate.getTime() < DateUtils.getDate(DateUtils.date2Str(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd").getTime())){
+						isBreak = true;
+					}
+					if(isBreak){
+						break;
+					}
+				}
+			}else if(count ==1){ //到期一次性还清
+				LoanMemberRepayDate loanMemberRepayDate = loanMemberRepayDates.get(0);
+				loanMemberRepayDate = updateLoanMemberRepayDate(loanMemberRepayDate,loanList,BackStyle.B2.getVal());
 				success = updateEntity(loanMemberRepayDate);
 				overSum +=loanMemberRepayDate.getOverSum();
-				//还款日
-				Date repayDate = loanMemberRepayDate.getRepayDate();
-				//如果系统日期在还款日以后，就让跳出，说明这个就是下期的还款日了
-				if(!(repayDate.getTime() < DateUtils.getDate(DateUtils.date2Str(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd").getTime())){
-					isBreak = true;
-				}
-				if(isBreak){
-					break;
-				}
 			}
-		}else if(count ==1){ //到期一次性还清
-			LoanMemberRepayDate loanMemberRepayDate = loanMemberRepayDates.get(0);
-			loanMemberRepayDate = updateLoanMemberRepayDate(loanMemberRepayDate,loanList,BackStyle.B2.getVal());
-			success = updateEntity(loanMemberRepayDate);
-			overSum +=loanMemberRepayDate.getOverSum();
 		}
 		if(success){
 			map.put("overSum", overSum);
@@ -461,6 +460,15 @@ public class LoanMemberRepayDateDaoImpl extends BaseDao<LoanMemberRepayDate> imp
 		}else{
 			return Integer.parseInt(String.valueOf(days));
 		}
+	}
+
+	@Override
+	public List<LoanMemberRepayDate> queryUnrepayRepayLoanDateByLoanList(String loanListId) throws Exception {
+		CondsUtils condsUtils = new CondsUtils();
+		condsUtils.addProperties(true, "loanListId","status","state","order");
+		condsUtils.addValues(true, loanListId,RepayStatus.STU1.getVal(),RepayState.STA0.getVal(),Order.asc("repayIndex"));
+		List<LoanMemberRepayDate> loanMemberRepayDates = queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+		return loanMemberRepayDates;
 	}
 	
 }

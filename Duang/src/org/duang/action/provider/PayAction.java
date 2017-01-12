@@ -5,11 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -33,15 +31,14 @@ import org.duang.service.LoanListService;
 import org.duang.service.MemberInfoService;
 import org.duang.service.RequestFlowService;
 import org.duang.service.ScaleLoanListService;
-import org.duang.util.DES;
 import org.duang.util.DataUtils;
+import org.duang.util.DateUtils;
 import org.duang.util.MD5Utils;
 import org.duang.util.ReadProperties;
 import org.duang.util.SSLClient;
 import org.json.JSONObject;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.web.util.HtmlUtils;
 
 
 /**   
@@ -599,7 +596,7 @@ public class PayAction extends BaseAction<BillInvest>{
 	 * @throws
 	 */
 	public void memberInfoRepaySetScale_noticeUrl(){
-		LoggerUtils.info("\t\n----------------------------------还款异步返回 memberInfoRepaySetScale_noticeUrl 结果", this.getClass());
+		LoggerUtils.info("\t\n----------------------------------还款异步返回 memberInfoRepaySetScale_noticeUrl结果", this.getClass());
 		boolean success = false;
 		Properties  properties;
 		String result="";
@@ -629,18 +626,44 @@ public class PayAction extends BaseAction<BillInvest>{
 				unsettledBalance="0";
 			}
 			properties= ReadProperties.initPrperties("sumapayURL.properties");
-			StringBuffer back_signatureBuffer = new StringBuffer(requestId+result+userIdIdentity+userBalance);
-			String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), ReadProperties.getStringValue(properties, "akey"));
-			LoggerUtils.info("\t\n-------------还款异步返回   返回的参数信息-加密签名:"+back_signature_sign.toString(),this.getClass());
-			if(back_signature_sign.equals(signature)){
-				Map<String, Object> loanListParamMap = new HashMap<String, Object>();
-				loanListParamMap.put("memberInfo.id", userIdIdentity);
-				loanListParamMap.put("returnStatus", ReturnStatus.B2.getVal());
-				LoanList loanList = loanListService.findEntity(loanListParamMap);
-				success = loanListService.memberInfoRepay(DataUtils.str2double(sum, 6), userIdIdentity, projectCode, loanList, 4);
+			if(result.equals(ResultCode.SUCCESS.getVal())){
+				//查询reuqestId的回调是否已经保存，如果保存，就不能再提交，防止多次调用
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("requestId", requestId);
+				map.put("memberInfoId",userIdIdentity);
+				map.put("describe","还款回调");
+				map.put("result","成功");
+				RequestFlow requestFlow = requestFlowService.findEntity(map);
+				if(requestFlow == null){
+					StringBuffer back_signatureBuffer = new StringBuffer(requestId+result+userIdIdentity+userBalance);
+					String back_signature_sign = MD5Utils.hmacSign(back_signatureBuffer.toString(), ReadProperties.getStringValue(properties, "akey"));
+					LoggerUtils.info("\t\n-------------还款异步返回   返回的参数信息-加密签名:"+back_signature_sign.toString(),this.getClass());
+					if(back_signature_sign.equals(signature)){
+						Map<String, Object> loanListParamMap = new HashMap<String, Object>();
+						loanListParamMap.put("memberInfo.id", userIdIdentity);
+						loanListParamMap.put("returnStatus", ReturnStatus.B2.getVal());
+						LoanList loanList = loanListService.findEntity(loanListParamMap);
+						if(loanList != null){
+							success = loanListService.memberInfoRepay(DataUtils.str2double(sum, 6), userIdIdentity, projectCode, loanList, 4);
+						}else{
+							LoggerUtils.error("\t\n-------目前贷款全部还完，不能进行还款：", this.getClass());
+						}
+						if(success){
+							requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date(),"还款回调","成功");
+						}else{
+							requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, userIdIdentity, new Date(),"还款回调","失败");
+						}
+						
+						requestFlowService.saveEntity(requestFlow);
+					}else{
+						LoggerUtils.error("\t\n-------还款异步返回失败：" + DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)), this.getClass());
+						msg="签名不一致";
+					}
+				}else{
+					LoggerUtils.error("\t\n-------还款异步重复回调" , this.getClass());
+				}
 			}else{
 				LoggerUtils.error("\t\n-------还款异步返回失败：" + DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)), this.getClass());
-				msg="签名不一致";
 			}
 		}catch(Exception e){
 			success = false;

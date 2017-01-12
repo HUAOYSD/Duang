@@ -11,5 +11,5 @@ import org.duang.entity.RequestFlow;
  * @date 2016年11月13日 下午 18:30:58
  */
 public interface RequestFlowService extends CommonInterface<RequestFlow>{
-
+	public boolean executeObject(RequestFlow requestFlow) throws Exception;
 }

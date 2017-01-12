@@ -1,5 +1,6 @@
 package org.duang.service.impl;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,15 +9,12 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.duang.annotation.ServiceLog;
-import org.duang.common.CondsUtils;
 import org.duang.common.logger.LoggerUtils;
 import org.duang.dao.LoanListRateDao;
 import org.duang.dao.LoanMemberRepayDateDao;
 import org.duang.entity.InvestMember;
 import org.duang.entity.LoanList;
 import org.duang.entity.LoanMemberRepayDate;
-import org.duang.enums.loan.RepayState;
-import org.duang.enums.loan.RepayStatus;
 import org.duang.service.LoanMemberRepayDateService;
 import org.duang.util.DataUtils;
 import org.duang.util.DateUtils;
@@ -327,10 +325,7 @@ public class LoanMemberRepayDateServiceImpl implements LoanMemberRepayDateServic
 		double overDueSum = 0;
 		//本期还款金额
 		double sum = 0;
-		CondsUtils condsUtils = new CondsUtils();
-		condsUtils.addProperties(true, "loanListId","status","state","order");
-		condsUtils.addValues(true, loanList.getId(),RepayStatus.STU1.getVal(),RepayState.STA0.getVal(),Order.asc("repayIndex"));
-		List<LoanMemberRepayDate> loanMemberRepayDates = queryEntity(condsUtils.getPropertys(), condsUtils.getValues(), null);
+		List<LoanMemberRepayDate> loanMemberRepayDates = dao.queryUnrepayRepayLoanDateByLoanList(loanList.getId());;
 		if(DataUtils.notEmpty(loanMemberRepayDates)){
 			for(int i=0;i<loanMemberRepayDates.size();i++){
 				LoanMemberRepayDate loanMemberRepayDate = loanMemberRepayDates.get(i);
@@ -339,12 +334,26 @@ public class LoanMemberRepayDateServiceImpl implements LoanMemberRepayDateServic
 				//逾期
 				if(repayDate.getTime() < DateUtils.getDate(DateUtils.date2Str(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd").getTime()){
 					b_msg="上期账单已逾期";
+					msg="上期账单已逾期";
 					//剩余应还金额
 					double exprSum = loanList.getReturnMoney()-loanList.getYetReturnMoney();
 					//逾期金额
 					overDueSum += getOverDueSum(loanMemberRepayDate,exprSum);
 					sum+=loanMemberRepayDate.getRepaySum();
+					date = repayDate;
+					break;
 				}else {
+					//获取还款的月份
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(repayDate);
+					int repayMonth = calendar.get(Calendar.MONTH);
+					//获取目前月份
+					calendar.setTime(new Date());
+					int curMonth = calendar.get(Calendar.MONTH);
+					if(repayMonth > curMonth && loanMemberRepayDate.getRepayIndex()>0){
+						msg="本期账单已结清";
+						b_msg="上期账单已结清";
+					}
 					date = repayDate;
 					sum+=loanMemberRepayDate.getRepaySum();
 					break;
@@ -352,6 +361,9 @@ public class LoanMemberRepayDateServiceImpl implements LoanMemberRepayDateServic
 			}
 		}
 		//如果date == null 说明无贷款。
+		if(date == null){
+			msg="无贷款";
+		}
 		map.put("date", date);
 		//上期还款状态信息
 		map.put("b_msg", b_msg);

@@ -315,29 +315,24 @@ public class LoanListAction extends BaseAction<LoanList>{
 				success = true;
 				if(loanList != null){
 					Map<String,Object> repayMap = loanMemberRepayDateService.getThisLoanRepayDate(loanList);
-					if(repayMap.get("date") == null){
-						msg="无贷款";
-					}else{
-						lastDate = DateUtils.date2Str((Date)repayMap.get("date"),"yyyy-MM-dd");
-						b_msg = (String) repayMap.get("b_msg");
-						msg = (String) repayMap.get("msg");
-						double overDueSum = (double) repayMap.get("overDueSum");
-						sum = (double) repayMap.get("sum");
-						if(overDueSum != 0){
-							sum+=overDueSum;
-						}
+					lastDate = DateUtils.date2Str((Date)repayMap.get("date"),"yyyy-MM-dd");
+					b_msg = (String) repayMap.get("b_msg");
+					msg = (String) repayMap.get("msg");
+					double overDueSum = (double) repayMap.get("overDueSum");
+					sum = (double) repayMap.get("sum");
+					if(overDueSum != 0){
+						sum+=overDueSum;
+					}
+					//获取标信息
+					ScaleLoanList scaleLoanList = scaleLoanListService.findEntity("loanList.id", loanList.getId());
+					if(scaleLoanList != null){
+						jsonObject.put("singleOrSet", scaleLoanList.getScale().getSingleOrSet());
+						jsonObject.put("projectCode", scaleLoanList.getScale().getId());
 					}
 				}else{
 					sum = 0;
+					msg="无贷款";
 				}
-				
-				//获取标信息
-				ScaleLoanList scaleLoanList = scaleLoanListService.findEntity("loanList.id", loanList.getId());
-				if(scaleLoanList != null){
-					jsonObject.put("singleOrSet", scaleLoanList.getScale().getSingleOrSet());
-					jsonObject.put("projectCode", scaleLoanList.getScale().getId());
-				}
-				
 			}else {
 				msg = "登录失效";
 			}
@@ -347,8 +342,12 @@ public class LoanListAction extends BaseAction<LoanList>{
 			LoggerUtils.error("LoanListAction——getLoanSumByMember方法错误：" + e.getLocalizedMessage(), this.getClass());
 			msg = "服务器维护，请稍后再试";
 		}
-		DecimalFormat df=new DecimalFormat(".##");
-		jsonObject.put("sum", df.format(sum));
+		if(sum==0.0){
+			jsonObject.put("sum", "0");
+		}else{
+			DecimalFormat df=new DecimalFormat(".##");
+			jsonObject.put("sum", df.format(sum));
+		}
 		jsonObject.put("lastDate", lastDate);
 		jsonObject.put("msg", msg);
 		jsonObject.put("b_msg", b_msg);

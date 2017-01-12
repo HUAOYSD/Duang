@@ -106,7 +106,7 @@ public class LoanMemberRepayDateAction extends BaseAction<ApplyLoanCar> {
 				if(DataUtils.notEmpty(whereStr)){
 					sql+=whereStr;
 				}
-				sql+=" order by loan_list_id,repay_index";
+				sql+=" order by loan_list_id,repay_index ";
 				List<LoanMemberRepayDate>  loanMemberReapays = loanMemberRepayDateService.queryBySQL(sql, null, null, true);
 				if (loanMemberReapays != null && loanMemberReapays.size() > 0) {
 					jsonObject.put("result", true);
