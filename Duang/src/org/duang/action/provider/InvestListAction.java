@@ -75,6 +75,7 @@ public class InvestListAction extends BaseAction<InvestList>{
 	public void setRequestFlowService(RequestFlowService requestFlowService) {
 		this.requestFlowService = requestFlowService;
 	}
+	
 	/**   
 	 * 获取首页推荐标信息
 	 * @Title: getHomeRecommendScale   
@@ -560,5 +561,74 @@ public class InvestListAction extends BaseAction<InvestList>{
 		jsonObject.put("success", success);
 		jsonObject.put("msg", msg);
 		printJsonResult();
+	}
+	
+	/**
+	 * 普通、集合项目中本息到账异步返回处理
+	 * @Title: transactionForFTCallback   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年12月15日 下午2:56:09
+	 * @return: void      
+	 * @throws
+	 */
+	public void transactionForFTCallback(){
+		try{
+			String requestId = getRequest().getParameter("requestId");
+			//读取配置文件中
+			Properties properties = ReadProperties.initPrperties("sumapayURL.properties");
+			//项目编号
+			String projectCode = getRequest().getParameter("projectCode");
+			String result = getRequest().getParameter("result");
+			//项目还款账户余额
+			//String accountBalance = getRequest().getParameter("accountBalance");
+			//本息到账金额
+			String sum = getRequest().getParameter("sum");
+			//主账户类型
+			//String mainAccountType = getRequest().getParameter("mainAccountType");
+			//主账户类型
+			//String mainAccountCode = getRequest().getParameter("mainAccountCode");
+			//手续费收取方式
+			//String payType = getRequest().getParameter("payType");
+			//请求时间
+			String requestTime = getRequest().getParameter("requestTime");
+			//处理时间
+			//String dealTime = getRequest().getParameter("dealTime");
+			//数字签名
+			String signature = getRequest().getParameter("signature");
+			StringBuffer signatureStr = new StringBuffer();
+			signatureStr.append(requestId).append(projectCode).append(result);
+			//获取返回数据的加密数据用于与签名校验
+			String dataSign = MD5Utils.hmacSign(signatureStr.toString(), ReadProperties.getStringValue(properties, "akey"));
+			LoggerUtils.info("\t\n---------------------------本息到账异步返回 数字签名："+dataSign, this.getClass());
+			//请求成功
+			if(result.equals(ResultCode.SUCCESS.getVal())){
+				if(signature.equals(dataSign)){
+					//查询memberId的借贷数据
+					InvestList investList = investListService.findEntity("cbRequestid",requestId);
+					investListService.transactionForFTCallback(investList,DataUtils.str2double(sum, 6));
+					//修改请求结果
+					RequestFlow requestFlow = requestFlowService.findEntity("requestId", requestId);
+					if(requestFlow != null){
+						requestFlow.setResult("成功");
+					}else{
+						requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, 
+								investList.getMemberInfo().getId(), DateUtils.getDate(requestTime,"yyyy-MM-dd HH:mm:ss"), "本息到账", "成功");
+						requestFlowService.saveEntity(requestFlow);
+					}
+				}else {
+					//签名不匹配
+					LoggerUtils.error("\t\n---------------------------本息到账异步 流程号："+requestId+","+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+				}
+				
+			}else{
+				LoggerUtils.error("\t\n---------------------------本息到账异步返回 流程号："+requestId+"------"+DataUtils.ISO2UTF8(ReadProperties.getStringValue(properties, result)),this.getClass());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoggerUtils.error("InvestListAction transactionForFTCallback：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("InvestListAction transactionForFTCallback：" + e.getLocalizedMessage(), this.getClass());
+		}
 	}
 }

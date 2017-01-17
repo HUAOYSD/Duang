@@ -1,5 +1,6 @@
 package org.duang.task;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +63,7 @@ public class QueryExpireScale {
 	 * @throws
 	 */
 	private List<InvestList> queryTodayExpireInvestList() throws Exception {
-		String sql = "SELECT *  from invest_list il where DATE_FORMAT(INTERVAL il.days DAY + il.open_date,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')";
+		String sql = "SELECT *  from invest_list il where DATE_FORMAT(INTERVAL il.days DAY + il.open_date,'%Y-%m-%d') = DATE_FORMAT(date_sub(curdate(),interval 1 day),'%Y-%m-%d')";
 		List<InvestList> list = investListService.queryBySQL(sql, null, null, true);
 		return list;
 	}
@@ -80,7 +81,7 @@ public class QueryExpireScale {
 	 * @return: String 返回拼接好的参数类型 a=b&c=d
 	 * @throws
 	 */
-	private String getSubledgerList(String memberInfoId) throws Exception {
+	private String getSubledgerList(String memberInfoId,String sum) throws Exception {
 		if (DataUtils.notEmpty(memberInfoId)) {
 			StringBuffer paramBuffer = new StringBuffer("[{");
 			 paramBuffer.append("\"roleType\"")
@@ -97,7 +98,7 @@ public class QueryExpireScale {
 	         .append(",")
 	         .append("\"sum\"")
 	         .append(":")
-	         .append("\""+1000+"\"")
+	         .append("\""+sum+"\"")
 			 .append("}")
 			 .append("]");
 			 return paramBuffer.toString();
@@ -143,6 +144,7 @@ public class QueryExpireScale {
 		String requestId = DataUtils.randomUUID();
 		// 计算到账金额（本金+利息）
 		double prinIntSum = investList.getTotalMoney();
+		String prinIntSumStr = new DecimalFormat("#.00").format(prinIntSum);
 		// 用户信息
 		MemberInfo memberInfo = investList.getMemberInfo();
 		// 标信息
@@ -158,13 +160,13 @@ public class QueryExpireScale {
 			noticeUrl = ReadProperties.getStringValue(properties, "CollectiveFinanceURL_noticeUrl");
 		}
 		// 获取分账列表
-		String subledgerList = getSubledgerList(memberInfo.getId());
+		String subledgerList = getSubledgerList(memberInfo.getId(),prinIntSumStr);
 		if(DataUtils.notEmpty(subledgerList)){
 			// 数字签名字符串
 			// 规范请求流水号(requestId)+商户编号(merchantCode)+项目编号(projectCode)+本息到账金额(sum)+手续费收取方式(payType)+
 			// 分账列表(subledgerList)+异步通知地址(noticeUrl)+主账户类型(mainAccountType)+主账户编码(mainAccountCode)
 			StringBuffer signatureBuffer = new StringBuffer();
-			signatureBuffer.append(requestId).append(merchantCode).append(scale.getId()).append(prinIntSum).append(fee).append(subledgerList).append(noticeUrl);
+			signatureBuffer.append(requestId).append(merchantCode).append(scale.getId()).append(prinIntSumStr).append(fee).append(subledgerList).append(noticeUrl);
 			LoggerUtils.info("------------本息到账报文方式 数字签名字符串：" + signatureBuffer.toString(), this.getClass());
 			// 加密后的数字签名
 			String signature_sign = MD5Utils.hmacSign(signatureBuffer.toString(), akey);
@@ -174,17 +176,11 @@ public class QueryExpireScale {
 			map.put("requestId", requestId);
 			map.put("merchantCode", merchantCode);
 			map.put("projectCode",scale.getId());
-			map.put("sum", String.valueOf(prinIntSum));
+			map.put("sum", prinIntSumStr);
 			map.put("payType", fee);
 			map.put("subledgerList",subledgerList);
-			map.put("noticeUrl", String.valueOf(prinIntSum));
-			map.put("mainAccountType", String.valueOf(prinIntSum));
-			map.put("mainAccountCode", String.valueOf(prinIntSum));
+			map.put("noticeUrl", noticeUrl);
 			map.put("signature", signature_sign);
-			
-			//保存请求requestid
-			RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, memberInfo.getId(), new Date(), "本息到账", "");
-			requestFlowService.saveEntity(requestFlow);
 			
 			// 获取转换的参数
 			JSONObject jsonObjectData = (JSONObject) SSLClient.getJsonObjectByUrl(urlStr,map,"GBK");
@@ -196,10 +192,17 @@ public class QueryExpireScale {
 			String result = jsonObjectData.get("result").toString();
 			if(result.equals(ResultCode.SUCCESS.getVal())){
 				LoggerUtils.info("\t\n-------------------本息到账 成功！", this.getClass());
+				//保存请求requestid
+				RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, memberInfo.getId(), new Date(), "本息到账", "成功");
+				requestFlowService.saveEntity(requestFlow);
 			}else if(result.equals(ResultCode.Doing.getVal())){
 				LoggerUtils.info("\t\n-------------------本息到账 正在处理！", this.getClass());
+				RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, memberInfo.getId(), new Date(), "本息到账", "正在进行");
+				requestFlowService.saveEntity(requestFlow);
 			}else{
 				LoggerUtils.info("\t\n-------------------本息到账 失败！，原因："+DataUtils.ISO2UTF8(jsonObjectData.getString(result)), this.getClass());
+				RequestFlow requestFlow = new RequestFlow(DataUtils.randomUUID(), requestId, memberInfo.getId(), new Date(), "本息到账", "失败");
+				requestFlowService.saveEntity(requestFlow);
 			}
 			LoggerUtils.info("\t\n-------------------姓名："+memberInfo.getRealName()+"\t 电话："+memberInfo.getPhone(), this.getClass());
 		}else{

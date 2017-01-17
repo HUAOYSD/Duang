@@ -176,7 +176,7 @@
   	<!-- 事务配置结束 -->
     
     <!-- 到期标定时任务 -->
-    <!--<import resource="classpath:queryexpirescaletask.xml"/>-->
+    <import resource="classpath:queryexpirescaletask.xml"/>
     <!-- 满标定时任务 -->
     <!--<import resource="classpath:queryfailscaletask.xml"/>-->
     <!-- 流标定时任务 -->

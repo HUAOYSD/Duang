@@ -10,22 +10,22 @@
         </property>  
         <property name="triggers">  
             <list>  
-                <ref bean="cronTriggerBean" />  
+                <ref bean="queryExpireScale_cronTriggerBean" />  
             </list>  
         </property>  
     </bean>  
       
-    <bean id="cronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+    <bean id="queryExpireScale_cronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">  
         <property name="jobDetail">  
-            <ref bean="jobDetailBean" />  
+            <ref bean="queryExpireScale_jobDetailBean" />  
         </property>  
         <property name="cronExpression">  
             <!-- 凌晨0点开始-->  
-            <value>0 0 0 * * ?</value>  
+            <value>0 0 1 * * ?</value>  
         </property>  
     </bean>  
       
-    <bean id="jobDetailBean" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+    <bean id="queryExpireScale_jobDetailBean" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
         <!-- 执行任务的类 -->
         <property name="targetObject" ref="queryExpireScale"></property>       
         <!-- 执行任务的方法 -->
