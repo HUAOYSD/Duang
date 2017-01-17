@@ -46,6 +46,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 			@Result(name = ResultPath.ADD, type = "dispatcher", location = "WEB-INF/page/sys/ad/addAd.jsp"),
 			@Result(name = ResultPath.EDIT, type = "dispatcher", location = "WEB-INF/page/sys/ad/editAd.jsp"),
 			@Result(name = "bingadimg", type = "dispatcher", location = "WEB-INF/page/sys/ad/bindAdImg.jsp"),
+			@Result(name = "linkImg", type = "dispatcher", location = "WEB-INF/page/sys/ad/bindAdLinkImg.jsp"),
 			@Result(name = com.opensymphony.xwork2.Action.ERROR, type = "dispatcher", location = "error.jsp") })
 public class AdAction extends BaseAction<Ad> {
 	private static final long serialVersionUID = 1L;
@@ -385,6 +386,36 @@ public class AdAction extends BaseAction<Ad> {
 	}
 	
 	/**
+	 * 跳转到上传广告图片的的页面  存放路径：resources/file/basic/ad/
+	 * @Title: showAdImage
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param: @return
+	 * @author LiYonghui
+	 * @date 2016年9月5日 下午16:18:08
+	 * @return: String
+	 * @throws
+	 */
+	public String showAdLinkImage() {
+		try{
+			//如果type==upload说明是上传，否则为查看
+			getRequest().setAttribute("type", getRequest().getParameter("type"));
+			//查询兑现
+			entity = adService.findById(entity.getId());
+			//返回身份证前照和后照的具体路径
+			if(DataUtils.notEmpty(entity.getLinkAddress())){
+				getRequest().setAttribute("path", "/resources/file/basic/ad/"+entity.getLinkAddress());
+			}else {
+				getRequest().setAttribute("path", "");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			LoggerUtils.error("跳转到上传广告图片页面错误：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("跳转到上传广告图片页面错误：" + e.getLocalizedMessage(), this.getClass());
+		} 
+		return "linkImg";
+	}
+	
+	/**
 	 * 上传广告轮播图片
 	 * @Title: uploadAdImg   
 	 * @Description: TODO(这里用一句话描述这个方法的作用)   
@@ -414,6 +445,53 @@ public class AdAction extends BaseAction<Ad> {
 				LoggerUtils.info("广告上传:"+fileName+"----------------上传广告："+success, this.getClass());
 				if(success){
 					ad.setImageAddress(fileName);
+					success = adService.updateEntity(ad);
+				}
+			}else{
+				msg = "缺少参数,请补充";
+			}
+		}catch(Exception e){
+			success = false;
+			msg="上传失败";
+			e.printStackTrace();
+			LoggerUtils.error("AdAction uploadAdImg：" + e.getMessage(), this.getClass());
+			LoggerUtils.error("AdAction uploadAdImg：" + e.getLocalizedMessage(), this.getClass());
+		}    
+		jsonObject.put("result", success);
+		jsonObject.put("msg", msg);
+		printJsonResult();
+	}
+	
+	/**
+	 * 上传广告轮播链接图片
+	 * @Title: uploadAdImg   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param:   
+	 * @author LiYonghui    
+	 * @date 2016年11月30日 下午2:15:14
+	 * @return: void      
+	 * @throws
+	 */
+	public void uploadAdLinkImg(){
+		boolean success=false;
+		try{
+			Ad ad = adService.findById(getRequest().getParameter("id"));
+			if (ad != null) {
+				//基本根路径
+				String temPath = getRequest().getSession().getServletContext().getRealPath("/");
+				//详细路径
+				String suffPath = UploadFile.PATH.getVal(UploadFile.AD.getVal())+"\\";
+				//文件名称
+				String fileName = DataUtils.randomUUID()+".jpg";
+				String fullpath = DataUtils.fileUploadPath(temPath, suffPath, fileName);
+				success = ImageString.generateImage(entity.getLinkAddress(), fullpath);
+				//备份
+				String backupPath = ReadProperties.getStringValue(ReadProperties.initPrperties("backupdb.properties"), "fileBasicPath");
+				ImageString.generateImage(entity.getLinkAddress(), DataUtils.fileUploadPath(backupPath, suffPath, fileName));
+				
+				LoggerUtils.info("广告上传:"+fileName+"----------------上传广告："+success, this.getClass());
+				if(success){
+					ad.setLinkAddress(fileName);
 					success = adService.updateEntity(ad);
 				}
 			}else{

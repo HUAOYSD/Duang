@@ -30,6 +30,7 @@
 	      <a id="ad-update-btn" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a> 
 	      <a id="ad-delete-btn" class="easyui-linkbutton" iconCls="icon-01" plain="true">禁用</a>
 	      <a id="ad-icon-btn" class="easyui-linkbutton" iconCls="icon-palette" plain="true">上传图片</a>
+	      <a id="ad-icon-link-btn" class="easyui-linkbutton" iconCls="icon-palette" plain="true">上传链接图片</a>
 	  </div>
 	  <!-- 数据表格区域 -->
 	  <table id="ad_table" style="table-layout:fixed;" ></table>

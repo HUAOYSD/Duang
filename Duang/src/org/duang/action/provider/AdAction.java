@@ -107,7 +107,7 @@ public class AdAction extends BaseAction<Ad>{
 				map.put("id", ad.getId());
 				map.put("createTime", DateUtils.date2Str(ad.getCreateTime()));
 				map.put("isUse", ad.getIsUse());
-				map.put("linkAddress", ad.getLinkAddress());
+				map.put("linkAddress", tomcatIPPortAndName+UploadFile.AD.appPath()+ad.getLinkAddress());
 				map.put("imageAddress", tomcatIPPortAndName+UploadFile.AD.appPath()+ad.getImageAddress());
 				map.put("name", ad.getName());
 				map.put("remark", ad.getRemark());

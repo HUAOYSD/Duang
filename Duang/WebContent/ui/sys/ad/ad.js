@@ -49,12 +49,26 @@ $(function(){
 				}
 				indexLayer = layer.open({
 					type: 2,
-					title: '广告',
+					title: '广告轮播图片',
 					shadeClose: true,
 					shade: 0.8,
 					area: ['80%', '80%'],
 					maxmin:true,
 					content: "ad!showAdImage.do?id="+selectRowt.id 
+				});  
+			}else if(field=='linkAddress'){
+				if(value==null){
+					layer.msg("还没有上传图片",{time:2000});
+					return;
+				}
+				indexLayer = layer.open({
+					type: 2,
+					title: '广告链接图片',
+					shadeClose: true,
+					shade: 0.8,
+					area: ['80%', '80%'],
+					maxmin:true,
+					content: "ad!showAdLinkImage.do?id="+selectRowt.id 
 				});  
 			}
 		},
@@ -105,7 +119,7 @@ function hideButton(){
 	$('#ad-update-btn').linkbutton('disable');
 	$('#ad-delete-btn').linkbutton('disable');
 	$('#ad-icon-btn').linkbutton('disable');
-	
+	$('#ad-icon-link-btn').linkbutton('disable');
 }
 /**
  * 设置按钮可用状态
@@ -115,6 +129,7 @@ function showButton(){
 	$('#ad-update-btn').linkbutton('enable');
 	$('#ad-delete-btn').linkbutton('enable');
 	$('#ad-icon-btn').linkbutton('enable');
+	$('#ad-icon-link-btn').linkbutton('enable');
 }
 
 
@@ -196,12 +211,31 @@ $("#ad-icon-btn").on("click",function(){
 		layer.msg("请选择一条广告记录",{time:2000});
 		return;
 	}else if(selectRowt.imageAddress != null){
-		layer.confirm('已经上传图片，确定重新上传吗？', {icon: 3, title:'提示'}, function(index){
+		layer.confirm('已经上传广告图片，确定重新上传吗？', {icon: 3, title:'提示'}, function(index){
 			layer.close(index);
 			openAdImage(selectRowt.id);
 		});
 	}else{
 		openAdImage(selectRowt.id);
+	}
+	 
+});
+
+/**
+ * 打开上传广告链接图片页面
+ */
+$("#ad-icon-link-btn").on("click",function(){
+	var selectRowt = tableObj.datagrid("getSelected");
+	if(selectRowt == null){
+		layer.msg("请选择一条广告记录",{time:2000});
+		return;
+	}else if(selectRowt.imageAddress != null){
+		layer.confirm('已经上传广告链接图片，确定重新上传吗？', {icon: 3, title:'提示'}, function(index){
+			layer.close(index);
+			openAdLinkImage(selectRowt.id);
+		});
+	}else{
+		openAdLinkImage(selectRowt.id);
 	}
 	 
 });
@@ -215,5 +249,17 @@ function openAdImage(id){
 		area: ['80%', '80%'],
 		maxmin:true,
 		content: "ad!showAdImage.do?id="+id+"&type=upload" 
+	});
+}
+
+function openAdLinkImage(id){
+	indexLayer = layer.open({
+		type: 2,
+		title: '广告',
+		shadeClose: true,
+		shade: 0.8,
+		area: ['80%', '80%'],
+		maxmin:true,
+		content: "ad!showAdLinkImage.do?id="+id+"&type=upload" 
 	});
 }
